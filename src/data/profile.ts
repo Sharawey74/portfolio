@@ -26,6 +26,18 @@ const profileSchema = z.object({
     title: z.string().min(1),
     description: z.string().min(1).max(160),
   }),
+  /** Interface strings: controls and accessible names, not claims. */
+  ui: z.object({
+    skipToContent: z.string(),
+    pauseAnimations: z.string(),
+    playAnimations: z.string(),
+    themeToLight: z.string(),
+    themeToDark: z.string(),
+    resumeUnavailable: z.string(),
+    statusMerged: z.string(),
+    statusOpen: z.string(),
+    externalLink: z.string(),
+  }),
 });
 
 export const profile = profileSchema.parse({
@@ -54,6 +66,17 @@ export const profile = profileSchema.parse({
     title: "Sharawey74 / Backend systems",
     description:
       "Backend systems in Java and Spring Boot, Python AI services, and open-source pull requests. Every number links to its source.",
+  },
+  ui: {
+    skipToContent: "Skip to content",
+    pauseAnimations: "Pause animations",
+    playAnimations: "Play animations",
+    themeToLight: "Switch to light theme",
+    themeToDark: "Switch to dark theme",
+    resumeUnavailable: "Resume coming soon",
+    statusMerged: "Merged",
+    statusOpen: "Open",
+    externalLink: "opens an external site",
   },
 });
 
