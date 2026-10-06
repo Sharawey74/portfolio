@@ -1,0 +1,40 @@
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/check-launch.ts && next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "check:facts": "node scripts/check-facts.ts",
+    "check:contrast": "node scripts/check-contrast.ts",
+    "check:colors": "node scripts/check-colors.ts",
+    "check:launch": "node scripts/check-launch.ts",
+    "check": "npm run check:facts && npm run check:contrast && npm run check:colors",
+    "report:bundle": "node scripts/report-bundle.ts"
+  },
+  "dependencies": {
+    "lenis": "^1.3.26",
+    "motion": "^14.0.0",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24.19.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.4.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3"
+  }
+}

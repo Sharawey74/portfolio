@@ -31,3 +31,7 @@ npm-debug.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# private, this machine only
+CLAUDE.local.md
+*.local.txt

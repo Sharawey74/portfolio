@@ -21,6 +21,18 @@ import { personal } from "../src/data/personal.ts";
 const root = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 const errors: string[] = [];
 
+function readPrivateTerms(): [string, RegExp][] {
+  try {
+    return readFileSync(join(root, "scripts/private-terms.local.txt"), "utf8")
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter((l) => l && !l.startsWith("#"))
+      .map((l): [string, RegExp] => ["private term", new RegExp(l, "i")]);
+  } catch {
+    return [];
+  }
+}
+
 // ── 2. Banned terms ──────────────────────────────────────────────────────
 // [label, pattern]. Label is what a facts:allow marker must name.
 const banned: [string, RegExp][] = [
@@ -56,9 +68,9 @@ const banned: [string, RegExp][] = [
   ["5 s refresh", /\b5\s?-?s(ec(ond)?s?)?\b.{0,20}refresh|refresh.{0,20}\b5\s?-?s(ec(ond)?s?)?\b/i],
   ["3 agents", /\b(3|three)\s+agents/i],
   ["130+ tests", /\b130\+/],
-  // Do-not-publish
-  ["Threadline", /threadline/i],
-  ["home server", /home[- ]server/i],
+  // Do-not-publish terms are private: one regex per line in the git-ignored
+  // scripts/private-terms.local.txt (absent in CI, so run this check locally).
+  ...readPrivateTerms(),
   // Unqualified adjectives and banned copy words
   ["production-grade", /production[- ]grade/i],
   ["scalable", /\bscalable\b/i],
@@ -102,7 +114,7 @@ for (const dir of SCAN_DIRS) {
       .forEach((line, i) => {
         const open = line.match(/facts:allow\s+([\w.,+ -]+)/);
         if (open) {
-          allowed = new Set(open[1].split(",").map((s) => s.trim()));
+          allowed = new Set((open[1] ?? "").split(",").map((s) => s.trim()));
           return;
         }
         if (/facts:end/.test(line)) {

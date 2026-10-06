@@ -1,0 +1,427 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Three layers:
+ *   1. Primitives: the 12-step neutral ramp (R=G=B) and the single --break color.
+ *   2. Semantic roles: surfaces, lines, text. Components use these, never primitives.
+ *   3. Tailwind @theme: maps roles to utilities; the default palette is removed.
+ *
+ * Contrast is verified by scripts/check-contrast.ts. Values changed from the
+ * brief to pass it are listed here:
+ *   - light --g8 #707070 -> #666666. With #707070, text-3 measured 4.27:1 on
+ *     the light card (#EEEEEE) and 4.00:1 on the light hover surface (#E7E7E7);
+ *     #666666 gives 4.64:1 or better on every light surface.
+ * The primitive blocks are parsed by the check scripts; keep their markers.
+ */
+
+/* tokens:dark */
+:root {
+  --g0: #050505;
+  --g1: #0a0a0a;
+  --g2: #111111;
+  --g3: #181818;
+  --g4: #212121;
+  --g5: #2e2e2e;
+  --g6: #444444;
+  --g7: #666666;
+  --g8: #8f8f8f;
+  --g9: #b3b3b3;
+  --g10: #e0e0e0;
+  --g11: #fafafa;
+  --break: #ff3b4e;
+  color-scheme: dark;
+}
+/* tokens:end */
+
+/* tokens:light */
+:root[data-theme="light"] {
+  --g0: #fafafa;
+  --g1: #f5f5f5;
+  --g2: #eeeeee;
+  --g3: #e7e7e7;
+  --g4: #dedede;
+  --g5: #d1d1d1;
+  --g6: #bbbbbb;
+  --g7: #999999;
+  --g8: #666666;
+  --g9: #4c4c4c;
+  --g10: #1f1f1f;
+  --g11: #050505;
+  --break: #c4152a;
+  color-scheme: light;
+}
+/* tokens:end */
+
+/* No-JS fallback: follow the system light preference unless dark is pinned.
+   With JS, the pre-paint script always sets data-theme, so this never applies.
+   Kept identical to tokens:light (check-contrast.ts asserts it). */
+/* tokens:light-media */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --g0: #fafafa;
+    --g1: #f5f5f5;
+    --g2: #eeeeee;
+    --g3: #e7e7e7;
+    --g4: #dedede;
+    --g5: #d1d1d1;
+    --g6: #bbbbbb;
+    --g7: #999999;
+    --g8: #666666;
+    --g9: #4c4c4c;
+    --g10: #1f1f1f;
+    --g11: #050505;
+    --break: #c4152a;
+    color-scheme: light;
+  }
+}
+/* tokens:end */
+
+:root {
+  /* Semantic roles */
+  --surface-page: var(--g0);
+  --surface-raised: var(--g1);
+  --surface-card: var(--g2);
+  --surface-hover: var(--g3);
+  --line-hair: var(--g4);
+  --line: var(--g5);
+  --line-strong: var(--g6);
+  --deco: var(--g7);
+  --text-3: var(--g8);
+  --text-2: var(--g9);
+  --text-soft: var(--g10);
+  --text-1: var(--g11);
+
+  /* Motion (easing lives in @theme as --ease-out) */
+  --dur-1: 200ms;
+  --dur-2: 400ms;
+  --dur-3: 800ms;
+
+  /* Layout */
+  --gutter: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+  --page-max: 96rem;
+  --header-h: 3.5rem;
+}
+
+/* Layer 3: Tailwind theme. Defaults that the brief bans are reset. */
+@theme {
+  --color-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
+  --radius-*: initial;
+  --font-*: initial;
+  --ease-*: initial;
+
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-g0: var(--g0);
+  --color-g1: var(--g1);
+  --color-g2: var(--g2);
+  --color-g3: var(--g3);
+  --color-g4: var(--g4);
+  --color-g5: var(--g5);
+  --color-g6: var(--g6);
+  --color-g7: var(--g7);
+  --color-g8: var(--g8);
+  --color-g9: var(--g9);
+  --color-g10: var(--g10);
+  --color-g11: var(--g11);
+  --color-break: var(--break);
+  --color-page: var(--surface-page);
+  --color-raised: var(--surface-raised);
+  --color-card: var(--surface-card);
+  --color-hover: var(--surface-hover);
+  --color-hair: var(--line-hair);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-deco: var(--deco);
+  --color-ink-3: var(--text-3);
+  --color-ink-2: var(--text-2);
+  --color-ink-soft: var(--text-soft);
+  --color-ink: var(--text-1);
+
+  --font-display: var(--font-newsreader), "Iowan Old Style", "Times New Roman", serif;
+  --font-sans: var(--font-hanken), "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Type scale. Fluid sizes keep max <= 2.5 x min so browser zoom still scales them. */
+  --text-display-xl: clamp(5rem, 2.5rem + 10vw, 12.5rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.04em;
+  --text-display-l: clamp(3rem, 1.667rem + 5.333vw, 7rem);
+  --text-display-l--line-height: 0.98;
+  --text-display-l--letter-spacing: -0.03em;
+  --text-h2: clamp(2rem, 1.333rem + 2.667vw, 4rem);
+  --text-h2--line-height: 1.05;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.375rem, 1.208rem + 0.667vw, 1.875rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.01em;
+  --text-body: clamp(1rem, 0.958rem + 0.167vw, 1.125rem);
+  --text-body--line-height: 1.55;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-mono: 0.75rem;
+  --text-mono--line-height: 1.4;
+  --text-mono-lg: 0.8125rem;
+  --text-mono-lg--line-height: 1.45;
+}
+
+@layer base {
+  html {
+    background: var(--surface-page);
+    color: var(--text-1);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--line-strong) var(--surface-page);
+    scrollbar-width: thin;
+  }
+
+  body {
+    min-height: 100dvh;
+    background: var(--surface-page);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-size-adjust: from-font;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-weight: 400;
+  }
+
+  p,
+  li,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--break);
+    color: var(--g0);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--break);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Figures read as data: tabular, lining numerals everywhere numbers appear. */
+  .num,
+  data,
+  time,
+  td {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@layer components {
+  /* Asymmetric editorial grid: 12 columns, shared gutter. */
+  .grid-12 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    padding-inline: var(--gutter);
+    max-width: var(--page-max);
+    margin-inline: auto;
+  }
+  @media (width >= 48rem) {
+    .grid-12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    line-height: var(--text-mono--line-height);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .skip-link {
+    position: fixed;
+    inset-block-start: 0.75rem;
+    inset-inline-start: 0.75rem;
+    z-index: 100;
+    padding: 0.5rem 0.75rem;
+    background: var(--text-1);
+    color: var(--surface-page);
+    translate: 0 -200%;
+  }
+  .skip-link:focus-visible {
+    translate: 0 0;
+  }
+
+  /* Screenshots stay grayscale until the reader engages with them. */
+  .shot {
+    filter: grayscale(1) contrast(1.05);
+    transition: filter var(--dur-2) var(--ease-out);
+  }
+  .shot:hover,
+  .shot:focus-visible,
+  :focus-within > .shot,
+  .shot[data-zoomed] {
+    filter: none;
+  }
+}
+
+/* M2 scroll-progress hairline: CSS scroll timeline where supported.
+   Without support, ScrollProgress drives --progress from Lenis. */
+.scroll-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 60;
+  height: 1px;
+  background: var(--text-1);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes progress-grow {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+    .scroll-progress {
+      animation: progress-grow auto linear;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+/* Global pause (WCAG 2.2.2) and reduced motion stop every CSS loop. */
+html[data-motion="paused"] *,
+html[data-motion="paused"] *::before,
+html[data-motion="paused"] *::after {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+/* The progress bar is position, not decoration: keep it tracking. */
+html[data-motion="paused"] .scroll-progress {
+  animation-play-state: running !important;
+}
+
+/* M14: theme switch reveal. JS animates clip-path on the new snapshot. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* M5 cursor: native cursor hidden only while the custom one is active,
+   and always restored in form fields. */
+html[data-cursor="on"],
+html[data-cursor="on"] a,
+html[data-cursor="on"] button {
+  cursor: none;
+}
+html[data-cursor="on"] :is(input, textarea, select, [contenteditable="true"]) {
+  cursor: auto;
+}
+/* Dot and ring are separate fixed layers so mix-blend-mode blends with the
+   page itself (a shared positioned wrapper would isolate them). White under
+   `difference` inverts whatever is below, in either theme. */
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: 90;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+.cursor-ring {
+  width: 0;
+  height: 0;
+}
+.cursor-ring::before {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  transition:
+    scale var(--dur-2) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
+}
+.cursor-label {
+  position: absolute;
+  translate: -50% -50%;
+  white-space: nowrap;
+  padding: 0.125rem 0.375rem;
+  background: var(--text-1);
+  color: var(--surface-page);
+}
+.cursor[data-state="hidden"] :is(.cursor-dot, .cursor-ring) {
+  opacity: 0;
+}
+.cursor[data-state="hover"] .cursor-ring {
+  mix-blend-mode: normal;
+}
+.cursor[data-state="hover"] .cursor-ring::before {
+  scale: 1.6;
+  border-color: var(--break);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}

@@ -161,7 +161,7 @@ labelled "notebook" (`~/Downloads/PlantVillageFinal.ipynb`, report:284).
 - Litestar / Eclipse Collections as merged or accepted
 - Any certificate date
 - Unqualified adjectives (production-grade, scalable, expert) and the banned copy words
-- Not published: phone (unless set), date of birth, height, graduation-project idea details, Threadline, home server, job-search statistics, third-party resumes
+- Not published: phone (unless set), date of birth, height, graduation-project idea details, private projects and infrastructure (terms kept in the git-ignored `scripts/private-terms.local.txt`), job-search statistics, third-party resumes
 
 ## Link probes (2026-10-06)
 
