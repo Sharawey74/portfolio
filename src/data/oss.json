@@ -1,0 +1,20 @@
+{
+  "fetchedAt": "2026-10-06",
+  "source": "gh pr view <n> -R <repo> --json title,state,createdAt,mergedAt,additions,deletions",
+  "pullRequests": [
+    { "repo": "python/typeshed", "number": 16443, "title": "Widen tarfile.open() preset to int", "state": "merged", "createdAt": "2026-09-25", "mergedAt": "2026-09-25", "additions": 5, "deletions": 5, "fixes": 16442 },
+    { "repo": "FreshRSS/FreshRSS", "number": 9369, "title": "Wrap the reader view article subtitle on narrow screens", "state": "merged", "createdAt": "2026-09-29", "mergedAt": "2026-10-02", "additions": 29, "deletions": 0, "fixes": 9360 },
+    { "repo": "FreshRSS/FreshRSS", "number": 9388, "title": "Keep the reader view article date on one line", "state": "merged", "createdAt": "2026-10-02", "mergedAt": "2026-10-04", "additions": 8, "deletions": 4, "fixes": null },
+    { "repo": "neomjs/neo", "number": 19365, "title": "test(grid): pin the icon, icon-link and LinkedIn grid columns (#19137)", "state": "merged", "createdAt": "2026-10-02", "mergedAt": "2026-10-02", "additions": 218, "deletions": 0, "fixes": 19137 },
+    { "repo": "vshulcz/deja-vu", "number": 4123, "title": "fix(warmup): warmup and version refuse arguments, and warmup --rebuild names deja index --rebuild", "state": "merged", "createdAt": "2026-09-28", "mergedAt": "2026-09-29", "additions": 61, "deletions": 2, "fixes": 4109, "note": "Shipped in v0.21.4, credited in the release notes" },
+    { "repo": "conorbronsdon/avoid-ai-writing", "number": 332, "title": "docs: replace comments naming a missing script, roadmap and research file", "state": "merged", "createdAt": "2026-09-21", "mergedAt": "2026-09-22", "additions": 54, "deletions": 38, "fixes": 224 },
+    { "repo": "conorbronsdon/avoid-ai-writing", "number": 342, "title": "fix(scripts): use the resolved interpreter in read_manifest_version", "state": "merged", "createdAt": "2026-09-23", "mergedAt": "2026-09-23", "additions": 1, "deletions": 1, "fixes": 333 },
+    { "repo": "litestar-org/litestar", "number": 5019, "title": "fix: do not suggest FromQuery for path parameter defaults", "state": "open", "createdAt": "2026-08-26", "mergedAt": null, "additions": 76, "deletions": 8, "fixes": 5018 },
+    { "repo": "eclipse-collections/eclipse-collections", "number": 1965, "title": "Add iteration pattern examples for primitive bags to reference guide", "state": "open", "createdAt": "2026-08-22", "mergedAt": null, "additions": 50, "deletions": 0, "fixes": 1387, "note": "Has a merge conflict" },
+    { "repo": "simplesamlphp/simplesamlphp", "number": 2688, "title": "Remove deprecated Twig includes from the release autoloader", "state": "open", "createdAt": "2026-10-02", "mergedAt": null, "additions": 15, "deletions": 0, "fixes": 2687 },
+    { "repo": "magefree/mage", "number": 16440, "title": "Boosters: fixed wrong card count in 30A, SWS and MH3 (#16370)", "state": "open", "createdAt": "2026-10-03", "mergedAt": null, "additions": 52, "deletions": 14, "fixes": 16370 }
+  ],
+  "issues": [
+    { "repo": "litestar-org/litestar", "number": 5020, "title": "Bug: click 8.5.0 breaks test collection via rich-click get_binary_stream deprecation", "state": "closed", "createdAt": "2026-08-26", "note": "Reported; fixed upstream in rich-click" }
+  ]
+}
