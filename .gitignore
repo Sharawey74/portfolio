@@ -1,0 +1,33 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# production
+/build
+
+# env files (commit only .env.example)
+.env
+.env.*
+!.env.example
+
+# vercel
+.vercel
+
+# debug
+npm-debug.log*
+
+# reports generated locally
+/reports/
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
