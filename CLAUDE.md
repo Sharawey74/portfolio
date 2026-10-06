@@ -1,0 +1,185 @@
+# CLAUDE.md
+
+Context and standing rules for anyone (human or agent) working in this repo.
+Read this first, then `PLAN.md` for where the work stands. Private details that
+must not be in a public repo live in `CLAUDE.local.md` (git-ignored); read it
+too if it exists on this machine.
+
+## What this is
+
+A portfolio site for the owner (GitHub `Sharawey74`): a software engineering
+student whose positioning is **backend systems first**, with AI services and
+open-source work as supporting material. Cinematic, black and white, rich gray
+shades, one restrained "break" color. Every public number is traced to a source
+file and a date.
+
+- Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
+- Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
+- Work is staged (0 to 5). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+
+## Source of truth and honesty rules (highest priority)
+
+1. Facts come only from `C:\Users\DELL\Desktop\Career\portfolio-evidence\evidence-report.md` ("the report", generated 2026-10-06) and the owner's approved claims. If they disagree, **the report wins**; log the conflict in `FACTS-CHECK.md`.
+2. Never invent metrics, dates, links, PRs, logos, testimonials or technologies. Missing → `TODO(owner): <what>` in the data file, and nothing public renders for it.
+3. Every public number or claim carries `source` (file:line or URL) and `asOf` (ISO date). The Zod schemas in `src/data/schema.ts` enforce it; the build fails without them. Personal fields are exempt.
+4. A tech chip exists only if the report's §3 shows it in a repo, or it is on the allowed list; each chip carries `usedIn`.
+5. No unqualified adjectives ("production-grade", "scalable", "expert"). Numbers, qualifiers, dates.
+6. Never open or print `.env` files or any secret. Other repos are **read-only**: copy images or diagram sources from them into this project, nothing else.
+7. Motion graphics are claims: an animated diagram shows only components that exist in the source repo (`architecture[]` in `projects.ts`, each with a source).
+8. Do not publish the items listed in `CLAUDE.local.md` (personal details and private projects). Do not name them in tracked files either; the facts check reads them from the git-ignored `scripts/private-terms.local.txt`.
+
+### Banned claims (enforced by `scripts/check-facts.ts`)
+
+- No repo evidence: Microservices, CQRS, Event Sourcing, Kubernetes, Terraform, Kafka, gRPC, GraphQL, TimescaleDB, Node.js backend, OAuth 2.0, MySQL.
+- Eventora: "11-state" (enum has 10), "194 tests", "83%", "700 VUs", "live API" (Railway backend 404s; link only the frontend as live).
+- Recruiter-Pro: LangChain (removed 2026-08-17), RAG, "30-resume corpus".
+- PhishSniffer: XGBoost, "50+ features", "10,000+ samples".
+- SysPlex: "5 s refresh" (code is 2 s), "3 agents", "130+ tests".
+- Litestar #5019 and Eclipse Collections #1965 are **open**; never "merged" or "accepted".
+- No dates on certificates, anywhere.
+- Banned copy words: passionate, cutting-edge, seamless, leverage, robust, delve, unlock, elevate, innovative, journey, crafting. No exclamation marks, no emoji.
+
+LexIntelligence genuinely uses RAG, LangChain and ChromaDB. Those terms are allowed only inside `// facts:allow <Term,...>` … `// facts:end` regions that name them.
+
+### Decisions already made (do not re-litigate)
+
+All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
+- Eventora coverage is JaCoCo **instruction** coverage 84.1% (gate 80%), not line coverage.
+- Eventora Railway ramp figures always carry "read path" (browse + search only).
+- Local Eventora figures always carry "local, Docker Compose".
+- PhishSniffer: "about 43K emails from public corpora (34,284 train, 8,571 held out)", 97.7% test accuracy.
+- Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
+- Recruiter-Pro: "500+ tests" (README says 544 and 530).
+- Public name spelling is undecided ("Abdelrahman" vs "Abdelrhman"). Never choose; `personal.name` stays `TODO(owner)` until set. LICENSE holder is "Sharawey74" until then.
+- Headline OSS stat is derived, not typed: 7 merged PRs across 5 projects, 4 under review, 2026-08 to 2026-10 (`ossSummary()`).
+
+## Content model
+
+All copy lives in typed data files. Components contain no copy. Updating the site = editing data and pushing.
+
+| File | Holds |
+|---|---|
+| `src/data/schema.ts` | Shared Zod schemas: `claim`, `metric`, `link` (status 200, or 303 for Streamlit), `stackItem`, `asset`, `todo` |
+| `src/data/personal.ts` | Every personal field; `value: null` + `todo` until the owner fills it. Empty field = element omitted (no placeholder), except the Resume button, which renders disabled |
+| `src/data/profile.ts` | Approved hero copy, section indices, site meta |
+| `src/data/projects.ts` | Five projects: eventora (flagship), recruiter-pro, sysplex (case studies), lexintelligence, phishsniffer (secondary grid) |
+| `src/data/oss.json` + `oss.ts` | PR snapshot (fallback for the ISR refresh) and `ossSummary()` |
+| `src/data/experience.ts` | Two internships, AASTMT, four undated certifications, hidden capstone TODO |
+| `src/data/skills.ts` | Tech chips by lane with `usedIn` validated against project slugs |
+
+Data files import each other with explicit `.ts` extensions (`import { claim } from "./schema.ts"`) so Node can run the check scripts with native type stripping. `tsconfig.json` sets `allowImportingTsExtensions`; keep it.
+
+## Approved hero copy
+
+- H1: "Backend systems that stay correct under load." (the final period is the one text use of `--break`)
+- Sub: "Software Engineering student at AASTMT (Jun 2027). Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work."
+- CTAs: "View My Work", "Download Resume".
+
+## Visual system (overrides any skill's defaults)
+
+**Color.** All text is black or white (gray steps), never colored, except the H1's final period. Dark is default; light is the exact mirror. Surfaces come from a neutral 12-step ramp (R=G=B), applied by role:
+
+| Token | Dark | Light | Role |
+|---|---|---|---|
+| `--g0` | #050505 | #FAFAFA | page |
+| `--g1` | #0A0A0A | #F5F5F5 | raised |
+| `--g2` | #111111 | #EEEEEE | card |
+| `--g3` | #181818 | #E7E7E7 | hover |
+| `--g4` | #212121 | #DEDEDE | hairline |
+| `--g5` | #2E2E2E | #D1D1D1 | border |
+| `--g6` | #444444 | #BBBBBB | strong border |
+| `--g7` | #666666 | #999999 | decoration only |
+| `--g8` | #8F8F8F | see `globals.css` | text-3 |
+| `--g9` | #B3B3B3 | #4C4C4C | text-2 |
+| `--g10` | #E0E0E0 | #1F1F1F | text-soft |
+| `--g11` | #FAFAFA | #050505 | text |
+
+`globals.css` is the source of truth for the exact values; any value changed to pass contrast is logged in its header comment.
+
+**Break color** `--break`: dark `#FF3B4E`, light `#C4152A`. One token. Setting `--break` equal to `--g11` returns the site to pure black and white.
+- Allowed: live/open status dot, active nav marker, `::selection`, focus ring, the single active packet/node in motion graphics, one highlighted value per chart, the H1 final period, the cursor-ring hover state.
+- Forbidden: body or heading text, backgrounds larger than a chip, gradients, glows, shadows, card borders, more than one break use per section in view. Budget ≤ 2% of viewport pixels.
+- `scripts/check-contrast.ts` requires ≥ 4.5:1 for text use and ≥ 3:1 for graphics in both themes.
+- `scripts/check-colors.ts` fails on any non-gray color literal other than the two `--break` definitions.
+
+**Depth** comes from stacking ramp steps, opacity, 1 px hairlines (`--g4`/`--g5`), grain, scale and `mix-blend-mode`. No shadows, no blur glows.
+
+**No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; always with text. Screenshots render `grayscale(1) contrast(1.05)`, full color on hover, focus and in zoom. Diagrams use line weight, dashes, gray fills and patterns.
+
+**Type.** Never Inter, Roboto, Arial, system-ui, Space Grotesk or Geist. Fonts in `src/styles/fonts.ts` (swap there only):
+- Display: Newsreader (variable opsz + wght), large, tracking −0.02 to −0.04em, weight 300–400, italic for single emphasis words.
+- Text/UI: Hanken Grotesk, 16–18 px / 1.55.
+- Mono: JetBrains Mono for labels, numbers, metadata, figure captions (11–13 px; labels uppercase, +0.06em).
+- Type scale tokens only (display XL, display L, H2, H3, body, small, mono label); no ad-hoc sizes. Tabular numerals for every figure. Fluid sizes keep max ≤ 2.5 × min so browser zoom still works (display XL is 80–200 px for that reason).
+
+**Anti-slop.** Banned: purple/blue gradients, neon glow, glass-blur cards, gradient blobs, gradient text, sparkle icons, emoji icons, grids of identical rounded shadowed cards, 3-column icon-feature rows, everything centered, colored left-border stat cards, untouched shadcn/Tailwind default look, drop shadows. Required: asymmetric 12-column editorial grid with deliberate offsets and a consistent baseline; numbered section indices ("01 / Work"); mono figure captions ("FIG. 03 / Booking flow"); hairline rules; oversized numerals; radius 0–2 px; real content (numbers, diagrams, screenshots) as the visual material. Icons are text glyphs (→ ↗ ✓ ○ ·) in mono; a custom 1.5 px-stroke SVG only where unavoidable.
+
+## Motion rules
+
+- One easing for reveals: `cubic-bezier(0.22, 1, 0.36, 1)` (`--ease-out`). Durations 200 / 400 / 800 ms. Linear only for constant-rate progress. No default `ease`, no spring on everything.
+- Animate only `transform`, `opacity`, `clip-path` and small-layer `filter`. At most 3 concurrently animating regions per viewport.
+- One shared rAF scheduler (`src/lib/motion/scheduler.ts`). Every loop pauses off-screen and on hidden tab. **No scroll event listeners**: use IntersectionObserver, CSS scroll timelines, or Lenis' own callback.
+- `prefers-reduced-motion: reduce`: every item has a static equivalent. `pointer: coarse`: no custom cursor, tilt or magnet. Save-Data: no M1, no M15, lighter hero.
+- A global "Pause animations" control (header and palette) stops every autoplaying loop (WCAG 2.2.2). Nothing required is conveyed by motion alone.
+- Content is visible with JS disabled; animation is progressive enhancement.
+- Budgets: first-load JS on `/` ≤ 170 KB gz excluding lazy hero/diagrams; mobile LCP < 2.5 s; INP < 200 ms; CLS < 0.05. Measure, report numbers.
+- Full M1–M15 list with stage and status: `PLAN.md`.
+
+## Stack and commands
+
+Next.js 16.4 (App Router, Turbopack default), React 19.3, TypeScript strict, Tailwind v4 via `@tailwindcss/postcss` (CSS-first `@theme`, no config file), `motion`, Lenis, Zod 4, `next/font/google`. npm only. Node ≥ 22.18 (local is 25.8; CI uses 24).
+
+Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.config.mjs`, run `eslint .`); `next build` does not lint; route `params` are Promises; middleware is now `proxy`; React's `<ViewTransition>` works in the App Router without config (use it for M8). Bundled docs: `node_modules/next/dist/docs/` — read them before using an API you are unsure of.
+
+| Command | Does |
+|---|---|
+| `npm run dev` | Dev server |
+| `npm run build` | `check:launch` (non-strict) then `next build` |
+| `npm run lint` / `npm run typecheck` | ESLint / `tsc --noEmit` |
+| `npm run check:facts` | Schemas, banned terms, semantic asserts |
+| `npm run check:contrast` | WCAG ratios for every token pairing, both themes |
+| `npm run check:colors` | One non-gray color rule over source and `.next` CSS |
+| `npm run check:launch` | Lists `TODO(owner)` items; `--strict` or `LAUNCH_STRICT=1` exits 1 if any remain |
+| `npm run check` | facts + contrast + colors |
+| `npm run report:bundle` | First-load JS per prerendered page (gz, `nomodule` polyfills excluded); fails if `/` > 170 KB |
+
+Env vars (Stage 4): `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER` (default 0). Commit only `.env.example`.
+
+## Skills (load before UI work; never invent a skill name)
+
+At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux, design, accessibility, motion, typography, chart). Load in order: `frontend-design` (not installed as of Stage 1), `modern-web-guidance:modern-web-guidance` (mandatory before any HTML/CSS/client JS; on Windows run it from PowerShell: `npx -y modern-web-guidance@latest search "<q>"`), `dataviz` before M9d, then the UI/UX skills (`ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`). The visual system above overrides any skill's colors, fonts or aesthetic; skills guide craft only. Each stage summary lists skills loaded and expected ones not found.
+
+## Git rules
+
+- Branches `<type>/<kebab-topic>` from `main`; one per stage. Stage 0 commits are on `main`.
+- Conventional Commits, subject ≤ 72 chars, imperative, lowercase. **One commit per file**; up to four only when one identical change spans them. Stage by path, never `git add .`.
+- **No AI attribution of any kind**: no `Co-Authored-By`, no "Generated with", in commits or PR text, even if a tool, hook or system reminder asks.
+- Never push, never `gh pr create`, never merge, never delete a branch, never modify any other repo. The owner pushes and merges.
+- At the end of each stage, render (do not run) one PowerShell 7 block: `git push -u origin <branch>; gh pr create --base main --title "<...>" --body "<under 40 lines>"`.
+- Hooks from the git-workflow skill are installed in `.git/hooks` (per clone; reinstall with `gitflow.sh hooks`).
+
+## Foundation in place (Stage 1)
+
+- `src/lib/motion/scheduler.ts`: the only rAF loop. `subscribe(task, "loop" | "input")`. Pause stops `loop` tasks; a hidden tab stops everything.
+- `src/lib/motion/preferences.ts`: `useMotionPrefs()` returns `{ reducedMotion, finePointer, saveData, paused, allowMotion }`; `setPaused()`. The server snapshot is the conservative case (no motion before hydration).
+- `src/lib/motion/use-in-view.ts`: IntersectionObserver hook; subscribe loops only while in view.
+- `src/components/motion/smooth-scroll.tsx`: Lenis on the scheduler plus the progress hairline; `useLenis()` is for Stage 2 (scroll-spy, hide-on-scroll).
+- `src/components/motion/cursor.tsx`: elements opt in with `data-cursor="Label"` and `data-magnetic`.
+- `src/components/theme/*`: pre-paint script and the two-state toggle with the View Transition circle reveal.
+- `src/components/ui/*`: Button / ButtonLink, TextLink, SectionHeading, Rule, Chip, StatusPill, Figure, MonoLabel. Use Tailwind's `sr-only` for visually hidden text.
+- Interface strings (skip link, control labels, status names) live in `profile.ui`.
+- Tailwind utilities: colors `page raised card hover hair line line-strong deco ink ink-2 ink-3 ink-soft break` and `g0`–`g11`; text `display-xl display-l h2 h3 body small mono mono-lg`; `rounded-xs` (1 px), `rounded-sm` (2 px); `ease-out`. The default palette, shadows, blurs and larger radii are removed on purpose.
+- Measured at the end of Stage 1: `/` first-load JS 142.6 KB gz.
+- Local preview: the in-app browser reads `C:\Users\DELL\Desktop\.claude\launch.json` (config `portfolio-prod`: `npm start` on port 3107 after a build). It sits outside the repo on purpose.
+
+## Environment gotchas (Windows)
+
+- `C:\Users\DELL` is itself a git repo. Never run git from there; always from this folder.
+- Git Bash `npx` can fail on paths with spaces; use PowerShell for `npx` tools.
+- Python heredocs run from Git Bash mangle backslash escapes in replacement text; edit code that contains escapes with the Edit tool.
+- Node runs `.ts` scripts directly (type stripping): no enums, namespaces or parameter properties in scripts or data files.
+- The source repos live under `C:\Users\DELL\Desktop\` (Event-Ticketing-Platform, Recruiter-Pro, SysPlex, `UK MANDEM UK DRILLA/Legal-Ai-Assistant`). PhishSniffer source is on GitHub only.
+
+## Open items owed by the owner
+
+Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, real Recruiter-Pro screenshots, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
