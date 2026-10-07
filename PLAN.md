@@ -124,13 +124,69 @@ Decisions:
 - A PR closed upstream without merging is dropped from the live list (FACTS-CHECK.md → Stage 4).
 - The `motion` package is still unused; Stage 5 polish removes it unless M15 needs it.
 
-## Stage 5: Optional shader and polish
+## Stage 5: Design polish, motion completion, optional shader
 
+Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidance` (before any HTML/CSS/client JS), then `ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`. The "Visual system" and "Motion rules" sections of CLAUDE.md override every skill: use the skills for craft, critique and accessibility only. Never change the gray ramp, `--break`, fonts, radius, the no-shadow rule, the easing or the 200/400/800 ms durations. Where frontend-design calls a brief-required choice "generic", the brief wins; record it as **Brief** in `docs/UX-REVIEW.md`.
+
+5.1 Design critique (no code first)
+- [ ] frontend-design self-critique of every page (`/`, all case studies) at 375 / 768 / 1280 / 1920, dark and light. Screenshots in `docs/screens/stage5-before/`
+- [ ] Issues list in `docs/UX-REVIEW.md` (new section "Stage 5"), each with a verdict
+- [ ] Each fix stays inside the token system (no new colors, sizes, shadows or radii)
+
+5.2 Motion completion (inside the existing system)
+- [ ] Audit every M1–M14 item against CLAUDE.md motion rules: one easing, fixed durations, ≤ 3 animating regions per viewport, scheduler only, no scroll listeners
+- [ ] Interaction states consistent on every control: hover, focus-visible, active, disabled; motion limited to `transform` / `opacity` / `clip-path`
+- [ ] Reduced motion, `pointer: coarse`, Save-Data, JS-off and the global Pause control re-verified on every page
+- [ ] `motion` package decision: either a listed item needs it (name the item), or remove it from `package.json` (one commit, bundle numbers before and after)
 - [ ] M15 (default OFF, `NEXT_PUBLIC_ENABLE_SHADER=0`): raw WebGL2 grayscale noise / flow field, ≤ 15 KB, lazy after idle; gated on WebGL2, `deviceMemory ≥ 4`, `hardwareConcurrency ≥ 4`, no Save-Data, no reduced motion, visible tab; falls back to M4
-- [ ] Polish pass
-- [ ] M1–M15 status table (DONE / PARTIAL / SKIPPED)
-- [ ] Final budget report
-- [ ] Final message reminds the owner to pin the repo and add the URL to `Sharawey74/Sharawey74`
+
+5.3 Audit and budgets
+- [ ] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md`
+- [ ] New behavior gets cases in `docs/UAT.md` (never marked passed)
+- [ ] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz
+- [ ] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. Stage 4 left two over budget: Eventora LCP 2.7–3.0 s and TBT 1.1–2.1 s (applied throttling)
+- [ ] 375 px `scrollWidth` check on every page
+- [ ] After screenshots in `docs/screens/stage5-after/`; M1–M15 status table updated
+
+Notes:
+- Screenshots and reports are committed one file per commit (CLAUDE.md git rules), or up to four per commit when they are one identical change (for example the four widths of one page and theme). Keep them as compressed PNG/JPEG at 1× so the repo stays small.
+
+## Stage 6: Release docs, CD and v1.0.0
+
+6.1 Docs (repo copy rules: no banned words, no emoji, no exclamation marks)
+- [ ] `DEPLOY.md`:
+  - Hosting: Vercel Git integration, production = `main`, preview per PR
+  - Owner-only Vercel import steps (the project is not imported yet)
+  - Env var names from CLAUDE.md only
+  - Pre-release checklist: `npm run check`, `lint`, `typecheck`, `build`, `report:bundle`, `check:launch -- --strict`, and the local-only private-terms facts check
+  - Release steps: 1. bump `package.json` version; 2. date the CHANGELOG section; 3. PR and merge to `main` (owner); 4. tag `vX.Y.Z` on the merge commit (owner); 5. push the tag (owner)
+  - Post-deploy smoke checks
+  - Rollback: Vercel instant rollback, or redeploy the previous tag
+  - Domain notes
+  - Updating the repo homepage URL
+- [ ] `CHANGELOG.md` in Keep a Changelog format, SemVer for this site:
+  - MAJOR: redesign or new information architecture
+  - MINOR: a new section or case study
+  - PATCH: copy, fixes, performance
+  - 0.x until launch; launch is v1.0.0
+  - Backfill one 0.x entry per DONE stage, using only PLAN.md, merged PR titles and `git log` dates
+
+6.2 CD (extend, do not replace, `.github/workflows/ci.yml`)
+- [ ] Playwright smoke job in `ci.yml` or a separate workflow: build, `next start`; every route returns 200; no console errors; header nav works; reduced-motion and JS-off render content
+- [ ] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on
+- [ ] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create`
+- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped
+- [ ] Least-privilege `permissions` in every workflow; actions pinned to at least a major version
+- [ ] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL
+
+6.3 Release v1.0.0
+- [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left)
+- [ ] Render the owner's release block per `DEPLOY.md`; after the deploy, run the smoke checks on the production URL and confirm the GitHub Release exists
+- [ ] Final message reminds the owner to pin the repo and add the URL to `Sharawey74/Sharawey74` (carried over from the old Stage 5 list)
+
+Notes:
+- Backfilled CHANGELOG versions (0.1.0 … 0.4.0 for Stages 1–4, or similar) are numbers assigned now for the record. No such tags or releases exist; the CHANGELOG says so, and only v1.0.0 (and later) gets a tag and a GitHub Release unless the owner decides to tag the old merge commits.
+- `package.json` is at `0.1.0` today and has never been bumped.
 
 ---
 

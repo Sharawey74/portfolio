@@ -15,7 +15,7 @@ file and a date.
 
 - Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
-- Work is staged (0 to 5). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+- Work is staged (0 to 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
 
 ## Source of truth and honesty rules (highest priority)
 
