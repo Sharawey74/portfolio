@@ -302,3 +302,86 @@ Verdicts: **Open** (defect, fix planned in 5.2) · **Owner** (needs a decision f
 - Real material carries the page: diagrams drawn from sourced steps, charts, screenshots, the PR timeline. No stock imagery, no filler sections.
 - Light mode is a true mirror; nothing breaks between themes at any width.
 - Every page measures exactly its viewport width at all four widths (`scrollWidth` = viewport).
+
+## 5.2 Fixes and motion completion
+
+Skills: `modern-web-guidance` (scrollability-affordance-hints; apply-webgl-shaders was retrieved and does not apply, it renders HTML into a canvas), `ui-ux-pro-max` (quick-reference rules; the searches for pressed state and scroll hints returned nothing specific). `ui-ux-pro-max:design-system` and `ui-ux-pro-max:ui-styling` were not loaded: token architecture and component styling are fixed by the brief, and both skills target new systems and shadcn/ui.
+
+### D1–D9 resolved
+
+| ID | Verdict | Change |
+|---|---|---|
+| D1 | Fixed | Section links from 1024 px (`lg`); below that the header button reads "Menu" and opens the palette |
+| D2 | Fixed (owner chose A) | The chip marquee is gone from Work, with its component and CSS; About keeps the lane list with `usedIn`. M6 keeps the sticky stack and numeral parallax |
+| D3 | Fixed | Card titles at `text-h2`, and the card is one column below 1024 px (a 5/12 column at 768 px still split "Recruiter-" / "Pro"): one line at all four captured widths |
+| D4 | Fixed | Flow previews render from 768 px only |
+| D5 | Fixed | Every case section heading is `text-h2` in the display face (Problem, Stack and Limits headings are now visible headings, not mono labels); display sizes only for the H1 |
+| D6 | Fixed | "Roles" and "Or reach me directly" removed (the latter kept as the list's `aria-label`) |
+| D7 | Fixed | About numerals at `text-h2`; Open source keeps the display numerals |
+| D8 | Fixed | Below 1024 px a mono line under the diagram: "← → Scroll sideways for the full diagram." (copy in `profile.ui.diagram.scrollHint`) |
+| D9 | Fixed | Parenthesised parts of step labels never break inside ("(availableCount -= n)") |
+
+### Motion audit, M1–M14 against the motion rules
+
+Method: grep for scroll listeners, raw `requestAnimationFrame`, hard-coded durations and easings; then every page in five modes in headless Chrome (reduced motion, coarse pointer, Save-Data, JavaScript off, global pause), recording running animations, hero layer, cursor, hidden text and console errors.
+
+| Rule | Result |
+|---|---|
+| No scroll event listeners | Pass: none (Lenis' own callback and IntersectionObserver only) |
+| One rAF loop (scheduler) | Pass: no `requestAnimationFrame` outside `scheduler.ts` |
+| One easing | Pass: every transition and keyframe animation uses `--ease-out`; `linear` only on scroll-linked timelines and the packet's constant-rate travel |
+| Durations 200 / 400 / 800 ms | **Fixed**: intro was 1000 + 650 ms (now 800 ms count, 300 ms hold, 400 ms lift = 1500 ms), count-up 1200 ms (now 800), scramble 360 ms (now 400), diagram packet 900 ms per step (now 800). Stagger delays (45–90 ms per word) are offsets, not durations |
+| ≤ 3 animating regions per viewport | Pass by inventory: Work in view = carousel autoplay + scroll-linked card recede + numeral drift (the marquee, a fourth, is gone); case study = diagram packet + progress hairline; hero = canvas + one-shot headline entrance |
+| Only transform / opacity / clip-path / small filter | Pass: the new pressed state uses `translate` only |
+| Reduced motion | Pass on all 4 pages: no running animations, no hero canvas, no cursor, no hidden text |
+| `pointer: coarse` | Pass on all 4 pages: no custom cursor (tilt and magnet key off the same flag) |
+| Save-Data | Pass on all 4 pages: no intro, no canvas (static hero) |
+| JavaScript off | Pass on all 4 pages: no hidden text; CSS-only scroll effects still run |
+| Global pause | Pass on all 4 pages: `data-motion="paused"`, the CSS numeral drift stops (observed), and the carousel, canvas and diagram packet are scheduler "loop" tasks, which the pause stops (verified in Stage 1); scroll-linked and one-shot effects keep running by design |
+| Console | No errors or warnings in any of the 20 runs |
+
+| Item | Status after audit |
+|---|---|
+| M1 | DONE, now on duration tokens (1500 ms) |
+| M2–M5, M7–M14 | DONE, unchanged |
+| M6 | PARTIAL by owner decision: sticky stack and parallax kept, marquee retired (D2) |
+| M15 | DONE, default OFF |
+
+### Interaction states
+
+| State | Result |
+|---|---|
+| Hover | Unchanged: color, border or underline steps on every control (Tailwind `hover:` variants only apply on hover-capable devices; the few plain-CSS `:hover` rules can stick after a tap on touch screens and are harmless there) |
+| Focus-visible | Unchanged: 2 px `--break` ring everywhere |
+| Active (new) | One pressed state for every control: a 1 px drop (`translate`), 200 ms, in the base layer so a component's own transition list still wins. Applies to buttons, `role=button`, palette options, contact links and button-styled links (`data-press`) |
+| Disabled | `cursor: not-allowed` and no pressed response; the Resume button keeps its outline-only disabled style |
+
+### `motion` package
+
+Removed (`npm uninstall motion`): nothing imports it, and M15 is raw WebGL2. First-load JS before and after: `/` 155.9 KB gz both, case studies 155.6 KB gz both (it was never bundled). The lockfile loses 61 lines; `npm audit --omit=dev`: 0 vulnerabilities.
+
+### M15 shader
+
+`src/components/hero/hero-shader.tsx`: raw WebGL2, a grayscale flow field drawn as contour lines from two token grays (`--g0`, `--g5`), so it cannot produce a color off the ramp. Half resolution, DPR ≤ 1.5, a "loop" task on the scheduler (stops off-screen, on a hidden tab, under the pause), re-reads the colors on theme change. Chunk: 3.2 KB raw, 1.7 KB gz (budget 15 KB). `HeroGraph` loads it only when `NEXT_PUBLIC_ENABLE_SHADER=1` and WebGL2, `deviceMemory ≥ 4`, `hardwareConcurrency ≥ 4`, a visible tab, no reduced motion and no Save-Data all hold; a failed context or compile falls back to the M4 canvas. Verified with the flag on in headless Chrome (WebGL2 via SwiftShader): canvas live, no console errors, contour lines behind the headline. With the flag off (default) `/` does not reference the chunk.
+
+## 5.3 Audit and budgets
+
+### UI UX Pro Max rules for the new and changed UI
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `nav-hierarchy`, `breakpoint-consistency` | Pass | One navigation per width: header links from 1024 px, Menu (palette) below; the header stays one row at 768 px (`stage5-after/home-768-*`) |
+| `press-feedback`, `state-clarity` | Pass | One pressed state on every control (1 px `translate`, 200 ms); disabled controls show `not-allowed` and do not move |
+| `scroll-affordance` | Pass | Scroll hint under the diagram below 1024 px; the ordered step list is the full text equivalent |
+| `heading-hierarchy` | Pass | Case studies: H1 at display size, every section an H2 at `text-h2`; the home page keeps display-size section titles (one per screen) |
+| `content-priority`, no duplication | Pass | The stack appears once on `/` (About), with where each chip was used |
+| `long-token-wrapping` | Pass | Parenthesised step details stay whole; source paths still wrap anywhere (R8) |
+| `motion-consistency` (one easing, token durations) | Pass | See the motion audit above; every JS-driven duration reads `DUR_MS` |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport on all 32 after captures (375, 768, 1280, 1920 × 4 pages × 2 themes) |
+| `decorative-motion-optional` (M15) | Pass | Off by default; gated on capability, reduced motion, Save-Data, a visible tab; pause stops it |
+
+After captures: `docs/screens/stage5-after/` (32 WebP, 6.6 MB), taken the same way as the before set.
+
+### Lighthouse
+
+Not recorded yet. Twelve runs (3 per page) on 2026-10-07 were discarded: the laptop was on battery and Lighthouse's CPU benchmark read 512–671, against 1,500–2,372 for the Stage 4 runs, so TBT came out at 4–8 s and every run warned about a slow CPU. The runs are re-done on mains power before the 5.3 Lighthouse item is ticked.
