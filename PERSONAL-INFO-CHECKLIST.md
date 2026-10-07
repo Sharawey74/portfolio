@@ -34,6 +34,7 @@ production build.
 
 ## Environment variables (Vercel)
 
-Set in the Vercel dashboard, never committed. Full list in `.env.example` (Stage 4):
+Set in the Vercel dashboard, never committed. Full list with notes in `.env.example`;
+setup steps in `README.md` → "Deploying on Vercel":
 `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`,
 optional `GITHUB_TOKEN`, and `LAUNCH_STRICT=1` on Production when you are ready to launch.
