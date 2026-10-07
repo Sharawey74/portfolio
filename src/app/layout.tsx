@@ -6,6 +6,7 @@ import { ThemeScript } from "@/components/theme/theme-script.tsx";
 import { SmoothScroll } from "@/components/motion/smooth-scroll.tsx";
 import { Cursor } from "@/components/motion/cursor.tsx";
 import { SiteHeader } from "@/components/layout/site-header.tsx";
+import { Intro } from "@/components/intro/intro.tsx";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             {children}
           </main>
         </SmoothScroll>
+        <Intro />
         <Cursor />
       </body>
     </html>
