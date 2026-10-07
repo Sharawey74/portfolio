@@ -72,23 +72,31 @@ Decisions:
 - On first visit the intro's lift is the hero reveal; on repeat visits the H1 words rise. Either way the hero text is painted early (LCP).
 - Mobile: the graph is masked to the top-right corner so no line crosses the text.
 
-## Stage 3: Projects and case studies
+## Stage 3: Projects and case studies · DONE 2026-10-07 · branch `feat/projects-case-studies`
 
-- [ ] Load `dataviz` before any chart (M9d)
-- [ ] Copy assets read-only from source repos into `public/` (Eventora screenshots; diagram sources)
-- [ ] Flip `work` to `live: true` in profile.ts (nav link + "View My Work" CTA appear)
-- [ ] Featured projects section; M6 sticky stacked cards (scale and dim as the next arrives), parallax on decoration only, pausable tech-chip marquee
-- [ ] M7 project cards: cursor spotlight (radial mask), tilt ≤ 4°, clip-path image reveal, screenshot crossfade carousel (pauses on hover/focus, manual controls)
-- [ ] `/projects/[slug]` for eventora, recruiter-pro, sysplex: problem → architecture → key decisions → evidence → stack → links; caveats shown
-- [ ] M8 route transitions: React `<ViewTransition>` shared card image + title → case-study hero; `motion` fade fallback; focus moved to the new heading
-- [ ] M9a Eventora request lifecycle (draw-on paths, packets, play/pause/step, scroll-scrub option)
-- [ ] M9b Recruiter-Pro pipeline (parse → extract → score → explain)
-- [ ] M9c SysPlex agents → dashboard flow
-- [ ] M9d evidence charts from committed numbers only (660 vs 800 req/s; 200-VU ramp figures), axes, value labels, source line
-- [ ] Every diagram: only nodes from `architecture[]`, static final state, `<figcaption>` "FIG. NN / …", visually hidden description, break color on the active packet only
-- [ ] M10 count-ups: server-rendered final value, tabular figures, animate only after hydration and in view
-- [ ] Recruiter-Pro and SysPlex screenshot slots render nothing public until the owner supplies real images
-- [ ] Gates green
+Skills loaded: modern-web-guidance (light-dismiss-a-dialog, declarative-dialog-popover-control, optimize-image-priority; plus Stage 1–2 guides), dataviz (before the charts), git-workflow. Not found: frontend-design.
+
+- [x] `dataviz` loaded before any chart code
+- [x] 9 Eventora screenshots copied read-only into `public/projects/eventora/` (source repo left clean); intrinsic sizes in data; alt text written after viewing them
+- [x] `work` flipped live: header shows "02 Work", hero shows "View My Work"
+- [x] M6 sticky stack: one named `view-timeline` on the list, per-card `exit-crossing` ranges (scale 0.92, opacity 0.45); Lenis-driven `--stack-p` fallback where scroll timelines are missing (no scroll listener); numeral parallax (decoration only); marquee runs only in view, holds on hover/focus, stops under pause and reduced motion (then wraps as a static list)
+- [x] M7 cards: spotlight = radial alpha mask over a hairline grid (no color); tilt ≤ 4° (fine pointer, motion allowed); clip-path media reveal; carousel = opacity crossfade on the scheduler, holds on hover/focus, off-screen and pause, manual ← → controls, `aria-roledescription` carousel/slide, hidden slides `fetchPriority="low"`
+- [x] `/projects/[slug]` (eventora, recruiter-pro, sysplex; static): problem + facts → architecture → key decisions → evidence (every metric shows source + date) → charts → screenshots → stack → limits; links in the header
+- [x] Sources link to GitHub permalinks pinned to the evidence commits (`src/lib/sources.ts`); 131 of 142 source strings resolve, all 38 linked files verified to exist at their commit
+- [x] M8: React `<ViewTransition name share="morph" default="none">` on card title + first screenshot and the case-study title + hero image; CSS fade when the View Transitions API is missing (pre-paint `data-vt="none"`); focus moves to the case-study H1. Verified: client navigation, focus on `#case-title`. The morph itself was not visible in captures (hidden pane)
+- [x] M9 `FlowDiagram`: nodes and steps only from sourced `flow` data (schema rejects steps between undeclared nodes; missing layout fails the build); edges draw on via transform `scale`; one `--break` packet; Pause/Play, Step, Restart, Follow scroll (Lenis), path toggle (Seats available / Sold out); ordered step list with `aria-current="step"` + → marker as the text equivalent; static final state with JS off / reduced motion. Verified: autoplay advances when frames render, Step, alt path order matches README:124-148
+- [x] M9a Eventora reservation flow · M9b Recruiter-Pro request path · M9c SysPlex collection → dashboard
+- [x] M9d charts: operating points (660 req/s @ p95 511 ms vs 800 req/s @ p95 9.0 ms, footnote with the 870 / 568 ceiling) and the 16-minute ramp schedule with whole-run outcomes; one axis each, thin marks, direct labels, `<title>` tooltips, sr-only tables, one `--break` mark per chart; schema caps highlights at 1
+- [x] M10 `CountUp`: final value in server HTML, tabular figures, counts once in view after hydration, off under reduced motion / pause
+- [x] Recruiter-Pro and SysPlex cards show their flow preview instead of screenshots (no mockups used)
+- [x] Gates green; `/` 151.9 KB gz; case studies 152.6 KB gz
+- [x] Fixed during review: card numerals overlapping titles, highlight numbers colliding, a wide diagram widening the whole grid on phones (`.grid-12 > * { min-width: 0 }`)
+- [x] UI UX Pro Max audit (`docs/UX-REVIEW.md`): 8 defects found and fixed on this branch (R1–R8: focus under header/cards, broken header link on case pages, unreadable mobile charts, low-contrast diagram edges, long lines, button cursor, 627 px-wide case pages)
+- [ ] Owner UAT run (`docs/UAT.md`) recorded before merge
+
+Decisions:
+- M6 fallback uses Lenis' scroll callback instead of `motion`'s `useScroll`, which listens to scroll events (against the motion rules); M8's fallback fade is CSS. The `motion` package is installed but not shipped in any bundle yet.
+- The "660 vs 800" chart is an operating-point plot, not bars (different measures; see FACTS-CHECK.md).
 
 ## Stage 4: Remaining sections, SEO, docs
 
@@ -124,12 +132,12 @@ Decisions:
 | M2 | Lenis + scroll-progress hairline | 1 | DONE |
 | M3 | Kinetic typography | 2 | DONE |
 | M4 | Hero node-graph canvas | 2 | DONE |
-| M5 | Cursor dot + ring, magnetic, labels | 1 | DONE (base; card labels wired in Stage 3) |
-| M6 | Scroll choreography, sticky stack, marquee | 3 | open |
-| M7 | Project card interactions | 3 | open |
-| M8 | Route transitions | 3 | open |
-| M9 | Motion graphics a–d | 3 | open |
-| M10 | Count-up numbers | 3 | open |
+| M5 | Cursor dot + ring, magnetic, labels | 1 + 3 | DONE (View / Zoom labels on cards and gallery) |
+| M6 | Scroll choreography, sticky stack, marquee | 3 | DONE |
+| M7 | Project card interactions | 3 | DONE |
+| M8 | Route transitions | 3 | DONE (morph not visually verified; hidden pane) |
+| M9 | Motion graphics a–d | 3 | DONE |
+| M10 | Count-up numbers | 3 | DONE |
 | M11 | Text scramble | 4 | open |
 | M12 | Grain, grid, vignette | 4 | open |
 | M13 | Command palette, scroll-spy, smart header | 2 + 4 | PARTIAL (scroll-spy + smart header done; palette in Stage 4) |
@@ -140,7 +148,7 @@ Decisions:
 
 | Budget | Target | Last measured |
 |---|---|---|
-| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 145.0 KB (Stage 2) |
+| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 151.9 KB (Stage 3) |
 | Mobile LCP | < 2.5 s | — |
 | INP | < 200 ms | — |
 | CLS | < 0.05 | — |
@@ -148,6 +156,8 @@ Decisions:
 | Concurrently animating regions per viewport | ≤ 3 | — |
 
 ## Definition of done (whole project)
+
+- [ ] `docs/UAT.md` signed off by the owner, no open High defects
 
 - [ ] `next build` passes; no TypeScript or lint errors; no unused data
 - [ ] Every public claim traces to `FACTS-CHECK.md`; zero banned claims, including alt text and metadata

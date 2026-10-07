@@ -1,4 +1,5 @@
 import { Hero } from "@/components/hero/hero.tsx";
+import { WorkSection } from "@/components/work/work-section.tsx";
 
 /**
  * Home. Sections are added stage by stage and flagged `live` in profile.ts
@@ -6,5 +7,10 @@ import { Hero } from "@/components/hero/hero.tsx";
  * Stage 4).
  */
 export default function Home() {
-  return <Hero />;
+  return (
+    <>
+      <Hero />
+      <WorkSection />
+    </>
+  );
 }

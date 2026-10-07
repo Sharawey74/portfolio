@@ -249,6 +249,11 @@
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
   }
+  /* Grid items default to min-width: auto, so one wide child (e.g. a diagram
+     in its own horizontal scroller) would widen every column. */
+  .grid-12 > * {
+    min-width: 0;
+  }
 
   .mono-label {
     font-family: var(--font-mono);
@@ -660,4 +665,343 @@ html[data-intro="play"] .intro {
       animation-range: entry 0% cover 35%;
     }
   }
+}
+
+/* ── Stage 3 ─────────────────────────────────────────────────────────── */
+
+/* M6 sticky stack. Each card sticks below the header, offset by its index;
+   as later cards slide over it, it scales down and dims. Driven by one named
+   view timeline on the list (CSS), or --stack-p from Lenis (fallback). */
+.stack {
+  display: grid;
+  gap: 4vh;
+  view-timeline: --stack block;
+}
+.stack-item {
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem + var(--i) * 1.25rem);
+  transform-origin: 50% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes stack-recede {
+      to {
+        scale: 0.92;
+        opacity: 0.45;
+      }
+    }
+    .stack-item:not(:last-child) {
+      animation: stack-recede linear both;
+      animation-timeline: --stack;
+      animation-range: exit-crossing calc(var(--i) / var(--n) * 100%) exit-crossing calc((var(--i) + 1) / var(--n) * 100%);
+    }
+  }
+}
+html[data-stack-fallback] .stack-item:not(:last-child) {
+  scale: calc(1 - var(--stack-p, 0) * 0.08);
+  opacity: calc(1 - var(--stack-p, 0) * 0.55);
+}
+/* Scroll-linked and user-driven, not autoplay: exempt from the pause. */
+html[data-motion="paused"] .stack-item {
+  animation-play-state: running !important;
+}
+
+/* M7 card surface: spotlight is a radial alpha mask over a hairline grid. */
+.card-surface {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.card-spot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line-hair) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-hair) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), #000, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+.card-surface[data-spot] .card-spot {
+  opacity: 1;
+}
+.card-surface > :not(.card-spot) {
+  position: relative;
+}
+.card-numeral {
+  display: block;
+  font-size: var(--text-display-l);
+  line-height: 1;
+  color: var(--deco);
+  pointer-events: none;
+}
+/* Parallax on decoration only: the numeral drifts against the card. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes numeral-drift {
+      from {
+        translate: 0 0.6rem;
+      }
+      to {
+        translate: 0 -0.6rem;
+      }
+    }
+    .card-numeral {
+      animation: numeral-drift linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+/* M7 clip-path reveal for card media, enabled only with data-reveal. */
+html[data-reveal="on"] .clip-reveal {
+  transition: clip-path var(--dur-3) var(--ease-out);
+}
+html[data-reveal="on"] .clip-reveal:not(.is-in) {
+  clip-path: inset(0 0 100% 0);
+  animation: rv-safety-clip 1ms 4s forwards;
+}
+@keyframes rv-safety-clip {
+  to {
+    clip-path: inset(0);
+  }
+}
+html[data-motion="paused"] .clip-reveal {
+  animation-play-state: running !important;
+}
+
+/* M7 carousel: opacity crossfade only. */
+.carousel-slide {
+  opacity: 0;
+  transition: opacity var(--dur-3) var(--ease-out);
+}
+.carousel-slide[data-active] {
+  opacity: 1;
+}
+.carousel-btn,
+.flow-btn {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  color: var(--text-2);
+  transition:
+    color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
+}
+.carousel-btn:hover,
+.flow-btn:hover,
+.flow-btn[aria-pressed="true"] {
+  color: var(--text-1);
+  border-color: var(--text-1);
+}
+
+/* M6 marquee: two copies of the track translate by half. */
+.marquee {
+  overflow: clip;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+.marquee-list {
+  display: flex;
+  gap: 0.5rem;
+  padding-inline-end: 0.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .marquee[data-run] .marquee-track {
+    animation: marquee 60s linear infinite;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+}
+@keyframes marquee {
+  to {
+    translate: -50% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    mask-image: none;
+  }
+  .marquee-track {
+    width: auto;
+  }
+  .marquee-list {
+    flex-wrap: wrap;
+  }
+  .marquee-list[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* M9 diagram */
+.flow-box-face {
+  fill: var(--surface-card);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  fill-opacity: 0.85;
+}
+.flow-node[data-active] .flow-box-face {
+  stroke: var(--text-1);
+  stroke-width: 2;
+}
+.flow-label {
+  fill: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+html[data-reveal="on"] .flow-edge {
+  scale: 0;
+  transition: scale var(--dur-3) var(--ease-out);
+}
+html[data-reveal="on"] .flow[data-drawn] .flow-edge {
+  scale: 1;
+}
+.flow-packet {
+  transition: opacity var(--dur-1) var(--ease-out);
+}
+.flow-step {
+  display: grid;
+  grid-template-columns: 1rem 2rem 1fr;
+  gap: 0.5rem;
+  padding-block: 0.75rem;
+  border-top: 1px solid var(--line-hair);
+}
+.flow-step-mark {
+  font-family: var(--font-mono);
+  color: var(--text-1);
+  opacity: 0;
+}
+.flow-step[aria-current="step"] .flow-step-mark {
+  opacity: 1;
+}
+.flow-step[aria-current="step"] .text-ink-2 {
+  color: var(--text-1);
+}
+
+/* M9d charts: recessive grid and axes, 2 px lines, one --break mark. */
+.chart-grid line {
+  stroke: var(--line-hair);
+  stroke-width: 1;
+}
+.chart-baseline {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+.chart-axis-text text {
+  fill: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.chart-axis-text .chart-axis-title {
+  fill: var(--text-2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.chart-line {
+  fill: none;
+  stroke: var(--text-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.chart-drop {
+  stroke: var(--line);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.chart-hit {
+  fill: transparent;
+}
+.chart-marker,
+.chart-vertex {
+  fill: var(--text-1);
+  stroke: var(--surface-page);
+  stroke-width: 2;
+}
+.chart-point[data-highlight] .chart-marker {
+  fill: var(--break);
+}
+.chart-label {
+  fill: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+.chart-value {
+  fill: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+html[data-reveal="on"] .chart-reveal .chart-line {
+  transition: clip-path var(--dur-3) var(--ease-out);
+}
+html[data-reveal="on"] .chart-reveal:not(.is-in) .chart-line {
+  clip-path: inset(0 100% 0 0);
+}
+
+/* Zoom view */
+.zoom-dialog {
+  max-width: min(92vw, 1440px);
+  margin: auto;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--text-1);
+}
+.zoom-dialog::backdrop {
+  background: color-mix(in srgb, var(--g0) 85%, transparent);
+}
+.zoom-dialog img {
+  filter: none;
+}
+
+/* M8 fallback: no View Transitions API -> a plain fade on route content. */
+html[data-vt="none"] .case {
+  animation: fade-in var(--dur-2) var(--ease-out);
+}
+::view-transition {
+  pointer-events: none;
+}
+
+/* ── UX review fixes (docs/UX-REVIEW.md) ─────────────────────────────── */
+
+/* R1 focus-not-obscured (WCAG 2.4.11) and fixed-element-offset: anchor jumps
+   and keyboard focus land below the fixed header, also without Lenis. */
+html {
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+/* R2 focus-not-obscured: a focused control in an earlier stacked card would
+   sit under the next sticky card; lift its card above the stack. */
+.stack-item:focus-within {
+  z-index: 2;
+}
+/* R7 cursor-pointer: Tailwind v4 preflight gives buttons the default arrow.
+   The custom cursor (fine pointer, motion allowed) still hides it. */
+button:not(:disabled),
+[role="button"] {
+  cursor: pointer;
+}
+/* R4 responsive-chart: below ~560 px the charts scroll sideways in their own
+   region instead of shrinking their 12 px labels to ~6 px. */
+.chart-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.chart-scroll > .chart {
+  min-width: 560px;
 }

@@ -162,6 +162,19 @@ for (const p of projects) {
   }
 }
 
+for (const p of projects) {
+  for (const a of p.screenshots) {
+    try {
+      statSync(join(root, "public", a.src));
+    } catch {
+      errors.push(`projects.ts: ${p.slug} screenshot ${a.src} is missing from public/`);
+    }
+  }
+  if (p.tier !== "secondary" && p.screenshots.length === 0 && !p.flow) {
+    errors.push(`projects.ts: ${p.slug} has neither screenshots nor a flow to show on its card`);
+  }
+}
+
 for (const c of experience.certifications) {
   if (/\b(19|20)\d{2}\b/.test(JSON.stringify(c).replace(/"asOf":"[^"]+"/, ""))) {
     errors.push(`experience.ts: certification "${c.name}" carries a date`);

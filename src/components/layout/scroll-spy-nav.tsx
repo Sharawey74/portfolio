@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type SpyItem = { id: string; index: string; title: string };
@@ -23,6 +24,9 @@ export function ScrollSpyNav({
   layout?: "row" | "column";
 }) {
   const [current, setCurrent] = useState<string | null>(null);
+  // The header nav also renders on case-study pages, where the sections live
+  // on "/": link there instead of to an anchor this page does not have.
+  const base = usePathname() === "/" ? "" : "/";
 
   useEffect(() => {
     const targets = items.map((i) => document.getElementById(i.id)).filter((el): el is HTMLElement => el !== null);
@@ -51,7 +55,7 @@ export function ScrollSpyNav({
           const active = item.id === current;
           return (
             <li key={item.id}>
-              <a href={`#${item.id}`} aria-current={active ? "true" : undefined} className="spy-link mono-label">
+              <a href={`${base}#${item.id}`} aria-current={active ? "true" : undefined} className="spy-link mono-label">
                 <span aria-hidden="true" className="spy-dot" />
                 <span className="num spy-index">{item.index}</span>
                 <span>{item.title}</span>

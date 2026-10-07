@@ -50,7 +50,7 @@ const pairs: Pair[] = [
   ),
   ...["g0", "g1", "g2"].map((bg) => ({ fg: "break", bg, min: 4.5, use: "break as text (H1 period)" })),
   ...SURFACES.map((bg) => ({ fg: "break", bg, min: 3, use: "break as graphics (focus ring, dot, node)" })),
-  ...SURFACES.map((bg) => ({ fg: "g8", bg, min: 3, use: "field underline" })),
+  ...SURFACES.map((bg) => ({ fg: "g8", bg, min: 3, use: "field underline, diagram edges" })),
   { fg: "g0", bg: "break", min: 4.5, use: "::selection text" },
   { fg: "g0", bg: "g11", min: 4.5, use: "filled button / skip link" },
   { fg: "g0", bg: "g10", min: 4.5, use: "filled button hover" },

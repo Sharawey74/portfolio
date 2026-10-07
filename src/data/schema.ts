@@ -52,10 +52,15 @@ export const stackItem = evidence.extend({
   version: z.string().optional(),
 });
 
-/** A file copied from a source repo into this project (Stage 3). */
+/** A file copied (read-only) from a source repo into /public. */
 export const asset = z.object({
-  /** Path inside the source repo; the copy lands under /public. */
+  /** Provenance: path inside the source repo. */
   from: z.string().min(1),
+  /** Served path under /public. */
+  src: z.string().startsWith("/"),
+  /** Intrinsic size, so the image reserves its box (no layout shift). */
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
   alt: z.string().min(1),
 });
 

@@ -10,13 +10,80 @@ import { asset, claim, link, metric, stackItem, todo } from "./schema.ts";
 
 const VERIFIED = "2026-10-06";
 
-/** A component that may appear in an animated architecture diagram (M9). */
-const node = z.object({
+/**
+ * An animated diagram (M9) is a claim: every node and every step cites the
+ * source file it was drawn from, and steps may only connect declared nodes.
+ */
+const flowNode = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
   label: z.string().min(1),
-  role: z.string().min(1),
+  detail: z.string().min(1),
   source: z.string().min(3),
 });
+const flowStep = z.object({
+  from: z.string(),
+  to: z.string(),
+  label: z.string().min(1),
+  source: z.string().min(3),
+  /**
+   * Which path a step belongs to: "both" (shared), "main" or "alt" (e.g. sold
+   * out). A path is the steps of that branch plus "both", in source order.
+   */
+  branch: z.enum(["both", "main", "alt"]).default("both"),
+});
+const flow = z
+  .object({
+    caption: z.string().min(1),
+    source: z.string().min(3),
+    asOf: z.iso.date(),
+    mainLabel: z.string().optional(),
+    altLabel: z.string().optional(),
+    nodes: z.array(flowNode).min(2),
+    steps: z.array(flowStep).min(1),
+  })
+  .refine((f) => f.steps.every((s) => f.nodes.some((n) => n.id === s.from) && f.nodes.some((n) => n.id === s.to)), {
+    message: "every step must connect two declared nodes",
+  });
+
+/** Evidence charts (M9d): committed numbers only, each chart sourced. */
+/** Operating points: one marker per measured configuration, shared axes. */
+const pointChart = z.object({
+  kind: z.literal("points"),
+  id: z.string(),
+  caption: z.string(),
+  qualifier: z.string(),
+  xLabel: z.string(),
+  yLabel: z.string(),
+  source: z.string().min(3),
+  asOf: z.iso.date(),
+  points: z
+    .array(
+      z.object({
+        label: z.string(),
+        x: z.number(),
+        y: z.number(),
+        display: z.string(),
+        note: z.string(),
+        highlight: z.boolean().default(false),
+      }),
+    )
+    .min(2),
+  footnote: z.string(),
+});
+const stepChart = z.object({
+  kind: z.literal("steps"),
+  id: z.string(),
+  caption: z.string(),
+  qualifier: z.string(),
+  xLabel: z.string(),
+  yLabel: z.string(),
+  source: z.string().min(3),
+  asOf: z.iso.date(),
+  points: z.array(z.tuple([z.number(), z.number()])).min(2),
+  outcomes: z.array(z.object({ label: z.string(), display: z.string(), highlight: z.boolean().default(false) })),
+  footnote: z.string(),
+});
+const chart = z.discriminatedUnion("kind", [pointChart, stepChart]);
 
 const projectSchema = z
   .object({
@@ -33,18 +100,33 @@ const projectSchema = z
     links: z.array(link),
     /** Limits shown publicly, as written. */
     caveats: z.array(claim),
-    architecture: z.array(node),
+    flow: flow.optional(),
+    charts: z.array(chart).default([]),
+    /** Metric ids shown on the home-page card, in order. */
+    highlights: z.array(z.string()).max(3).default([]),
     screenshots: z.array(asset),
     todos: z.array(todo),
   })
-  .refine((p) => p.tier === "secondary" || p.problem !== undefined, {
-    message: "case-study projects need a problem statement",
-  });
+  .refine((p) => p.tier === "secondary" || (p.problem !== undefined && p.flow !== undefined), {
+    message: "case-study projects need a problem statement and a flow",
+  })
+  .refine((p) => p.highlights.every((id) => p.metrics.some((m) => m.id === id)), {
+    message: "highlights must reference this project's metric ids",
+  })
+  .refine(
+    (p) =>
+      p.charts.every(
+        (c) =>
+          (c.kind === "points" ? c.points : c.outcomes).filter((x) => x.highlight).length <= 1,
+      ),
+    { message: "at most one highlighted (break-colored) value per chart" },
+  );
 
 export const projects = z.array(projectSchema).parse([
   // ── Eventora ──────────────────────────────────────────────────────────
   {
     slug: "eventora",
+    highlights: ["tests", "coverage", "ramp-requests"],
     name: "Eventora",
     tier: "flagship",
     summary: {
@@ -153,23 +235,84 @@ export const projects = z.array(projectSchema).parse([
         asOf: "2026-07-04",
       },
     ],
-    architecture: [
-      { id: "web", label: "Next.js frontend", role: "UI, Stripe checkout redirect", source: "Event-Ticketing-Platform/frontend/package.json" },
-      { id: "api", label: "Spring Boot API", role: "9 controllers, JWT + RBAC", source: "Event-Ticketing-Platform/README.md:55,86" },
-      { id: "redis", label: "Redis", role: "inventory counters, locks, JWT denylist, rate limiting", source: "Event-Ticketing-Platform/README.md:320" },
-      { id: "postgres", label: "PostgreSQL", role: "system of record, Flyway migrations", source: "Event-Ticketing-Platform/README.md:133,160" },
-      { id: "rabbitmq", label: "RabbitMQ", role: "QR and email jobs, dead-letter queues", source: "Event-Ticketing-Platform/README.md:52,170" },
-      { id: "stripe", label: "Stripe", role: "checkout and webhooks", source: "Event-Ticketing-Platform/README.md:96,164" },
+    flow: {
+      caption: "Reservation flow, concurrency-critical path",
+      source: "Event-Ticketing-Platform/README.md:118-148",
+      asOf: VERIFIED,
+      mainLabel: "Seats available",
+      altLabel: "Sold out",
+      nodes: [
+        { id: "client", label: "Client", detail: "POST /api/v1/bookings", source: "Event-Ticketing-Platform/README.md:124" },
+        { id: "api", label: "BookingService", detail: "Spring Boot API", source: "Event-Ticketing-Platform/README.md:124; Event-Ticketing-Platform/pom.xml:8" },
+        { id: "redis", label: "Redis", detail: "lock, availability, Lua floor guard", source: "Event-Ticketing-Platform/README.md:126-128" },
+        { id: "postgres", label: "PostgreSQL", detail: "conditional UPDATE, booking row", source: "Event-Ticketing-Platform/README.md:133-136" },
+      ],
+      steps: [
+        { from: "client", to: "api", label: "POST /api/v1/bookings", source: "Event-Ticketing-Platform/README.md:124" },
+        { from: "api", to: "redis", label: "acquire per-user distributed lock", source: "Event-Ticketing-Platform/README.md:126" },
+        { from: "api", to: "redis", label: "re-check availability (TOCTOU guard)", source: "Event-Ticketing-Platform/README.md:127" },
+        { from: "api", to: "redis", label: "reserveSeat(): atomic Lua floor guard", source: "Event-Ticketing-Platform/README.md:128" },
+        { from: "redis", to: "api", label: "decremented, success", source: "Event-Ticketing-Platform/README.md:132", branch: "main" },
+        { from: "api", to: "postgres", label: "atomic conditional UPDATE (availableCount -= n)", source: "Event-Ticketing-Platform/README.md:133-134", branch: "main" },
+        { from: "api", to: "postgres", label: "INSERT Booking (state=RESERVED, expires=+5m)", source: "Event-Ticketing-Platform/README.md:135-136", branch: "main" },
+        { from: "api", to: "client", label: "201 Created", source: "Event-Ticketing-Platform/README.md:137", branch: "main" },
+        { from: "redis", to: "api", label: "rejected (floor guard)", source: "Event-Ticketing-Platform/README.md:143", branch: "alt" },
+        { from: "api", to: "client", label: "409 Conflict", source: "Event-Ticketing-Platform/README.md:144", branch: "alt" },
+        { from: "api", to: "redis", label: "release lock", source: "Event-Ticketing-Platform/README.md:148" },
+      ],
+    },
+    charts: [
+      {
+        kind: "points",
+        id: "replicas",
+        caption: "Read path: one replica vs two behind nginx",
+        qualifier: "local, Docker Compose",
+        xLabel: "throughput, req/s",
+        yLabel: "p95 latency, ms",
+        source: "Event-Ticketing-Platform/PERFORMANCE.md:382,386,400-401,411-412,416",
+        asOf: VERIFIED,
+        points: [
+          { label: "1 replica", x: 660, y: 511, display: "660 req/s · p95 511 ms", note: "its ceiling: p95 crossed 500 ms here" },
+          {
+            label: "2 replicas, nginx",
+            x: 800,
+            y: 9,
+            display: "800 req/s · p95 9.0 ms",
+            note: "held every stage without abort",
+            highlight: true,
+          },
+        ],
+        footnote:
+          "One replica's point is its ceiling; two replicas' point is a rate they held, not their ceiling (870 req/s, p95 568 ms).",
+      },
+      {
+        kind: "steps",
+        id: "ramp",
+        caption: "Capacity ramp on Railway, 2026-07-04",
+        qualifier: "read path (browse and search)",
+        xLabel: "minutes",
+        yLabel: "target virtual users",
+        source: "Event-Ticketing-Platform/src/test/k6/capacity-ramp.js@d103b56:16-23; PERFORMANCE.md:271,283-291",
+        asOf: "2026-07-04",
+        points: [[0, 0], [2, 10], [5, 25], [8, 50], [11, 100], [14, 200], [16, 0]],
+        outcomes: [
+          { label: "requests", display: "32,577" },
+          { label: "failed", display: "0.00%" },
+          { label: "p95", display: "394 ms", highlight: true },
+        ],
+        footnote: "The line is the k6 stage schedule (configured targets), not measured VUs. Results are whole-run aggregates.",
+      },
     ],
     screenshots: [
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/01-landing-hero-dark.webp", alt: "Eventora landing page, dark theme" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/03-event-detail-dark.webp", alt: "Event detail page with ticket tiers" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/04-ticket-selection-cart-dark.webp", alt: "Ticket selection and cart" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/05-stripe-checkout.webp", alt: "Stripe checkout step" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/08-booking-detail-qr-ticket-dark.webp", alt: "Booking detail with QR ticket" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/09-organizer-dashboard-dark.webp", alt: "Organizer dashboard" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/10-organizer-attendees-checkin-dark.webp", alt: "Organizer attendee check-in list" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/13-refund-request.webp", alt: "Refund request form" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/01-landing-hero-dark.webp", src: "/projects/eventora/01-landing-hero-dark.webp", width: 1440, height: 900, alt: "Eventora home page with event search, dark theme" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/04-ticket-selection-cart-dark.webp", src: "/projects/eventora/04-ticket-selection-cart-dark.webp", width: 1440, height: 900, alt: "Event page with ticket tier selection" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/12-featured-events-dark.webp", src: "/projects/eventora/12-featured-events-dark.webp", width: 1440, height: 900, alt: "Featured events grid" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/05-stripe-checkout.webp", src: "/projects/eventora/05-stripe-checkout.webp", width: 1440, height: 908, alt: "Stripe-hosted checkout step" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/03-event-detail-dark.webp", src: "/projects/eventora/03-event-detail-dark.webp", width: 1440, height: 1458, alt: "Event detail page" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/08-booking-detail-qr-ticket-dark.webp", src: "/projects/eventora/08-booking-detail-qr-ticket-dark.webp", width: 1440, height: 1367, alt: "Booking detail with QR ticket" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/09-organizer-dashboard-dark.webp", src: "/projects/eventora/09-organizer-dashboard-dark.webp", width: 1440, height: 2618, alt: "Organizer dashboard" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/10-organizer-attendees-checkin-dark.webp", src: "/projects/eventora/10-organizer-attendees-checkin-dark.webp", width: 1440, height: 1226, alt: "Organizer attendee check-in list" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/13-refund-request.webp", src: "/projects/eventora/13-refund-request.webp", width: 1440, height: 900, alt: "Refund request form" },
     ],
     todos: ["TODO(owner): confirm whether the Railway API is intentionally down (report §7 q3)"],
   },
@@ -177,6 +320,7 @@ export const projects = z.array(projectSchema).parse([
   // ── Recruiter-Pro ─────────────────────────────────────────────────────
   {
     slug: "recruiter-pro",
+    highlights: ["corpus", "branch-coverage", "tests"],
     name: "Recruiter-Pro",
     tier: "case-study",
     summary: {
@@ -248,13 +392,26 @@ export const projects = z.array(projectSchema).parse([
         asOf: VERIFIED,
       },
     ],
-    architecture: [
-      { id: "upload", label: "Upload", role: "PDF, DOCX or text via FastAPI", source: "Recruiter-Pro/README.md:134" },
-      { id: "parse", label: "Parse", role: "agent 1: file bytes checked, text layer extracted", source: "Recruiter-Pro/README.md:134" },
-      { id: "extract", label: "Extract", role: "agent 2: skills resolved to the 679-skill vocabulary", source: "Recruiter-Pro/README.md:135" },
-      { id: "score", label: "Score", role: "agent 3: five weighted rule components, optional classifier", source: "Recruiter-Pro/README.md:136,159-160" },
-      { id: "explain", label: "Explain", role: "agent 4: Ollama, OpenRouter or rule-based", source: "Recruiter-Pro/README.md:137,183-187" },
-    ],
+    flow: {
+      caption: "Request path through the four-agent pipeline",
+      source: "Recruiter-Pro/README.md:209-240",
+      asOf: VERIFIED,
+      nodes: [
+        { id: "client", label: "Client", detail: "Next.js 16, :3000", source: "Recruiter-Pro/README.md:211" },
+        { id: "api", label: "API", detail: "FastAPI; 10 MB cap, 5/min per IP", source: "Recruiter-Pro/README.md:219-221" },
+        { id: "parse", label: "1 Parser", detail: "pdf, docx, txt", source: "Recruiter-Pro/README.md:229-231" },
+        { id: "extract", label: "2 Extract", detail: "679 canonical skills", source: "Recruiter-Pro/README.md:229-231,239" },
+        { id: "score", label: "3 Scorer", detail: "5 weighted rules + ML; 800 roles", source: "Recruiter-Pro/README.md:229-231,239" },
+        { id: "explain", label: "4 Explain", detail: "top-K only; ollama, openrouter, rule_based", source: "Recruiter-Pro/README.md:229-231,239-240" },
+      ],
+      steps: [
+        { from: "client", to: "api", label: "REST / JSON", source: "Recruiter-Pro/README.md:216" },
+        { from: "api", to: "parse", label: "dispatch", source: "Recruiter-Pro/README.md:223" },
+        { from: "parse", to: "extract", label: "clean text layer", source: "Recruiter-Pro/README.md:134,229" },
+        { from: "extract", to: "score", label: "structured profile", source: "Recruiter-Pro/README.md:135,229" },
+        { from: "score", to: "explain", label: "top-K matches", source: "Recruiter-Pro/README.md:229,231" },
+      ],
+    },
     screenshots: [],
     todos: [
       "TODO(owner): real app screenshots (frontend/Images/*.png are design mockups with placeholder data, not the shipped app)",
@@ -264,6 +421,7 @@ export const projects = z.array(projectSchema).parse([
   // ── SysPlex ───────────────────────────────────────────────────────────
   {
     slug: "sysplex",
+    highlights: ["refresh", "pulls", "pytest"],
     name: "SysPlex",
     tier: "case-study",
     summary: {
@@ -321,12 +479,24 @@ export const projects = z.array(projectSchema).parse([
       { text: "The repository has no license file.", source: "evidence-report.md:145", asOf: VERIFIED },
       { text: "The repository has no screenshots.", source: "evidence-report.md:146", asOf: VERIFIED },
     ],
-    architecture: [
-      { id: "go-agent", label: "Go agent", role: "gopsutil, port 8889", source: "SysPlex/README.md:48-52,143" },
-      { id: "bash-agent", label: "Bash agent", role: "native OS tools, FastAPI on port 8888", source: "SysPlex/README.md:39-43,155" },
-      { id: "ps-collector", label: "PowerShell collector", role: "WMI and LibreHardwareMonitor on Windows", source: "SysPlex/README.md:43" },
-      { id: "dashboard", label: "Flask dashboard", role: "Docker, port 5000, polls every 2 s", source: "SysPlex/README.md:58; server/app.py:337; server/static/js/dashboard.js:14" },
-    ],
+    flow: {
+      caption: "Collection on the host, presentation in Docker",
+      source: "SysPlex/README.md:66-106",
+      asOf: VERIFIED,
+      nodes: [
+        { id: "go", label: "Go agent", detail: "gopsutil; HTTP :8889", source: "SysPlex/README.md:73,80" },
+        { id: "bash", label: "Bash agent", detail: "native tools; FastAPI :8888", source: "SysPlex/README.md:73,79" },
+        { id: "ps", label: "PowerShell", detail: "WMI, LibreHardwareMonitor", source: "SysPlex/README.md:73-77" },
+        { id: "server", label: "Flask server", detail: "Docker, :5000, no privileges", source: "SysPlex/README.md:90-94" },
+        { id: "dashboard", label: "Dashboard", detail: "polls every 2 s", source: "SysPlex/README.md:104; SysPlex/server/static/js/dashboard.js:14" },
+      ],
+      steps: [
+        { from: "go", to: "server", label: "JSON envelope over HTTP", source: "SysPlex/README.md:86,259" },
+        { from: "bash", to: "server", label: "JSON envelope over HTTP", source: "SysPlex/README.md:86,258" },
+        { from: "ps", to: "server", label: "JSON envelope as a file", source: "SysPlex/README.md:86,185" },
+        { from: "server", to: "dashboard", label: "REST, polled every 2 s", source: "SysPlex/README.md:94,104; SysPlex/server/static/js/dashboard.js:14" },
+      ],
+    },
     screenshots: [],
     todos: ["TODO(owner): screenshot of the SysPlex dashboard"],
   },
@@ -364,7 +534,6 @@ export const projects = z.array(projectSchema).parse([
       { label: "Source", href: "https://github.com/Sharawey74/LexIntelligence", kind: "repo", status: 200, source: "curl probe", asOf: VERIFIED },
     ],
     caveats: [{ text: "No automated tests.", source: "evidence-report.md:209", asOf: VERIFIED }],
-    architecture: [],
     screenshots: [],
     todos: [],
   },
@@ -406,7 +575,6 @@ export const projects = z.array(projectSchema).parse([
       { label: "Live demo", href: "https://phishsniffer.streamlit.app", kind: "live", status: 303, note: "May take a few seconds to wake.", source: "curl probe; owner confirms it is up", asOf: VERIFIED },
     ],
     caveats: [],
-    architecture: [],
     screenshots: [],
     todos: [],
   },
