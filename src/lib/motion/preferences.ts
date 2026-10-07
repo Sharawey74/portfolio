@@ -83,6 +83,12 @@ export function useMotionPrefs(): MotionPrefs {
   return useSyncExternalStore(subscribe, () => snapshot, () => SERVER);
 }
 
+/** Current preferences outside React (event handlers in delegated listeners). */
+export function getMotionPrefs(): MotionPrefs {
+  init();
+  return snapshot;
+}
+
 export function setPaused(paused: boolean) {
   init();
   try {
