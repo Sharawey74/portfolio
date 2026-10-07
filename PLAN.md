@@ -91,6 +91,8 @@ Skills loaded: modern-web-guidance (light-dismiss-a-dialog, declarative-dialog-p
 - [x] Recruiter-Pro and SysPlex cards show their flow preview instead of screenshots (no mockups used)
 - [x] Gates green; `/` 151.9 KB gz; case studies 152.6 KB gz
 - [x] Fixed during review: card numerals overlapping titles, highlight numbers colliding, a wide diagram widening the whole grid on phones (`.grid-12 > * { min-width: 0 }`)
+- [x] UI UX Pro Max audit (`docs/UX-REVIEW.md`): 8 defects found and fixed on this branch (R1–R8: focus under header/cards, broken header link on case pages, unreadable mobile charts, low-contrast diagram edges, long lines, button cursor, 627 px-wide case pages)
+- [ ] Owner UAT run (`docs/UAT.md`) recorded before merge
 
 Decisions:
 - M6 fallback uses Lenis' scroll callback instead of `motion`'s `useScroll`, which listens to scroll events (against the motion rules); M8's fallback fade is CSS. The `motion` package is installed but not shipped in any bundle yet.
@@ -154,6 +156,8 @@ Decisions:
 | Concurrently animating regions per viewport | ≤ 3 | — |
 
 ## Definition of done (whole project)
+
+- [ ] `docs/UAT.md` signed off by the owner, no open High defects
 
 - [ ] `next build` passes; no TypeScript or lint errors; no unused data
 - [ ] Every public claim traces to `FACTS-CHECK.md`; zero banned claims, including alt text and metadata
