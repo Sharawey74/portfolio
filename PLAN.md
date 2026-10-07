@@ -50,21 +50,33 @@ Skills loaded: modern-web-guidance (dark-mode, scroll-progress-indicator, same-d
 - [x] Gates green locally; first-load JS on `/` 142.6 KB gz (`nomodule` polyfill excluded)
 - [x] Stage summary and push + PR command rendered
 
-## Stage 2: Hero and navigation
+## Stage 2: Hero and navigation · DONE 2026-10-07 · branch `feat/hero-navigation`
 
-- [ ] List and load skills again (modern-web-guidance first)
-- [ ] Hero section with approved copy; H1 final period in `--break`
-- [ ] Point "View My Work" (`#work`) at a real target; the anchor has no section until Stage 3
-- [ ] M1 intro sequence: first visit per session, ≤ 1.8 s, name reveal + progress counter, clip-path lift; content already in DOM beneath; skipped for reduced motion, Save-Data, repeat visits, and when `personal.name` is empty (counter only)
-- [ ] M3 kinetic type: own split-text util; line and word mask reveals on view; H1 reacts to cursor proximity through Newsreader `wght` (fine pointer only); section titles scale or track with scroll
-- [ ] M4 hero canvas: monochrome 2D node graph reacting to the mouse; lazy after first paint; paused off-screen and on hidden tab; DPR ≤ 2; ≤ 80 nodes desktop, ≤ 30 mobile; static SVG under reduced motion
-- [ ] M13 nav (part): scroll-spy with the break marker on the active item; header hides on scroll down, returns on scroll up (observers / Lenis, no scroll listeners)
-- [ ] Gates green; first-load JS on `/` ≤ 170 KB gz (excluding lazy hero)
+Skills loaded: modern-web-guidance (scrollspy, state-aware-sticky-headers, scroll-entry-exit-effects, expose-canvas-content-to-browser-features, detect-initial-visibility-state), ui-ux-pro-max (ux + gsap text-reveal guidance), git-workflow. Not found: frontend-design.
+
+- [x] Skills listed and loaded
+- [x] Hero with approved copy; H1 final period in `--break`
+- [x] "View My Work" renders only when its target section is `live` (profile.ts); hidden until Stage 3 flips `work` live, so no dead anchor ships
+- [x] M1 intro: pure CSS (`@property` integer counter 000→100, clip-path lift), 1100 + 650 = 1750 ms; first visit per session (sessionStorage); skipped under reduced motion, Save-Data and the pause; name rendered only when `personal.name` is set; page fully rendered beneath; aria-hidden. Verified: played once, then `visibility: hidden`
+- [x] M3 split text: `SplitWords` (server-rendered, sr-only full text + aria-hidden words), `RevealText` (view or load trigger, words or lines); hidden state only when the pre-paint script set `data-reveal="on"`, plus a 4 s CSS safety reveal
+- [x] M3 H1 weight follows cursor proximity (300→460, fine pointer, motion allowed); words pinned to measured widths so the line never reflows. Verified: weights respond, layout-shift total 0.0000
+- [x] M3 section titles settle in scale on entry (CSS `view()` timeline, decorative, no fallback)
+- [x] M4 canvas: lazy chunk (1.6 KB gz) imported on idle, never with reduced motion or Save-Data; "loop" task paused off-screen, on hidden tab and under the pause; DPR ≤ 2; ≤ 80 nodes (area-based) desktop, 30 below 768 px; one `--break` packet; colors follow the theme. Static SVG (same seeded graph) server-rendered as the fallback. Verified on desktop and 375 px
+- [x] M13 scroll-spy: one IntersectionObserver, current = last section past 45% of the viewport; `aria-current` + break marker dot. Verified on `/dev/type` down and back up
+- [x] M13 smart header: hides on scroll down, returns on scroll up via Lenis' callback; `:focus-within` keeps it visible. Verified
+- [x] Gates green; first-load JS on `/` 145.0 KB gz (canvas chunk not in first load)
+- [ ] Not verifiable here: reduced-motion and no-JS paths (code paths in place: pre-paint flags, static SVG, CSS guards); scrolled-state screenshots (the hidden browser pane renders black frames after programmatic scrolls; behavior verified through the DOM)
+
+Decisions:
+- Header nav lists only `live` sections; on `/` it is empty until Stage 3. Below 768 px the header nav is hidden; mobile navigation arrives with the command palette (Stage 4).
+- On first visit the intro's lift is the hero reveal; on repeat visits the H1 words rise. Either way the hero text is painted early (LCP).
+- Mobile: the graph is masked to the top-right corner so no line crosses the text.
 
 ## Stage 3: Projects and case studies
 
 - [ ] Load `dataviz` before any chart (M9d)
 - [ ] Copy assets read-only from source repos into `public/` (Eventora screenshots; diagram sources)
+- [ ] Flip `work` to `live: true` in profile.ts (nav link + "View My Work" CTA appear)
 - [ ] Featured projects section; M6 sticky stacked cards (scale and dim as the next arrives), parallax on decoration only, pausable tech-chip marquee
 - [ ] M7 project cards: cursor spotlight (radial mask), tilt ≤ 4°, clip-path image reveal, screenshot crossfade carousel (pauses on hover/focus, manual controls)
 - [ ] `/projects/[slug]` for eventora, recruiter-pro, sysplex: problem → architecture → key decisions → evidence → stack → links; caveats shown
@@ -108,10 +120,10 @@ Skills loaded: modern-web-guidance (dark-mode, scroll-progress-indicator, same-d
 
 | ID | Item | Stage | Status |
 |---|---|---|---|
-| M1 | Intro sequence | 2 | open |
+| M1 | Intro sequence | 2 | DONE |
 | M2 | Lenis + scroll-progress hairline | 1 | DONE |
-| M3 | Kinetic typography | 2 | open |
-| M4 | Hero node-graph canvas | 2 | open |
+| M3 | Kinetic typography | 2 | DONE |
+| M4 | Hero node-graph canvas | 2 | DONE |
 | M5 | Cursor dot + ring, magnetic, labels | 1 | DONE (base; card labels wired in Stage 3) |
 | M6 | Scroll choreography, sticky stack, marquee | 3 | open |
 | M7 | Project card interactions | 3 | open |
@@ -120,7 +132,7 @@ Skills loaded: modern-web-guidance (dark-mode, scroll-progress-indicator, same-d
 | M10 | Count-up numbers | 3 | open |
 | M11 | Text scramble | 4 | open |
 | M12 | Grain, grid, vignette | 4 | open |
-| M13 | Command palette, scroll-spy, smart header | 2 + 4 | open |
+| M13 | Command palette, scroll-spy, smart header | 2 + 4 | PARTIAL (scroll-spy + smart header done; palette in Stage 4) |
 | M14 | Theme toggle with VT reveal, no flash | 1 | DONE |
 | M15 | Optional WebGL2 shader | 5 | open |
 
@@ -128,7 +140,7 @@ Skills loaded: modern-web-guidance (dark-mode, scroll-progress-indicator, same-d
 
 | Budget | Target | Last measured |
 |---|---|---|
-| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 142.6 KB (Stage 1) |
+| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 145.0 KB (Stage 2) |
 | Mobile LCP | < 2.5 s | — |
 | INP | < 200 ms | — |
 | CLS | < 0.05 | — |

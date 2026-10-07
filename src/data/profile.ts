@@ -11,6 +11,8 @@ const sectionSchema = z.object({
   id: z.string().regex(/^[a-z-]+$/),
   index: z.string().regex(/^\d{2}$/),
   title: z.string().min(1),
+  /** Rendered on `/` yet? Nav links and CTAs point only at live sections. */
+  live: z.boolean(),
 });
 
 const profileSchema = z.object({
@@ -29,6 +31,7 @@ const profileSchema = z.object({
   /** Interface strings: controls and accessible names, not claims. */
   ui: z.object({
     skipToContent: z.string(),
+    navLabel: z.string(),
     pauseAnimations: z.string(),
     playAnimations: z.string(),
     themeToLight: z.string(),
@@ -56,11 +59,11 @@ export const profile = profileSchema.parse({
     ctaResume: { label: "Download Resume" },
   },
   sections: [
-    { id: "about", index: "01", title: "About" },
-    { id: "work", index: "02", title: "Work" },
-    { id: "open-source", index: "03", title: "Open source" },
-    { id: "experience", index: "04", title: "Experience" },
-    { id: "contact", index: "05", title: "Contact" },
+    { live: false, id: "about", index: "01", title: "About" },
+    { live: false, id: "work", index: "02", title: "Work" },
+    { live: false, id: "open-source", index: "03", title: "Open source" },
+    { live: false, id: "experience", index: "04", title: "Experience" },
+    { live: false, id: "contact", index: "05", title: "Contact" },
   ],
   meta: {
     title: "Sharawey74 / Backend systems",
@@ -69,6 +72,7 @@ export const profile = profileSchema.parse({
   },
   ui: {
     skipToContent: "Skip to content",
+    navLabel: "Sections",
     pauseAnimations: "Pause animations",
     playAnimations: "Play animations",
     themeToLight: "Switch to light theme",
