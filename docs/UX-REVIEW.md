@@ -384,13 +384,24 @@ After captures: `docs/screens/stage5-after/` (32 WebP, 6.6 MB), taken the same w
 
 ### Lighthouse (median of 3, mobile, applied throttling, mains power)
 
+After the performance pass (2026-10-08):
+
 | Page | Perf | A11y | Best pr. | SEO | LCP (< 2.5 s) | TBT (< 200 ms) | CLS (< 0.05) |
 |---|---|---|---|---|---|---|---|
-| `/` | 68 | 100 | 100 | 100 | 2.52 s (over by 0.02 s) | 1,164 ms (over) | 0.001 |
-| `/projects/eventora` | 59 | 100 | 100 | 100 | 2.81 s (over) | 2,043 ms (over) | 0.001 |
-| `/projects/recruiter-pro` | 65 | 100 | 100 | 100 | 2.59 s (over) | 1,518 ms (over) | 0.001 |
-| `/projects/sysplex` | 62 | 100 | 100 | 100 | 2.83 s (over) | 1,451 ms (over) | 0.001 |
+| `/` | 71 | 100 | 100 | 100 | 2.11 s (pass) | 989 ms (over) | 0.001 |
+| `/projects/eventora` | 71 | 100 | 100 | 100 | 2.79 s (over) | 911 ms (over) | 0.001 |
+| `/projects/recruiter-pro` | 77 | 100 | 100 | 100 | 2.27 s (pass) | 717 ms (over) | 0.001 |
+| `/projects/sysplex` | 76 | 100 | 100 | 100 | 2.45 s (pass) | 695 ms (over) | 0.001 |
 
-Details, per-run numbers and the main-thread breakdown: `docs/reports/lighthouse-stage5.md` (full JSON for the median run of each page beside it). An earlier set on battery power was discarded (CPU benchmark 512–671 against 2,099–3,325 here).
+Before the pass (2026-10-07): LCP 2.52–2.83 s on every page, TBT 1,164–2,043 ms. Before/after table, method, validity and what was tried: `docs/reports/lighthouse-stage5.md` (full JSON for the median run of each page beside it).
 
-Verdict: **Open.** CLS, accessibility, best practices and SEO meet the bar everywhere. LCP is at or just over 2.5 s on every page, and TBT, the lab stand-in for INP, is 6–10 times the 200 ms target. The main thread is busy with the layout's client code (2.1 s on `/`), style and layout work (1.8 s) and hydration long tasks. Fixing that is a performance pass of its own, proposed to the owner rather than started here.
+| ID | Change | Verdict |
+|---|---|---|
+| P1 | Grain from a 16 KB pre-rendered grayscale PNG tile instead of an SVG `feTurbulence` filter (the brief asked for "static pre-rendered grain") | Fixed |
+| P2 | Coarse pointers keep the static hero graph; the live canvas (about 0.9 s of main thread at 4x CPU) needs a fine pointer, which its pointer interaction depends on anyway | Fixed, design change flagged to the owner (UAT-48) |
+| P3 | Newsreader loads the normal style only; the unused italic face was a second ~140 KB variable file preloaded ahead of the LCP image | Fixed |
+| P4 | `content-visibility: auto` below the fold | Rejected: layout still touched every object and took about twice as long |
+| P5 | Eventora LCP 2.79 s: 0.7 s HTML on slow 4G, then the image shares the connection with 207 KB of fonts and waits ~0.8 s for the main thread | Open (owner) |
+| P6 | TBT 695–989 ms: the first full style and layout pass (~0.45 s at 4x CPU) plus React hydration | Open (owner) |
+
+Options for P5 and P6, each a trade-off against the brief, for the owner to choose: drop Newsreader's `opsz` axis (the largest font file; the brief asks for "variable opsz + wght"); cut the number of client components that hydrate on every page (palette loaded on first open, cursor and scramble host after idle); or accept the numbers until they are re-measured on Vercel, where the HTML and image come from a CDN.
