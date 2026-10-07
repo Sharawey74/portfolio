@@ -7,7 +7,7 @@ import { Hanken_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google";
  */
 
 /**
- * Display: variable opsz + wght, with italic for single emphasis words.
+ * Display: variable opsz + wght (normal style only; see below).
  * `optional`, not `swap`: the hero headline is large and bottom-aligned, so a
  * late swap re-wraps it and moved the hero by CLS 0.188 on a throttled mobile
  * run. The font is preloaded; a visit that misses the short block period keeps
@@ -15,7 +15,10 @@ import { Hanken_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google";
  */
 export const display = Newsreader({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  // Normal only: the italic face is a second ~140 KB variable file, preloaded
+  // ahead of the LCP image on slow connections, and no page uses it (Stage 5).
+  // Add "italic" back when content needs an emphasis word.
+  style: ["normal"],
   axes: ["opsz"],
   display: "optional",
   variable: "--font-newsreader",
