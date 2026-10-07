@@ -652,10 +652,11 @@ html[data-intro="play"] .intro {
 /* M3 section titles settle in scale as they enter. Decorative: no fallback. */
 @media (prefers-reduced-motion: no-preference) {
   @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    /* Scale only: an opacity fade left the index label at 1.66:1 while the
+       title entered (Lighthouse color-contrast, Stage 4). */
     @keyframes title-settle {
       from {
         scale: 0.94;
-        opacity: 0.35;
       }
     }
     .title-track {
@@ -1004,4 +1005,306 @@ button:not(:disabled),
 }
 .chart-scroll > .chart {
   min-width: 560px;
+}
+
+/* ── Stage 4 ─────────────────────────────────────────────────────────── */
+
+/* About bento: hairline seams (1 px gap over the hairline color), varied
+   spans, no radius, no shadow. One column on phones. */
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  border: 1px solid var(--line-hair);
+  background: var(--line-hair);
+}
+@media (width >= 48rem) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+.bento-cell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  background: var(--surface-page);
+}
+
+/* Open source timeline. Month labels stick below the header on wide screens;
+   each entry hangs off a hairline with a node whose shape carries the status:
+   merged = filled square, open = hollow square (the pill repeats it in text). */
+.oss-timeline {
+  display: flex;
+  flex-direction: column;
+}
+.oss-month {
+  display: grid;
+  gap: 1rem;
+  border-top: 1px solid var(--line-hair);
+  padding-top: 1.5rem;
+  padding-bottom: 1rem;
+}
+@media (width >= 48rem) {
+  .oss-month {
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: var(--gutter);
+  }
+  .oss-month-label {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    align-self: start;
+  }
+}
+.oss-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-left: 1px solid var(--line);
+  padding: 0 0 2rem 1.75rem;
+}
+.oss-node,
+.xp-node {
+  position: absolute;
+  inset-block-start: 0.45rem;
+  inset-inline-start: -0.3125rem;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  border: 1px solid var(--text-1);
+  background: var(--surface-page);
+}
+.oss-node[data-state="merged"] {
+  background: var(--text-1);
+}
+
+/* Experience timeline: the rule draws down with scroll (view timeline). */
+.xp-timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.xp-timeline::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 1px;
+  background: var(--line);
+  transform-origin: 50% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    @keyframes xp-draw {
+      from {
+        transform: scaleY(0);
+      }
+    }
+    .xp-timeline::before {
+      animation: xp-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 55%;
+    }
+  }
+}
+.xp-item {
+  position: relative;
+  display: grid;
+  gap: 0.75rem;
+  padding: 0 0 3rem 1.75rem;
+}
+.xp-item .xp-node {
+  background: var(--text-1);
+}
+@media (width >= 48rem) {
+  .xp-item {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+    gap: var(--gutter);
+  }
+}
+/* Scroll-linked, not autoplay: exempt from the pause like .title-track. */
+html[data-motion="paused"] .xp-timeline::before {
+  animation-play-state: running !important;
+}
+
+/* Contact form. Underlined fields (3:1 underline, see check-contrast).
+   Invalid state appears only after interaction (:user-invalid) or after the
+   server says so (aria-invalid), and is shown by a dashed, heavier underline
+   plus the status line, never by color alone. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--text-3);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  color: var(--text-1);
+  font: inherit;
+  transition: border-color var(--dur-1) var(--ease-out);
+}
+.field textarea {
+  resize: vertical;
+}
+.field input:hover,
+.field textarea:hover {
+  border-bottom-color: var(--text-2);
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  border-bottom-color: var(--text-1);
+  outline-offset: 6px;
+}
+.field input:user-invalid,
+.field textarea:user-invalid,
+.field [aria-invalid="true"] {
+  border-bottom: 2px dashed var(--text-1);
+}
+.hp {
+  position: absolute;
+  inset-inline-start: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Direct links (contact) and footer links: mono rows, 44 px targets. */
+.contact-link {
+  display: flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+  transition: color var(--dur-1) var(--ease-out);
+}
+.footer-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-2);
+  transition: color var(--dur-1) var(--ease-out);
+}
+.contact-link:hover,
+.footer-link:hover {
+  color: var(--text-1);
+}
+
+/* M13 command palette: native modal dialog near the top of the viewport. */
+.palette {
+  width: min(40rem, 100vw - 2rem);
+  max-width: none;
+  margin: 12vh auto auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--text-1);
+}
+.palette::backdrop {
+  background: color-mix(in srgb, var(--g0) 80%, transparent);
+}
+.palette-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding: 1rem;
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-body);
+}
+.palette-input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--text-1);
+}
+.palette-input::placeholder {
+  color: var(--text-3);
+}
+.palette-option {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-inline-start: 2px solid transparent;
+  padding: 0.5rem 1rem 0.5rem calc(1rem - 2px);
+  color: var(--text-2);
+  cursor: pointer;
+}
+/* Active option: hover surface, full ink, and the --break marker (an active
+   nav marker, an allowed use). */
+.palette-option[aria-selected="true"] {
+  border-inline-start-color: var(--break);
+  background: var(--surface-hover);
+  color: var(--text-1);
+}
+
+/* M12 surfaces. Body's own background is dropped so the fixed layers at
+   z-index -1 sit between the page color (html) and the content. Grain is a
+   static SVG noise tile (grayscale, rasterized once), above everything at low
+   opacity and without blending, so it costs one composited layer. The
+   hairline grid fades out over the first viewport of scroll (scroll
+   timeline; a static fade where unsupported or under reduced motion). */
+body {
+  background: transparent;
+}
+.surface-grid,
+.surface-vignette,
+.surface-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.surface-grid {
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, var(--line-hair) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line-hair) 1px, transparent 1px);
+  background-size: calc((min(100vw, var(--page-max)) - 2 * var(--gutter)) / 12) 8rem;
+  background-position: center top;
+  opacity: 0.5;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    @keyframes grid-fade {
+      to {
+        opacity: 0;
+      }
+    }
+    .surface-grid {
+      animation: grid-fade linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+  }
+}
+html[data-motion="paused"] .surface-grid {
+  animation-play-state: running !important;
+}
+.surface-vignette {
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 40%, transparent 55%, var(--g0) 120%);
+}
+.surface-grain {
+  z-index: 70;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+@media print {
+  .surface-grid,
+  .surface-vignette,
+  .surface-grain {
+    display: none;
+  }
 }
