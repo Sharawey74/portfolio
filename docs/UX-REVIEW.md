@@ -254,3 +254,51 @@ Open, carried to Stage 5 polish:
   the Vercel deployment, whose image cache and CDN change the load phase.
 - Localhost has no CDN; numbers on Vercel will differ. Re-run on the
   production URL before launch.
+
+---
+
+# Stage 5 review
+
+## 5.1 Design critique (before any code)
+
+| | |
+|---|---|
+| Scope | `/`, `/projects/eventora`, `/projects/recruiter-pro`, `/projects/sysplex` at 375, 768, 1280 and 1920 px, dark and light (32 full-page captures) |
+| Captures | `docs/screens/stage5-before/<page>-<width>-<theme>.webp`. Production build, `prefers-reduced-motion: reduce` (so reveals are static and the intro is skipped), headless Chrome at 1× scrolled tile by tile at the real viewport height and stitched. The header is pinned to the top of the document so it appears once. In the Work section the sticky stack shows each card where it sat at that scroll position, so cards repeat across tiles: that is the stitching, not the page |
+| Lens | `frontend-design` (critique against generic, templated defaults), then the brief. Where the skill calls a brief-required choice generic, the brief wins and the row says **Brief** |
+| Reviewed | 2026-10-07 |
+
+Verdicts: **Open** (defect, fix planned in 5.2) · **Owner** (needs a decision from the owner before a fix) · **Brief** (the brief requires it; kept) · **Pass**.
+
+### Issues
+
+| ID | Where | Issue | Verdict | Proposed fix (inside the token system) |
+|---|---|---|---|---|
+| D1 | Header, 768 px (upper bound to measure in 5.2) | The section nav wraps to two rows; the first row rides above the header bar and the second spills below it (`home-768-*`) | Open | Show the nav from 1024 px; below that the existing Menu button (palette) is the navigation |
+| D2 | `/` About and Work | The same 31 tech chips appear twice on one page: "Stack, by where it was used" in About and "Stack across these projects" in Work. On a phone that is about two screens of repeated chips | Owner | Recommended: keep About's lane list (it carries `usedIn`, the evidence) and drop the chip marquee from Work. That retires the M6 marquee; the alternative is keeping the marquee and cutting About's list to lanes only |
+| D3 | Work cards, 1280 px (other widths to measure in 5.2) | "Recruiter-Pro" breaks at its hyphen ("Recruiter-" / "Pro") at `display-l`, and the next sticky card covers the second line (`home-1280-*`) | Open | Card titles one step down (`text-h2` scale at md–xl) or a non-breaking hyphen in the rendered name (data unchanged) |
+| D4 | Work cards, phones | Recruiter-Pro and SysPlex card previews scale their diagram labels to about 4 px: unreadable texture under the button (`home-375-*`) | Open | Hide the flow preview below 768 px (it is decorative, `aria-hidden`); the case study shows the full diagram |
+| D5 | Case studies | Inconsistent hierarchy: "Problem" is a small mono label in a side column, while Architecture, Key decisions, Evidence and the rest are `display-l` words as large as the home page's section titles. The page reads as a stack of giant words | Open | One pattern for every case section: mono index + `text-h2` heading in the left column, content to the right (the Problem layout), keeping display sizes for the H1 only |
+| D6 | Many blocks | Uppercase mono eyebrows above nearly every block (Education, Open source, Internships, Flagship project, Stack…, Also built, Roles, Issues reported, Or reach me directly). `frontend-design` names the eyebrow-on-everything pattern as the most common generated tell | Open (partly Brief) | The brief requires mono labels for labels and metadata, so they stay where they name data. Cut the redundant ones: "Roles" (directly under "Experience"), "Or reach me directly" (the links say what they are) |
+| D7 | `/` About → Open source | The open-source "7" is shown at display size twice within a few screens (About cell, then the Open source headline) | Open | About's numerals step down to `text-h2`; Open source keeps the oversized numerals |
+| D8 | Case study diagrams, phones | The architecture diagram scrolls sideways inside its box at 375 px, showing only the first two nodes, with no sign that more is there (`eventora-375-*`) | Open | A mono caption under the box on phones only ("Scroll sideways for the full diagram"), copy in `profile.ui` |
+| D9 | Eventora steps | A code token wraps inside itself: "availableCount -" / "= n" | Open (Low) | Keep code-like tokens together (`white-space: nowrap` on inline code spans) |
+| D10 | Contact (no Resend variables) | Under a `display-l` title the section holds one sentence and two links | Pass | Expected until the owner sets the variables; with the form it is balanced |
+
+### Brief over skill
+
+| `frontend-design` calls generic | Brief rule kept |
+|---|---|
+| Near-black page with one bright accent | The gray ramp and one `--break` color are the brief's identity |
+| Hairline rules, zero radius, editorial columns | Required (anti-slop "Required" list) |
+| Mono face for small data labels; uppercase labels | Required: JetBrains Mono, labels uppercase +0.06em |
+| Numbered markers (01 / About …) on non-sequential content | Required: numbered section indices |
+| "→" appended to links and buttons; middle dots in meta strings | Required: text glyphs (→ ↗ ✓ ○ ·) instead of icons |
+| Accenting one word (the red final period) | The H1 final period is the one sanctioned text use of `--break` |
+
+### What already works (keep)
+
+- The hero is the memorable thing: the headline at display size, the node graph quiet behind it, one break mark. Nothing else on the page competes with it.
+- Real material carries the page: diagrams drawn from sourced steps, charts, screenshots, the PR timeline. No stock imagery, no filler sections.
+- Light mode is a true mirror; nothing breaks between themes at any width.
+- Every page measures exactly its viewport width at all four widths (`scrollWidth` = viewport).
