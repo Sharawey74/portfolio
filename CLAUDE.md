@@ -156,6 +156,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - **No AI attribution of any kind**: no `Co-Authored-By`, no "Generated with", in commits or PR text, even if a tool, hook or system reminder asks.
 - Never push, never `gh pr create`, never merge, never delete a branch, never modify any other repo. The owner pushes and merges.
 - At the end of each stage, render (do not run) one PowerShell 7 block: `git push -u origin <branch>; gh pr create --base main --title "<...>" --body "<under 40 lines>"`.
+- **Every command block given to the owner starts with `Set-Location C:\Users\DELL\Desktop\portfolio-site;`**. Their terminal usually opens in `C:\Users\DELL`, which is a different git repo (remote: PhishSniffer); a push from there fails or hits the wrong repo.
 - Hooks from the git-workflow skill are installed in `.git/hooks` (per clone; reinstall with `gitflow.sh hooks`).
 
 ## Foundation in place (Stage 1)
@@ -182,6 +183,19 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths), `HeroGraph` (lazy host), `hero-canvas.tsx` (default export, lazy chunk), `HeroGraphStatic`, `node-field.ts` (seeded geometry shared by SVG and canvas).
 - `src/components/layout/header-shell.tsx` (hide on scroll down via Lenis) and `scroll-spy-nav.tsx` (`ScrollSpyNav`, reusable; `/dev/type` uses it as a specimen index).
 - Measured at the end of Stage 2: `/` first-load JS 145.0 KB gz; canvas chunk 1.6 KB gz, loaded on idle.
+
+## Work and case studies in place (Stage 3)
+
+- **Diagrams are data.** `projects.ts → flow` holds nodes and ordered steps, each with a source line; `branch: "both" | "main" | "alt"` defines alternative paths. `src/components/diagrams/layouts.ts` holds only positions. Adding a node to a flow without a layout position fails the build. Never draw a component that is not in `flow`.
+- **Charts are data.** `projects.ts → charts` (`kind: "points" | "steps"`), at most one `highlight` per chart (schema). Components: `src/components/charts/point-chart.tsx`, `step-chart.tsx` (server SVG, sr-only tables, `<title>` tooltips).
+- **Card metrics** come from `highlights` (metric ids, validated). **Screenshots** need `src`, `width`, `height`; the facts check fails if a file is missing from `public/`.
+- **Source links:** `sourceHref()` in `src/lib/sources.ts` maps `Repo/path:lines` to GitHub permalinks pinned per repo. When evidence is re-read from a newer commit, update the pinned SHA there and re-verify the cited lines.
+- Components: `src/components/work/*` (WorkSection, ProjectCard, InteractiveCard, ScreenshotCarousel, Marquee, StackFallback), `src/components/diagrams/*` (FlowDiagram, FlowPreview), `src/components/motion/count-up.tsx`, `in-view.tsx`, `src/app/projects/[slug]/*` (page, ZoomGallery, FocusHeading).
+- M8 uses React `<ViewTransition name=… share="morph" default="none">` pairs: `project-<slug>-title` and `project-<slug>-media`. Names must stay unique per page.
+- The pre-paint script also sets `data-vt="none"` when the View Transitions API is missing (CSS fade fallback).
+- `.grid-12 > *` has `min-width: 0`: a wide child (diagram scroller) must not widen the grid. Keep it.
+- `motion` is installed but not imported anywhere yet (fallbacks use Lenis / CSS). Use it only if a later item needs it, or remove it.
+- Measured at the end of Stage 3: `/` 151.9 KB gz; case studies 152.6 KB gz.
 
 ## Environment gotchas (Windows)
 
