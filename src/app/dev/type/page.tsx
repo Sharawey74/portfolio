@@ -9,6 +9,16 @@ import { SectionHeading } from "@/components/ui/section-heading.tsx";
 import { StatusPill } from "@/components/ui/status-pill.tsx";
 import { TextLink } from "@/components/ui/text-link.tsx";
 import { KernelDemo } from "./kernel-demo.tsx";
+import { ScrollSpyNav } from "@/components/layout/scroll-spy-nav.tsx";
+import { RevealText } from "@/components/motion/reveal-text.tsx";
+
+const SPECIMEN_INDEX = [
+  { id: "scale", index: "01", title: "Type scale" },
+  { id: "ramp", index: "02", title: "Ramp" },
+  { id: "break", index: "03", title: "Break color" },
+  { id: "components", index: "04", title: "Components" },
+  { id: "kernel", index: "05", title: "Motion kernel" },
+];
 
 /**
  * Developer specimen: type scale, ramp, break-color rules, base components and
@@ -68,6 +78,9 @@ export default function TypeSpecimen() {
 
   return (
     <div className="grid-12 gap-y-16 py-16">
+      <div className="sticky top-(--header-h) z-10 col-span-full border-b border-hair bg-page md:col-span-10 md:col-start-2">
+        <ScrollSpyNav items={SPECIMEN_INDEX} label="Specimen index" />
+      </div>
       <SectionHeading id="scale" index="01" title="Type scale" />
       <div className="col-span-full flex flex-col md:col-span-10 md:col-start-2">
         {SCALE.map(([token, cls, sample]) => (
@@ -157,6 +170,16 @@ export default function TypeSpecimen() {
           </div>
         </Figure>
         <Rule strong />
+      </div>
+
+      <div className="col-span-full flex flex-col gap-3 md:col-span-6 md:col-start-2">
+        <MonoLabel>reveal · lines</MonoLabel>
+        <RevealText
+          as="p"
+          mode="lines"
+          className="font-display text-h2"
+          text="A Redis Lua script checks availability and decrements in one atomic step, so a 50-seat tier sells exactly 50."
+        />
       </div>
 
       <SectionHeading id="kernel" index="05" title="Motion kernel" />
