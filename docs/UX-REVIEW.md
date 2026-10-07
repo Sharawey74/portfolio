@@ -159,9 +159,98 @@ N/A until the Stage 4 contact form. Rules to apply then: `input-labels`, `error-
 
 ## Open items carried forward
 
-| Item | Owner / stage |
+Stage 1–3 items closed in Stage 4: mobile navigation (command palette, "Menu"
+below 768 px), Lighthouse numbers and the forms rules (see "Stage 4 review"
+below). Human checks marked UAT stay with the owner (`docs/UAT.md`).
+
+---
+
+# Stage 4 review
+
+| | |
 |---|---|
-| Mobile section navigation (no header links below 768 px) | Stage 4, command palette |
-| Lighthouse LCP / INP / CLS numbers | Stage 4 report |
-| Forms rules (contact) | Stage 4 |
-| Human checks listed as UAT above | Owner, `docs/UAT.md` |
+| Scope | Branch `feat/sections-seo-docs`: About, Open source, Experience, Contact, footer, command palette (M13), text scramble (M11), surfaces (M12), metadata, share images, JSON-LD, sitemap, robots |
+| Method | Same rulebook. Production build captured with headless Chrome over the DevTools protocol at 1440 px and 375 px, dark and light; palette and form driven in the in-app browser; Lighthouse 12 mobile, both simulated and applied (DevTools) throttling |
+| Reviewed | 2026-10-07 |
+
+## Stage 4 defects found and fixed
+
+| ID | Rule | Defect | Fix | Verified |
+|---|---|---|---|---|
+| S1 | `form-state-preservation` (forms) | React resets a form after its Server Action; a message rejected by validation was wiped | The action returns the submitted values with a fresh `at`; the form remounts with them as defaults | Invalid submit keeps all three values, marks email and message `aria-invalid`, focuses email |
+| S2 | `cls` (performance) | Hero headline re-wrapped when Newsreader swapped in on a slow connection: CLS 0.188 (applied throttling) | Display face `font-display: optional` (preloaded; fallback is metric-adjusted) | CLS 0.001 on three runs |
+| S3 | `color-contrast` (WCAG 1.4.3) | Section index labels faded from 35% opacity with the title-settle scroll effect; Lighthouse measured 1.66:1 below the fold | Effect animates scale only | Lighthouse accessibility 100 on `/` and `/projects/eventora` |
+| S4 | Honesty (brief) | Footer and meta description said every number *links* to its source; home-page numbers carry it as a tooltip only | "names its source …; the case studies link to the cited lines" | Copy in `profile.ts`, logged in `FACTS-CHECK.md` |
+| S5 | `lcp-priority` | Case-study hero image used the deprecated `priority` without `fetchpriority=high` | `loading="eager"` + `fetchPriority="high"` | LCP 3.6 s → 2.7–3.0 s (applied throttling) |
+| S6 | `errors-in-console` | `/favicon.ico` 404 | `src/app/icon.svg`, grayscale | Icon route in the build |
+| S7 | `consistent-sizing` | Tech chips stretched to the width of their "used in" caption | Chip list items `items-start` | 1440 px capture |
+| S8 | Copy accuracy | "Not connected" note said "use a link below"; on desktop the links sit to the right | "Use one of the direct links instead." | Copy |
+| S9 | Brand (share image) | The red period wrapped onto its own line in the share image | Words laid out as separate flex items, period inside the last word | `/opengraph-image` rendered |
+
+## Stage 4 rule results
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `heading-hierarchy` | Pass | One H1; each section H2 (`SectionHeading`); months (Open source) and role titles (Experience) are H3 |
+| `form-labels`, `required-indicators`, `input-type-keyboard`, `autofill-support` | Pass | Visible labels above fields with "(required)"; `type="email"`, `autocomplete` name/email, `enterkeyhint`, no autocorrect on email |
+| `inline-validation`, `error-placement`, `focus-management`, `aria-live-errors` | Pass | Native constraints styled only after interaction (`:user-invalid`); server re-validates (Zod); `aria-invalid` on failed fields; focus to the first; status line is `role=status` |
+| `error-feedback` without color | Pass | Dashed 2 px underline + ○ glyph + message; success ✓ + message |
+| `submit-feedback`, `loading-buttons` | Pass | Button reads "Sending" and is disabled while pending (no double post) |
+| Progressive enhancement | Pass | Server Action form posts without JavaScript |
+| Spam and abuse | Pass | Off-screen honeypot (`aria-hidden`, `tabindex=-1`) answers with a silent success; 3 messages per 10 min per address (in memory, per instance); 10 s send timeout; message body never logged |
+| Not-configured state | Pass | Without the three Resend variables the form is replaced by a note; direct links remain |
+| Command palette: `keyboard-nav`, `escape-routes`, `focus-trap` | Pass | Ctrl/Cmd+K; combobox + listbox with `aria-activedescendant`; ↑ ↓, Ctrl+Home/End, Enter; Esc and click outside close (native modal `<dialog>`, `closedby="any"`); focus returns to the opener |
+| `mobile-nav` | Pass | Header button reads "Menu" below 768 px and opens the palette (sections first) |
+| `focus-after-navigation` | Pass | Palette section jumps scroll with Lenis and move focus to the section heading (`tabindex=-1`) |
+| `touch-target-size` | Pass | Header controls, palette options, footer and contact links ≥ 44 px tall |
+| `status-not-color-only` | Pass | PR status: filled ✓ pill + filled square node vs outline ○ pill + hollow node |
+| `motion-meaning`, `reduced-motion` | Pass | Scramble is decorative over an sr-only copy, ≤ 360 ms, off under reduced motion and for hover on coarse pointers; the experience rule draw and grid fade are scroll-linked and static under reduced motion |
+| `max-animated-regions` | UAT | The new sections add no autoplaying loops; the count with the Work section in view is UAT-12 |
+| `horizontal-scroll` | Pass | `/`, three case studies and `/dev/type`: `scrollWidth` 375 at 375 px |
+| `line-length` | Pass | Bio, lead and notes capped at 48–64 ch |
+| Light theme | Pass | 1440 px capture of Open source in light mode |
+| `meta-tags`, `og-image`, `structured-data`, `sitemap` | Pass | Title template, description, canonical per page, Open Graph and Twitter cards, generated share images, JSON-LD `Person`, `/sitemap.xml`, `/robots.txt` (excludes `/dev/`) |
+| Break-color budget | Brief | Each open PR's status pill carries the break dot (the brief's open-status rule), so Open source shows up to 4 at once; every other break use stays single per section |
+
+## Anti-slop self-review (brief list)
+
+| Banned | Result |
+|---|---|
+| Purple/blue gradients, neon glow, glass blur, gradient blobs, gradient text | Pass: none. Gradients only draw the 1 px grid lines and the gray vignette |
+| Sparkle or emoji icons | Pass: text glyphs only (→ ↗ ✓ ○ · ↑ ↓) |
+| Grids of identical rounded shadowed cards | Pass: the bento has varied spans, hairline seams, no radius, no shadow |
+| 3-column icon-feature rows | Pass: none |
+| Everything centered | Pass: left-aligned editorial grid with `col-start-2` offsets |
+| Colored left-border stat cards | Pass: none. The palette's active option uses a 2 px break marker (active nav marker, allowed) |
+| Untouched shadcn/Tailwind default look | Pass: default palette, shadows and radii removed from the theme |
+| Drop shadows | Pass: none |
+
+| Required | Result |
+|---|---|
+| Asymmetric 12-column grid, deliberate offsets | Pass |
+| Numbered section indices ("01 / About") | Pass: 01–05 |
+| Mono figure captions | Pass (case studies) |
+| Hairline rules, oversized numerals, radius 0–2 px | Pass: About and Open source numerals at display size |
+| Real content as the visual material | Pass: data-driven bento, PR timeline, sourced roles |
+
+## Lighthouse (mobile, production build on localhost, 2026-10-07)
+
+| Page | Throttling | Perf | A11y | Best pr. | SEO | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|---|
+| `/` (before S2, S3) | simulated (default) | 73 | 97 | 96 | 100 | 4.5 s simulated, 1.45 s observed | 360 ms | 0.001 |
+| `/` (before S2) | applied (DevTools) | 51 | – | – | – | 3.0 s | 1.61 s | 0.188 |
+| `/` | applied (DevTools) | 64–66 | 100 | 96 | 100 | 2.0–2.4 s | 1.55–2.08 s | 0.001 |
+| `/projects/eventora` | applied (DevTools) | 64–65 | 100 | 96 | 100 | 2.7–3.0 s | 1.12–1.53 s | 0.001 |
+
+Best practices 96 was the favicon 404 (S6), fixed after these runs.
+
+Open, carried to Stage 5 polish:
+
+- **Main-thread time (Open).** TBT 1.1–2.1 s under 4× CPU slowdown: React
+  hydration plus the client islands (hero, cards, diagrams, palette). INP
+  under 200 ms is not proven by these runs; measure it on a real phone
+  (UAT-31) and trim client components where the numbers point.
+- **Case-study LCP (Open).** 2.7–3.0 s against the 2.5 s budget. Re-measure on
+  the Vercel deployment, whose image cache and CDN change the load phase.
+- Localhost has no CDN; numbers on Vercel will differ. Re-run on the
+  production URL before launch.
