@@ -92,27 +92,37 @@ Skills loaded: modern-web-guidance (light-dismiss-a-dialog, declarative-dialog-p
 - [x] Gates green; `/` 151.9 KB gz; case studies 152.6 KB gz
 - [x] Fixed during review: card numerals overlapping titles, highlight numbers colliding, a wide diagram widening the whole grid on phones (`.grid-12 > * { min-width: 0 }`)
 - [x] UI UX Pro Max audit (`docs/UX-REVIEW.md`): 8 defects found and fixed on this branch (R1–R8: focus under header/cards, broken header link on case pages, unreadable mobile charts, low-contrast diagram edges, long lines, button cursor, 627 px-wide case pages)
-- [ ] Owner UAT run (`docs/UAT.md`) recorded before merge
+- [-] Owner UAT run before merge: PR #3 was merged on 2026-10-07 without a recorded run; the full run is now due before launch (Definition of done)
 
 Decisions:
 - M6 fallback uses Lenis' scroll callback instead of `motion`'s `useScroll`, which listens to scroll events (against the motion rules); M8's fallback fade is CSS. The `motion` package is installed but not shipped in any bundle yet.
 - The "660 vs 800" chart is an operating-point plot, not bars (different measures; see FACTS-CHECK.md).
 
-## Stage 4: Remaining sections, SEO, docs
+## Stage 4: Remaining sections, SEO, docs · DONE 2026-10-07 · branch `feat/sections-seo-docs`
 
-- [ ] About bento + stack (chips from `skills.ts` with `usedIn`)
-- [ ] Open source: timeline + cards; status by shape; ISR refresh from the GitHub API (`revalidate: 86400`), `oss.json` fallback, optional `GITHUB_TOKEN`
-- [ ] Experience: scroll-triggered vertical timeline; certifications without dates
-- [ ] Contact: Server Action, Zod, Resend, honeypot, simple rate limit; "not configured" state when `CONTACT_TO_EMAIL` is unset (preview and dev)
-- [ ] Footer
-- [ ] M13 command palette (Ctrl/Cmd+K): sections, projects, OSS items, open links, toggle theme, pause animations
-- [ ] M11 text scramble on mono labels at hover/focus, ≤ 400 ms, `aria-label` keeps real text
-- [ ] M12 surfaces: static pre-rendered grain, hairline grid fading with scroll, vignette
-- [ ] SEO: metadata, `next/og` image (black and white), JSON-LD `Person`, sitemap, robots
-- [ ] `.env.example` (`RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER`)
-- [ ] README complete: what, stack, data-file table, how to update, env vars, Vercel dashboard steps, launch checklist
-- [ ] Anti-slop self-review: pass/fail per rule
-- [ ] Lighthouse (mobile) and `next build` bundle report with numbers
+Skills loaded: modern-web-guidance (forms, validate-input-after-interaction, required-field-feedback, light-dismiss-a-dialog; Stage 1–3 guides), UI UX Pro Max rulebook (review), git-workflow. Not found: frontend-design (ListPlugins shows neither plugin from the Stage 3 install card as enabled).
+
+- [x] About bento (education, open source, internships, flagship; bio, portrait, location, availability cells appear only once set) + stack by lane, each chip naming where it was used
+- [x] Open source: headline numbers derived (`ossSummary`), month-grouped timeline, status by shape; daily refresh from the GitHub API (`fetch` with `revalidate: 86400`, `/` is ISR 1 d), `oss.json` fallback per PR, optional `GITHUB_TOKEN`; verified live at build
+- [x] Experience: timeline whose rule draws with scroll (view timeline, static fallback), entries clip in; education; certifications without dates; capstone hidden (TODO)
+- [x] Contact: Server Action, Zod, Resend over `fetch`, honeypot, 3 per 10 min per address (in memory), values kept on rejection; "not connected" note when the Resend variables are unset. Verified: invalid path, honeypot, not-configured; a real send is UAT-33
+- [x] Footer: name, site index, outbound links, palette button, sourcing note, license, back to top
+- [x] M13 command palette (Ctrl/Cmd+K, header Search / mobile Menu, footer): sections, projects, PRs, links, theme, pause; native modal dialog + ARIA combobox. Verified: filter, Enter to PR, jump + focus to section, theme action, Esc
+- [x] M11 text scramble on mono nav, footer, contact and palette-trigger labels: ≤ 360 ms, delegated listener, sr-only real text
+- [x] M12 surfaces: static SVG grain, hairline grid fading over the first screen (scroll timeline), gray vignette
+- [x] SEO: metadata with title template and per-page canonical, Open Graph and Twitter, `next/og` share images (home + each case study, Newsreader and JetBrains Mono, colors read from the tokens), JSON-LD `Person`, sitemap, robots, grayscale icon
+- [x] `.env.example`
+- [x] README complete: routes, stack, commands, data-file table, how to update, env vars, Vercel steps, launch checklist
+- [x] Anti-slop self-review: pass/fail per rule (`docs/UX-REVIEW.md` → Stage 4)
+- [x] Lighthouse (mobile) and bundle report with numbers (below and in `docs/UX-REVIEW.md`)
+- [x] UI UX Pro Max review of the new UI: 9 defects found and fixed (S1–S9, incl. CLS 0.188 → 0.001 and the form wiping rejected input); UAT-28 to UAT-40 added
+- [ ] Owner UAT run of the Stage 4 cases
+
+Decisions:
+- Display font is `font-display: optional` (CLS); text and mono stay `swap`.
+- The palette is the mobile navigation; the header keeps only Menu, Pause (glyph only below 768 px) and Theme.
+- A PR closed upstream without merging is dropped from the live list (FACTS-CHECK.md → Stage 4).
+- The `motion` package is still unused; Stage 5 polish removes it unless M15 needs it.
 
 ## Stage 5: Optional shader and polish
 
@@ -138,9 +148,9 @@ Decisions:
 | M8 | Route transitions | 3 | DONE (morph not visually verified; hidden pane) |
 | M9 | Motion graphics a–d | 3 | DONE |
 | M10 | Count-up numbers | 3 | DONE |
-| M11 | Text scramble | 4 | open |
-| M12 | Grain, grid, vignette | 4 | open |
-| M13 | Command palette, scroll-spy, smart header | 2 + 4 | PARTIAL (scroll-spy + smart header done; palette in Stage 4) |
+| M11 | Text scramble | 4 | DONE |
+| M12 | Grain, grid, vignette | 4 | DONE |
+| M13 | Command palette, scroll-spy, smart header | 2 + 4 | DONE |
 | M14 | Theme toggle with VT reveal, no flash | 1 | DONE |
 | M15 | Optional WebGL2 shader | 5 | open |
 
@@ -148,10 +158,10 @@ Decisions:
 
 | Budget | Target | Last measured |
 |---|---|---|
-| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 151.9 KB (Stage 3) |
-| Mobile LCP | < 2.5 s | — |
-| INP | < 200 ms | — |
-| CLS | < 0.05 | — |
+| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 155.9 KB (Stage 4); case studies 155.5 KB |
+| Mobile LCP | < 2.5 s | `/` 2.0–2.4 s; `/projects/eventora` 2.7–3.0 s (over; Lighthouse applied throttling, localhost, Stage 4) |
+| INP | < 200 ms | not measured in the field; TBT 1.1–2.1 s under 4× CPU suggests risk (UAT-31, Stage 5) |
+| CLS | < 0.05 | 0.001 (was 0.188 before the display font became `optional`) |
 | `--break` pixels in viewport | ≤ 2% | — |
 | Concurrently animating regions per viewport | ≤ 3 | — |
 

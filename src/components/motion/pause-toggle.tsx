@@ -12,10 +12,10 @@ export function PauseToggle({ labels }: { labels: { pause: string; play: string 
       type="button"
       aria-pressed={paused}
       onClick={() => setPaused(!paused)}
-      className="mono-label inline-flex min-h-11 items-center gap-2 px-2 text-ink-2 hover:text-ink"
+      className="mono-label inline-flex min-h-11 min-w-11 items-center justify-center gap-2 px-2 text-ink-2 hover:text-ink"
     >
       <span aria-hidden="true">{paused ? "▶︎" : "❙❙"}</span>
-      <span>{paused ? labels.play : labels.pause}</span>
+      <span className="max-md:sr-only">{paused ? labels.play : labels.pause}</span>
     </button>
   );
 }

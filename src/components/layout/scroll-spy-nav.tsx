@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ScrambleText } from "@/components/motion/scramble.tsx";
 
 export type SpyItem = { id: string; index: string; title: string };
 
@@ -58,7 +59,7 @@ export function ScrollSpyNav({
               <a href={`${base}#${item.id}`} aria-current={active ? "true" : undefined} className="spy-link mono-label">
                 <span aria-hidden="true" className="spy-dot" />
                 <span className="num spy-index">{item.index}</span>
-                <span>{item.title}</span>
+                <ScrambleText text={item.title} />
               </a>
             </li>
           );

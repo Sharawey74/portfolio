@@ -143,7 +143,7 @@ Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.con
 | `npm run check` | facts + contrast + colors |
 | `npm run report:bundle` | First-load JS per prerendered page (gz, `nomodule` polyfills excluded); fails if `/` > 170 KB |
 
-Env vars (Stage 4): `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER` (default 0). Commit only `.env.example`.
+Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER` (default 0); documented in `.env.example` and the README. Commit only `.env.example`. To see the contact form locally, build and start with placeholder values for the three Resend variables, and test only paths that stop before sending (validation, honeypot); a valid message would call Resend.
 
 ## Skills (load before UI work; never invent a skill name)
 
@@ -196,6 +196,31 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `.grid-12 > *` has `min-width: 0`: a wide child (diagram scroller) must not widen the grid. Keep it.
 - `motion` is installed but not imported anywhere yet (fallbacks use Lenis / CSS). Use it only if a later item needs it, or remove it.
 - Measured at the end of Stage 3: `/` 151.9 KB gz; case studies 152.6 KB gz.
+
+## Sections, palette and SEO in place (Stage 4)
+
+- `/` renders Hero → About → Work → Open source → Experience → Contact; all five sections are `live`. `page.tsx` fetches PR status once (`getPullRequests()` in `src/lib/oss-live.ts`) and passes it to About and Open source so their numbers agree. That fetch (`revalidate: 86400`) makes `/` ISR with a 1-day interval; failures fall back to `oss.json` per PR.
+- Components: `src/components/{about,oss,experience,contact,palette}/*`, `layout/site-footer.tsx`, `layout/surfaces.tsx` (M12), `motion/scramble.tsx` (M11). Interface strings for all of them live in `profile.ui.{about,oss,experience,contact,footer,palette}`.
+- **Contact:** Server Action `src/app/actions/contact.ts` (honeypot → config → Zod → rate limit → Resend over `fetch`). `src/lib/contact-config.ts` decides whether the form renders; keep non-action helpers out of the `"use server"` file (every export there becomes a callable endpoint). The action returns the submitted values with a fresh `at`, and the form is keyed on it, because React resets a form after its action.
+- **Palette (M13):** `PaletteDialog` (client) gets a prebuilt item list from `CommandPalette` (server). Open it from anywhere with `window.dispatchEvent(new Event(OPEN_EVENT))`. It is the mobile navigation (header "Menu" below 768 px).
+- **Theme:** `src/components/theme/theme-switch.ts` holds `switchTheme()`; the toggle and the palette both call it.
+- **Scramble (M11):** wrap a mono label in `<ScrambleText text=… />` inside a link or button; one `ScrambleHost` in the layout does the rest.
+- **SEO:** `src/lib/site.ts` (`siteUrl()`), metadata in `layout.tsx` (title template, OG, Twitter, JSON-LD `Person`), per-page canonical in `page.tsx` and the case page, `sitemap.ts`, `robots.ts`, `icon.svg`. Share images: `src/lib/og.tsx` reads colors from the dark tokens in `globals.css` and fetches TTF subsets from Google Fonts at build (next/og's bundled default is Geist, a banned face; a failed fetch fails the build). A child route that sets `openGraph` replaces the parent's whole `openGraph` object, so set all its fields or none.
+- **Fonts:** Newsreader is `display: "optional"` (a late swap re-wrapped the hero: CLS 0.188); keep it.
+- **Body background is transparent** so the M12 layers at `z-index: -1` show; `html` carries the page color.
+- Measured at the end of Stage 4: `/` 155.9 KB gz, case studies 155.5 KB gz. Lighthouse mobile (applied throttling, localhost): `/` LCP 2.0–2.4 s, CLS 0.001, TBT 1.5–2.1 s; Eventora LCP 2.7–3.0 s. Accessibility 100, SEO 100.
+
+## Taking screenshots when the browser pane is hidden
+
+The pane is small (about 533 px) and renders no frames while hidden. For
+layout checks, drive headless Chrome over the DevTools protocol from Node
+(built-in `WebSocket`): set the viewport with `Emulation.setDeviceMetricsOverride`,
+emulate `prefers-reduced-motion` / `prefers-color-scheme`, then
+`Page.captureScreenshot` with `captureBeyondViewport: true` and a clip per
+section. A tall `--window-size` does not work (the hero is `100svh`), and
+`--screenshot` after an anchor jump comes back black. Lighthouse: run
+`npx -y lighthouse@12 <url> --throttling-method=devtools` from PowerShell with
+`CHROME_PATH` set; the default simulated LCP can be far from the observed one.
 
 ## Review and acceptance
 

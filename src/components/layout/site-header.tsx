@@ -3,11 +3,13 @@ import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
 import { PauseToggle } from "@/components/motion/pause-toggle.tsx";
 import { ThemeToggle } from "@/components/theme/theme-toggle.tsx";
+import { PaletteTrigger } from "@/components/palette/palette-trigger.tsx";
 import { HeaderShell } from "./header-shell.tsx";
 import { ScrollSpyNav } from "./scroll-spy-nav.tsx";
 
 /**
- * Header: wordmark, section nav with scroll-spy, and the two global controls.
+ * Header: wordmark, section nav with scroll-spy, the palette button (the
+ * mobile menu below 768 px) and the two global controls.
  * The nav lists only sections marked `live` in profile.ts, so it never links
  * to a section that is not on the page yet. Hides on scroll down (HeaderShell).
  * The wordmark uses the public name once the owner sets it, else the handle.
@@ -24,7 +26,8 @@ export function SiteHeader() {
         <div className="hidden min-w-0 flex-1 md:block">
           <ScrollSpyNav items={navItems} label={ui.navLabel} />
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1">
+          <PaletteTrigger labels={{ open: ui.palette.open, menu: ui.palette.menu }} />
           <PauseToggle labels={{ pause: ui.pauseAnimations, play: ui.playAnimations }} />
           <ThemeToggle labels={{ toLight: ui.themeToLight, toDark: ui.themeToDark }} />
         </div>
