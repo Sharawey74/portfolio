@@ -67,7 +67,7 @@ Verdicts: **Pass** · **Fixed** (defect found in this review and fixed on PR #3)
 | `lazy-loading`, `bundle-splitting` | Pass | Canvas is a 1.6 KB idle-loaded chunk; first-load JS `/` 151.8 KB gz (budget 170) |
 | `content-jumping` | Pass | H1 weight effect pins word widths (measured CLS 0.0000) |
 | `main-thread-budget`, `reduce-reflows` | Pass | One rAF scheduler; per-frame work is transforms; React state only on step changes |
-| LCP / INP field numbers | Open | Lighthouse report is a Stage 4 deliverable |
+| LCP / INP field numbers | Open | Lab numbers since Stage 4 (`docs/reports/`); field INP is `docs/ISSUES.md` → ISS-04 |
 
 ### 4. Style selection (HIGH)
 
@@ -131,7 +131,7 @@ N/A until the Stage 4 contact form. Rules to apply then: `input-labels`, `error-
 | `focus-on-route-change` | Pass | Case-study H1 receives focus after navigation |
 | `deep-linking` | Pass | Every case study has a static URL |
 | `back-behavior`, `persistent-nav` | Fixed | R3; browser Back with scroll restore is UAT-04 |
-| `empty-nav-state`, `adaptive-navigation` | Open | Below 768 px the header shows no section links; mobile navigation arrives with the command palette (Stage 4) |
+| `empty-nav-state`, `adaptive-navigation` | Fixed (Stage 4) | Below 1024 px the header button reads "Menu" and opens the command palette (Stage 4, breakpoint moved in Stage 5) |
 | `modal-escape` | Pass | Zoom dialog |
 
 ### 10. Charts & data (LOW)
@@ -401,7 +401,7 @@ Before the pass (2026-10-07): LCP 2.52–2.83 s on every page, TBT 1,164–2,043
 | P2 | Coarse pointers keep the static hero graph; the live canvas (about 0.9 s of main thread at 4x CPU) needs a fine pointer, which its pointer interaction depends on anyway | Fixed, design change flagged to the owner (UAT-48) |
 | P3 | Newsreader loads the normal style only; the unused italic face was a second ~140 KB variable file preloaded ahead of the LCP image | Fixed |
 | P4 | `content-visibility: auto` below the fold | Rejected: layout still touched every object and took about twice as long |
-| P5 | Eventora LCP 2.79 s: 0.7 s HTML on slow 4G, then the image shares the connection with 207 KB of fonts and waits ~0.8 s for the main thread | Open (owner) |
-| P6 | TBT 695–989 ms: the first full style and layout pass (~0.45 s at 4x CPU) plus React hydration | Open (owner) |
+| P5 | Eventora LCP 2.79 s: 0.7 s HTML on slow 4G, then the image shares the connection with 207 KB of fonts and waits ~0.8 s for the main thread | Decided: accept and re-measure on Vercel (`docs/ISSUES.md` → ISS-01) |
+| P6 | TBT 695–989 ms: the first full style and layout pass (~0.45 s at 4x CPU) plus React hydration | Decided: accept and re-measure on Vercel (`docs/ISSUES.md` → ISS-02) |
 
-Options for P5 and P6, each a trade-off against the brief, for the owner to choose: drop Newsreader's `opsz` axis (the largest font file; the brief asks for "variable opsz + wght"); cut the number of client components that hydrate on every page (palette loaded on first open, cursor and scramble host after idle); or accept the numbers until they are re-measured on Vercel, where the HTML and image come from a CDN.
+The owner chose option C on 2026-10-08: accept the numbers now and re-measure on a Vercel preview in Stage 6. The options, evidence and next steps for P2, P5 and P6 are in `docs/ISSUES.md` (ISS-01 to ISS-03); open items from here on are tracked there.
