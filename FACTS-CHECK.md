@@ -151,6 +151,51 @@ Every chip names the project(s) it was used in and a source in report §3 or a
 manifest line. ChromaDB + LangChain appear only for LexIntelligence. PyTorch is
 labelled "notebook" (`~/Downloads/PlantVillageFinal.ipynb`, report:284).
 
+### Diagrams and charts (Stage 3, verified 2026-10-07)
+
+Every animated diagram node and step is data in `projects.ts → flow`, each with
+its own source line; the schema rejects a step between undeclared nodes.
+
+| Figure | Drawn from |
+|---|---|
+| Eventora reservation flow (9 steps, sold-out branch of 2) | Event-Ticketing-Platform/README.md:118-148 (steps 124-148) |
+| Recruiter-Pro request path (client → API → 4 agents) | Recruiter-Pro/README.md:209-240 |
+| SysPlex collection → Flask → dashboard | SysPlex/README.md:66-106, :185, :258-259; server/static/js/dashboard.js:14 |
+| Operating points: 1 replica 660 req/s at p95 511 ms; 2 replicas 800 req/s at p95 9.0 ms | PERFORMANCE.md:382, 386, 400 |
+| Footnote: 2-replica ceiling 870 req/s, p95 568 ms | PERFORMANCE.md:401, 412 |
+| Ramp schedule 0→10→25→50→100→200→0 over 16 min | `src/test/k6/capacity-ramp.js` at commit d103b56, lines 16-23 |
+| Ramp outcomes 32,577 requests, 0.00% failed, p95 394 ms | PERFORMANCE.md:271, 283-291 |
+
+Decisions:
+- **Chart form.** The brief asked for "660 vs 800 req/s". Those are different
+  measures (660 is one replica's ceiling; 800 is a rate two replicas held), so
+  side-by-side bars would imply a like-for-like comparison. The chart plots each
+  configuration as an operating point on shared throughput / p95 axes instead,
+  with a footnote stating the difference and the 2-replica ceiling.
+- **Ramp schedule from the run-time script.** Today's `capacity-ramp.js` also has
+  500 and 1000 VU stages, added on 2026-07-15 (commit 5aac1ea), after the
+  2026-07-04 run. The chart uses the script as of d103b56 (the commit before
+  them), whose 2+3+3+3+3+2 = 16 minutes matches PERFORMANCE.md's "16m00s". The
+  line is labelled as configured targets, not measured VUs.
+- **Screenshot alt text** was written after viewing the images; `04-ticket-selection-cart-dark.webp` shows the event page with ticket tiers, not a cart, and is described that way.
+
+### Source links (Stage 3)
+
+Case-study sources link to GitHub permalinks pinned to the commit the evidence
+was read from (`src/lib/sources.ts`). On 2026-10-07 each pinned commit existed on
+GitHub, and all 38 linked files resolved at their commit.
+
+| Repo | Pinned commit | Note |
+|---|---|---|
+| Event-Ticketing-Platform | ef96703 | equals GitHub `main` |
+| Recruiter-Pro | daf160b | equals GitHub `main` |
+| SysPlex | 9f3cce9 | equals GitHub `main` |
+| LexIntelligence | 6dbd97a | local HEAD; GitHub `main` is 2 README-only commits ahead |
+| PhishSniffer | e62bd85 | GitHub `main` (2026-03-03) |
+
+Sources that are not public (`evidence-report.md`, owner statements, probes)
+render as plain text.
+
 ## Banned claims (enforced by `scripts/check-facts.ts`)
 
 - Technology with no repo evidence: Microservices, CQRS, Event Sourcing, Kubernetes, Terraform, Kafka, gRPC, GraphQL, TimescaleDB, Node.js backend, OAuth 2.0, MySQL
