@@ -187,7 +187,7 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
                   y2={y2}
                   className="flow-edge"
                   style={{ transformOrigin: `${x1}px ${y1}px`, transitionDelay: `${i * 120}ms` }}
-                  stroke="var(--line-strong)"
+                  stroke="var(--text-3)"
                   strokeWidth="1.5"
                   strokeDasharray={e.alt ? "5 5" : undefined}
                   vectorEffect="non-scaling-stroke"

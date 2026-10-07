@@ -22,7 +22,7 @@ export function FlowPreview({ slug, flow }: { slug: string; flow: Flow }) {
         const [bx, by] = layout.at[b]!;
         const [x1, y1] = exitPoint(ax, ay, bx, by, w, h);
         const [x2, y2] = exitPoint(bx, by, ax, ay, w, h);
-        return <line key={`${a}-${b}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="var(--line-strong)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />;
+        return <line key={`${a}-${b}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="var(--text-3)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />;
       })}
       {flow.nodes.map((n) => {
         const [cx, cy] = layout.at[n.id]!;
