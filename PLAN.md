@@ -131,22 +131,22 @@ Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidan
 5.1 Design critique (no code first)
 - [x] frontend-design self-critique of every page (`/`, all case studies) at 375 / 768 / 1280 / 1920, dark and light. Screenshots in `docs/screens/stage5-before/` (32 WebP, 6.7 MB; `scrollWidth` equals the viewport on all 32)
 - [x] Issues list in `docs/UX-REVIEW.md` (new section "Stage 5"), each with a verdict: D1–D10 (8 Open, D6 partly Brief; 1 Owner; 1 Pass) plus the Brief-over-skill table
-- [ ] Each fix stays inside the token system (no new colors, sizes, shadows or radii)
+- [x] Each fix stays inside the token system (no new colors, sizes, shadows or radii): only existing utilities and tokens; `check:colors` and `check:contrast` pass
 
 5.2 Motion completion (inside the existing system)
-- [ ] Audit every M1–M14 item against CLAUDE.md motion rules: one easing, fixed durations, ≤ 3 animating regions per viewport, scheduler only, no scroll listeners
-- [ ] Interaction states consistent on every control: hover, focus-visible, active, disabled; motion limited to `transform` / `opacity` / `clip-path`
-- [ ] Reduced motion, `pointer: coarse`, Save-Data, JS-off and the global Pause control re-verified on every page
-- [ ] `motion` package decision: either a listed item needs it (name the item), or remove it from `package.json` (one commit, bundle numbers before and after)
-- [ ] M15 (default OFF, `NEXT_PUBLIC_ENABLE_SHADER=0`): raw WebGL2 grayscale noise / flow field, ≤ 15 KB, lazy after idle; gated on WebGL2, `deviceMemory ≥ 4`, `hardwareConcurrency ≥ 4`, no Save-Data, no reduced motion, visible tab; falls back to M4
+- [x] Audit every M1–M14 item against CLAUDE.md motion rules: one easing, fixed durations, ≤ 3 animating regions per viewport, scheduler only, no scroll listeners. Fixed off-token durations (intro 1000 + 650 → 800 + 300 hold + 400 ms; count-up 1200 → 800; scramble 360 → 400; packet 900 → 800 ms); the rest pass (`docs/UX-REVIEW.md` → 5.2)
+- [x] Interaction states consistent on every control: hover, focus-visible, active, disabled; motion limited to `transform` / `opacity` / `clip-path`. New: one pressed state (1 px `translate`) and `not-allowed` on disabled
+- [x] Reduced motion, `pointer: coarse`, Save-Data, JS-off and the global Pause control re-verified on every page: 4 pages × 5 modes in headless Chrome, all pass, no console errors
+- [x] `motion` package decision: removed (no item needs it; M15 is raw WebGL2). `/` 155.9 KB gz before and after, case studies 155.6 KB both (it was never bundled)
+- [x] M15 (default OFF, `NEXT_PUBLIC_ENABLE_SHADER=0`): raw WebGL2 grayscale noise / flow field, ≤ 15 KB, lazy after idle; gated on WebGL2, `deviceMemory ≥ 4`, `hardwareConcurrency ≥ 4`, no Save-Data, no reduced motion, visible tab; falls back to M4. Built: 3.2 KB raw / 1.7 KB gz chunk; verified with the flag on (WebGL2 canvas live, no console errors)
 
 5.3 Audit and budgets
-- [ ] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md`
-- [ ] New behavior gets cases in `docs/UAT.md` (never marked passed)
-- [ ] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz
-- [ ] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. Stage 4 left two over budget: Eventora LCP 2.7–3.0 s and TBT 1.1–2.1 s (applied throttling)
-- [ ] 375 px `scrollWidth` check on every page
-- [ ] After screenshots in `docs/screens/stage5-after/`; M1–M15 status table updated
+- [x] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md` (5.3 table)
+- [x] New behavior gets cases in `docs/UAT.md` (never marked passed): UAT-41 to UAT-47; UAT-23 updated (no marquee)
+- [x] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz: 156.1 KB gz, case studies 155.6 KB
+- [ ] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. Stage 4 left two over budget: Eventora LCP 2.7–3.0 s and TBT 1.1–2.1 s (applied throttling). Not done yet: 12 runs on 2026-10-07 were discarded because the laptop was on battery (CPU benchmark 512–671 vs 1,500–2,372 at Stage 4); re-run on mains power
+- [x] 375 px `scrollWidth` check on every page: equal to the viewport at 375, 768, 1280 and 1920 on all 4 pages, both themes
+- [x] After screenshots in `docs/screens/stage5-after/` (32 WebP, 6.6 MB); M1–M15 status table updated
 
 Notes:
 - Screenshots and reports are committed one file per commit (CLAUDE.md git rules), or up to four per commit when they are one identical change (for example the four widths of one page and theme). Keep them as compressed PNG/JPEG at 1× so the repo stays small.
@@ -194,12 +194,12 @@ Notes:
 
 | ID | Item | Stage | Status |
 |---|---|---|---|
-| M1 | Intro sequence | 2 | DONE |
+| M1 | Intro sequence | 2 + 5 | DONE (on duration tokens since Stage 5: 1500 ms) |
 | M2 | Lenis + scroll-progress hairline | 1 | DONE |
 | M3 | Kinetic typography | 2 | DONE |
 | M4 | Hero node-graph canvas | 2 | DONE |
 | M5 | Cursor dot + ring, magnetic, labels | 1 + 3 | DONE (View / Zoom labels on cards and gallery) |
-| M6 | Scroll choreography, sticky stack, marquee | 3 | DONE |
+| M6 | Scroll choreography, sticky stack, marquee | 3 + 5 | PARTIAL by owner decision: sticky stack and parallax kept, marquee retired (Stage 5 D2) |
 | M7 | Project card interactions | 3 | DONE |
 | M8 | Route transitions | 3 | DONE (morph not visually verified; hidden pane) |
 | M9 | Motion graphics a–d | 3 | DONE |
@@ -208,13 +208,13 @@ Notes:
 | M12 | Grain, grid, vignette | 4 | DONE |
 | M13 | Command palette, scroll-spy, smart header | 2 + 4 | DONE |
 | M14 | Theme toggle with VT reveal, no flash | 1 | DONE |
-| M15 | Optional WebGL2 shader | 5 | open |
+| M15 | Optional WebGL2 shader | 5 | DONE (default OFF) |
 
 ## Budgets (measured, not assumed)
 
 | Budget | Target | Last measured |
 |---|---|---|
-| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 155.9 KB (Stage 4); case studies 155.5 KB |
+| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 156.1 KB (Stage 5); case studies 155.6 KB; M15 chunk 1.7 KB gz, loaded only when enabled |
 | Mobile LCP | < 2.5 s | `/` 2.0–2.4 s; `/projects/eventora` 2.7–3.0 s (over; Lighthouse applied throttling, localhost, Stage 4) |
 | INP | < 200 ms | not measured in the field; TBT 1.1–2.1 s under 4× CPU suggests risk (UAT-31, Stage 5) |
 | CLS | < 0.05 | 0.001 (was 0.188 before the display font became `optional`) |
