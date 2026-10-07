@@ -15,6 +15,9 @@ const BUDGET_KB = 170;
 const PAGES: [string, string][] = [
   ["/", ".next/server/app/index.html"],
   ["/dev/type", ".next/server/app/dev/type.html"],
+  ["/projects/eventora", ".next/server/app/projects/eventora.html"],
+  ["/projects/recruiter-pro", ".next/server/app/projects/recruiter-pro.html"],
+  ["/projects/sysplex", ".next/server/app/projects/sysplex.html"],
 ];
 
 const kb = (n: number) => (n / 1024).toFixed(1);
