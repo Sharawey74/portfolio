@@ -196,6 +196,38 @@ GitHub, and all 38 linked files resolved at their commit.
 Sources that are not public (`evidence-report.md`, owner statements, probes)
 render as plain text.
 
+### Stage 4 sections (verified 2026-10-07)
+
+No new facts were introduced; About, Open source and Experience render data
+already mapped above. Numbers shown there are derived, never typed:
+
+| Shown | Derived from | Source carried |
+|---|---|---|
+| About: "7 merged pull requests across 5 projects, 4 under review" | `ossSummary(prs)`, the same list the Open source section renders | evidence-report.md:309-364, as of the snapshot date |
+| About: "2 internships" | `experience.roles.length` (both roles are internships) | evidence-report.md:408 per role |
+| About: flagship card | Eventora `summary` and its first `highlights` metric (228 tests) | the claim's own source |
+| Open source: dates, line counts, "Fixes #n" | `oss.json` fields | `gh pr view`, 2026-10-06 |
+
+- **Live PR status.** `/` regenerates at most once a day (ISR) and re-reads
+  each PR's state from the public GitHub API (`src/lib/oss-live.ts`). Titles,
+  line counts and notes stay as committed. A PR merged upstream shows as merged;
+  a PR closed without merging is dropped (it is neither merged nor under
+  review). Any API failure keeps that PR's snapshot values, and the section
+  says which applies ("refreshed daily" vs "as of the last snapshot"). The
+  banned-claim asserts on Litestar #5019 and Eclipse Collections #1965 still
+  run against the committed snapshot; if either merges upstream, update
+  `oss.json` and those asserts together.
+- **Sourcing line.** The footer and meta description say every number *names*
+  its source (home-page figures carry it as a tooltip; case studies link to the
+  pinned lines). Earlier copy said "links to", which was true only on the case
+  studies; corrected in Stage 4.
+- **Share images** (`/opengraph-image`, `/projects/<slug>/opengraph-image`)
+  render the approved headline and each case study's `summary`, plus stack
+  names from `projects.ts`. No other text.
+- **JSON-LD `Person`** uses the GitHub handle as `name` until the owner sets a
+  public name (the spelling decision stays with the owner), `sameAs` GitHub and
+  LinkedIn, `alumniOf` AASTMT, and `knowsAbout` from the backend and data chips.
+
 ## Banned claims (enforced by `scripts/check-facts.ts`)
 
 - Technology with no repo evidence: Microservices, CQRS, Event Sourcing, Kubernetes, Terraform, Kafka, gRPC, GraphQL, TimescaleDB, Node.js backend, OAuth 2.0, MySQL
