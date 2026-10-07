@@ -977,3 +977,31 @@ html[data-vt="none"] .case {
 ::view-transition {
   pointer-events: none;
 }
+
+/* ── UX review fixes (docs/UX-REVIEW.md) ─────────────────────────────── */
+
+/* R1 focus-not-obscured (WCAG 2.4.11) and fixed-element-offset: anchor jumps
+   and keyboard focus land below the fixed header, also without Lenis. */
+html {
+  scroll-padding-top: calc(var(--header-h) + 1rem);
+}
+/* R2 focus-not-obscured: a focused control in an earlier stacked card would
+   sit under the next sticky card; lift its card above the stack. */
+.stack-item:focus-within {
+  z-index: 2;
+}
+/* R7 cursor-pointer: Tailwind v4 preflight gives buttons the default arrow.
+   The custom cursor (fine pointer, motion allowed) still hides it. */
+button:not(:disabled),
+[role="button"] {
+  cursor: pointer;
+}
+/* R4 responsive-chart: below ~560 px the charts scroll sideways in their own
+   region instead of shrinking their 12 px labels to ~6 px. */
+.chart-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.chart-scroll > .chart {
+  min-width: 560px;
+}
