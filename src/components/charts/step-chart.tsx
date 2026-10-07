@@ -24,63 +24,67 @@ export function StepChart({ chart }: { chart: Chart }) {
 
   return (
     <div className="grid items-end gap-8 md:grid-cols-[2fr_1fr]">
-      <div>
-        <svg viewBox={`0 0 ${W} ${H}`} className="chart block h-auto w-full" role="img" aria-label={chart.caption}>
-          <g className="chart-grid">
-            {yTicks.map((t) => (
-              <line key={t} x1={M.left} x2={W - M.right} y1={py(t)} y2={py(t)} />
-            ))}
-          </g>
-          <g className="chart-axis-text">
-            {yTicks.map((t) => (
-              <text key={t} x={M.left - 10} y={py(t) + 4} textAnchor="end">
-                {t}
-              </text>
-            ))}
-            {xTicks.map((t) => (
-              <text key={t} x={px(t)} y={H - M.bottom + 20} textAnchor="middle">
-                {t}
-              </text>
-            ))}
-            <text x={(M.left + W - M.right) / 2} y={H - 8} textAnchor="middle" className="chart-axis-title">
-              {chart.xLabel}
-            </text>
-            <text x={14} y={(M.top + H - M.bottom) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(M.top + H - M.bottom) / 2})`} className="chart-axis-title">
-              {chart.yLabel}
-            </text>
-          </g>
-          <line className="chart-baseline" x1={M.left} x2={W - M.right} y1={py(0)} y2={py(0)} />
-          <path d={d} className="chart-line" />
-          {chart.points.map(([x, y]) => (
-            <g key={`${x}-${y}`} className="chart-point">
-              <title>{`${x} min: ${y} target VUs`}</title>
-              <circle cx={px(x)} cy={py(y)} r="12" className="chart-hit" />
-              <circle cx={px(x)} cy={py(y)} r="4" className="chart-vertex" />
-              {y === yTop ? (
-                <text x={px(x)} y={py(y) - 12} textAnchor="middle" className="chart-value">
-                  {y}
-                </text>
-              ) : null}
+      <div className="min-w-0">
+        <div className="chart-scroll" data-lenis-prevent>
+          <svg viewBox={`0 0 ${W} ${H}`} className="chart block h-auto w-full" role="img" aria-label={chart.caption}>
+            <g className="chart-grid">
+              {yTicks.map((t) => (
+                <line key={t} x1={M.left} x2={W - M.right} y1={py(t)} y2={py(t)} />
+              ))}
             </g>
-          ))}
-        </svg>
-        <table className="sr-only">
-          <caption>{chart.caption}</caption>
-          <thead>
-            <tr>
-              <th scope="col">{chart.xLabel}</th>
-              <th scope="col">{chart.yLabel}</th>
-            </tr>
-          </thead>
-          <tbody>
+            <g className="chart-axis-text">
+              {yTicks.map((t) => (
+                <text key={t} x={M.left - 10} y={py(t) + 4} textAnchor="end">
+                  {t}
+                </text>
+              ))}
+              {xTicks.map((t) => (
+                <text key={t} x={px(t)} y={H - M.bottom + 20} textAnchor="middle">
+                  {t}
+                </text>
+              ))}
+              <text x={(M.left + W - M.right) / 2} y={H - 8} textAnchor="middle" className="chart-axis-title">
+                {chart.xLabel}
+              </text>
+              <text x={14} y={(M.top + H - M.bottom) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(M.top + H - M.bottom) / 2})`} className="chart-axis-title">
+                {chart.yLabel}
+              </text>
+            </g>
+            <line className="chart-baseline" x1={M.left} x2={W - M.right} y1={py(0)} y2={py(0)} />
+            <path d={d} className="chart-line" />
             {chart.points.map(([x, y]) => (
-              <tr key={`${x}-${y}`}>
-                <td>{x}</td>
-                <td>{y}</td>
-              </tr>
+              <g key={`${x}-${y}`} className="chart-point">
+                <title>{`${x} min: ${y} target VUs`}</title>
+                <circle cx={px(x)} cy={py(y)} r="12" className="chart-hit" />
+                <circle cx={px(x)} cy={py(y)} r="4" className="chart-vertex" />
+                {y === yTop ? (
+                  <text x={px(x)} y={py(y) - 12} textAnchor="middle" className="chart-value">
+                    {y}
+                  </text>
+                ) : null}
+              </g>
             ))}
-          </tbody>
-        </table>
+          </svg>
+        </div>
+        <div className="sr-only">
+          <table>
+            <caption>{chart.caption}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{chart.xLabel}</th>
+                <th scope="col">{chart.yLabel}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {chart.points.map(([x, y]) => (
+                <tr key={`${x}-${y}`}>
+                  <td>{x}</td>
+                  <td>{y}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <dl className="flex flex-col gap-5">
         {chart.outcomes.map((o) => (
