@@ -7,7 +7,6 @@ import { caseStudies, getProject } from "@/data/projects.ts";
 import { profile } from "@/data/profile.ts";
 import { Chip } from "@/components/ui/chip.tsx";
 import { Figure } from "@/components/ui/figure.tsx";
-import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { TextLink } from "@/components/ui/text-link.tsx";
 import { CountUp } from "@/components/motion/count-up.tsx";
 import { InView } from "@/components/motion/in-view.tsx";
@@ -115,11 +114,10 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       ) : null}
 
       <section aria-labelledby="problem" className="col-span-full grid gap-6 md:col-span-10 md:col-start-2 md:grid-cols-10">
-        <MonoLabel className="md:col-span-3">{s.problem}</MonoLabel>
+        <h2 id="problem" className="font-display text-h2 md:col-span-3">
+          {s.problem}
+        </h2>
         <div className="flex flex-col gap-3 md:col-span-7">
-          <h2 id="problem" className="sr-only">
-            {s.problem}
-          </h2>
           <p className="font-display text-h3">{project.problem.text}</p>
           <Source source={project.problem.source} asOf={project.problem.asOf} />
           <ul className="mt-6 flex flex-col">
@@ -134,7 +132,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <section aria-labelledby="architecture" className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
-        <RevealText as="h2" id="architecture" text={s.architecture} className="font-display text-display-l" />
+        <RevealText as="h2" id="architecture" text={s.architecture} className="font-display text-h2" />
         <Figure number={++fig} caption={project.flow.caption} description={project.flow.steps.map((st) => st.label).join("; ")}>
           <FlowDiagram slug={project.slug} flow={project.flow} labels={ui.diagram} />
           <Source source={project.flow.source} asOf={project.flow.asOf} />
@@ -142,7 +140,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <section aria-labelledby="decisions" className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
-        <RevealText as="h2" id="decisions" text={s.decisions} className="font-display text-display-l" />
+        <RevealText as="h2" id="decisions" text={s.decisions} className="font-display text-h2" />
         <ol className="flex flex-col">
           {project.decisions.map((d, i) => (
             <li key={d.text} className="grid gap-2 border-t border-hair py-6 md:grid-cols-10 md:gap-6">
@@ -157,7 +155,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <section aria-labelledby="evidence" className="col-span-full flex flex-col gap-10 md:col-span-10 md:col-start-2">
-        <RevealText as="h2" id="evidence" text={s.evidence} className="font-display text-display-l" />
+        <RevealText as="h2" id="evidence" text={s.evidence} className="font-display text-h2" />
         <dl className="grid grid-cols-1 gap-px bg-hair sm:grid-cols-2 lg:grid-cols-3">
           {project.metrics.map((m) => (
             <div key={m.id} className="flex flex-col gap-2 bg-page p-5">
@@ -188,13 +186,13 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       {project.screenshots.length > 0 ? (
         <section aria-labelledby="screenshots" className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
-          <RevealText as="h2" id="screenshots" text={s.screenshots} className="font-display text-display-l" />
+          <RevealText as="h2" id="screenshots" text={s.screenshots} className="font-display text-h2" />
           <ZoomGallery shots={project.screenshots} labels={{ zoom: ui.zoom, close: ui.close, cursor: ui.cursorZoom }} />
         </section>
       ) : null}
 
       <section aria-labelledby="stack" className="col-span-full grid gap-6 md:col-span-10 md:col-start-2 md:grid-cols-10">
-        <h2 id="stack" className="mono-label text-ink-3 md:col-span-3">
+        <h2 id="stack" className="font-display text-h2 md:col-span-3">
           {s.stack}
         </h2>
         <ul className="flex flex-wrap gap-2 md:col-span-7">
@@ -208,7 +206,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       {project.caveats.length > 0 ? (
         <section aria-labelledby="caveats" className="col-span-full grid gap-6 md:col-span-10 md:col-start-2 md:grid-cols-10">
-          <h2 id="caveats" className="mono-label text-ink-3 md:col-span-3">
+          <h2 id="caveats" className="font-display text-h2 md:col-span-3">
             {s.caveats}
           </h2>
           <ul className="flex flex-col gap-4 md:col-span-7">
