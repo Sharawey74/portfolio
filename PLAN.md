@@ -124,7 +124,9 @@ Decisions:
 - A PR closed upstream without merging is dropped from the live list (FACTS-CHECK.md → Stage 4).
 - The `motion` package is still unused; Stage 5 polish removes it unless M15 needs it.
 
-## Stage 5: Design polish, motion completion, optional shader
+## Stage 5: Design polish, motion completion, optional shader · DONE 2026-10-08 · branch `feat/design-polish-motion`
+
+Skills loaded: frontend-design (critique), modern-web-guidance (scrollability-affordance-hints, defer-rendering-heavy-content; apply-webgl-shaders retrieved, not applicable), ui-ux-pro-max (quick-reference audit), git-workflow. Not loaded: ui-ux-pro-max:design-system and ui-ux-pro-max:ui-styling (token architecture and component styling are fixed by the brief; both target new systems and shadcn/ui).
 
 Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidance` (before any HTML/CSS/client JS), then `ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`. The "Visual system" and "Motion rules" sections of CLAUDE.md override every skill: use the skills for craft, critique and accessibility only. Never change the gray ramp, `--break`, fonts, radius, the no-shadow rule, the easing or the 200/400/800 ms durations. Where frontend-design calls a brief-required choice "generic", the brief wins; record it as **Brief** in `docs/UX-REVIEW.md`.
 
@@ -144,7 +146,7 @@ Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidan
 - [x] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md` (5.3 table)
 - [x] New behavior gets cases in `docs/UAT.md` (never marked passed): UAT-41 to UAT-47; UAT-23 updated (no marquee)
 - [x] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz: 156.1 KB gz, case studies 155.6 KB
-- [~] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. After the performance pass (P1–P3, mains power, CPU benchmark 2,732–3,182): CLS 0.001 and a11y / best practices / SEO 100 everywhere; LCP passes on `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, over on Eventora 2.79 s; TBT 695–989 ms on every page (over). Partial: Eventora LCP and TBT need an owner decision (`docs/UX-REVIEW.md` → P5, P6)
+- [~] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. After the performance pass (P1–P3, mains power, CPU benchmark 2,732–3,182): CLS 0.001 and a11y / best practices / SEO 100 everywhere; LCP passes on `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, over on Eventora 2.79 s; TBT 695–989 ms on every page (over). Partial: Eventora LCP and TBT over budget. Owner decision 2026-10-08: option C, accept and re-measure on a Vercel preview in Stage 6 (`docs/ISSUES.md` → ISS-01, ISS-02)
 - [x] 375 px `scrollWidth` check on every page: equal to the viewport at 375, 768, 1280 and 1920 on all 4 pages, both themes
 - [x] After screenshots in `docs/screens/stage5-after/` (32 WebP, 6.6 MB); M1–M15 status table updated
 
@@ -173,6 +175,7 @@ Notes:
 
 6.2 CD (extend, do not replace, `.github/workflows/ci.yml`)
 - [ ] Playwright smoke job in `ci.yml` or a separate workflow: build, `next start`; every route returns 200; no console errors; header nav works; reduced-motion and JS-off render content
+- [ ] Re-measure Lighthouse on a Vercel preview (3 runs) and act on `docs/ISSUES.md` ISS-01 and ISS-02: close them if within budget, otherwise apply their next option (ISS-01 option A, ISS-02 option B1) and re-measure
 - [ ] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on
 - [ ] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create`
 - [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped
@@ -180,7 +183,7 @@ Notes:
 - [ ] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL
 
 6.3 Release v1.0.0
-- [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left)
+- [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left); `docs/ISSUES.md` has no Open or Owner issue of High severity
 - [ ] Render the owner's release block per `DEPLOY.md`; after the deploy, run the smoke checks on the production URL and confirm the GitHub Release exists
 - [ ] Final message reminds the owner to pin the repo and add the URL to `Sharawey74/Sharawey74` (carried over from the old Stage 5 list)
 
@@ -224,6 +227,7 @@ Notes:
 ## Definition of done (whole project)
 
 - [ ] `docs/UAT.md` signed off by the owner, no open High defects
+- [ ] `docs/ISSUES.md`: every High issue Closed, or Decided with the owner's acceptance recorded
 
 - [ ] `next build` passes; no TypeScript or lint errors; no unused data
 - [ ] Every public claim traces to `FACTS-CHECK.md`; zero banned claims, including alt text and metadata
