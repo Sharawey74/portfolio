@@ -32,13 +32,15 @@ function shaderCapable(): boolean {
  * and the M4 canvas loads in its place.
  */
 export function HeroGraph({ children }: { children: ReactNode }) {
-  const { allowMotion, reducedMotion, saveData } = useMotionPrefs();
+  const { allowMotion, reducedMotion, saveData, finePointer } = useMotionPrefs();
   const host = useRef<HTMLDivElement>(null);
   const inView = useInView(host);
   const [Canvas, setCanvas] = useState<ComponentType<CanvasProps> | null>(null);
   const [Shader, setShader] = useState<ComponentType<ShaderProps> | null>(null);
   const [shaderFailed, setShaderFailed] = useState(false);
-  const wanted = !reducedMotion && !saveData;
+  // Coarse pointers keep the static graph: the live layer leans toward a
+  // pointer they do not have, and its loop cost phones ~0.9 s of main thread.
+  const wanted = !reducedMotion && !saveData && finePointer;
 
   useEffect(() => {
     if (!wanted || Canvas || Shader) return;
