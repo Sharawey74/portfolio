@@ -17,7 +17,7 @@ are not repeated here. The design-rule audit this script follows up on is
 | Tester | |
 | Date | |
 | Build | branch / commit (`git log -1 --oneline`) or Vercel preview URL |
-| Scope | Stages covered (e.g. 1–4) |
+| Scope | Stages covered (e.g. 1–5) |
 
 ## 2. How to run the site
 
@@ -84,7 +84,7 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-21 | Scroll through the three featured cards | Each card sticks, then shrinks and dims as the next slides over it | | |
 | UAT-11 | Click "Case study" on a card (Chrome/Edge/Safari) | Title (and Eventora image) morph into the case-study page; focus lands on the title | | |
 | UAT-22 | Eventora diagram: watch, then Pause, Step, Restart, "Sold out", "Follow scroll" | Red dot travels the steps in order; the → marker tracks the step list; Pause stops it; Step advances one; Sold out shows the 409 path; Follow scroll ties progress to scrolling | | |
-| UAT-23 | Header "Pause animations" | Canvas, carousel, marquee and diagram stop; button reads "Play animations"; setting survives a reload | | |
+| UAT-23 | Header "Pause animations" | Canvas, carousel and diagram stop; button reads "Play animations"; setting survives a reload | | |
 | UAT-12 | In the Work section, count things moving at once without you scrolling | No more than 3 moving regions in view; nothing feels busy or distracting | | |
 | UAT-24 | Theme toggle in both directions | Circle reveal from the button; all text readable in light mode; charts and diagrams visible in both | | |
 | UAT-05 | Repeat UAT-17 to UAT-23 with reduced motion on (E7) | No intro, no tilt, no autoplay, no custom cursor; headings static; diagram shows the full static state; everything still readable and usable | | |
@@ -123,6 +123,18 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-38 | Open `/sitemap.xml` and `/robots.txt` on the production URL | Sitemap lists `/` and the three case studies on the real domain; robots disallows `/dev/` and points at the sitemap | | |
 | UAT-39 | Footer: every link, plus "Back to top" | Section links work from a case-study page too; GitHub and LinkedIn open; "Search and commands" opens the palette; "Back to top" returns to the top | | |
 | UAT-40 | Fill one personal field (e.g. `location`) locally, rebuild | It appears in the About bento and nowhere it should not; removing it removes the cell (no empty box) | | |
+
+### Stage 5: polish and motion
+
+| ID | Steps | Expected | Result | Notes |
+|---|---|---|---|---|
+| UAT-41 | Resize a desktop window from wide to about 800 px, or use a tablet | From 1024 px up the header shows the five section links on one row; below that it shows "Menu", which opens the palette with sections first; the header never grows a second row | | |
+| UAT-42 | On `/`, scroll through Work at desktop and phone width | Card titles stay on one line ("Recruiter-Pro" included); no tech-chip strip under the cards (the stack is in About only); on a phone the two diagram-only cards show no tiny diagram | | |
+| UAT-43 | Open each case study | One heading size for every section (Problem, Architecture, Key decisions, Evidence, Screenshots, Stack, Limits); only the project name is huge | | |
+| UAT-44 | Case study on a phone or a window under 1024 px | Under the diagram a line reads "Scroll sideways for the full diagram."; the step list reads cleanly, with "(availableCount -= n)" on one line | | |
+| UAT-45 | Press and hold any button, palette option, contact link or "Case study" link | It drops by about 1 px while pressed and returns on release; disabled controls (Resume before the PDF exists) do not move and show a not-allowed cursor | | |
+| UAT-46 | First visit in a private window (motion on) | The intro counts 000→100, holds briefly, then lifts, in about 1.5 s; numbers count up in under a second; mono labels scramble for under half a second | | |
+| UAT-47 | Optional, only if you want to try M15: build with `NEXT_PUBLIC_ENABLE_SHADER=1` on a desktop with a dedicated or recent GPU | Gray contour lines drift slowly behind the headline instead of the node graph; Pause stops them; theme switch recolors them; with the flag unset (default) the node graph shows as before | | |
 
 ## 5. Defect log
 
