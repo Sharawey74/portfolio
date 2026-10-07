@@ -9,9 +9,22 @@ import { useInView } from "@/lib/motion/use-in-view.ts";
 import { exitPoint, layouts } from "./layouts.ts";
 
 type Flow = NonNullable<Project["flow"]>;
-type Labels = { play: string; pause: string; step: string; restart: string; scrub: string; steps: string };
+type Labels = { play: string; pause: string; step: string; restart: string; scrub: string; steps: string; scrollHint: string };
 
-const TRAVEL_MS = 900;
+const TRAVEL_MS = 800; // --dur-3; linear, a constant-rate move
+
+/** Parenthesised parts ("(availableCount -= n)") never break inside. */
+function keepTogether(text: string) {
+  return text.split(/(\([^)]*\))/).map((part, i) =>
+    part.startsWith("(") ? (
+      <span key={i} className="whitespace-nowrap">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 const DWELL_MS = 500;
 const END_DWELL_MS = 1600;
 
@@ -221,6 +234,11 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
           <circle ref={packet} r="6" cx="0" cy="0" fill="var(--break)" style={{ opacity: 0 }} className="flow-packet" />
         </svg>
       </div>
+      {/* Below 1024 px the 640 px diagram scrolls inside its box; say so. */}
+      <p className="-mt-3 font-mono text-mono text-ink-3 lg:hidden">
+        <span aria-hidden="true">← → </span>
+        {labels.scrollHint}
+      </p>
 
       {motionUi ? (
         <div className="flex flex-wrap items-center gap-2 font-mono text-mono">
@@ -262,7 +280,7 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
                 <span className="font-mono text-mono text-ink-3">
                   {flow.nodes.find((n) => n.id === s.from)?.label} → {flow.nodes.find((n) => n.id === s.to)?.label}
                 </span>
-                <span className="block text-small text-ink-2">{s.label}</span>
+                <span className="block text-small text-ink-2">{keepTogether(s.label)}</span>
               </span>
             </li>
           ))}
