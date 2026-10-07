@@ -3,8 +3,9 @@
 import { useEffect, useRef } from "react";
 import { useMotionPrefs } from "@/lib/motion/preferences.ts";
 import { subscribe } from "@/lib/motion/scheduler.ts";
+import { DUR_MS } from "@/lib/motion/tokens.ts";
 
-const DURATION = 1200;
+const DURATION = DUR_MS.slow;
 
 /**
  * M10. Renders `display` exactly as given (server HTML holds the final value).
