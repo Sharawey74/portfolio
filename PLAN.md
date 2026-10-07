@@ -144,7 +144,7 @@ Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidan
 - [x] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md` (5.3 table)
 - [x] New behavior gets cases in `docs/UAT.md` (never marked passed): UAT-41 to UAT-47; UAT-23 updated (no marquee)
 - [x] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz: 156.1 KB gz, case studies 155.6 KB
-- [ ] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. Stage 4 left two over budget: Eventora LCP 2.7–3.0 s and TBT 1.1–2.1 s (applied throttling). Not done yet: 12 runs on 2026-10-07 were discarded because the laptop was on battery (CPU benchmark 512–671 vs 1,500–2,372 at Stage 4); re-run on mains power
+- [~] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. Measured (mains power, CPU benchmark 2,099–3,325): CLS 0.001 and a11y / best practices / SEO 100 on every page; LCP 2.52–2.83 s (over) and TBT 1,164–2,043 ms (over). Partial: the targets are not met; a performance pass is proposed to the owner
 - [x] 375 px `scrollWidth` check on every page: equal to the viewport at 375, 768, 1280 and 1920 on all 4 pages, both themes
 - [x] After screenshots in `docs/screens/stage5-after/` (32 WebP, 6.6 MB); M1–M15 status table updated
 
@@ -215,9 +215,9 @@ Notes:
 | Budget | Target | Last measured |
 |---|---|---|
 | First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 156.1 KB (Stage 5); case studies 155.6 KB; M15 chunk 1.7 KB gz, loaded only when enabled |
-| Mobile LCP | < 2.5 s | `/` 2.0–2.4 s; `/projects/eventora` 2.7–3.0 s (over; Lighthouse applied throttling, localhost, Stage 4) |
-| INP | < 200 ms | not measured in the field; TBT 1.1–2.1 s under 4× CPU suggests risk (UAT-31, Stage 5) |
-| CLS | < 0.05 | 0.001 (was 0.188 before the display font became `optional`) |
+| Mobile LCP | < 2.5 s | Stage 5 medians: `/` 2.52 s, Eventora 2.81 s, Recruiter-Pro 2.59 s, SysPlex 2.83 s (all over; applied throttling, localhost) |
+| INP | < 200 ms | not measured in the field; lab TBT medians 1,164–2,043 ms against a 200 ms proxy target (Stage 5) |
+| CLS | < 0.05 | 0.001 on every page (Stage 5 medians) |
 | `--break` pixels in viewport | ≤ 2% | — |
 | Concurrently animating regions per viewport | ≤ 3 | — |
 
