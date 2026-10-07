@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Context and standing rules for anyone (human or agent) working in this repo.
-Read this first, then `PLAN.md` for where the work stands. Private details that
+Read this first, then `PLAN.md` for where the work stands. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script. Private details that
 must not be in a public repo live in `CLAUDE.local.md` (git-ignored); read it
 too if it exists on this machine.
 
@@ -196,6 +196,12 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `.grid-12 > *` has `min-width: 0`: a wide child (diagram scroller) must not widen the grid. Keep it.
 - `motion` is installed but not imported anywhere yet (fallbacks use Lenis / CSS). Use it only if a later item needs it, or remove it.
 - Measured at the end of Stage 3: `/` 151.9 KB gz; case studies 152.6 KB gz.
+
+## Review and acceptance
+
+- Before each stage summary, re-run the UI UX Pro Max audit for the new UI against `references/quick-reference.md` and add rows to `docs/UX-REVIEW.md` (verdicts: Pass, Fixed, Open, N/A, Brief, UAT).
+- New user-facing behavior gets a case in `docs/UAT.md` (steps + expected result). Do not mark UAT cases as passed: only the owner records results there.
+- Measure phone layout with `document.documentElement.scrollWidth` at 375 px on every page; flex/grid children holding wide content need `min-w-0`, long tokens need `overflow-wrap: anywhere`, and `sr-only` goes on a wrapper div, never on a `<table>`.
 
 ## Environment gotchas (Windows)
 
