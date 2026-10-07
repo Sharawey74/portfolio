@@ -1208,7 +1208,8 @@ html[data-motion="paused"] .xp-timeline::before {
 
 /* M12 surfaces. Body's own background is dropped so the fixed layers at
    z-index -1 sit between the page color (html) and the content. Grain is a
-   static SVG noise tile (grayscale, rasterized once), above everything at low
+   pre-rendered grayscale PNG tile (the SVG filter version cost ~300 ms of
+   main thread at load, Stage 5), above everything at low
    opacity and without blending, so it costs one composited layer. The
    hairline grid fades out over the first viewport of scroll (scroll
    timeline; a static fade where unsupported or under reduced motion). */
@@ -1256,7 +1257,7 @@ html[data-motion="paused"] .surface-grid {
 .surface-grain {
   z-index: 70;
   opacity: 0.045;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("/textures/grain.png");
   background-size: 160px 160px;
 }
 @media print {
