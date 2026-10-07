@@ -208,6 +208,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `C:\Users\DELL` is itself a git repo. Never run git from there; always from this folder.
 - Git Bash `npx` can fail on paths with spaces; use PowerShell for `npx` tools.
 - Python heredocs run from Git Bash mangle backslash escapes in replacement text; edit code that contains escapes with the Edit tool.
+- Python on Windows writes text files with CRLF by default (`open(..., newline="\n")` avoids it). Before committing, `git diff --stat` should match the size of the change; check `git ls-files --eol <file>` keeps the file's previous ending (most files are LF).
 - Git over HTTPS needs `http.sslBackend=schannel` (set in this clone's config) or fetch fails with "unable to get local issuer certificate".
 - The in-app browser pane renders no frames while hidden: rAF, IntersectionObserver and Lenis stall, and screenshots after a programmatic scroll come back black. Check `tabs_context` first; a screenshot forces one frame, so interleave screenshots with DOM checks, or ask the owner to show the pane (Ctrl+Shift+B).
 - Node runs `.ts` scripts directly (type stripping): no enums, namespaces or parameter properties in scripts or data files.
