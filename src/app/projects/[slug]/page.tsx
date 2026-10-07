@@ -36,7 +36,7 @@ function Source({ source, asOf }: { source: string; asOf: string }) {
   const { ui } = profile;
   const href = sourceHref(source);
   return (
-    <span className="font-mono text-mono break-words text-ink-3">
+    <span className="font-mono text-mono wrap-anywhere text-ink-3">
       {ui.source} ·{" "}
       {href ? (
         <a href={href} rel="noreferrer" className="underline decoration-line decoration-1 underline-offset-2 hover:text-ink">
@@ -139,7 +139,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             <li key={d.text} className="grid gap-2 border-t border-hair py-6 md:grid-cols-10 md:gap-6">
               <span className="num font-mono text-mono text-ink-3 md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
               <div className="flex flex-col gap-2 md:col-span-9">
-                <p className="text-body">{d.text}</p>
+                <p className="max-w-[70ch] text-body">{d.text}</p>
                 <Source source={d.source} asOf={d.asOf} />
               </div>
             </li>
