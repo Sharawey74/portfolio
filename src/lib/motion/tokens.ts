@@ -1,7 +1,7 @@
 /**
- * Motion tokens for JS (WAAPI). Mirror the CSS tokens --ease-out and
- * --dur-1/2/3 in globals.css. Add a seconds-based variant for `motion` when the
- * first `motion` animation lands (Stage 2).
+ * Motion tokens for JS (WAAPI, scheduler tasks). Mirror the CSS tokens
+ * --ease-out and --dur-1/2/3 in globals.css. Every JS-driven duration uses one
+ * of these.
  */
 export const EASE_OUT_CSS = "cubic-bezier(0.22, 1, 0.36, 1)";
 
