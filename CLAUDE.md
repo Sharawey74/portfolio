@@ -169,17 +169,32 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `src/components/ui/*`: Button / ButtonLink, TextLink, SectionHeading, Rule, Chip, StatusPill, Figure, MonoLabel. Use Tailwind's `sr-only` for visually hidden text.
 - Interface strings (skip link, control labels, status names) live in `profile.ui`.
 - Tailwind utilities: colors `page raised card hover hair line line-strong deco ink ink-2 ink-3 ink-soft break` and `g0`–`g11`; text `display-xl display-l h2 h3 body small mono mono-lg`; `rounded-xs` (1 px), `rounded-sm` (2 px); `ease-out`. The default palette, shadows, blurs and larger radii are removed on purpose.
-- Measured at the end of Stage 1: `/` first-load JS 142.6 KB gz.
-- Local preview: the in-app browser reads `C:\Users\DELL\Desktop\.claude\launch.json` (config `portfolio-prod`: `npm start` on port 3107 after a build). It sits outside the repo on purpose.
+- Local preview: config `portfolio-prod` (`npm start` on port 3107 after a build) in `.claude/launch.json` inside the repo, git-ignored. The desktop browser resolves it from the session's working directory; a session started on the Desktop needs a copy at `C:\Users\DELL\Desktop\.claude\launch.json`.
+
+## Hero and navigation in place (Stage 2)
+
+- **Sections are flagged `live` in `profile.sections`.** The header nav and the "View My Work" CTA only point at live sections. When a stage adds a section to `/`, flip its flag in the same branch.
+- `src/lib/text/split-words.tsx`: `SplitWords` (server-safe, sr-only full text + aria-hidden `.w` mask > `.w-i` words with `--i`) and `assignLines()` (writes `--line`). Headlines only.
+- `src/components/motion/reveal-text.tsx`: `RevealText` (`trigger="view" | "load"`, `mode="words" | "lines"`). `SectionHeading` uses it, plus the `.title-track` scroll effect.
+- The pre-paint script (`theme-script.tsx`) also sets `data-reveal="on"` (motion allowed) and `data-intro="play"` (first visit this session). Hidden-then-revealed CSS keys off `data-reveal`, so JS-off and reduced motion get static text.
+- One-shot entrances (`.rv`, `.rv-load`, `.hero-ctas`, `.intro`) and the scroll-linked `.title-track` are exempt from the global pause: they do not autoplay, and pausing could strand text half-revealed. Loops must not be added to that list.
+- `src/components/intro/intro.tsx`: M1, CSS-only.
+- `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths), `HeroGraph` (lazy host), `hero-canvas.tsx` (default export, lazy chunk), `HeroGraphStatic`, `node-field.ts` (seeded geometry shared by SVG and canvas).
+- `src/components/layout/header-shell.tsx` (hide on scroll down via Lenis) and `scroll-spy-nav.tsx` (`ScrollSpyNav`, reusable; `/dev/type` uses it as a specimen index).
+- Measured at the end of Stage 2: `/` first-load JS 145.0 KB gz; canvas chunk 1.6 KB gz, loaded on idle.
 
 ## Environment gotchas (Windows)
 
 - `C:\Users\DELL` is itself a git repo. Never run git from there; always from this folder.
 - Git Bash `npx` can fail on paths with spaces; use PowerShell for `npx` tools.
 - Python heredocs run from Git Bash mangle backslash escapes in replacement text; edit code that contains escapes with the Edit tool.
+- Git over HTTPS needs `http.sslBackend=schannel` (set in this clone's config) or fetch fails with "unable to get local issuer certificate".
+- The in-app browser pane renders no frames while hidden: rAF, IntersectionObserver and Lenis stall, and screenshots after a programmatic scroll come back black. Check `tabs_context` first; a screenshot forces one frame, so interleave screenshots with DOM checks, or ask the owner to show the pane (Ctrl+Shift+B).
 - Node runs `.ts` scripts directly (type stripping): no enums, namespaces or parameter properties in scripts or data files.
 - The source repos live under `C:\Users\DELL\Desktop\` (Event-Ticketing-Platform, Recruiter-Pro, SysPlex, `UK MANDEM UK DRILLA/Legal-Ai-Assistant`). PhishSniffer source is on GitHub only.
 
 ## Open items owed by the owner
 
 Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, real Recruiter-Pro screenshots, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
+
+Repo setup still open (checked 2026-10-07): the Vercel project is not imported (no deployments on the repo), and the repo homepage is the placeholder `https://YOUR-PROJECT.vercel.app` (returns 404). Set it to the real Vercel URL once the project exists.
