@@ -28,7 +28,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const p = getProject((await params).slug);
   if (!p) return {};
-  return { title: `${p.name} / ${profile.ui.caseStudy}`, description: p.summary.text.slice(0, 160) };
+  const title = `${p.name} / ${profile.ui.caseStudy}`;
+  const description = p.summary.text.slice(0, 160);
+  return {
+    title,
+    description,
+    alternates: { canonical: `/projects/${p.slug}` },
+    openGraph: { type: "article", title, description, url: `/projects/${p.slug}` },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 /** "Source · <file:lines> · as of <date>", linked to the pinned GitHub lines when public. */
@@ -98,7 +106,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
               width={hero.width}
               height={hero.height}
               sizes="(min-width: 768px) 80vw, 100vw"
-              priority
+              loading="eager"
+              fetchPriority="high"
               className="shot aspect-[16/10] w-full border border-hair object-cover object-top"
             />
           </ViewTransition>
