@@ -17,7 +17,7 @@ are not repeated here. The design-rule audit this script follows up on is
 | Tester | |
 | Date | |
 | Build | branch / commit (`git log -1 --oneline`) or Vercel preview URL |
-| Scope | Stages covered (e.g. 1–3) |
+| Scope | Stages covered (e.g. 1–4) |
 
 ## 2. How to run the site
 
@@ -105,6 +105,24 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-26 | Phone portrait (E4): every page | No sideways scrolling; text readable without zoom; buttons easy to tap | | |
 | UAT-10 | Phone landscape (E5): `/` and one case study | Hero, cards and diagram usable; nothing hidden behind the header | | |
 | UAT-27 | Firefox (E2): `/` | Stack cards still recede on scroll (fallback path); nothing broken | | |
+
+### Stage 4: sections, palette, contact, SEO
+
+| ID | Steps | Expected | Result | Notes |
+|---|---|---|---|---|
+| UAT-28 | Read About, Open source and Experience | Every number matches what you would say (7 merged across 5 projects, 4 under review, 2 internships, 228 tests); hover a number on desktop to see its source; no dates on certificates | | |
+| UAT-29 | Open source: click three PR links and two "Fixes #n" links | Each opens the right PR or issue on GitHub; merged/open status matches GitHub today; the line under the numbers says "refreshed daily" (or the snapshot date if GitHub was unreachable at build) | | |
+| UAT-30 | Press Ctrl+K (⌘K on a Mac), type "litestar", press Enter; reopen, type "experience", Enter; reopen, run "Switch theme" and "Pause animations" | Palette opens with the cursor in the search field; ↑ ↓ move the highlighted row; Enter opens the PR, jumps to Experience (heading not under the header), switches theme, pauses animations; Esc and a click outside close it; focus returns to where you were | | |
+| UAT-31 | Phone (E4): tap "Menu" in the header, pick each section; also scroll the whole home page and tap things | Menu opens the palette with sections first; each choice lands on its section; scrolling and taps feel immediate (note any delay over a blink, with the phone model) | | |
+| UAT-32 | Contact without the Resend variables (local build or a preview without them) | The form is replaced by "The form is not connected on this deployment …"; GitHub and LinkedIn links work | | |
+| UAT-33 | Contact with the variables set (Vercel): submit empty, then a bad email and a 5-letter message, then a real message to yourself | Empty: the browser points at the first field; bad values: fields get a dashed underline, the status says "Check the highlighted fields.", typed text stays; real message: "Sent. I will reply by email." and the email arrives with Reply-To set to the address you typed | | |
+| UAT-34 | Keyboard only (E8) through the contact form and the palette | Labels read with each field; "(required)" announced; errors announced by the status line; nothing reachable that is invisible (the hidden honeypot field is never focused) | | |
+| UAT-35 | Hover or Tab onto header and footer links (fine pointer, motion on) | Mono labels scramble briefly (under half a second) and settle on the real text; the screen reader reads the real text only; no jitter in width | | |
+| UAT-36 | Scroll slowly from the top of `/` | A faint hairline grid behind the hero fades out over the first screen; a very light film grain over everything; neither makes text harder to read in either theme | | |
+| UAT-37 | Paste the production URL and a case-study URL into a link preview (LinkedIn post composer, Slack or opengraph.xyz) | Black card with the headline (red final period) or the project summary; title and description correct; no placeholder text | | |
+| UAT-38 | Open `/sitemap.xml` and `/robots.txt` on the production URL | Sitemap lists `/` and the three case studies on the real domain; robots disallows `/dev/` and points at the sitemap | | |
+| UAT-39 | Footer: every link, plus "Back to top" | Section links work from a case-study page too; GitHub and LinkedIn open; "Search and commands" opens the palette; "Back to top" returns to the top | | |
+| UAT-40 | Fill one personal field (e.g. `location`) locally, rebuild | It appears in the About bento and nowhere it should not; removing it removes the cell (no empty box) | | |
 
 ## 5. Defect log
 
