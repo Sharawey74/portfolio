@@ -1,20 +1,18 @@
 import type { CSSProperties } from "react";
 import { caseStudies, secondaryProjects } from "@/data/projects.ts";
 import { profile } from "@/data/profile.ts";
-import { skills } from "@/data/skills.ts";
 import { SectionHeading } from "@/components/ui/section-heading.tsx";
-import { Chip } from "@/components/ui/chip.tsx";
 import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { TextLink } from "@/components/ui/text-link.tsx";
 import { CountUp } from "@/components/motion/count-up.tsx";
-import { Marquee } from "./marquee.tsx";
 import { ProjectCard } from "./project-card.tsx";
 import { StackFallback } from "./stack-fallback.tsx";
 
 /**
  * 02 / Work. Featured projects as a sticky stack (M6: each card scales and
- * dims as the next arrives, CSS view() timeline, Lenis fallback), the stack
- * marquee, then the secondary projects as hairline rows (no case study).
+ * dims as the next arrives, CSS view() timeline, Lenis fallback), then the
+ * secondary projects as hairline rows (no case study). The stack lives in
+ * About (owner decision, Stage 5 D2), so it is not repeated here.
  */
 export function WorkSection() {
   const { ui, sections } = profile;
@@ -32,17 +30,6 @@ export function WorkSection() {
         ))}
       </ol>
       <StackFallback />
-
-      <div className="col-span-full flex flex-col gap-4">
-        <MonoLabel>{ui.stackAcross}</MonoLabel>
-        <Marquee label={ui.stackAcross}>
-          {skills.map((s) => (
-            <li key={s.name}>
-              <Chip name={s.name} qualifier={s.qualifier} />
-            </li>
-          ))}
-        </Marquee>
-      </div>
 
       <div className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
         <MonoLabel>{ui.alsoBuilt}</MonoLabel>
