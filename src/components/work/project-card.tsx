@@ -12,7 +12,8 @@ import { ScreenshotCarousel } from "./screenshot-carousel.tsx";
  * Featured project card (M7) inside the sticky stack (M6). Left: index
  * numeral (parallax decoration), title, summary, three sourced highlights,
  * the case-study link. Right: the screenshot carousel, or the project's flow
- * as a static diagram when there are no real screenshots.
+ * as a static diagram when there are no real screenshots (from 768 px only:
+ * on a phone its labels shrink to unreadable texture).
  * Title and first screenshot carry shared-element names for the route morph (M8).
  */
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
@@ -28,7 +29,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           {String(index + 1).padStart(2, "0")}
         </span>
         <ViewTransition name={`project-${project.slug}-title`} share="morph" default="none">
-          <h3 className="font-display text-display-l">{project.name}</h3>
+          <h3 className="font-display text-h2">{project.name}</h3>
         </ViewTransition>
         <p className="max-w-[46ch] text-ink-2">{project.summary.text}</p>
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(6.5rem,1fr))] gap-x-4 gap-y-5 border-t border-hair pt-5">
@@ -47,6 +48,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             href={`/projects/${project.slug}`}
             data-cursor={ui.cursorView}
             data-magnetic=""
+            data-press=""
             className="inline-flex min-h-11 items-center gap-3 border border-line-strong px-5 text-small font-medium text-ink transition-colors duration-200 ease-out hover:border-ink hover:bg-hover"
           >
             {ui.caseStudy}
@@ -65,7 +67,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             />
           </InView>
         ) : project.flow ? (
-          <InView className="clip-reveal border border-hair bg-raised p-4">
+          <InView className="clip-reveal hidden border border-hair bg-raised p-4 md:block">
             <FlowPreview slug={project.slug} flow={project.flow} />
           </InView>
         ) : null}
