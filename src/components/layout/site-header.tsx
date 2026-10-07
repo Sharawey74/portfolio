@@ -9,7 +9,8 @@ import { ScrollSpyNav } from "./scroll-spy-nav.tsx";
 
 /**
  * Header: wordmark, section nav with scroll-spy, the palette button (the
- * mobile menu below 768 px) and the two global controls.
+ * menu below 1024 px, where the section links do not fit) and the two global
+ * controls.
  * The nav lists only sections marked `live` in profile.ts, so it never links
  * to a section that is not on the page yet. Hides on scroll down (HeaderShell).
  * The wordmark uses the public name once the owner sets it, else the handle.
@@ -23,7 +24,7 @@ export function SiteHeader() {
         <Link href="/" className="shrink-0 font-mono text-mono-lg tracking-wide text-ink">
           {personal.name.value ?? personal.github.handle}
         </Link>
-        <div className="hidden min-w-0 flex-1 md:block">
+        <div className="hidden min-w-0 flex-1 lg:block">
           <ScrollSpyNav items={navItems} label={ui.navLabel} />
         </div>
         <div className="flex shrink-0 items-center gap-1">
