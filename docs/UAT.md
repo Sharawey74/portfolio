@@ -135,6 +135,7 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-45 | Press and hold any button, palette option, contact link or "Case study" link | It drops by about 1 px while pressed and returns on release; disabled controls (Resume before the PDF exists) do not move and show a not-allowed cursor | | |
 | UAT-46 | First visit in a private window (motion on) | The intro counts 000→100, holds briefly, then lifts, in about 1.5 s; numbers count up in under a second; mono labels scramble for under half a second | | |
 | UAT-47 | Optional, only if you want to try M15: build with `NEXT_PUBLIC_ENABLE_SHADER=1` on a desktop with a dedicated or recent GPU | Gray contour lines drift slowly behind the headline instead of the node graph; Pause stops them; theme switch recolors them; with the flag unset (default) the node graph shows as before | | |
+| UAT-48 | Open `/` on a phone, then on a desktop with a mouse | Phone: the node graph behind the headline is still (no moving red packet); desktop: the graph drifts, leans toward the mouse and the packet moves. Decide whether the still graph on phones is acceptable (it saves about 0.9 s of main-thread work there) | | |
 
 ## 5. Defect log
 
