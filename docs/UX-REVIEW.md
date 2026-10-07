@@ -382,6 +382,15 @@ Removed (`npm uninstall motion`): nothing imports it, and M15 is raw WebGL2. Fir
 
 After captures: `docs/screens/stage5-after/` (32 WebP, 6.6 MB), taken the same way as the before set.
 
-### Lighthouse
+### Lighthouse (median of 3, mobile, applied throttling, mains power)
 
-Not recorded yet. Twelve runs (3 per page) on 2026-10-07 were discarded: the laptop was on battery and Lighthouse's CPU benchmark read 512–671, against 1,500–2,372 for the Stage 4 runs, so TBT came out at 4–8 s and every run warned about a slow CPU. The runs are re-done on mains power before the 5.3 Lighthouse item is ticked.
+| Page | Perf | A11y | Best pr. | SEO | LCP (< 2.5 s) | TBT (< 200 ms) | CLS (< 0.05) |
+|---|---|---|---|---|---|---|---|
+| `/` | 68 | 100 | 100 | 100 | 2.52 s (over by 0.02 s) | 1,164 ms (over) | 0.001 |
+| `/projects/eventora` | 59 | 100 | 100 | 100 | 2.81 s (over) | 2,043 ms (over) | 0.001 |
+| `/projects/recruiter-pro` | 65 | 100 | 100 | 100 | 2.59 s (over) | 1,518 ms (over) | 0.001 |
+| `/projects/sysplex` | 62 | 100 | 100 | 100 | 2.83 s (over) | 1,451 ms (over) | 0.001 |
+
+Details, per-run numbers and the main-thread breakdown: `docs/reports/lighthouse-stage5.md` (full JSON for the median run of each page beside it). An earlier set on battery power was discarded (CPU benchmark 512–671 against 2,099–3,325 here).
+
+Verdict: **Open.** CLS, accessibility, best practices and SEO meet the bar everywhere. LCP is at or just over 2.5 s on every page, and TBT, the lab stand-in for INP, is 6–10 times the 200 ms target. The main thread is busy with the layout's client code (2.1 s on `/`), style and layout work (1.8 s) and hydration long tasks. Fixing that is a performance pass of its own, proposed to the owner rather than started here.
