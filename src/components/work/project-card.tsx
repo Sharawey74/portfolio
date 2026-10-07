@@ -9,7 +9,8 @@ import { InteractiveCard } from "./interactive-card.tsx";
 import { ScreenshotCarousel } from "./screenshot-carousel.tsx";
 
 /**
- * Featured project card (M7) inside the sticky stack (M6). Left: index
+ * Featured project card (M7) inside the sticky stack (M6). From 1024 px two
+ * columns (below that one: a 5/12 column cannot hold "Recruiter-Pro"). Left: index
  * numeral (parallax decoration), title, summary, three sourced highlights,
  * the case-study link. Right: the screenshot carousel, or the project's flow
  * as a static diagram when there are no real screenshots (from 768 px only:
@@ -23,8 +24,8 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     .filter((m): m is NonNullable<typeof m> => m !== undefined);
 
   return (
-    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 md:grid-cols-12 md:gap-6 md:p-10">
-      <div className="flex flex-col gap-6 md:col-span-5">
+    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 md:p-10 lg:grid-cols-12 lg:gap-6">
+      <div className="flex flex-col gap-6 lg:col-span-5">
         <span aria-hidden="true" className="card-numeral num font-display">
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -57,7 +58,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           </Link>
         </div>
       </div>
-      <div className="md:col-span-7">
+      <div className="lg:col-span-7">
         {project.screenshots.length > 0 ? (
           <InView className="clip-reveal">
             <ScreenshotCarousel
