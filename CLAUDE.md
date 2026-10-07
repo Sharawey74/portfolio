@@ -127,7 +127,7 @@ Data files import each other with explicit `.ts` extensions (`import { claim } f
 
 ## Stack and commands
 
-Next.js 16.4 (App Router, Turbopack default), React 19.3, TypeScript strict, Tailwind v4 via `@tailwindcss/postcss` (CSS-first `@theme`, no config file), `motion`, Lenis, Zod 4, `next/font/google`. npm only. Node ≥ 22.18 (local is 25.8; CI uses 24).
+Next.js 16.4 (App Router, Turbopack default), React 19.3, TypeScript strict, Tailwind v4 via `@tailwindcss/postcss` (CSS-first `@theme`, no config file), Lenis, Zod 4, `next/font/google`. npm only. Node ≥ 22.18 (local is 25.8; CI uses 24).
 
 Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.config.mjs`, run `eslint .`); `next build` does not lint; route `params` are Promises; middleware is now `proxy`; React's `<ViewTransition>` works in the App Router without config (use it for M8). Bundled docs: `node_modules/next/dist/docs/` — read them before using an API you are unsure of.
 
@@ -147,7 +147,7 @@ Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBL
 
 ## Skills (load before UI work; never invent a skill name)
 
-At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux, design, accessibility, motion, typography, chart). Load in order: `frontend-design` (not installed as of Stage 1), `modern-web-guidance:modern-web-guidance` (mandatory before any HTML/CSS/client JS; on Windows run it from PowerShell: `npx -y modern-web-guidance@latest search "<q>"`), `dataviz` before M9d, then the UI/UX skills (`ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`). The visual system above overrides any skill's colors, fonts or aesthetic; skills guide craft only. Each stage summary lists skills loaded and expected ones not found.
+At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux, design, accessibility, motion, typography, chart). Load in order: `frontend-design` (installed since Stage 5), `modern-web-guidance:modern-web-guidance` (mandatory before any HTML/CSS/client JS; on Windows run it from PowerShell: `npx -y modern-web-guidance@latest search "<q>"`), `dataviz` before M9d, then the UI/UX skills (`ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`). The visual system above overrides any skill's colors, fonts or aesthetic; skills guide craft only. Each stage summary lists skills loaded and expected ones not found.
 
 ## Git rules
 
@@ -194,7 +194,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - M8 uses React `<ViewTransition name=… share="morph" default="none">` pairs: `project-<slug>-title` and `project-<slug>-media`. Names must stay unique per page.
 - The pre-paint script also sets `data-vt="none"` when the View Transitions API is missing (CSS fade fallback).
 - `.grid-12 > *` has `min-width: 0`: a wide child (diagram scroller) must not widen the grid. Keep it.
-- `motion` is installed but not imported anywhere yet (fallbacks use Lenis / CSS). Use it only if a later item needs it, or remove it.
+- The `motion` package was removed in Stage 5 (never imported). Motion is CSS, WAAPI and scheduler tasks only; do not add an animation library without a listed item that needs it.
 - Measured at the end of Stage 3: `/` 151.9 KB gz; case studies 152.6 KB gz.
 
 ## Sections, palette and SEO in place (Stage 4)
@@ -221,6 +221,19 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 `--screenshot` after an anchor jump comes back black. Lighthouse: run
 `npx -y lighthouse@12 <url> --throttling-method=devtools` from PowerShell with
 `CHROME_PATH` set; the default simulated LCP can be far from the observed one.
+
+## Polish in place (Stage 5)
+
+- **Breakpoints:** the header's section links and the two-column project card start at 1024 px (`lg`). Below that the header button reads "Menu" (the palette) and the card is one column. At 768 px both the five links and a 5/12 card column overflowed.
+- **No stack marquee:** the tech chips appear once on `/`, in About (owner decision D2). M6 is the sticky stack plus numeral parallax.
+- **Case-study headings:** every section heading is `font-display text-h2`; display sizes are for the H1 only.
+- **Durations:** every JS-driven duration reads `DUR_MS` from `src/lib/motion/tokens.ts`; CSS uses `--dur-1/2/3`. The intro is 800 ms count + 300 ms hold + 400 ms lift.
+- **Pressed state:** one rule in `globals.css` (`@layer base`): buttons, `role=button`, palette options, `.contact-link` and links with `data-press` drop 1 px on `:active`. Give any new button-styled link `data-press`.
+- **M15:** `src/components/hero/hero-shader.tsx`, loaded by `HeroGraph` only with `NEXT_PUBLIC_ENABLE_SHADER=1` (inlined at build) and the capability gates; it reports failures and the M4 canvas takes over. Colors come from `--g0` / `--g5`, so it stays on the ramp.
+- **Screenshots:** full-page captures are tiled at the real viewport height and stitched (a single `captureBeyondViewport` shot breaks the sticky stack and lazy images). The sticky cards repeat across tiles; that is the stitching.
+- **Performance pass:** grain is `public/textures/grain.png` (pre-rendered, grayscale), never an SVG filter; the live hero canvas and the M15 shader load only with a fine pointer (`finePointer` in `HeroGraph`); Newsreader loads the normal style only (add `"italic"` in `fonts.ts` only when content uses it, it costs ~140 KB). `content-visibility: auto` was tried below the fold and made layout slower here; do not reapply it without re-measuring.
+- **Measuring main-thread cost:** record a Chrome trace over the DevTools protocol at 4x CPU and break down each task over 50 ms by child event (Layout, UpdateLayoutTree, EvaluateScript); three-run A/B comparisons of `Performance.getMetrics` were too noisy to trust.
+- **Lighthouse needs a steady CPU.** Runs on battery read a CPU benchmark of 510–670 against 1,500–2,400 for the Stage 4 runs, and TBT came out about four times higher; check `environment.benchmarkIndex` in each JSON before trusting or comparing runs.
 
 ## Review and acceptance
 

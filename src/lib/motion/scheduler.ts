@@ -2,7 +2,7 @@
  * The one requestAnimationFrame loop for the whole site.
  *
  * - Runs only while at least one task is subscribed and the tab is visible.
- * - `kind: "loop"` tasks are autoplaying animation (canvas, marquee, packets).
+ * - `kind: "loop"` tasks are autoplaying animation (canvas, carousel, packets).
  *   The global pause (WCAG 2.2.2) stops them.
  * - `kind: "input"` tasks follow the user (Lenis, cursor). Pause leaves them
  *   running, because they move only when the user does.

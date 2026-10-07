@@ -35,7 +35,6 @@ export function ExperienceSection() {
       <SectionHeading id="experience" index={section.index} title={section.title} />
 
       <div className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
-        <MonoLabel>{t.roles}</MonoLabel>
         <ol className="xp-timeline">
           {experience.roles.map((r) => (
             <InView as="li" key={r.id} className="xp-item clip-reveal">

@@ -1,7 +1,6 @@
 import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
 import { SectionHeading } from "@/components/ui/section-heading.tsx";
-import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { ScrambleText } from "@/components/motion/scramble.tsx";
 import { contactConfigured } from "@/lib/contact-config.ts";
 import { ContactForm } from "./contact-form.tsx";
@@ -59,8 +58,7 @@ export function ContactSection() {
       </div>
 
       <div className="col-span-full flex flex-col gap-4 md:col-span-3 md:col-start-9">
-        <MonoLabel>{t.direct}</MonoLabel>
-        <ul className="flex flex-col">
+        <ul className="flex flex-col" aria-label={t.direct}>
           {links.map((l) => {
             const external = l.href.startsWith("https://");
             return (

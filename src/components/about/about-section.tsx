@@ -57,7 +57,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
 
         <li className="bento-cell md:col-span-3" title={evidence(oss.source, oss.asOf)}>
           <MonoLabel>{t.openSource}</MonoLabel>
-          <p className="font-display text-display-l leading-none">
+          <p className="font-display text-h2 leading-none">
             <CountUp display={String(oss.merged)} />
           </p>
           <p className="text-small text-ink-2">
@@ -71,7 +71,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
 
         <li className="bento-cell md:col-span-2">
           <MonoLabel>{t.internships}</MonoLabel>
-          <p className="font-display text-display-l leading-none">
+          <p className="font-display text-h2 leading-none">
             <CountUp display={String(experience.roles.length)} />
           </p>
           <ul className="flex flex-col gap-1 text-small text-ink-2">

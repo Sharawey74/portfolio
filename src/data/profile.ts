@@ -44,7 +44,6 @@ const profileSchema = z.object({
     externalLink: z.string(),
     caseStudy: z.string(),
     alsoBuilt: z.string(),
-    stackAcross: z.string(),
     carouselLabel: z.string(),
     previous: z.string(),
     next: z.string(),
@@ -73,6 +72,7 @@ const profileSchema = z.object({
       step: z.string(),
       restart: z.string(),
       scrub: z.string(),
+      scrollHint: z.string(),
       steps: z.string(),
     }),
     about: z.object({
@@ -102,7 +102,6 @@ const profileSchema = z.object({
       snapshotStatus: z.string(),
     }),
     experience: z.object({
-      roles: z.string(),
       education: z.string(),
       certifications: z.string(),
       project: z.string(),
@@ -188,7 +187,6 @@ export const profile = profileSchema.parse({
     externalLink: "opens an external site",
     caseStudy: "Case study",
     alsoBuilt: "Also built",
-    stackAcross: "Stack across these projects",
     carouselLabel: "Screenshots",
     previous: "Previous screenshot",
     next: "Next screenshot",
@@ -217,6 +215,7 @@ export const profile = profileSchema.parse({
       step: "Step",
       restart: "Restart",
       scrub: "Follow scroll",
+      scrollHint: "Scroll sideways for the full diagram.",
       steps: "Steps",
     },
     about: {
@@ -252,7 +251,6 @@ export const profile = profileSchema.parse({
       snapshotStatus: "Status as of the last snapshot",
     },
     experience: {
-      roles: "Roles",
       education: "Education",
       certifications: "Certifications",
       project: "Project",

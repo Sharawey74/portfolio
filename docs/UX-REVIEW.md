@@ -254,3 +254,154 @@ Open, carried to Stage 5 polish:
   the Vercel deployment, whose image cache and CDN change the load phase.
 - Localhost has no CDN; numbers on Vercel will differ. Re-run on the
   production URL before launch.
+
+---
+
+# Stage 5 review
+
+## 5.1 Design critique (before any code)
+
+| | |
+|---|---|
+| Scope | `/`, `/projects/eventora`, `/projects/recruiter-pro`, `/projects/sysplex` at 375, 768, 1280 and 1920 px, dark and light (32 full-page captures) |
+| Captures | `docs/screens/stage5-before/<page>-<width>-<theme>.webp`. Production build, `prefers-reduced-motion: reduce` (so reveals are static and the intro is skipped), headless Chrome at 1× scrolled tile by tile at the real viewport height and stitched. The header is pinned to the top of the document so it appears once. In the Work section the sticky stack shows each card where it sat at that scroll position, so cards repeat across tiles: that is the stitching, not the page |
+| Lens | `frontend-design` (critique against generic, templated defaults), then the brief. Where the skill calls a brief-required choice generic, the brief wins and the row says **Brief** |
+| Reviewed | 2026-10-07 |
+
+Verdicts: **Open** (defect, fix planned in 5.2) · **Owner** (needs a decision from the owner before a fix) · **Brief** (the brief requires it; kept) · **Pass**.
+
+### Issues
+
+| ID | Where | Issue | Verdict | Proposed fix (inside the token system) |
+|---|---|---|---|---|
+| D1 | Header, 768 px (upper bound to measure in 5.2) | The section nav wraps to two rows; the first row rides above the header bar and the second spills below it (`home-768-*`) | Open | Show the nav from 1024 px; below that the existing Menu button (palette) is the navigation |
+| D2 | `/` About and Work | The same 31 tech chips appear twice on one page: "Stack, by where it was used" in About and "Stack across these projects" in Work. On a phone that is about two screens of repeated chips | Owner | Recommended: keep About's lane list (it carries `usedIn`, the evidence) and drop the chip marquee from Work. That retires the M6 marquee; the alternative is keeping the marquee and cutting About's list to lanes only |
+| D3 | Work cards, 1280 px (other widths to measure in 5.2) | "Recruiter-Pro" breaks at its hyphen ("Recruiter-" / "Pro") at `display-l`, and the next sticky card covers the second line (`home-1280-*`) | Open | Card titles one step down (`text-h2` scale at md–xl) or a non-breaking hyphen in the rendered name (data unchanged) |
+| D4 | Work cards, phones | Recruiter-Pro and SysPlex card previews scale their diagram labels to about 4 px: unreadable texture under the button (`home-375-*`) | Open | Hide the flow preview below 768 px (it is decorative, `aria-hidden`); the case study shows the full diagram |
+| D5 | Case studies | Inconsistent hierarchy: "Problem" is a small mono label in a side column, while Architecture, Key decisions, Evidence and the rest are `display-l` words as large as the home page's section titles. The page reads as a stack of giant words | Open | One pattern for every case section: mono index + `text-h2` heading in the left column, content to the right (the Problem layout), keeping display sizes for the H1 only |
+| D6 | Many blocks | Uppercase mono eyebrows above nearly every block (Education, Open source, Internships, Flagship project, Stack…, Also built, Roles, Issues reported, Or reach me directly). `frontend-design` names the eyebrow-on-everything pattern as the most common generated tell | Open (partly Brief) | The brief requires mono labels for labels and metadata, so they stay where they name data. Cut the redundant ones: "Roles" (directly under "Experience"), "Or reach me directly" (the links say what they are) |
+| D7 | `/` About → Open source | The open-source "7" is shown at display size twice within a few screens (About cell, then the Open source headline) | Open | About's numerals step down to `text-h2`; Open source keeps the oversized numerals |
+| D8 | Case study diagrams, phones | The architecture diagram scrolls sideways inside its box at 375 px, showing only the first two nodes, with no sign that more is there (`eventora-375-*`) | Open | A mono caption under the box on phones only ("Scroll sideways for the full diagram"), copy in `profile.ui` |
+| D9 | Eventora steps | A code token wraps inside itself: "availableCount -" / "= n" | Open (Low) | Keep code-like tokens together (`white-space: nowrap` on inline code spans) |
+| D10 | Contact (no Resend variables) | Under a `display-l` title the section holds one sentence and two links | Pass | Expected until the owner sets the variables; with the form it is balanced |
+
+### Brief over skill
+
+| `frontend-design` calls generic | Brief rule kept |
+|---|---|
+| Near-black page with one bright accent | The gray ramp and one `--break` color are the brief's identity |
+| Hairline rules, zero radius, editorial columns | Required (anti-slop "Required" list) |
+| Mono face for small data labels; uppercase labels | Required: JetBrains Mono, labels uppercase +0.06em |
+| Numbered markers (01 / About …) on non-sequential content | Required: numbered section indices |
+| "→" appended to links and buttons; middle dots in meta strings | Required: text glyphs (→ ↗ ✓ ○ ·) instead of icons |
+| Accenting one word (the red final period) | The H1 final period is the one sanctioned text use of `--break` |
+
+### What already works (keep)
+
+- The hero is the memorable thing: the headline at display size, the node graph quiet behind it, one break mark. Nothing else on the page competes with it.
+- Real material carries the page: diagrams drawn from sourced steps, charts, screenshots, the PR timeline. No stock imagery, no filler sections.
+- Light mode is a true mirror; nothing breaks between themes at any width.
+- Every page measures exactly its viewport width at all four widths (`scrollWidth` = viewport).
+
+## 5.2 Fixes and motion completion
+
+Skills: `modern-web-guidance` (scrollability-affordance-hints; apply-webgl-shaders was retrieved and does not apply, it renders HTML into a canvas), `ui-ux-pro-max` (quick-reference rules; the searches for pressed state and scroll hints returned nothing specific). `ui-ux-pro-max:design-system` and `ui-ux-pro-max:ui-styling` were not loaded: token architecture and component styling are fixed by the brief, and both skills target new systems and shadcn/ui.
+
+### D1–D9 resolved
+
+| ID | Verdict | Change |
+|---|---|---|
+| D1 | Fixed | Section links from 1024 px (`lg`); below that the header button reads "Menu" and opens the palette |
+| D2 | Fixed (owner chose A) | The chip marquee is gone from Work, with its component and CSS; About keeps the lane list with `usedIn`. M6 keeps the sticky stack and numeral parallax |
+| D3 | Fixed | Card titles at `text-h2`, and the card is one column below 1024 px (a 5/12 column at 768 px still split "Recruiter-" / "Pro"): one line at all four captured widths |
+| D4 | Fixed | Flow previews render from 768 px only |
+| D5 | Fixed | Every case section heading is `text-h2` in the display face (Problem, Stack and Limits headings are now visible headings, not mono labels); display sizes only for the H1 |
+| D6 | Fixed | "Roles" and "Or reach me directly" removed (the latter kept as the list's `aria-label`) |
+| D7 | Fixed | About numerals at `text-h2`; Open source keeps the display numerals |
+| D8 | Fixed | Below 1024 px a mono line under the diagram: "← → Scroll sideways for the full diagram." (copy in `profile.ui.diagram.scrollHint`) |
+| D9 | Fixed | Parenthesised parts of step labels never break inside ("(availableCount -= n)") |
+
+### Motion audit, M1–M14 against the motion rules
+
+Method: grep for scroll listeners, raw `requestAnimationFrame`, hard-coded durations and easings; then every page in five modes in headless Chrome (reduced motion, coarse pointer, Save-Data, JavaScript off, global pause), recording running animations, hero layer, cursor, hidden text and console errors.
+
+| Rule | Result |
+|---|---|
+| No scroll event listeners | Pass: none (Lenis' own callback and IntersectionObserver only) |
+| One rAF loop (scheduler) | Pass: no `requestAnimationFrame` outside `scheduler.ts` |
+| One easing | Pass: every transition and keyframe animation uses `--ease-out`; `linear` only on scroll-linked timelines and the packet's constant-rate travel |
+| Durations 200 / 400 / 800 ms | **Fixed**: intro was 1000 + 650 ms (now 800 ms count, 300 ms hold, 400 ms lift = 1500 ms), count-up 1200 ms (now 800), scramble 360 ms (now 400), diagram packet 900 ms per step (now 800). Stagger delays (45–90 ms per word) are offsets, not durations |
+| ≤ 3 animating regions per viewport | Pass by inventory: Work in view = carousel autoplay + scroll-linked card recede + numeral drift (the marquee, a fourth, is gone); case study = diagram packet + progress hairline; hero = canvas + one-shot headline entrance |
+| Only transform / opacity / clip-path / small filter | Pass: the new pressed state uses `translate` only |
+| Reduced motion | Pass on all 4 pages: no running animations, no hero canvas, no cursor, no hidden text |
+| `pointer: coarse` | Pass on all 4 pages: no custom cursor (tilt and magnet key off the same flag) |
+| Save-Data | Pass on all 4 pages: no intro, no canvas (static hero) |
+| JavaScript off | Pass on all 4 pages: no hidden text; CSS-only scroll effects still run |
+| Global pause | Pass on all 4 pages: `data-motion="paused"`, the CSS numeral drift stops (observed), and the carousel, canvas and diagram packet are scheduler "loop" tasks, which the pause stops (verified in Stage 1); scroll-linked and one-shot effects keep running by design |
+| Console | No errors or warnings in any of the 20 runs |
+
+| Item | Status after audit |
+|---|---|
+| M1 | DONE, now on duration tokens (1500 ms) |
+| M2–M5, M7–M14 | DONE, unchanged |
+| M6 | PARTIAL by owner decision: sticky stack and parallax kept, marquee retired (D2) |
+| M15 | DONE, default OFF |
+
+### Interaction states
+
+| State | Result |
+|---|---|
+| Hover | Unchanged: color, border or underline steps on every control (Tailwind `hover:` variants only apply on hover-capable devices; the few plain-CSS `:hover` rules can stick after a tap on touch screens and are harmless there) |
+| Focus-visible | Unchanged: 2 px `--break` ring everywhere |
+| Active (new) | One pressed state for every control: a 1 px drop (`translate`), 200 ms, in the base layer so a component's own transition list still wins. Applies to buttons, `role=button`, palette options, contact links and button-styled links (`data-press`) |
+| Disabled | `cursor: not-allowed` and no pressed response; the Resume button keeps its outline-only disabled style |
+
+### `motion` package
+
+Removed (`npm uninstall motion`): nothing imports it, and M15 is raw WebGL2. First-load JS before and after: `/` 155.9 KB gz both, case studies 155.6 KB gz both (it was never bundled). The lockfile loses 61 lines; `npm audit --omit=dev`: 0 vulnerabilities.
+
+### M15 shader
+
+`src/components/hero/hero-shader.tsx`: raw WebGL2, a grayscale flow field drawn as contour lines from two token grays (`--g0`, `--g5`), so it cannot produce a color off the ramp. Half resolution, DPR ≤ 1.5, a "loop" task on the scheduler (stops off-screen, on a hidden tab, under the pause), re-reads the colors on theme change. Chunk: 3.2 KB raw, 1.7 KB gz (budget 15 KB). `HeroGraph` loads it only when `NEXT_PUBLIC_ENABLE_SHADER=1` and WebGL2, `deviceMemory ≥ 4`, `hardwareConcurrency ≥ 4`, a visible tab, no reduced motion and no Save-Data all hold; a failed context or compile falls back to the M4 canvas. Verified with the flag on in headless Chrome (WebGL2 via SwiftShader): canvas live, no console errors, contour lines behind the headline. With the flag off (default) `/` does not reference the chunk.
+
+## 5.3 Audit and budgets
+
+### UI UX Pro Max rules for the new and changed UI
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `nav-hierarchy`, `breakpoint-consistency` | Pass | One navigation per width: header links from 1024 px, Menu (palette) below; the header stays one row at 768 px (`stage5-after/home-768-*`) |
+| `press-feedback`, `state-clarity` | Pass | One pressed state on every control (1 px `translate`, 200 ms); disabled controls show `not-allowed` and do not move |
+| `scroll-affordance` | Pass | Scroll hint under the diagram below 1024 px; the ordered step list is the full text equivalent |
+| `heading-hierarchy` | Pass | Case studies: H1 at display size, every section an H2 at `text-h2`; the home page keeps display-size section titles (one per screen) |
+| `content-priority`, no duplication | Pass | The stack appears once on `/` (About), with where each chip was used |
+| `long-token-wrapping` | Pass | Parenthesised step details stay whole; source paths still wrap anywhere (R8) |
+| `motion-consistency` (one easing, token durations) | Pass | See the motion audit above; every JS-driven duration reads `DUR_MS` |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport on all 32 after captures (375, 768, 1280, 1920 × 4 pages × 2 themes) |
+| `decorative-motion-optional` (M15) | Pass | Off by default; gated on capability, reduced motion, Save-Data, a visible tab; pause stops it |
+
+After captures: `docs/screens/stage5-after/` (32 WebP, 6.6 MB), taken the same way as the before set.
+
+### Lighthouse (median of 3, mobile, applied throttling, mains power)
+
+After the performance pass (2026-10-08):
+
+| Page | Perf | A11y | Best pr. | SEO | LCP (< 2.5 s) | TBT (< 200 ms) | CLS (< 0.05) |
+|---|---|---|---|---|---|---|---|
+| `/` | 71 | 100 | 100 | 100 | 2.11 s (pass) | 989 ms (over) | 0.001 |
+| `/projects/eventora` | 71 | 100 | 100 | 100 | 2.79 s (over) | 911 ms (over) | 0.001 |
+| `/projects/recruiter-pro` | 77 | 100 | 100 | 100 | 2.27 s (pass) | 717 ms (over) | 0.001 |
+| `/projects/sysplex` | 76 | 100 | 100 | 100 | 2.45 s (pass) | 695 ms (over) | 0.001 |
+
+Before the pass (2026-10-07): LCP 2.52–2.83 s on every page, TBT 1,164–2,043 ms. Before/after table, method, validity and what was tried: `docs/reports/lighthouse-stage5.md` (full JSON for the median run of each page beside it).
+
+| ID | Change | Verdict |
+|---|---|---|
+| P1 | Grain from a 16 KB pre-rendered grayscale PNG tile instead of an SVG `feTurbulence` filter (the brief asked for "static pre-rendered grain") | Fixed |
+| P2 | Coarse pointers keep the static hero graph; the live canvas (about 0.9 s of main thread at 4x CPU) needs a fine pointer, which its pointer interaction depends on anyway | Fixed, design change flagged to the owner (UAT-48) |
+| P3 | Newsreader loads the normal style only; the unused italic face was a second ~140 KB variable file preloaded ahead of the LCP image | Fixed |
+| P4 | `content-visibility: auto` below the fold | Rejected: layout still touched every object and took about twice as long |
+| P5 | Eventora LCP 2.79 s: 0.7 s HTML on slow 4G, then the image shares the connection with 207 KB of fonts and waits ~0.8 s for the main thread | Open (owner) |
+| P6 | TBT 695–989 ms: the first full style and layout pass (~0.45 s at 4x CPU) plus React hydration | Open (owner) |
+
+Options for P5 and P6, each a trade-off against the brief, for the owner to choose: drop Newsreader's `opsz` axis (the largest font file; the brief asks for "variable opsz + wght"); cut the number of client components that hydrate on every page (palette loaded on first open, cursor and scramble host after idle); or accept the numbers until they are re-measured on Vercel, where the HTML and image come from a CDN.

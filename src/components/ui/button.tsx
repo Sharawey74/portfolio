@@ -55,6 +55,7 @@ export function ButtonLink({
 }: Common & ComponentProps<"a">) {
   return (
     <a
+      data-press=""
       data-magnetic={magnetic ? "" : undefined}
       data-cursor={cursorLabel}
       className={`${base} ${variants[variant]} ${className}`}

@@ -9,10 +9,12 @@ import { InteractiveCard } from "./interactive-card.tsx";
 import { ScreenshotCarousel } from "./screenshot-carousel.tsx";
 
 /**
- * Featured project card (M7) inside the sticky stack (M6). Left: index
+ * Featured project card (M7) inside the sticky stack (M6). From 1024 px two
+ * columns (below that one: a 5/12 column cannot hold "Recruiter-Pro"). Left: index
  * numeral (parallax decoration), title, summary, three sourced highlights,
  * the case-study link. Right: the screenshot carousel, or the project's flow
- * as a static diagram when there are no real screenshots.
+ * as a static diagram when there are no real screenshots (from 768 px only:
+ * on a phone its labels shrink to unreadable texture).
  * Title and first screenshot carry shared-element names for the route morph (M8).
  */
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
@@ -22,13 +24,13 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     .filter((m): m is NonNullable<typeof m> => m !== undefined);
 
   return (
-    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 md:grid-cols-12 md:gap-6 md:p-10">
-      <div className="flex flex-col gap-6 md:col-span-5">
+    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 md:p-10 lg:grid-cols-12 lg:gap-6">
+      <div className="flex flex-col gap-6 lg:col-span-5">
         <span aria-hidden="true" className="card-numeral num font-display">
           {String(index + 1).padStart(2, "0")}
         </span>
         <ViewTransition name={`project-${project.slug}-title`} share="morph" default="none">
-          <h3 className="font-display text-display-l">{project.name}</h3>
+          <h3 className="font-display text-h2">{project.name}</h3>
         </ViewTransition>
         <p className="max-w-[46ch] text-ink-2">{project.summary.text}</p>
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(6.5rem,1fr))] gap-x-4 gap-y-5 border-t border-hair pt-5">
@@ -47,6 +49,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             href={`/projects/${project.slug}`}
             data-cursor={ui.cursorView}
             data-magnetic=""
+            data-press=""
             className="inline-flex min-h-11 items-center gap-3 border border-line-strong px-5 text-small font-medium text-ink transition-colors duration-200 ease-out hover:border-ink hover:bg-hover"
           >
             {ui.caseStudy}
@@ -55,7 +58,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           </Link>
         </div>
       </div>
-      <div className="md:col-span-7">
+      <div className="lg:col-span-7">
         {project.screenshots.length > 0 ? (
           <InView className="clip-reveal">
             <ScreenshotCarousel
@@ -65,7 +68,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             />
           </InView>
         ) : project.flow ? (
-          <InView className="clip-reveal border border-hair bg-raised p-4">
+          <InView className="clip-reveal hidden border border-hair bg-raised p-4 md:block">
             <FlowPreview slug={project.slug} flow={project.flow} />
           </InView>
         ) : null}
