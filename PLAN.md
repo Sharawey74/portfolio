@@ -129,8 +129,8 @@ Decisions:
 Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidance` (before any HTML/CSS/client JS), then `ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`. The "Visual system" and "Motion rules" sections of CLAUDE.md override every skill: use the skills for craft, critique and accessibility only. Never change the gray ramp, `--break`, fonts, radius, the no-shadow rule, the easing or the 200/400/800 ms durations. Where frontend-design calls a brief-required choice "generic", the brief wins; record it as **Brief** in `docs/UX-REVIEW.md`.
 
 5.1 Design critique (no code first)
-- [ ] frontend-design self-critique of every page (`/`, all case studies) at 375 / 768 / 1280 / 1920, dark and light. Screenshots in `docs/screens/stage5-before/`
-- [ ] Issues list in `docs/UX-REVIEW.md` (new section "Stage 5"), each with a verdict
+- [x] frontend-design self-critique of every page (`/`, all case studies) at 375 / 768 / 1280 / 1920, dark and light. Screenshots in `docs/screens/stage5-before/` (32 WebP, 6.7 MB; `scrollWidth` equals the viewport on all 32)
+- [x] Issues list in `docs/UX-REVIEW.md` (new section "Stage 5"), each with a verdict: D1–D10 (8 Open, D6 partly Brief; 1 Owner; 1 Pass) plus the Brief-over-skill table
 - [ ] Each fix stays inside the token system (no new colors, sizes, shadows or radii)
 
 5.2 Motion completion (inside the existing system)
