@@ -104,10 +104,10 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
               alt={hero.alt}
               width={hero.width}
               height={hero.height}
-              sizes="(min-width: 768px) 80vw, 100vw"
+              unoptimized
               loading="eager"
               fetchPriority="high"
-              className="shot aspect-[16/10] w-full border border-hair object-cover object-top"
+              className="aspect-[16/10] w-full border border-hair object-cover object-top"
             />
           </ViewTransition>
         </div>
