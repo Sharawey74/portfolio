@@ -13,6 +13,9 @@ export default defineConfig({
   // One `next start` serves every test; more workers than this time out
   // on image optimization rather than finding bugs.
   workers: 2,
+  // A run straight after `next build` on a busy machine took 5x longer;
+  // a slow runner should be slow, not red.
+  timeout: 60_000,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["list"], ["github"]] : "list",
