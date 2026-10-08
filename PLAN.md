@@ -202,10 +202,10 @@ R4 Verify and record
 - [x] Lighthouse on mains power, 3 runs per page (`docs/reports/lighthouse-review1.md`): medians LCP 2.43 / 2.88 / 3.28 / 2.65 s, TBT 1,079–1,508 ms, CLS 0.001; regressions against Stage 5 (TBT everywhere, Recruiter-Pro LCP) logged as ISS-36 and decided like ISS-01 / ISS-02
 - [x] Each fixed issue closed in `docs/ISSUES.md` with its evidence; UAT-49 to UAT-55 ready for the owner; 21 defect-log entries marked fixed for retest
 
-## Stage 6: Release docs, CD and v1.0.0
+## Stage 6: Release docs, CD and v1.0.0 · 6.1 and 6.2 DONE 2026-10-08 on `chore/stage6-release` (Vercel re-measure blocked) · 6.3 waits on the owner
 
 6.1 Docs (repo copy rules: no banned words, no emoji, no exclamation marks)
-- [ ] `DEPLOY.md`:
+- [x] `DEPLOY.md`: — done 2026-10-08
   - Hosting: Vercel Git integration, production = `main`, preview per PR
   - Owner-only Vercel import steps (the project is not imported yet)
   - Env var names from CLAUDE.md only
@@ -215,7 +215,7 @@ R4 Verify and record
   - Rollback: Vercel instant rollback, or redeploy the previous tag
   - Domain notes
   - Updating the repo homepage URL
-- [ ] `CHANGELOG.md` in Keep a Changelog format, SemVer for this site:
+- [x] `CHANGELOG.md` in Keep a Changelog format, SemVer for this site: — done; 0.1.0 to 0.6.0 backfilled, no tags
   - MAJOR: redesign or new information architecture
   - MINOR: a new section or case study
   - PATCH: copy, fixes, performance
@@ -223,14 +223,14 @@ R4 Verify and record
   - Backfill one 0.x entry per DONE stage, using only PLAN.md, merged PR titles and `git log` dates
 
 6.2 CD (extend, do not replace, `.github/workflows/ci.yml`)
-- [ ] Playwright smoke job in `ci.yml` or a separate workflow: build, `next start`; every route returns 200; no console errors; header nav works; reduced-motion and JS-off render content
-- [ ] Re-measure Lighthouse on a Vercel preview (3 runs) and act on `docs/ISSUES.md` ISS-01, ISS-02 and ISS-36 (round 1 TBT and Recruiter-Pro LCP): close them if within budget, otherwise apply their next option (ISS-01 option A, ISS-02 option B1) and re-measure
-- [ ] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on
-- [ ] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create`
-- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped. Watches for the patched `braces` chain (`docs/ISSUES.md` → ISS-10); never `npm audit fix --force` (it downgrades `eslint-config-next` to 14)
-- [ ] Try ESLint 10 on its own branch (`docs/ISSUES.md` → ISS-11): `npm run lint` clean and CI green, or stay on 9.39.5 with the reason recorded
-- [ ] Least-privilege `permissions` in every workflow; actions pinned to at least a major version
-- [ ] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL
+- [x] Playwright smoke job in `ci.yml` or a separate workflow: build, `next start`; every route returns 200; no console errors; header nav works; reduced-motion and JS-off render content — 20 tests in `tests/smoke.spec.ts`, run in `ci.yml` after the build; 20/20 locally
+- [ ] BLOCKED on the owner (Vercel not imported, ISS-07): Re-measure Lighthouse on a Vercel preview (3 runs) and act on `docs/ISSUES.md` ISS-01, ISS-02 and ISS-36 (round 1 TBT and Recruiter-Pro LCP): close them if within budget, otherwise apply their next option (ISS-01 option A, ISS-02 option B1) and re-measure
+- [x] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on — LCP and TBT warn, CLS and accessibility fail, until the preview numbers are in
+- [x] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create` — also fails if `package.json` disagrees with the tag
+- [x] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped. Watches for the patched `braces` chain (`docs/ISSUES.md` → ISS-10); never `npm audit fix --force` (it downgrades `eslint-config-next` to 14)
+- [x] Try ESLint 10 on its own branch (`docs/ISSUES.md` → ISS-11): `npm run lint` clean and CI green, or stay on 9.39.5 with the reason recorded — branch `chore/eslint-10`: works, lint clean, 3 plugins still declare ≤ 9; recommendation to merge (ISS-11)
+- [x] Least-privilege `permissions` in every workflow; actions pinned to at least a major version — `contents: read` for CI and Lighthouse, `contents: write` for Release only; `actions/*@v4`, `@lhci/cli@0.15.x`
+- [x] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL — `DEPLOY.md` → First-time setup
 
 6.3 Release v1.0.0
 - [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left); `docs/ISSUES.md` has no Open or Owner issue of High severity
@@ -267,10 +267,10 @@ Notes:
 
 | Budget | Target | Last measured |
 |---|---|---|
-| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 156.1 KB (Stage 5); case studies 155.6 KB; M15 chunk 1.7 KB gz, loaded only when enabled |
-| Mobile LCP | < 2.5 s | Stage 5 medians after the performance pass: `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s (pass); Eventora 2.79 s (over). Applied throttling, localhost |
-| INP | < 200 ms | not measured in the field; lab TBT medians 695–989 ms after the performance pass (was 1,164–2,043 ms), against a 200 ms proxy target |
-| CLS | < 0.05 | 0.001 on every page (Stage 5 medians) |
+| First-load JS on `/` (gz, excl. lazy hero and diagrams) | ≤ 170 KB | 156.2 KB (review round 1); case studies 155.9 KB; M15 chunk 1.7 KB gz, loaded only when enabled |
+| Mobile LCP | < 2.5 s | Review round 1 medians: `/` 2.43 s (pass); Eventora 2.88 s, Recruiter-Pro 3.28 s, SysPlex 2.65 s (over; ISS-01, ISS-36). Stage 5 was 2.11–2.79 s. Applied throttling, localhost |
+| INP | < 200 ms | not measured in the field (ISS-04); lab TBT medians 1,079–1,508 ms in review round 1 (Stage 5: 695–989 ms; ISS-02, ISS-36), against a 200 ms proxy target |
+| CLS | < 0.05 | 0.001 on every page (review round 1 medians) |
 | `--break` pixels in viewport | ≤ 2% | — |
 | Concurrently animating regions per viewport | ≤ 3 | — |
 
