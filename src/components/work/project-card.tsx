@@ -25,7 +25,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
 
   return (
     <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 transition-colors duration-200 ease-out hover:border-c2 md:p-8 lg:grid-cols-12 lg:gap-6">
-      <div className="flex flex-col gap-6 lg:col-span-5">
+      <div className="card-copy flex flex-col gap-6 lg:col-span-5">
         <span aria-hidden="true" className="card-numeral num font-display">
           {String(index + 1).padStart(2, "0")}
         </span>
