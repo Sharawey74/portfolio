@@ -259,6 +259,20 @@ already mapped above. Numbers shown there are derived, never typed:
 | github.com/Sharawey74/PhishSniffer | 200 | linked |
 | phishsniffer.streamlit.app | 303 | linked (Streamlit wake redirect accepted) |
 
+## Owner review, round 1 (2026-10-08)
+
+Recorded here so the next data update starts from verified facts; applied in `PLAN.md` → Review round 1.
+
+| Fact | Evidence | Applies to |
+|---|---|---|
+| Public name is "Abdelrhman Mohamed" | Owner decision, 2026-10-08 | `personal.name`, LICENSE (ISS-14) |
+| Public email abdelrhmanhamied004@gmail.com | Owner, 2026-10-08 | `personal.email` (ISS-15) |
+| magefree/mage #16440 merged 2026-10-07T19:34Z | `gh pr view 16440 -R magefree/mage`, 2026-10-08 | `oss.json`; headline becomes 8 merged across 6 projects, 3 under review (ISS-16) |
+| simplesamlphp/simplesamlphp #2688 retitled "Document the Twig conflict when an application loads its own Twig", still open | `gh pr view 2688`, 2026-10-08 | `oss.json` title and note (ISS-16) |
+| Issues filed outside own repos: litestar #5020 (closed), avoid-ai-writing #333 (closed), litestar #5018 (open), elwahapumps #1 (open) | `gh search issues --author Sharawey74`, 2026-10-08 | `oss.json → issues` (ISS-17) |
+| Eventora, Recruiter-Pro and SysPlex have no commits after the pinned evidence commits | `git rev-list --count <pin>..origin/main` = 0 for all three, 2026-10-08 | Metrics audit (ISS-18) |
+| Recruiter-Pro now has 13 app screenshots in `site/assets/img/screenshots/` | `git ls-files`, 2026-10-08; to be viewed before use | ISS-25; may close the Recruiter-Pro screenshot TODO |
+
 ## Open questions for the owner
 
 1. Is the Railway API intentionally down? (report §7 q3)
