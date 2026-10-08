@@ -8,6 +8,11 @@ every public number traced to a source file and a date.
 > Build order and progress: `PLAN.md`. Rules and context: `CLAUDE.md`. Design
 > audit: `docs/UX-REVIEW.md`. Owner acceptance script: `docs/UAT.md`. Open
 > issues and proposed fixes: `docs/ISSUES.md`. Measurements: `docs/reports/`.
+>
+> `PLAN.md`, `FACTS-CHECK.md` and `PERSONAL-INFO-CHECKLIST.md` are the owner's
+> working files. They are kept on the owner's machine and are not in this
+> repository (git-ignored since 2026-10-08); mentions of them here and in the
+> code refer to those local copies.
 
 ## What is on the site
 
