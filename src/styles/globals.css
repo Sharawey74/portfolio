@@ -489,6 +489,12 @@ html[data-reveal="on"]:not([data-intro]) .rv-load[data-mode="lines"] .w-i {
     translate: 0 0.75rem;
   }
 }
+html[data-reveal="on"]:not([data-intro]) .hero-label {
+  animation: fade-up var(--dur-3) var(--ease-out) backwards;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-more {
+  animation: fade-up var(--dur-3) var(--ease-out) 700ms backwards;
+}
 html[data-reveal="on"]:not([data-intro]) .hero-ctas {
   animation: fade-up var(--dur-3) var(--ease-out) 820ms backwards;
 }
@@ -496,7 +502,7 @@ html[data-reveal="on"]:not([data-intro]) .hero-ctas {
 /* Reveals and the intro are one-shot entrances, and .title-track follows the
    reader's own scrolling: none of them autoplay, so the pause leaves them be
    (pausing them could strand text half-revealed). */
-html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-ctas, .intro, .intro *, .title-track) {
+html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .intro, .intro *, .title-track) {
   animation-play-state: running !important;
 }
 
