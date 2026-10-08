@@ -11,7 +11,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 ## [Unreleased]
 
 ### Added
-- `DEPLOY.md`: hosting, the owner's Vercel import steps, environment variables, the pre-release checklist, release and rollback steps.
+- A deploy guide for the owner (hosting, Vercel import steps, environment variables, pre-release checklist, release and rollback steps), kept on the owner's machine rather than in the repository.
 - Playwright smoke tests in CI: every route returns 200, no console errors, header navigation, reduced-motion and JavaScript-off rendering, no horizontal scroll at 375 px.
 - `lighthouse.yml`: Lighthouse on every Vercel preview deployment, 3 runs, against the budgets.
 - `release.yml`: a `v*.*.*` tag creates the GitHub Release from this file's section for that version.
