@@ -2,13 +2,19 @@ import type { ComponentProps, ReactNode } from "react";
 
 type Variant = "filled" | "outline";
 
+/**
+ * Pill shape for buttons and CTAs only (owner decision, docs/ISSUES.md ISS-22);
+ * content stays square. Hover answers with the accent ramp (ISS-21, ISS-32):
+ * filled turns --c2, outline gets a --c2 edge on a --c1 fill, and a trailing
+ * arrow glyph (`data-arrow`) moves 4 px in its direction.
+ */
 const base =
-  "inline-flex min-h-11 items-center gap-3 rounded-xs px-5 font-sans text-small font-medium " +
+  "btn inline-flex min-h-11 items-center gap-3 rounded-pill px-6 font-sans text-small font-medium " +
   "transition-[background-color,color,border-color,translate] duration-200 ease-out";
 
 const variants: Record<Variant, string> = {
-  filled: "bg-ink text-page hover:bg-ink-soft",
-  outline: "border border-line-strong text-ink hover:border-ink hover:bg-hover",
+  filled: "bg-ink text-page hover:bg-c2 hover:text-on-c2",
+  outline: "border border-line-strong text-ink hover:border-c2 hover:bg-c1",
 };
 
 const disabledStyle = "border border-hair text-ink-3 cursor-not-allowed";
