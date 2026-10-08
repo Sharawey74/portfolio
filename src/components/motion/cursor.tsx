@@ -33,7 +33,9 @@ export function Cursor() {
   useEffect(() => {
     if (!enabled) return;
     const root = document.documentElement;
-    root.dataset.cursor = "on";
+    // Not `data-cursor`: that attribute is the per-element label, and the
+    // hover lookup would match <html> and show its value (docs/ISSUES.md ISS-33).
+    root.dataset.cursorActive = "";
 
     const target = { x: -100, y: -100 };
     const pos = { x: -100, y: -100 };
@@ -94,7 +96,7 @@ export function Cursor() {
       document.removeEventListener("pointerleave", onLeave);
       stopLoop?.();
       releaseMagnet();
-      delete root.dataset.cursor;
+      delete root.dataset.cursorActive;
     };
   }, [enabled]);
 
