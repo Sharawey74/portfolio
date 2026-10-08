@@ -178,7 +178,8 @@ Notes:
 - [ ] Re-measure Lighthouse on a Vercel preview (3 runs) and act on `docs/ISSUES.md` ISS-01 and ISS-02: close them if within budget, otherwise apply their next option (ISS-01 option A, ISS-02 option B1) and re-measure
 - [ ] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on
 - [ ] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create`
-- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped
+- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped. Watches for the patched `braces` chain (`docs/ISSUES.md` → ISS-10); never `npm audit fix --force` (it downgrades `eslint-config-next` to 14)
+- [ ] Try ESLint 10 on its own branch (`docs/ISSUES.md` → ISS-11): `npm run lint` clean and CI green, or stay on 9.39.5 with the reason recorded
 - [ ] Least-privilege `permissions` in every workflow; actions pinned to at least a major version
 - [ ] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL
 
