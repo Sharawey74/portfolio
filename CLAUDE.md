@@ -16,7 +16,7 @@ file and a date.
 - Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
-- **Pending brief changes.** The owner's review round 1 (2026-10-08) asks to change rules below: the approved hero copy, one accent color, the 0–2 px radius, the Arial ban and grayscale screenshots (`docs/ISSUES.md` ISS-12, ISS-13, ISS-21 to ISS-25). Each rule here stays in force until its decision is recorded in `docs/ISSUES.md`; then this file changes in the same branch as the code.
+- **Pending brief changes.** The owner's review round 1 (2026-10-08) asks to change rules below: one accent color, the 0–2 px radius, the Arial ban and grayscale screenshots (`docs/ISSUES.md` ISS-21 to ISS-25). Each rule here stays in force until its decision is recorded in `docs/ISSUES.md`; then this file changes in the same branch as the code.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -51,8 +51,9 @@ All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
 - PhishSniffer: "about 43K emails from public corpora (34,284 train, 8,571 held out)", 97.7% test accuracy.
 - Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
 - Recruiter-Pro: "500+ tests" (README says 544 and 530).
-- Public name: the owner chose **"Abdelrhman Mohamed"** on 2026-10-08 (`docs/ISSUES.md` ISS-14). Until review round 1 applies it, `personal.name` is still `TODO(owner)` and the LICENSE holder is "Sharawey74"; never use the other spelling.
-- Headline OSS stat is derived, not typed (`ossSummary()`). The committed snapshot says 7 merged across 5 projects, 4 under review; since magefree/mage #16440 merged on 2026-10-07 the true figure is 8 across 6, 3 under review, and review round 1 updates the snapshot (`docs/ISSUES.md` ISS-16).
+- Public name: **"Abdelrhman Mohamed"** (owner, 2026-10-08, `docs/ISSUES.md` ISS-14): `personal.name`, the hero H1, the LICENSE holder and JSON-LD `Person.name`; "Sharawey74" stays as the handle (`alternateName`). The facts check bans the other spelling and asserts the H1 equals the name plus a period.
+- Headline OSS stat is derived, not typed (`ossSummary()`): 8 merged across 6 projects, 3 under review, 2026-08 to 2026-10 (snapshot 2026-10-08; magefree/mage #16440 merged 2026-10-07). The first-contributions practice PR stays excluded (ISS-16). "Issues reported" lists litestar #5020 and #5018 and avoid-ai-writing #333 (ISS-17).
+- Eventora card highlights: 0 oversold seats, 569,066 requests with 0 failed across five capacity runs (A, B, C, G, H; summed and checked), 660 req/s per 1-CPU replica, all "local, Docker Compose" (ISS-18).
 
 ## Content model
 
@@ -72,8 +73,12 @@ Data files import each other with explicit `.ts` extensions (`import { claim } f
 
 ## Approved hero copy
 
-- H1: "Backend systems that stay correct under load." (the final period is the one text use of `--break`)
-- Sub: "Software Engineering student at AASTMT (Jun 2027). Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work."
+Owner's own description, reframed to pass the copy rules and approved on 2026-10-08 (`docs/ISSUES.md` ISS-12, ISS-13). The 2026-10-06 headline and the student sentence are retired; education stays in About.
+
+- Label (mono, above the H1): "Software engineer"
+- H1: "Abdelrhman Mohamed." (the final period is the one text use of `--break`)
+- Lead: "Software Engineer focused on designing and building systems that keep working as load grows, with a strong emphasis on correctness, maintainability and real-world engineering constraints."
+- Second paragraph: "Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software."
 - CTAs: "View My Work", "Download Resume".
 
 ## Visual system (overrides any skill's defaults)
