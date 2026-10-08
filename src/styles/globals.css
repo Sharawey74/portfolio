@@ -174,8 +174,10 @@
   /* Type scale. Fluid sizes keep max <= 2.5 x min so browser zoom still scales them. */
   /* Display sizes are capped by viewport height as well as width, so a laptop
      at 125-150% Windows scaling (1536x864, 1280x720 CSS px) keeps the hero and
-     section titles inside one screen (docs/ISSUES.md ISS-28). */
-  --text-display-xl: clamp(5rem, min(2.5rem + 10vw, 15svh), 12.5rem);
+     section titles inside one screen (docs/ISSUES.md ISS-28). Display XL is
+     the H1 only: the name, whose longest word ("Abdelrhman", about 5.85em)
+     must fit 343 px at 375 and 288 px at 320, hence 15vw. */
+  --text-display-xl: clamp(3rem, min(15vw, 15svh), 7.5rem);
   --text-display-xl--line-height: 0.92;
   --text-display-xl--letter-spacing: -0.04em;
   --text-display-l: clamp(3rem, min(1.667rem + 5.333vw, 11svh), 7rem);
@@ -334,6 +336,15 @@
   }
   .stack-rows > li > :first-child {
     justify-self: start;
+  }
+  /* Narrow phones: chip above its caption (two columns overflowed at 320 px). */
+  @media (width < 30rem) {
+    .stack-rows {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .stack-rows > li {
+      row-gap: 0.25rem;
+    }
   }
 
   .skip-link {
