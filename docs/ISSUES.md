@@ -11,7 +11,7 @@ Design-rule verdicts live in `docs/UX-REVIEW.md`, measurements in
 | Status | **Open** (no decision yet) · **Decided** (a decision is recorded, work may still follow) · **Owner** (only the owner can act) · **Closed** (resolved, with evidence) |
 | Severity | **High** (blocks launch or breaks a budget in the brief) · **Medium** (visible or measurable, not blocking) · **Low** (polish) |
 
-Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's clean-install build log; ISS-12 to ISS-34 from the owner's review, round 1).
+Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12 to ISS-18 and ISS-21 to ISS-34 closed with evidence; ISS-35 added).
 
 ## At a glance
 
@@ -24,33 +24,34 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
 | ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Owner imports the project and sets the homepage | Before Stage 6 |
-| ISS-08 | 13 `TODO(owner)` items (name, email, resume, screenshots and others) | High | Owner | Owner fills `src/data/personal.ts` and supplies files | Before v1.0.0 |
+| ISS-08 | 13 `TODO(owner)` items (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
-| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | Final (owner, 2026-10-08): H1 is the name, "Abdelrhman Mohamed.", under a "Software engineer" label, followed by the owner's two-sentence description, reframed to pass the copy rules | Review round 1, R1 |
-| ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Decided | Replaced by the owner's description (ISS-12); the stack line moves out of the hero. Education stays in About | Review round 1, R1 |
-| ISS-14 | Public name: "Abdelrhman Mohamed" | High | Decided | Owner chose the spelling on 2026-10-08; set `personal.name`, the LICENSE holder, the share images and JSON-LD | Review round 1, R1 |
-| ISS-15 | Contact email: abdelrhmanhamied004@gmail.com | High | Decided | Set `personal.email`; it appears in Contact, the footer and the palette | Review round 1, R1 |
-| ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Decided | Update the snapshot: 8 merged across 6 projects, 3 under review; the practice PR stays excluded (owner, 2026-10-08) | Review round 1, R1 |
-| ISS-17 | Show every issue the owner filed, open and closed, not only litestar #5020 | Medium | Decided | List the three OSS issues with their state; elwahapumps #1 left out (owner, 2026-10-08) | Review round 1, R1 |
-| ISS-18 | Owner reports some project metrics are out of date | High | Decided | Owner pointed at Eventora's README performance section: bring its strongest figures onto the card and case study (selection in the detail) | Review round 1, R1 |
+| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Closed | Applied: label, name as H1, the owner's two paragraphs (`profile.hero`); facts check asserts H1 = name | — |
+| ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Closed | Applied with ISS-12; education stays in About | — |
+| ISS-14 | Public name: "Abdelrhman Mohamed" | High | Closed | Applied: `personal.name`, LICENSE, header, footer, intro, titles, JSON-LD; other spelling banned by the facts check | — |
+| ISS-15 | Contact email: abdelrhmanhamied004@gmail.com | High | Closed | Applied: Contact (with icon), footer, palette, JSON-LD | — |
+| ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Closed | Applied: snapshot 2026-10-08, 8 merged across 6 projects, 3 under review; asserted by the facts check | — |
+| ISS-17 | Show every issue the owner filed, open and closed, not only litestar #5020 | Medium | Closed | Applied: litestar #5020, #5018 and avoid-ai-writing #333 with ● / ○ and text | — |
+| ISS-18 | Owner reports some project metrics are out of date | High | Closed | Applied: card leads with 0 oversold, 569,066 requests / 0 failed, 660 req/s; case study adds 2.40 ms, 870 req/s, 1.32×, 55.4 ms, CPU-bound finding | — |
 | ISS-19 | Add the Alstom internship | Medium | Owner (later) | Needs title, dates and what was done, from the owner | When the owner supplies it |
 | ISS-20 | Add the Claude certificates as one entry | Low | Owner (later) | Needs the certificate names, from the owner | When the owner supplies it |
-| ISS-21 | Add a heavy crimson secondary color and make the whole palette work together | High | Decided | Direction A, a three-step crimson ramp on the gray ramp (owner, 2026-10-08) | Review round 1, R2 |
-| ISS-22 | Round the buttons ("View My Work", "Download Resume", all CTAs) | Medium | Decided | Pill radius on buttons and CTAs only; cards and content stay square (owner, 2026-10-08) | Review round 1, R2 |
-| ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Decided | Hanken Grotesk, sentence case, for the nav, footer and stack captions; Arial stays out (owner, 2026-10-08) | Review round 1, R2 |
-| ISS-24 | GitHub and LinkedIn as icons in Contact (and the footer) | Medium | Decided | Brief change: monochrome brand marks as inline SVG next to their text labels | Review round 1, R2 |
-| ISS-25 | Work and case studies: show screenshots in full color, several per project, from the projects' GitHub Pages | High | Decided | Brief change (screenshots are grayscale today). Eventora: the 15 dark screens; Recruiter-Pro: its 13 real screens (replaces the mockup TODO) | Review round 1, R3 |
-| ISS-26 | Work card slides look blurred | High | Open | Find the cause (grayscale filter, image size picked, card scaling) and fix | Review round 1, R3 |
-| ISS-27 | SysPlex diagram looks weak (card preview and case study) | Medium | Open | Redesign the layout inside the same sourced nodes and steps | Review round 1, R3 |
-| ISS-28 | The page only looks right at 67–75% browser zoom on the owner's laptop | High | Open | Type, spacing and card heights are sized for larger viewports; rescale and test at common laptop sizes | Review round 1, R2 |
-| ISS-29 | "Also built": project names overlap their descriptions | High | Open | Long names (LexIntelligence, PhishSniffer) overflow a 3-of-10 column; fix the layout | Review round 1, R2 |
-| ISS-30 | "Stack, by where it was used" looks cramped and mixed | Medium | Open | Rebuild as an aligned grid (technology, where used) per lane | Review round 1, R2 |
-| ISS-31 | Sticky project stack hides part of each card on a laptop screen | Medium | Open | Cards taller than the viewport get covered by the next card; fit or relax the stack | Review round 1, R2 |
-| ISS-32 | Buttons and CTAs should feel more responsive and interactive | Medium | Decided | Hover, press and focus treatment per control with the crimson ramp and pill buttons (ISS-21, ISS-22 decided) | Review round 1, R2 |
-| ISS-33 | The custom cursor shows an "ON" label everywhere | High | Open | Bug: the label lookup matches the page's own `data-cursor="on"`; fix the selector | Review round 1, R2 |
-| ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Open | Bug in the scroll-spy's update timing; reproduce and fix | Review round 1, R2 |
+| ISS-21 | Add a heavy crimson secondary color and make the whole palette work together | High | Closed | Applied: `--c1` / `--c2` / `--break`, Contact band, checks extended; owner confirms in UAT-50 | UAT-50 |
+| ISS-22 | Round the buttons ("View My Work", "Download Resume", all CTAs) | Medium | Closed | Applied: `rounded-pill` on buttons, CTAs and header controls | UAT-50 |
+| ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Closed | Applied: `.ui-label` (Hanken Grotesk, sentence case) on nav, footer, header controls; stack captions in the text face | UAT-50 |
+| ISS-24 | GitHub and LinkedIn as icons in Contact (and the footer) | Medium | Closed | Applied: `BrandIcon` (GitHub, LinkedIn, envelope) beside the labels in Contact and the footer | — |
+| ISS-25 | Work and case studies: show screenshots in full color, several per project, from the projects' GitHub Pages | High | Closed | Applied: full color; Recruiter-Pro gets 4 of its 13 screens (the rest are unusable, ISS-35); Eventora keeps its 9 | — |
+| ISS-26 | Work card slides look blurred | High | Closed | Cause measured: double resampling + quality 75 + grayscale filter, not resolution; originals served `unoptimized` | UAT-20 |
+| ISS-27 | SysPlex diagram looks weak (card preview and case study) | Medium | Closed | Applied: the README's two tiers as sourced zones, node detail lines, card preview matches | UAT-22 |
+| ISS-28 | The page only looks right at 67–75% browser zoom on the owner's laptop | High | Closed | Display sizes capped by `svh`, H1 48–120 px; hero fits one screen at 1280×720 to 1920×1080; no overflow at 320 and 375 | UAT-51 |
+| ISS-29 | "Also built": project names overlap their descriptions | High | Closed | Names on their own row | — |
+| ISS-30 | "Stack, by where it was used" looks cramped and mixed | Medium | Closed | Aligned table per lane (`.stack-rows`), one column on narrow phones | — |
+| ISS-31 | Sticky project stack hides part of each card on a laptop screen | Medium | Closed | Cards fit at 1536×864 and 1280×720; stack becomes a list below 40 rem height | UAT-51 |
+| ISS-32 | Buttons and CTAs should feel more responsive and interactive | Medium | Closed | Accent hover per control type, arrow nudge, pill hover on header controls and nav | UAT-45 |
+| ISS-33 | The custom cursor shows an "ON" label everywhere | High | Closed | Flag renamed to `data-cursor-active`; probe shows no label over plain text | — |
+| ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Closed | Section-level viewport observer plus `hashchange` / `pageshow`; probe passes all five jump cases | — |
+| ISS-35 | Recruiter-Pro's scoring screens (results, score breakdown, shortlist, history) show the owner's own resume under another spelling of the name, so the site cannot use them | Low | Owner | Re-capture those screens with a sample resume (and no search term on the jobs page), then add the best two to `projects.ts` | When the owner re-captures |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -306,11 +307,15 @@ Reframing, phrase by phrase: "reliable, scalable systems" → "systems that keep
 
 **Effects.** `profile.hero` gains a label and a second paragraph; the H1 becomes the name (so `personal.name` and the hero agree, ISS-14); `CLAUDE.md` "Approved hero copy" is rewritten; share images use the same lines; the H1 is short, which also helps ISS-28 at laptop sizes.
 
+**Resolution (2026-10-08, round 1).** `profile.hero` holds `label`, `headline` ("Abdelrhman Mohamed."), `lead` and `more`; `Hero` renders them; the share image uses the label as kicker and the name as title. `scripts/check-facts.ts` asserts the H1 equals `personal.name` plus a period. Captures: `docs/screens/review-1/`.
+
 ### ISS-13 Hero sub without "Software Engineering student at AASTMT (Jun 2027)"
 
 **UAT** UAT-01. **Severity** Medium. **Status** Decided (owner note).
 
 **Change.** The sub becomes "Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work." (or the owner's rewrite to match ISS-12). The education fact stays in About's Education cell, so nothing true is lost. Update the approved copy in `CLAUDE.md` and `profile.ts`.
+
+**Resolution (2026-10-08).** Applied with ISS-12; `CLAUDE.md` "Approved hero copy" rewritten.
 
 ### ISS-14 Public name "Abdelrhman Mohamed"
 
@@ -320,11 +325,15 @@ Reframing, phrase by phrase: "reliable, scalable systems" → "systems that keep
 
 **Change.** `personal.name` → "Abdelrhman Mohamed"; LICENSE holder; header wordmark, footer, page title template, share image kicker, JSON-LD `Person.name` (handle stays as `alternateName`); `CLAUDE.md` "Decisions already made"; `FACTS-CHECK.md`; closes that line of ISS-08.
 
+**Resolution (2026-10-08).** `personal.name`, LICENSE, header wordmark, footer, intro, page titles, JSON-LD `Person.name` (handle as `alternateName`). The facts check bans the other spelling in shipped text.
+
 ### ISS-15 Contact email
 
 **UAT** UAT-30, UAT-32, UAT-39. **Severity** High. **Status** Decided (owner note).
 
 **Change.** `personal.email` → abdelrhmanhamied004@gmail.com. It then renders in Contact ("Or reach me directly"), the footer and the command palette, and as JSON-LD `email`. Closes that line of ISS-08. It is a public address, so expect spam; the contact form (Resend) is the alternative path.
+
+**Resolution (2026-10-08).** `personal.email` set; renders in Contact with an envelope icon, the footer, the palette and JSON-LD.
 
 ### ISS-16 Open source numbers out of date
 
@@ -346,6 +355,8 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 
 **Change.** `oss.json` (mage merged with date and the new #2688 title and note), `scripts/check-facts.ts` asserts, `CLAUDE.md` headline line, `FACTS-CHECK.md`.
 
+**Resolution (2026-10-08).** `oss.json` re-fetched for all 11 PRs (snapshot 2026-10-08); facts check asserts 8 / 6 / 3 and prints it. A local build showed 7 / 5 / 4 until `.next/cache/fetch-cache` was cleared: Next keeps the daily PR fetch between local builds; deployments refresh within a day.
+
 ### ISS-17 List every issue filed, open and closed
 
 **UAT** UAT-29. **Severity** Medium. **Status** Decided (owner note), one question.
@@ -362,6 +373,8 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 **Change.** `oss.json → issues` gets litestar #5020, avoid-ai-writing #333 and litestar #5018 with state and a one-line note each; the section lists them under "Issues reported" with open/closed shown by shape and text, like the PRs.
 
 **Decision (owner, 2026-10-08).** elwahapumps #1 is left out.
+
+**Resolution (2026-10-08).** Three issues in `oss.json → issues`, each with ● Closed / ○ Open and text.
 
 ### ISS-18 Some metrics are out of date
 
@@ -399,6 +412,8 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 
 Recruiter-Pro and SysPlex: no outdated figure named; the audit table still covers them.
 
+**Resolution (2026-10-08).** The five-run sum was checked against PERFORMANCE.md:381-383 and 400-401 (94,332 + 107,839 + 92,964 + 140,548 + 133,383 = 569,066). New metrics `local-requests`, `local-1-median`, `local-2-ceiling`, `local-scaling`, `local-booking-p95`, the CPU-bound finding as a fact; card highlights changed; every card figure now shows its qualifier. About's flagship cell keeps the test count. Logged in `FACTS-CHECK.md`.
+
 ### ISS-19 Alstom internship (later)
 
 **UAT** new case when added. **Severity** Medium. **Status** Owner, later.
@@ -433,6 +448,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Decision (owner, 2026-10-08).** Direction A: a three-step crimson ramp on the existing grays. `frontend-design` critiques the result in round 1 before it is kept.
 
+**Resolution (2026-10-08).** Tokens `--c1` (#3A0810 / #F6E2E5), `--c2` (#8E1428 / #A3142A), `--on-c2`, plus the existing `--break`. Uses: Contact band, button and control hovers, active nav pill, selected palette option, card hover edge, selection, section index numbers. `check-colors.ts` allows exactly these definitions; `check-contrast.ts` adds the ramp pairings (light `--c1` lightened from #F3DADD to pass text-3 at 4.63:1). `frontend-design` critique in `docs/UX-REVIEW.md` → Review round 1.
+
 ### ISS-22 Rounded buttons
 
 **UAT** UAT-45, new case UAT-50. **Severity** Medium. **Status** Decided: pill on buttons (2026-10-08).
@@ -440,6 +457,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **Context.** Radius is 0–2 px everywhere today (brief). Options: full pill (`9999px`) for buttons and CTAs only, cards stay square (recommended: clear contrast between actions and content); or a small radius (6–8 px) for buttons, chips and inputs.
 
 **Decision (owner, 2026-10-08).** Pill on buttons and CTAs only.
+
+**Resolution (2026-10-08).** `--radius-pill` / `rounded-pill` on `Button`, `ButtonLink`, the card's case-study link, the contact submit, header controls and nav links. Cards, figures and chips stay 0–2 px.
 
 ### ISS-23 Arial for the nav bar, the footer and the stack captions
 
@@ -449,11 +468,15 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Decision (owner, 2026-10-08).** Hanken Grotesk, sentence case.
 
+**Resolution (2026-10-08).** `.ui-label` (Hanken Grotesk 14 px, weight 500, sentence case) on header controls, nav and footer links; stack captions in the text face; index numbers stay mono.
+
 ### ISS-24 GitHub and LinkedIn icons
 
 **UAT** UAT-32, UAT-39. **Severity** Medium. **Status** Decided (owner note).
 
 **Change.** Monochrome GitHub and LinkedIn marks as inline SVG (`currentColor`, `aria-hidden`), always next to their text label, in Contact and the footer. The brief allows "a custom SVG only where unavoidable"; brand marks are that case. No other icon set comes in.
+
+**Resolution (2026-10-08).** `src/components/ui/brand-icon.tsx` (GitHub mark, LinkedIn mark, 1.5 px envelope), `aria-hidden`, beside text labels in Contact and the footer.
 
 ### ISS-25 Full-color screenshots, several per project
 
@@ -469,17 +492,23 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Change.** Drop the grayscale filter (or keep it only as an option the owner can turn back on); Eventora uses its dark screens; Recruiter-Pro gets a carousel of its real screens, which also closes the Recruiter-Pro screenshot TODO, after each image is viewed and checked for placeholder or private data; the case-study galleries use the same sets. Copy rule unchanged: files are copied from the repos read-only.
 
+**Resolution (2026-10-08).** The `.shot` grayscale filter is gone. Every Recruiter-Pro screen was viewed first: 4 used (dashboard, job market, job detail, empty upload); left out the landing page (unsourced "22x", "654 skills", "0.74s"), results, score breakdown, shortlist and history (the owner's own resume under another spelling; see ISS-35), and the job search (a banned term typed in the box). Eventora keeps its 9 screens, now in color. Closes the Recruiter-Pro screenshot `TODO(owner)`.
+
 ### ISS-26 Work card slides look blurred
 
 **UAT** UAT-20. **Severity** High. **Status** Open: cause to confirm.
 
 **Likely causes**, to check one by one: the grayscale + contrast filter softening small text; the `sizes` attribute making the browser pick a smaller `srcset` width than the box needs on a 125% scaled screen; `next/image` quality 75 on screenshots full of small UI text; and the sticky stack's `scale` transform on cards. **Fix** after measuring: correct `sizes`, quality 85–90 for screenshots, no filter (ISS-25), and no scaling of the image layer while it is readable.
 
+**Resolution (2026-10-08).** Measured at 1536×864, 1.25x: the card image is 808 CSS px and the browser picked the 1080 w file, so resolution was enough (1,010 device px). The blur came from resampling twice (1440 → 1080 at quality 75 by the optimizer, then 1080 → 1010 by the browser) on small UI text, plus the grayscale and contrast filter. Fix: screenshots are served as the original WebP files (`unoptimized`, 22–114 KB each), so the browser resamples once; no filter. The owner confirms sharpness in UAT-20.
+
 ### ISS-27 SysPlex diagram
 
 **UAT** UAT-22, UAT-42. **Severity** Medium. **Status** Open.
 
 **Context.** Three agents on the left, one Flask server, one dashboard, plain lines: it reads as sparse. **Plan.** Same five nodes and four steps (diagrams show only sourced components), better composition: group the agents as "on the host" and the server + dashboard as "in Docker" (README: agents run natively, the dashboard runs in an unprivileged container), label the edges with the transport (HTTP :8889, FastAPI :8888, file) and the 2 s poll, tighter spacing. Then the same for the card preview.
+
+**Resolution (2026-10-08).** New `flow.zones` (sourced: README.md:69-70 and 90-91) drawn as dashed frames with a label and note (`flow-parts.tsx`); boxes show each node's detail line (`detail: true` layouts); SysPlex laid out as Tier 1 (three agents) and Tier 2 (server above dashboard). Same five nodes and four steps. The card preview uses the same parts.
 
 ## Layout
 
@@ -491,11 +520,15 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Plan.** Test at 1366×768, 1440×900, 1536×864 and 1280×720 (plus the existing sizes); cap display sizes by viewport height as well as width (`min(…vw, …vh)` inside the clamp), reduce section padding at these heights, and make sure a project card fits in one viewport at 1536×864.
 
+**Resolution (2026-10-08).** Display XL is `clamp(3rem, min(15vw, 15svh), 7.5rem)` and display L is capped at `11svh`; hero spacing scales with height. Captured at 1280×720, 1366×768, 1536×864 and 1920×1080: name, both paragraphs and both CTAs fit the first screen. `scrollWidth` equals the viewport at 320 and 375 on all four pages (`r1/scrollwidth.txt` in the round-1 notes; summary in `docs/UX-REVIEW.md`). Two follow-ups found and fixed on the way: the name clipped at 375 (the longest word is about 5.85em) and the header controls overflowed at 320.
+
 ### ISS-29 "Also built" overlap
 
 **UAT** UAT-26, UAT-09. **Severity** High. **Status** Open.
 
 **Evidence.** Owner screenshot: "LexIntelligence" and "PhishSniffer" run into the description column. **Cause.** The names are `text-h2` in the display face inside a 3-of-10 column, with no wrapping point and no `min-width: 0`. **Fix.** Name above the description at widths where it does not fit (or a wider name column), `min-w-0`, and a size that fits the longest name.
+
+**Resolution (2026-10-08).** Name on its own row across all 10 columns, `overflow-wrap: anywhere`; description and figures below it.
 
 ### ISS-30 Stack section looks cramped and mixed
 
@@ -503,11 +536,15 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Evidence.** Owner screenshot: chips of different widths wrap at uneven points, and each "used in" caption hangs under its chip at a different width, so the rows read as a jumble. **Plan.** One aligned grid per lane: technology in the first column, where used in the second (a row per technology), or fixed-width chip columns with the caption on one line. Caption font follows ISS-23.
 
+**Resolution (2026-10-08).** `.stack-rows`: a subgrid table, chip column (13 rem) and "used in" column, hairline per row; one column below 30 rem.
+
 ### ISS-31 Sticky stack hides part of each card on a laptop screen
 
 **UAT** UAT-21, UAT-26. **Severity** Medium. **Status** Open.
 
 **Evidence.** Owner screenshot: the SysPlex card covers Recruiter-Pro's numbers. **Cause.** Each card sticks below the header and the next one slides over it; when a card is taller than the viewport, its lower part is covered before it was readable. **Fix** with ISS-28: cards that fit the viewport, and the stack switched off (plain list) when the viewport is too short for a card.
+
+**Resolution (2026-10-08).** With the new type scale a card is about 630 px tall at 1536×864, under the 784 px left below the header; card padding reduced; below 40 rem viewport height the stack is a plain list (no sticky, no recede).
 
 ## Motion and interaction
 
@@ -517,17 +554,33 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Context.** Today: hover steps a color or border, press drops 1 px, focus shows the ring, primary CTAs lean toward the pointer (magnet). **Plan.** One treatment per control type, inside the motion rules (transform and opacity only, 200 ms, one easing): primary button fills with the accent on hover, its arrow moves 4 px; secondary button gets the accent border; text links get an underline that draws in; palette and nav items get the active marker on hover. Final values after the palette and radius decisions.
 
+**Resolution (2026-10-08).** Filled button → `--c2` with `--on-c2` text; outline → `--c2` edge on `--c1`; trailing arrow moves 4 px toward where it points; header controls and nav links get a `--c1` pill on hover; card edge turns `--c2`. All 200 ms, one easing, colors and transform only.
+
 ### ISS-33 Custom cursor shows "ON" everywhere
 
 **UAT** UAT-19. **Severity** High (on every page, desktop). **Status** Open. Found in the owner's screenshots.
 
 **Cause** (confirmed in code). `src/components/motion/cursor.tsx` marks the page with `document.documentElement.dataset.cursor = "on"`, and its hover lookup is `closest("a[href], button:not(:disabled), [data-cursor], [role='button']")`. Over plain content the nearest match is `<html>` itself, so its value "on" becomes the cursor label. **Fix.** Store the "cursor active" flag under another attribute (e.g. `data-cursor-active`) or exclude the root from the lookup; add a UAT step.
 
+**Resolution (2026-10-08).** The page flag is now `data-cursor-active`; `data-cursor` is only a per-element label. Probe (headless Chrome, fine pointer, motion on): over the hero paragraph the ring is `idle` with no label; over the CTA it is `hover`.
+
 ### ISS-34 Scroll-spy marks "05 Contact" at the top of the page
 
 **UAT** UAT-15. **Severity** Medium. **Status** Open. Found in the owner's screenshots.
 
 **Evidence.** All six screenshots, including one with the hero on screen, show "05 Contact" as current; the URL was `/#open-source`. **Suspected cause.** `ScrollSpyNav` recomputes only when a heading crosses the 45% line; a load with a hash, or a fast smooth-scroll jump, can leave the last computed section in place. **Fix.** Reproduce, then also recompute on load, on `hashchange` and when Lenis' scroll settles.
+
+**Cause (confirmed).** The observer watched only a band at the top 45% of the viewport. A jump (hash link, scroll restoration, "Back to top") can move a heading from above the band to below it, or past the viewport entirely, with no crossing, so the last result stayed. **Resolution (2026-10-08).** A second observer watches each heading's whole section over the full viewport (a jump always changes which section is on screen), plus `hashchange` and `pageshow`. Probe: load at top → none; instant jump to bottom → Contact; jump back to top → none; load `/#open-source` → Open source; hash change to `#experience` → Experience.
+
+## Added in round 1
+
+### ISS-35 Recruiter-Pro scoring screens show the owner's own resume
+
+**UAT** UAT-20, UAT-42. **Severity** Low. **Status** Owner.
+
+**Evidence.** Viewed on 2026-10-08: `06-results`, `07-results-full`, `08-score-breakdown`, `09-shortlist` and `10-history` in Recruiter-Pro's `site/assets/img/screenshots/` show the owner's own resume file and name under a different spelling; `08` is also a broken stitched capture; `03-jobs-search` has a banned technology typed in the search box. The scoring view is the most interesting screen of the app, and the site cannot show it.
+
+**Fix (owner).** Re-capture results and score breakdown with a sample resume (a made-up candidate), and the jobs page without a search term; commit them to Recruiter-Pro; then they are copied here like the others. Cost: about 15 minutes in the running app.
 
 ---
 
@@ -537,5 +590,13 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 |---|---|---|---|
 | — | Stage 5 design critique D1–D9 (header overflow at 768 px, duplicated stack, card title wrap, tiny previews on phones, case-study heading sizes, redundant eyebrows, repeated numerals, diagram scroll hint, split code token) | 2026-10-07 | `docs/UX-REVIEW.md` → Stage 5, 5.2; after captures in `docs/screens/stage5-after/` |
 | — | CLS 0.188 from the display font swap | 2026-10-07 | `docs/UX-REVIEW.md` → Stage 4, S2; CLS 0.001 since |
+| ISS-12, ISS-13, ISS-14, ISS-15 | Hero copy, name and email | 2026-10-08 | `profile.ts`, `personal.ts`; facts check asserts H1 = name; captures in `docs/screens/review-1/` |
+| ISS-16, ISS-17 | Open source numbers and reported issues | 2026-10-08 | `oss.json` snapshot 2026-10-08; facts check prints 8 / 6 / 3 |
+| ISS-18 | Eventora figures from the README performance section | 2026-10-08 | `projects.ts`; `FACTS-CHECK.md` Eventora rows (sum checked) |
+| ISS-21 to ISS-24, ISS-32 | Accent ramp, pills, interface face, brand icons, control feedback | 2026-10-08 | `npm run check` (contrast and colors over the ramp); `docs/UX-REVIEW.md` → Review round 1 |
+| ISS-25, ISS-26 | Color screenshots, blur | 2026-10-08 | Measured image sizes and the fix in the detail above; owner confirms in UAT-20 |
+| ISS-27 | SysPlex diagram | 2026-10-08 | Two-tier zones from README.md:69-70, 90-91; captures in `docs/screens/review-1/` |
+| ISS-28 to ISS-31 | Laptop sizing, "Also built" overlap, stack table, sticky stack | 2026-10-08 | Captures at 1280×720 to 1920×1080; `scrollWidth` = viewport at 320 and 375 on all pages |
+| ISS-33, ISS-34 | Cursor label, scroll-spy after jumps | 2026-10-08 | Headless Chrome probe, results in the details above |
 
 New issues found from here on get the next `ISS-NN` ID and a row in the table at the top.
