@@ -44,7 +44,7 @@ export function ThemeToggle({ labels }: { labels: { toLight: string; toDark: str
       aria-label={label}
       title={label}
       disabled={theme === null}
-      className="mono-label inline-flex min-h-11 min-w-11 items-center justify-center text-ink-2 hover:text-ink"
+      className="ui-label inline-flex min-h-11 rounded-pill transition-colors duration-200 ease-out hover:bg-c1 min-w-11 items-center justify-center text-ink-2 hover:text-ink"
     >
       <span aria-hidden="true" className="text-body leading-none">{theme === "light" ? "●" : "○"}</span>
     </button>
