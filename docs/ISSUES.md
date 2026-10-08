@@ -24,7 +24,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
 | ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Owner imports the project and sets the homepage | Before Stage 6 |
-| ISS-08 | 13 `TODO(owner)` items (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
+| ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
@@ -42,7 +42,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Closed | Applied: `.ui-label` (Hanken Grotesk, sentence case) on nav, footer, header controls; stack captions in the text face | UAT-50 |
 | ISS-24 | GitHub and LinkedIn as icons in Contact (and the footer) | Medium | Closed | Applied: `BrandIcon` (GitHub, LinkedIn, envelope) beside the labels in Contact and the footer | — |
 | ISS-25 | Work and case studies: show screenshots in full color, several per project, from the projects' GitHub Pages | High | Closed | Applied: full color; Recruiter-Pro gets 4 of its 13 screens (the rest are unusable, ISS-35); Eventora keeps its 9 | — |
-| ISS-26 | Work card slides look blurred | High | Closed | Cause measured: double resampling + quality 75 + grayscale filter, not resolution; originals served `unoptimized` | UAT-20 |
+| ISS-26 | Work card slides look blurred | High | Closed | Cause measured: double resampling at quality 75 + grayscale filter, not resolution; carousel now quality 90 with matching `sizes`, no filter | UAT-20 |
 | ISS-27 | SysPlex diagram looks weak (card preview and case study) | Medium | Closed | Applied: the README's two tiers as sourced zones, node detail lines, card preview matches | UAT-22 |
 | ISS-28 | The page only looks right at 67–75% browser zoom on the owner's laptop | High | Closed | Display sizes capped by `svh`, H1 48–120 px; hero fits one screen at 1280×720 to 1920×1080; no overflow at 320 and 375 | UAT-51 |
 | ISS-29 | "Also built": project names overlap their descriptions | High | Closed | Names on their own row | — |
@@ -52,6 +52,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-33 | The custom cursor shows an "ON" label everywhere | High | Closed | Flag renamed to `data-cursor-active`; probe shows no label over plain text | — |
 | ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Closed | Section-level viewport observer plus `hashchange` / `pageshow`; probe passes all five jump cases | — |
 | ISS-35 | Recruiter-Pro's scoring screens (results, score breakdown, shortlist, history) show the owner's own resume under another spelling of the name, so the site cannot use them | Low | Owner | Re-capture those screens with a sample resume (and no search term on the jobs page), then add the best two to `projects.ts` | When the owner re-captures |
+| ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot) | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -500,7 +501,7 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Likely causes**, to check one by one: the grayscale + contrast filter softening small text; the `sizes` attribute making the browser pick a smaller `srcset` width than the box needs on a 125% scaled screen; `next/image` quality 75 on screenshots full of small UI text; and the sticky stack's `scale` transform on cards. **Fix** after measuring: correct `sizes`, quality 85–90 for screenshots, no filter (ISS-25), and no scaling of the image layer while it is readable.
 
-**Resolution (2026-10-08).** Measured at 1536×864, 1.25x: the card image is 808 CSS px and the browser picked the 1080 w file, so resolution was enough (1,010 device px). The blur came from resampling twice (1440 → 1080 at quality 75 by the optimizer, then 1080 → 1010 by the browser) on small UI text, plus the grayscale and contrast filter. Fix: screenshots are served as the original WebP files (`unoptimized`, 22–114 KB each), so the browser resamples once; no filter. The owner confirms sharpness in UAT-20.
+**Resolution (2026-10-08).** Measured at 1536×864, 1.25x: the card image is 808 CSS px and the browser picked the 1080 w file, so resolution was enough (1,010 device px). The blur came from resampling twice (1440 → 1080 at quality 75 by the optimizer, then 1080 → 1010 by the browser) on small UI text, plus the grayscale and contrast filter. Fix, after a Lighthouse A/B (`docs/reports/lighthouse-review1.md`): no filter; carousel screenshots resized at quality 90 with `sizes` matching the 7-of-12 card column; galleries and the zoom view serve the original files; the case-study hero (the LCP image) stays at the default quality. Serving originals everywhere was sharpest but cost up to 0.4 s of LCP and 0.4–0.6 s of TBT on phones. The owner confirms sharpness in UAT-20 / UAT-54.
 
 ### ISS-27 SysPlex diagram
 
@@ -581,6 +582,16 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **Evidence.** Viewed on 2026-10-08: `06-results`, `07-results-full`, `08-score-breakdown`, `09-shortlist` and `10-history` in Recruiter-Pro's `site/assets/img/screenshots/` show the owner's own resume file and name under a different spelling; `08` is also a broken stitched capture; `03-jobs-search` has a banned technology typed in the search box. The scoring view is the most interesting screen of the app, and the site cannot show it.
 
 **Fix (owner).** Re-capture results and score breakdown with a sample resume (a made-up candidate), and the jobs page without a search term; commit them to Recruiter-Pro; then they are copied here like the others. Cost: about 15 minutes in the running app.
+
+### ISS-36 TBT up after round 1; Recruiter-Pro LCP over budget
+
+**UAT** none (measurement). **Severity** High. **Status** Decided (option C, like ISS-01 / ISS-02).
+
+**Evidence** (`docs/reports/lighthouse-review1.md`, 3 runs per page, CPU benchmark 2,212–2,908, mains power): medians `/` LCP 2.43 s, TBT 1,508 ms; Eventora 2.88 s, 1,224 ms; Recruiter-Pro 3.28 s, 1,120 ms; SysPlex 2.65 s, 1,079 ms. Stage 5: LCP 2.11–2.79 s, TBT 695–989 ms. CLS 0.001 and accessibility, best practices and SEO 100 everywhere.
+
+**What was measured.** Serving original screenshots cost up to 0.4 s of LCP and 0.4–0.6 s of TBT; that was reverted (carousels resized at quality 90, hero image at the default). A Chrome trace of `/` at 4x CPU still shows the cost in the first style and layout pass plus hydration, as in Stage 5; a subgrid A/B on About's stack table did not change it beyond the noise.
+
+**Options.** A: trace and trim the first layout (fewer nodes in the stack table, lighter Contact band, lazy diagram zones). B: accept and re-measure on Vercel (CDN, real HTTP/2), as decided for ISS-01 / ISS-02. **Recommendation:** B now, A in Stage 6 if the preview numbers confirm it.
 
 ---
 
