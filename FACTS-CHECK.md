@@ -285,7 +285,8 @@ Hero copy: the owner's own description, reframed to pass the copy rules (banned 
 | simplesamlphp/simplesamlphp #2688 retitled "Document the Twig conflict when an application loads its own Twig", still open | `gh pr view 2688`, 2026-10-08 | `oss.json` title and note (ISS-16) |
 | Issues filed outside own repos: litestar #5020 (closed), avoid-ai-writing #333 (closed), litestar #5018 (open), elwahapumps #1 (open) | `gh search issues --author Sharawey74`, 2026-10-08 | `oss.json → issues` (ISS-17) |
 | Eventora, Recruiter-Pro and SysPlex have no commits after the pinned evidence commits | `git rev-list --count <pin>..origin/main` = 0 for all three, 2026-10-08 | Metrics audit (ISS-18) |
-| Recruiter-Pro now has 13 app screenshots in `site/assets/img/screenshots/` | `git ls-files`, 2026-10-08; to be viewed before use | ISS-25; may close the Recruiter-Pro screenshot TODO |
+| Recruiter-Pro now has 13 app screenshots in `site/assets/img/screenshots/` | `git ls-files`, 2026-10-08; each viewed before use | ISS-25: 4 used (11-dashboard, 02-jobs, 12-job-detail, 04-upload-empty) at Recruiter-Pro@daf160b; 01 shows unsourced figures ("22x faster", "654 distinct skills", "0.74s per résumé") that conflict with the site's 679 skills and ~4.5 s; 05-10 and 13 show the owner's own resume under a different spelling; 03 has a banned term in the search box (ISS-35) |
+| SysPlex runs in two tiers: collection natively on the host (full sensor access), presentation in Docker with `cap_drop: ALL` | SysPlex/README.md:69-70, 90-91 at 9f3cce9 | `projects.ts → sysplex.flow.zones` (ISS-27) |
 
 ## Open questions for the owner
 
