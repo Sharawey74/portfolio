@@ -23,11 +23,11 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-04 | INP is not measured with real visitors | Medium | Open | Needs a field-data source once the site is live | Stage 6 |
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
-| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Owner imports the project and sets the homepage | Before Stage 6 |
+| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Still not imported (rechecked 2026-10-08, Stage 6). `DEPLOY.md` → First-time setup lists the steps | Before v1.0.0 |
 | ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
-| ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
-| ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
+| ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only; Dependabot (weekly, Stage 6) proposes the patched release; never `npm audit fix --force` | Dependabot pull requests |
+| ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Decided | Trial done on branch `chore/eslint-10`: ESLint 10.12 installs with `npm ci`, every plugin's rules fire, lint clean. Three bundled plugins still declare ESLint ≤ 9. Recommendation: merge after its CI is green | When the owner merges `chore/eslint-10` |
 | ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Closed | Applied: label, name as H1, the owner's two paragraphs (`profile.hero`); facts check asserts H1 = name | — |
 | ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Closed | Applied with ISS-12; education stays in About | — |
 | ISS-14 | Public name: "Abdelrhman Mohamed" | High | Closed | Applied: `personal.name`, LICENSE, header, footer, intro, titles, JSON-LD; other spelling banned by the facts check | — |
@@ -53,6 +53,8 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Closed | Section-level viewport observer plus `hashchange` / `pageshow`; probe passes all five jump cases | — |
 | ISS-35 | Recruiter-Pro's scoring screens (results, score breakdown, shortlist, history) show the owner's own resume under another spelling of the name, so the site cannot use them | Low | Owner | Re-capture those screens with a sample resume (and no search term on the jobs page), then add the best two to `projects.ts` | When the owner re-captures |
 | ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot) | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
+| ISS-37 | Smoke tests timed out when about 8 browsers ran in parallel against one local `next start` | Medium | Closed | Fixed in Stage 6: 2 workers, 60 s per test, 1 retry in CI; 20/20 on three later runs | — |
+| ISS-38 | Commands that reach the npm registry or GitHub can fail for network reasons (`ECONNRESET`), not because of the project | Low | Decided | Retry; nothing in the repo to fix. How to tell a network failure from a real one is in the detail | When it recurs |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -252,6 +254,10 @@ One root cause, counted five times along the dependency chain. `npm audit --omit
 **Context.** ESLint only runs in development and CI; the site is unaffected. `eslint-config-next@16.4.0` declares `eslint >=9.0.0` as its peer, so ESLint 10 is allowed on paper, but the plugins it bundles (React, React Hooks, TypeScript, import) have not been checked against ESLint 10 here.
 
 **Fix.** On its own branch: install `eslint@10`, run `npm run lint` on the whole repo, fix or document any rule changes, and confirm CI is green. If a bundled plugin rejects ESLint 10, stay on 9.39.5 and re-check when `eslint-config-next` lists 10 as tested.
+
+**Trial (2026-10-08, Stage 6, branch `chore/eslint-10`, one commit).** `npm install -D eslint@10` → 10.12.0; a clean `npm ci` succeeds; `npm run lint` is clean on the whole repo. Probe files with planted violations confirmed every rule family still fires: `react-hooks/rules-of-hooks`, `react/jsx-key`, `@typescript-eslint/no-unused-vars`, `@next/next/no-img-element`, `jsx-a11y/alt-text`, `jsx-a11y/click-events-have-key-events`, `import/no-anonymous-default-export`. `npm ls eslint` marks the peer as invalid for `eslint-plugin-react` 7.37.5 (declares up to `^9.7`), `eslint-plugin-jsx-a11y` and `eslint-plugin-import` (up to `^9`): they work but are not declared compatible.
+
+**Options.** A: merge `chore/eslint-10` now (supported ESLint; a future plugin bug would show as a lint failure in CI, never on the site). B: stay on 9.39.5 until `eslint-config-next` ships plugins that declare 10. **Recommendation:** A, after its CI run is green; Dependabot will keep both moving.
 
 ---
 
@@ -592,6 +598,26 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **What was measured.** Serving original screenshots cost up to 0.4 s of LCP and 0.4–0.6 s of TBT; that was reverted (carousels resized at quality 90, hero image at the default). A Chrome trace of `/` at 4x CPU still shows the cost in the first style and layout pass plus hydration, as in Stage 5; a subgrid A/B on About's stack table did not change it beyond the noise.
 
 **Options.** A: trace and trim the first layout (fewer nodes in the stack table, lighter Contact band, lazy diagram zones). B: accept and re-measure on Vercel (CDN, real HTTP/2), as decided for ISS-01 / ISS-02. **Recommendation:** B now, A in Stage 6 if the preview numbers confirm it.
+
+### ISS-37 Smoke tests timed out under parallel load
+
+**Severity** Medium (a flaky check in CI is worse than none: people learn to ignore red). **Status** Closed (2026-10-08, Stage 6).
+
+**Evidence.** First full run of `npm run test:smoke`: 8 failed, 12 passed in 2.0 min, every failure a 30 s timeout ("page.evaluate: Test timeout of 30000ms exceeded"). The same tests run one at a time passed in under a second each (`npx playwright test -g "has one h1" --workers=1`: 4 passed in 6.9 s).
+
+**Cause.** Playwright defaults to one worker per CPU core (about 8 here), and each worker is a full Chromium. All of them hit one local `next start`, which resizes screenshots on first request; the server and the browsers competed for the same CPU, pages took longer than 30 s, and the tests timed out. Nothing in the site was broken. A later run straight after `next build` (CPU still busy) had 2 timeouts in 49 s; the next two runs passed 20/20 in 9–12 s.
+
+**Fix.** `playwright.config.ts`: `workers: 2`, `timeout: 60_000`, `retries: 1` in CI. Evidence: 20/20 on three runs, including one with the image cache deleted. If a smoke test fails again, rerun it alone (`npx playwright test -g "<name>" --workers=1`): passes alone means load, fails alone means a real bug; the trace in `test-results/` (or the CI artifact) shows which.
+
+### ISS-38 Network failures look like command failures
+
+**Severity** Low. **Status** Decided: retry, no repo change.
+
+**Evidence.** In Stage 6, `npm view eslint-config-next@latest version peerDependencies --json` failed with `npm error code ECONNRESET … read ECONNRESET … This is a problem related to network connectivity`, while the `npm view eslint …` call a second earlier in the same command succeeded. The same query retried a minute later returned the peer ranges. Earlier rounds saw the same class of failure from GitHub (`git push` "Internal Server Error", Stage 5).
+
+**Cause.** The connection to the registry was reset mid-response (Wi-Fi, ISP, a proxy or antivirus inspecting HTTPS, or the registry itself). Nothing in the project.
+
+**How to tell.** A network failure names the network: `ECONNRESET`, `ETIMEDOUT`, `ENOTFOUND`, `EAI_AGAIN`, "Internal Server Error" or 5xx from GitHub, "unable to get local issuer certificate" (this clone needs `http.sslBackend=schannel`). A project failure names a file, a rule or a test. **Action:** wait a minute and rerun the same command; if it keeps failing, check the connection or `npm config get proxy`. The owner's local guide (`PORTFOLIO-GUIDE.local.md`, not in git) explains each command and its failures.
 
 ---
 

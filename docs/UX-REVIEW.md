@@ -456,3 +456,7 @@ Captures: `docs/screens/review-1/` (hero, first Work card and Contact at 1280×7
 | `/projects/sysplex` | 68 | 2.65 s | 1,079 ms | 0.001 | 100 / 100 / 100 |
 
 Worse than Stage 5 on TBT everywhere and on Recruiter-Pro's LCP (now a screenshot): `docs/ISSUES.md` ISS-36, decided like ISS-01 / ISS-02 (re-measure on Vercel). The image A/B that brought it down from the first attempt is in `docs/reports/lighthouse-review1.md`. First-load JS: `/` 156.2 KB gz (budget 170).
+
+## Stage 6 (2026-10-08)
+
+No interface changes: release docs, CI smoke tests, workflows and the withheld option for personal fields. The UI UX Pro Max audit has nothing new to rate. The Playwright smoke tests now repeat three earlier checks on every pull request: one visible `h1` per page, content without JavaScript and with reduced motion, and no horizontal scroll at 375 px (`horizontal-scroll`).

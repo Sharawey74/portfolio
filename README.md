@@ -8,6 +8,11 @@ every public number traced to a source file and a date.
 > Build order and progress: `PLAN.md`. Rules and context: `CLAUDE.md`. Design
 > audit: `docs/UX-REVIEW.md`. Owner acceptance script: `docs/UAT.md`. Open
 > issues and proposed fixes: `docs/ISSUES.md`. Measurements: `docs/reports/`.
+>
+> `PLAN.md`, `FACTS-CHECK.md`, `PERSONAL-INFO-CHECKLIST.md` and `DEPLOY.md` are
+> the owner's working files. They are kept on the owner's machine and are not in this
+> repository (git-ignored since 2026-10-08); mentions of them here and in the
+> code refer to those local copies.
 
 ## What is on the site
 
@@ -40,13 +45,17 @@ Node 22.18 or newer (the check scripts are plain `.ts` run by Node directly).
 | `npm run check` | Facts, contrast and one-color checks |
 | `npm run check:facts` | Every claim has `source` + `asOf`; no banned claims; no private terms |
 | `npm run check:contrast` | WCAG ratios for every token pairing, both themes |
-| `npm run check:colors` | Only grays plus the one `--break` color, in source and built CSS |
+| `npm run check:colors` | Only grays plus the three accent tokens (`--c1`, `--c2`, `--break`), in source and built CSS |
 | `npm run check:launch` | Lists `TODO(owner)` items; `-- --strict` or `LAUNCH_STRICT=1` fails if any remain |
 | `npm run report:bundle` | First-load JS per page after a build (budget for `/`: 170 KB gz) |
+| `npm run test:smoke` | Playwright smoke tests against the production build (build first; `npx playwright install chromium` once) |
 
 CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, the facts and
-contrast checks, build, the color check on built CSS, and the bundle budget on
-every push and pull request.
+contrast checks, build, the color check on built CSS, the bundle budget and the
+smoke tests on every push and pull request. Lighthouse runs on each Vercel
+preview, and a `vX.Y.Z` tag creates the GitHub Release; the owner's local
+`DEPLOY.md` covers environment variables, release steps and rollback. Changes are
+listed in `CHANGELOG.md`.
 
 ## Where the content lives
 

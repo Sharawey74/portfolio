@@ -1,0 +1,29 @@
+# Weekly dependency updates. Minor and patch updates are grouped into one
+# pull request per ecosystem; majors come one by one, so each can be checked.
+# Watches for the patched `braces` chain in the lint tooling (docs/ISSUES.md
+# ISS-10). Never answer an advisory with `npm audit fix --force`: it
+# downgrades eslint-config-next to 14.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build(deps)"
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      actions:
+        update-types: [minor, patch]
