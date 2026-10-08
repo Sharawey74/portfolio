@@ -8,6 +8,7 @@
  *   --break as text (H1 period)    >= 4.5
  *   --break as graphics (ring, dot, active node) >= 3.0  (1.4.11)
  *   field underline (--g8)         >= 3.0
+ *   crimson ramp: text roles and --break on the --c1 band, --on-c2 on --c2
  * Also asserts the no-JS light block is identical to the scripted light block.
  * Exits 1 on any failure.
  */
@@ -21,7 +22,7 @@ function block(name: string): Tokens {
   const m = css.match(new RegExp(`/\\* tokens:${name} \\*/([\\s\\S]*?)/\\* tokens:end \\*/`));
   if (!m?.[1]) throw new Error(`globals.css: block tokens:${name} not found`);
   const out: Tokens = {};
-  for (const [, k, v] of m[1].matchAll(/--(g\d+|break):\s*(#[0-9a-f]{6})\s*;/gi)) {
+  for (const [, k, v] of m[1].matchAll(/--(g\d+|break|c1|c2|on-c2):\s*(#[0-9a-f]{6})\s*;/gi)) {
     if (k && v) out[k] = v.toLowerCase();
   }
   return out;
@@ -51,7 +52,10 @@ const pairs: Pair[] = [
   ...["g0", "g1", "g2"].map((bg) => ({ fg: "break", bg, min: 4.5, use: "break as text (H1 period)" })),
   ...SURFACES.map((bg) => ({ fg: "break", bg, min: 3, use: "break as graphics (focus ring, dot, node)" })),
   ...SURFACES.map((bg) => ({ fg: "g8", bg, min: 3, use: "field underline, diagram edges" })),
-  { fg: "g0", bg: "break", min: 4.5, use: "::selection text" },
+  ...["g11", "g10", "g9", "g8"].map((fg) => ({ fg, bg: "c1", min: 4.5, use: "text on the --c1 band (Contact, selected option)" })),
+  { fg: "break", bg: "c1", min: 4.5, use: "break as text on --c1 (section index)" },
+  { fg: "g8", bg: "c1", min: 3, use: "field underline on --c1" },
+  { fg: "on-c2", bg: "c2", min: 4.5, use: "::selection text, filled button hover" },
   { fg: "g0", bg: "g11", min: 4.5, use: "filled button / skip link" },
   { fg: "g0", bg: "g10", min: 4.5, use: "filled button hover" },
 ];
@@ -68,10 +72,10 @@ if (JSON.stringify(media) !== JSON.stringify(themes[1]![1])) {
 }
 
 for (const [name, t] of themes) {
-  for (const key of [...Array.from({ length: 12 }, (_, i) => `g${i}`), "break"]) {
+  for (const key of [...Array.from({ length: 12 }, (_, i) => `g${i}`), "break", "c1", "c2", "on-c2"]) {
     const v = t[key];
     if (!v) errors.push(`${name}: --${key} missing`);
-    else if (key !== "break" && !(v.slice(1, 3) === v.slice(3, 5) && v.slice(3, 5) === v.slice(5, 7))) {
+    else if (!["break", "c1", "c2"].includes(key) && !(v.slice(1, 3) === v.slice(3, 5) && v.slice(3, 5) === v.slice(5, 7))) {
       errors.push(`${name}: --${key} ${v} is not neutral (R=G=B)`);
     }
   }
