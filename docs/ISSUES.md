@@ -28,8 +28,8 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
-| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | Owner chose (2026-10-08): name and role above, H1 "Software engineer building systems that stay correct under concurrency." | Review round 1, R1 |
-| ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Decided | Remove the sentence; keep the stack line. Education stays in About | Review round 1, R1 |
+| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | Final (owner, 2026-10-08): H1 is the name, "Abdelrhman Mohamed.", under a "Software engineer" label, followed by the owner's two-sentence description, reframed to pass the copy rules | Review round 1, R1 |
+| ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Decided | Replaced by the owner's description (ISS-12); the stack line moves out of the hero. Education stays in About | Review round 1, R1 |
 | ISS-14 | Public name: "Abdelrhman Mohamed" | High | Decided | Owner chose the spelling on 2026-10-08; set `personal.name`, the LICENSE holder, the share images and JSON-LD | Review round 1, R1 |
 | ISS-15 | Contact email: abdelrhmanhamied004@gmail.com | High | Decided | Set `personal.email`; it appears in Contact, the footer and the palette | Review round 1, R1 |
 | ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Decided | Update the snapshot: 8 merged across 6 projects, 3 under review; the practice PR stays excluded (owner, 2026-10-08) | Review round 1, R1 |
@@ -291,6 +291,20 @@ Verified read-only on 2026-10-08 while writing this round: live PR and issue sta
 | Sub (ISS-13) | Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work. |
 
 Evidence behind the H1: Eventora's oversell tests (0 oversold seats with 100 VUs against 8 seats; exactly 50 of 100 threads get 50 seats) and the reservation flow diagram on the case study. The label uses the name decided in ISS-14. Directions not chosen: a three-pillar focus statement, "end to end" range, and "problems I solve". Changes `profile.ts` (hero) and the approved copy in `CLAUDE.md` in round 1.
+
+**Decision (owner, 2026-10-08), final.** The owner then supplied their own description and asked for it with their name. Their wording used "robust" (on the banned-words list, enforced by the facts check), "reliable", "scalable" and "production-ready" (unqualified adjectives under honesty rule 5; "scalable" is also undercut by Eventora's measured 1.32x sub-linear scaling, and "production-ready" by the Railway API returning 404). The owner asked why, accepted the reframed version below ("done"), and the copy rules stay unchanged.
+
+| Element | Text |
+|---|---|
+| Label above the H1 (mono, uppercase) | Software engineer |
+| H1, display size, final period in `--break` | Abdelrhman Mohamed. |
+| Lead paragraph | Software Engineer focused on designing and building systems that keep working as load grows, with a strong emphasis on correctness, maintainability and real-world engineering constraints. |
+| Second paragraph | Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software. |
+| CTAs | View My Work, Download Resume (unchanged) |
+
+Reframing, phrase by phrase: "reliable, scalable systems" → "systems that keep working as load grows" (backed by 569,066 requests with 0 failures and the 10→200-VU Railway ramp); "robust production-ready software" → "tested, deployable software" (228 / 500+ / 104 automated tests; Docker images, the published SysPlex image). "Interested in … distributed systems" states an interest, not a built system, so it stays. Earlier proposals (the four directions, the "under concurrency" line) are superseded.
+
+**Effects.** `profile.hero` gains a label and a second paragraph; the H1 becomes the name (so `personal.name` and the hero agree, ISS-14); `CLAUDE.md` "Approved hero copy" is rewritten; share images use the same lines; the H1 is short, which also helps ISS-28 at laptop sizes.
 
 ### ISS-13 Hero sub without "Software Engineering student at AASTMT (Jun 2027)"
 
