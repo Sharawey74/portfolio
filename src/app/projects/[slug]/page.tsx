@@ -104,7 +104,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
               alt={hero.alt}
               width={hero.width}
               height={hero.height}
-              unoptimized
+              // The LCP image stays on the optimizer's default quality: quality
+              // 90 cost about 0.1-0.4 s of mobile LCP (docs/reports/lighthouse-review1.md).
+              sizes="(min-width: 768px) 80vw, 100vw"
               loading="eager"
               fetchPriority="high"
               className="aspect-[16/10] w-full border border-hair object-cover object-top"
