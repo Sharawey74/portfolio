@@ -116,7 +116,7 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 **Depth** comes from stacking ramp steps, opacity, 1 px hairlines (`--g4`/`--g5`), grain, scale and `mix-blend-mode`. No shadows, no blur glows.
 
-**No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; reported issues ● Closed / ○ Open; always with text. Screenshots render in full color as the original files (`unoptimized`; ISS-25, ISS-26). Diagrams use line weight, dashes, gray fills, patterns and dashed zone frames.
+**No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; reported issues ● Closed / ○ Open; always with text. Screenshots render in full color (ISS-25): carousels resized at quality 90 with `sizes` matching the card column, the case-study hero (an LCP image) at the default quality, gallery and zoom as the original files (ISS-26). Diagrams use line weight, dashes, gray fills, patterns and dashed zone frames.
 
 **Type.** Never Inter, Roboto, Arial, system-ui, Space Grotesk or Geist. Fonts in `src/styles/fonts.ts` (swap there only):
 - Display: Newsreader (variable opsz + wght), large, tracking −0.02 to −0.04em, weight 300–400, italic for single emphasis words.
@@ -262,7 +262,8 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Scroll-spy:** a band observer on the headings plus a whole-viewport observer on their sections, plus `hashchange` and `pageshow` (ISS-34).
 - **Number traps in the facts check:** the banned-number patterns also match coordinates and line numbers ("700", "194"): keep layout coordinates off them and cite another line when a source line has that number.
 - **Local fetch cache:** `.next/cache/fetch-cache` keeps the daily PR status between local builds; delete it to see a fresh status locally.
-- Measured at the end of review round 1: see `docs/reports/lighthouse-review1.md`.
+- **Images and speed:** `next.config.ts` allows qualities 75 and 90. Serving 1440 px originals to phones cost up to 0.4 s of LCP and 0.4–0.6 s of TBT; keep LCP images on the optimizer.
+- Measured at the end of review round 1: `/` 156.2 KB gz. Lighthouse mobile medians (CPU benchmark 2,212–2,908): LCP `/` 2.43 s, Eventora 2.88 s, Recruiter-Pro 3.28 s, SysPlex 2.65 s; TBT 1,079–1,508 ms; CLS 0.001; accessibility, best practices and SEO 100. TBT and Recruiter-Pro LCP are worse than Stage 5: `docs/ISSUES.md` ISS-36 (re-measure on Vercel). Close the browser pane before Lighthouse runs: its animated hero competes for the CPU.
 
 ## Review and acceptance
 
