@@ -158,7 +158,7 @@ Notes:
 Source: the owner's review of a local production build on 2026-10-08 (21 notes, six screenshots). Every item is an issue in `docs/ISSUES.md` (ISS-12 to ISS-34, with context, options and recommendations) and an owner-reported entry in the `docs/UAT.md` defect log. Branch when started: `feat/owner-review-1`. Stage gating as usual: finish, stop, wait for "continue". Several items change rules the brief fixed (approved hero copy, one accent color, radius, banned fonts, grayscale screenshots); `CLAUDE.md` changes in the same branch as the decision, never before.
 
 R0 Owner decisions (blocks R2 to R4; nothing is coded before these are answered)
-- [x] ISS-12 hero: label "Abdelrhman Mohamed / Software engineer", H1 "Software engineer building systems that stay correct under concurrency." (owner's choice, 2026-10-08)
+- [x] ISS-12 hero (final, 2026-10-08): label "Software engineer", H1 "Abdelrhman Mohamed.", then the owner's two-sentence description reframed to pass the copy rules (`docs/ISSUES.md` → ISS-12)
 - [x] ISS-21 palette direction: A, crimson ramp
 - [x] ISS-22 button radius: pill for buttons and CTAs only
 - [x] ISS-23 nav, footer and stack captions: Hanken Grotesk
@@ -170,7 +170,7 @@ R0 Owner decisions (blocks R2 to R4; nothing is coded before these are answered)
 R1 Facts and content (data files only)
 - [ ] ISS-14 name "Abdelrhman Mohamed": `personal.name`, LICENSE holder, share images, JSON-LD; `CLAUDE.md` decision line
 - [ ] ISS-15 email `personal.email`
-- [ ] ISS-13 hero sub without the student sentence; ISS-12 headline once chosen; `CLAUDE.md` approved copy
+- [ ] ISS-12 / ISS-13 hero: label, name as H1, the two description paragraphs; stack line and student sentence removed from the hero; `CLAUDE.md` approved copy and share images updated
 - [ ] ISS-16 `oss.json`: mage #16440 merged 2026-10-07, #2688 retitled; facts-check asserts; headline 8 merged across 6 projects, 3 under review (or as decided)
 - [ ] ISS-17 every filed issue with its state
 - [ ] ISS-18 metrics audit table (site metric, source line, README line today, match), owner review, evidence report and `FACTS-CHECK.md` updated
