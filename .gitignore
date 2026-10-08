@@ -35,6 +35,11 @@ Thumbs.db
 # private, this machine only
 CLAUDE.local.md
 *.local.txt
+# owner's working docs, kept local since 2026-10-08
+PLAN.md
+FACTS-CHECK.md
+PERSONAL-INFO-CHECKLIST.md
+*.local.md
 
 # local preview config for the desktop app browser
 .claude/launch.json
