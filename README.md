@@ -9,8 +9,8 @@ every public number traced to a source file and a date.
 > audit: `docs/UX-REVIEW.md`. Owner acceptance script: `docs/UAT.md`. Open
 > issues and proposed fixes: `docs/ISSUES.md`. Measurements: `docs/reports/`.
 >
-> `PLAN.md`, `FACTS-CHECK.md` and `PERSONAL-INFO-CHECKLIST.md` are the owner's
-> working files. They are kept on the owner's machine and are not in this
+> `PLAN.md`, `FACTS-CHECK.md`, `PERSONAL-INFO-CHECKLIST.md` and `DEPLOY.md` are
+> the owner's working files. They are kept on the owner's machine and are not in this
 > repository (git-ignored since 2026-10-08); mentions of them here and in the
 > code refer to those local copies.
 
@@ -53,8 +53,8 @@ Node 22.18 or newer (the check scripts are plain `.ts` run by Node directly).
 CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, the facts and
 contrast checks, build, the color check on built CSS, the bundle budget and the
 smoke tests on every push and pull request. Lighthouse runs on each Vercel
-preview, and a `vX.Y.Z` tag creates the GitHub Release; see `DEPLOY.md`, which
-also covers environment variables, release steps and rollback. Changes are
+preview, and a `vX.Y.Z` tag creates the GitHub Release; the owner's local
+`DEPLOY.md` covers environment variables, release steps and rollback. Changes are
 listed in `CHANGELOG.md`.
 
 ## Where the content lives
