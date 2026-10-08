@@ -141,9 +141,13 @@ Tick what you covered. A full launch review covers every row at least once.
 
 | ID | Steps | Expected | Result | Notes |
 |---|---|---|---|---|
-| UAT-49 | Read the hero (headline and sub) as a recruiter would | The headline says what kind of engineer this is in one confident line you would say out loud; the sub names the stack; nothing you would not defend in an interview | | |
+| UAT-49 | Read the hero as a recruiter would | Label "Software engineer", your name as the headline (the final period in crimson), then your two paragraphs exactly as approved on 2026-10-08; nothing you would not defend in an interview | | |
 | UAT-50 | Look at the whole site in both themes after the palette, radius and font changes (ISS-21 to ISS-23) | Colors feel like one family (black, white, grays and the crimson tones); buttons have the chosen rounding; nav, footer and stack captions use the chosen face; text stays readable everywhere | | |
 | UAT-51 | Open `/` and a case study at 100% browser zoom on your laptop (and at 1366×768, 1536×864 if you can) | Everything fits without zooming out: the hero headline and buttons are visible on the first screen, a project card fits on one screen, no text overlaps | | |
+| UAT-52 | With a mouse, move the pointer over plain text, then over a project card's "Case study" link | Over plain text: a small dot and ring, no word next to it (the old "ON" label is gone). Over the case-study link: the ring grows and reads "View" | | |
+| UAT-53 | Reload `/` at the top; press End (or drag the scrollbar to the bottom); press Home; then open `/#open-source` in a new tab | Header: nothing marked at the top; "05 Contact" marked at the bottom; nothing marked again at the top; "03 Open source" marked in the new tab | | |
+| UAT-54 | Look at the Work cards and case-study galleries for Eventora and Recruiter-Pro; step through each carousel; open one screenshot full size | Screenshots in full color and sharp (small UI text readable); Recruiter-Pro shows 4 real app screens (dashboard, job market, job detail, upload), none with your own resume | | |
+| UAT-55 | Look at Contact, the footer and the header controls in both themes | Contact sits on a deep crimson band (pale rose in light); email, GitHub and LinkedIn show their icons next to the text; header "Search"/"Menu", pause and theme controls get a crimson pill on hover | | |
 
 ## 5. Defect log
 
@@ -151,29 +155,29 @@ Entries 1 to 23 are the owner's review, round 1 (2026-10-08), transcribed from t
 
 | # | Case | Environment | What happened | Severity (High / Med / Low) | Screenshot | Status |
 |---|---|---|---|---|---|---|
-| 1 | UAT-01, UAT-49 | E1, owner's laptop, 100% zoom, 2026-10-08 | Hero headline reads as a plain sentence; should present a software engineer more professionally | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-12 |
-| 2 | UAT-01 | E1, owner's laptop, 100% zoom, 2026-10-08 | Remove "Software Engineering student at AASTMT (Jun 2027)" from the hero | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-13 |
-| 3 | UAT-01 | E1, owner's laptop, 100% zoom, 2026-10-08 | Name should read "Abdelrhman Mohamed" | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-14 |
-| 4 | UAT-32, UAT-39 | E1, owner's laptop, 100% zoom, 2026-10-08 | Contact has no email; add abdelrhmanhamied004@gmail.com | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-15 |
-| 5 | UAT-28, UAT-29 | E1, owner's laptop, 100% zoom, 2026-10-08 | Open source: mage #16440 is merged now; the merged count is out of date | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-16 |
-| 6 | UAT-29 | E1, owner's laptop, 100% zoom, 2026-10-08 | Show every issue filed, open and closed | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-17 |
-| 7 | UAT-03 | E1, owner's laptop, 100% zoom, 2026-10-08 | Some project metrics are out of date against the repos' READMEs | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-18 |
+| 1 | UAT-01, UAT-49 | E1, owner's laptop, 100% zoom, 2026-10-08 | Hero headline reads as a plain sentence; should present a software engineer more professionally | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-12 |
+| 2 | UAT-01 | E1, owner's laptop, 100% zoom, 2026-10-08 | Remove "Software Engineering student at AASTMT (Jun 2027)" from the hero | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-13 |
+| 3 | UAT-01 | E1, owner's laptop, 100% zoom, 2026-10-08 | Name should read "Abdelrhman Mohamed" | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-14 |
+| 4 | UAT-32, UAT-39 | E1, owner's laptop, 100% zoom, 2026-10-08 | Contact has no email; add abdelrhmanhamied004@gmail.com | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-15 |
+| 5 | UAT-28, UAT-29 | E1, owner's laptop, 100% zoom, 2026-10-08 | Open source: mage #16440 is merged now; the merged count is out of date | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-16 |
+| 6 | UAT-29 | E1, owner's laptop, 100% zoom, 2026-10-08 | Show every issue filed, open and closed | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-17 |
+| 7 | UAT-03 | E1, owner's laptop, 100% zoom, 2026-10-08 | Some project metrics are out of date against the repos' READMEs | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-18 |
 | 8 | UAT-28 | E1, owner's laptop, 100% zoom, 2026-10-08 | Alstom internship missing (to add later) | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-19 |
 | 9 | UAT-28 | E1, owner's laptop, 100% zoom, 2026-10-08 | Claude certificates missing, as one entry (to add later) | Low | owner's review screenshots | Open, `docs/ISSUES.md` ISS-20 |
-| 10 | UAT-24, UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Too uniformly dark; wants a heavy crimson secondary color and one harmonized palette | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-21 |
-| 11 | UAT-45, UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Buttons should be rounded | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-22 |
-| 12 | UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Nav bar, footer and stack captions should use Arial | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-23 |
-| 13 | UAT-32, UAT-39 | E1, owner's laptop, 100% zoom, 2026-10-08 | GitHub and LinkedIn should show as icons | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-24 |
-| 14 | UAT-13, UAT-20 | E1, owner's laptop, 100% zoom, 2026-10-08 | Work screenshots should be in color, several per project (Eventora, Recruiter-Pro from their GitHub Pages) | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-25 |
-| 15 | UAT-20 | E1, owner's laptop, 100% zoom, 2026-10-08 | Work card slides look blurred | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-26 |
-| 16 | UAT-22, UAT-42 | E1, owner's laptop, 100% zoom, 2026-10-08 | SysPlex diagram looks weak | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-27 |
-| 17 | UAT-09, UAT-26, UAT-51 | E1, owner's laptop, 100% zoom, 2026-10-08 | Looks right only at 67-75% browser zoom | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-28 |
-| 18 | UAT-26 | E1, owner's laptop, 100% zoom, 2026-10-08 | "Also built": project names overlap their descriptions | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-29 |
-| 19 | UAT-28, UAT-42 | E1, owner's laptop, 100% zoom, 2026-10-08 | "Stack, by where it was used" looks cramped and mixed | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-30 |
-| 20 | UAT-21, UAT-26 | E1, owner's laptop, 100% zoom, 2026-10-08 | Next stacked card covers the previous card's numbers | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-31 |
-| 21 | UAT-45, UAT-19 | E1, owner's laptop, 100% zoom, 2026-10-08 | Buttons and CTAs should feel more responsive | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-32 |
-| 22 | UAT-19 | E1, owner's laptop, 100% zoom, 2026-10-08 | Cursor shows an "ON" label everywhere (seen in the screenshots) | High | owner's review screenshots | Open, `docs/ISSUES.md` ISS-33 |
-| 23 | UAT-15 | E1, owner's laptop, 100% zoom, 2026-10-08 | Header marks "05 Contact" as current at the top of the page (seen in the screenshots) | Med | owner's review screenshots | Open, `docs/ISSUES.md` ISS-34 |
+| 10 | UAT-24, UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Too uniformly dark; wants a heavy crimson secondary color and one harmonized palette | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-21 |
+| 11 | UAT-45, UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Buttons should be rounded | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-22 |
+| 12 | UAT-50 | E1, owner's laptop, 100% zoom, 2026-10-08 | Nav bar, footer and stack captions should use Arial | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-23 |
+| 13 | UAT-32, UAT-39 | E1, owner's laptop, 100% zoom, 2026-10-08 | GitHub and LinkedIn should show as icons | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-24 |
+| 14 | UAT-13, UAT-20 | E1, owner's laptop, 100% zoom, 2026-10-08 | Work screenshots should be in color, several per project (Eventora, Recruiter-Pro from their GitHub Pages) | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-25 |
+| 15 | UAT-20 | E1, owner's laptop, 100% zoom, 2026-10-08 | Work card slides look blurred | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-26 |
+| 16 | UAT-22, UAT-42 | E1, owner's laptop, 100% zoom, 2026-10-08 | SysPlex diagram looks weak | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-27 |
+| 17 | UAT-09, UAT-26, UAT-51 | E1, owner's laptop, 100% zoom, 2026-10-08 | Looks right only at 67-75% browser zoom | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-28 |
+| 18 | UAT-26 | E1, owner's laptop, 100% zoom, 2026-10-08 | "Also built": project names overlap their descriptions | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-29 |
+| 19 | UAT-28, UAT-42 | E1, owner's laptop, 100% zoom, 2026-10-08 | "Stack, by where it was used" looks cramped and mixed | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-30 |
+| 20 | UAT-21, UAT-26 | E1, owner's laptop, 100% zoom, 2026-10-08 | Next stacked card covers the previous card's numbers | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-31 |
+| 21 | UAT-45, UAT-19 | E1, owner's laptop, 100% zoom, 2026-10-08 | Buttons and CTAs should feel more responsive | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-32 |
+| 22 | UAT-19 | E1, owner's laptop, 100% zoom, 2026-10-08 | Cursor shows an "ON" label everywhere (seen in the screenshots) | High | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-33 |
+| 23 | UAT-15 | E1, owner's laptop, 100% zoom, 2026-10-08 | Header marks "05 Contact" as current at the top of the page (seen in the screenshots) | Med | owner's review screenshots | Fixed on `feat/owner-review-1` (2026-10-08), owner to retest; `docs/ISSUES.md` ISS-34 |
 | 24 | | | | | | |
 
 Severity guide: **High** = wrong or private content, broken navigation,
