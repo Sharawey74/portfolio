@@ -7,7 +7,7 @@ the site looks finished either way.
 
 To keep a field off the site for good (phone, GPA, a portrait you would rather
 not show), replace the `todo` with the date you decided:
-`phone: { value: null, withheld: "2026-10-09" }`. It still renders nothing,
+`phone: { value: null, withheld: "2026-10-08" }`. It still renders nothing,
 and it no longer counts as a `TODO(owner)`, so the strict launch check can pass.
 
 `npm run check:launch` lists what is still open (added in Stage 1). It exits
