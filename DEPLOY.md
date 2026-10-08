@@ -10,7 +10,7 @@ How this site goes live, how a release is cut, and how to undo one. Steps marked
 
 ## First-time setup (owner)
 
-The Vercel project is not imported yet (checked 2026-10-09: no deployments on the repo; homepage is a placeholder).
+The Vercel project is not imported yet (checked 2026-10-08: no deployments on the repo; homepage is a placeholder).
 
 1. vercel.com → Add New → Project → import `Sharawey74/portfolio`. Framework preset: Next.js. Leave the build settings as they are.
 2. Add the environment variables below (Production; also Preview if the contact form should work on previews).
@@ -49,7 +49,7 @@ Set-Location C:\Users\DELL\Desktop\portfolio-site; npm run lint; npm run typeche
 
 - `npm run check` includes the facts check. Run it **on this laptop**: the do-not-publish terms live in the git-ignored `scripts/private-terms.local.txt`, so CI cannot check them.
 - `test:smoke` needs Playwright's browser once: `npx playwright install chromium`.
-- `check:launch -- --strict` must print "no TODO(owner) items left". A personal field you decide not to publish is recorded as withheld, with the date, instead of a value: `phone: { value: null, withheld: "2026-10-09" }`.
+- `check:launch -- --strict` must print "no TODO(owner) items left". A personal field you decide not to publish is recorded as withheld, with the date, instead of a value: `phone: { value: null, withheld: "2026-10-08" }`.
 - `docs/UAT.md` run on the preview URL; `docs/ISSUES.md` has no Open or Owner issue of High severity.
 
 ## Release steps
