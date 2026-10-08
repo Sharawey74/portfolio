@@ -3,8 +3,9 @@ import { claim } from "./schema.ts";
 
 /**
  * Site-wide copy: hero, section indices, CTAs, footer microcopy.
- * Source "owner:approved-copy" means the line was approved by the owner in the
- * build brief (2026-10-06) and is logged in FACTS-CHECK.md.
+ * Source "owner:approved-copy" means the line was approved by the owner, in the
+ * build brief (2026-10-06) or in review round 1 (2026-10-08, docs/ISSUES.md
+ * ISS-12), and is logged in FACTS-CHECK.md.
  */
 
 const sectionSchema = z.object({
@@ -17,9 +18,12 @@ const sectionSchema = z.object({
 
 const profileSchema = z.object({
   hero: z.object({
-    /** The final period is the one place body/heading text may use --break. */
+    /** Mono label above the H1. */
+    label: claim,
+    /** The public name. The final period is the one place body/heading text may use --break. */
     headline: claim,
-    sub: claim,
+    lead: claim,
+    more: claim,
     ctaPrimary: z.object({ label: z.string(), href: z.string().startsWith("#") }),
     ctaResume: z.object({ label: z.string() }),
   }),
@@ -27,7 +31,7 @@ const profileSchema = z.object({
   meta: z.object({
     title: z.string().min(1),
     description: z.string().min(1).max(160),
-    /** Mono footer line on share images; terms from the approved hero sub. */
+    /** Mono footer line on share images; terms from the stack in About. */
     ogLine: z.string().min(1),
   }),
   /** Interface strings: controls and accessible names, not claims. */
@@ -148,15 +152,17 @@ const profileSchema = z.object({
 
 export const profile = profileSchema.parse({
   hero: {
-    headline: {
-      text: "Backend systems that stay correct under load.",
+    label: { text: "Software engineer", source: "owner:approved-copy", asOf: "2026-10-08" },
+    headline: { text: "Abdelrhman Mohamed.", source: "owner:approved-copy", asOf: "2026-10-08" },
+    lead: {
+      text: "Software Engineer focused on designing and building systems that keep working as load grows, with a strong emphasis on correctness, maintainability and real-world engineering constraints.",
       source: "owner:approved-copy",
-      asOf: "2026-10-06",
+      asOf: "2026-10-08",
     },
-    sub: {
-      text: "Software Engineering student at AASTMT (Jun 2027). Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work.",
+    more: {
+      text: "Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software.",
       source: "owner:approved-copy",
-      asOf: "2026-10-06",
+      asOf: "2026-10-08",
     },
     ctaPrimary: { label: "View My Work", href: "#work" },
     ctaResume: { label: "Download Resume" },
@@ -169,9 +175,9 @@ export const profile = profileSchema.parse({
     { live: true, id: "contact", index: "05", title: "Contact" },
   ],
   meta: {
-    title: "Sharawey74 / Backend systems",
+    title: "Abdelrhman Mohamed / Software engineer",
     description:
-      "Backend systems in Java and Spring Boot, Python AI services, and open-source pull requests. Every number names its source.",
+      "Software engineer: Java and Spring Boot backends, Python AI services, and open-source pull requests. Every number names its source.",
     ogLine: "Java · Spring Boot · Redis · RabbitMQ · Python AI services",
   },
   ui: {
