@@ -11,7 +11,7 @@ Design-rule verdicts live in `docs/UX-REVIEW.md`, measurements in
 | Status | **Open** (no decision yet) · **Decided** (a decision is recorded, work may still follow) · **Owner** (only the owner can act) · **Closed** (resolved, with evidence) |
 | Severity | **High** (blocks launch or breaks a budget in the brief) · **Medium** (visible or measurable, not blocking) · **Low** (polish) |
 
-Last updated: 2026-10-08 (end of Stage 5).
+Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's clean-install build log).
 
 ## At a glance
 
@@ -26,6 +26,8 @@ Last updated: 2026-10-08 (end of Stage 5).
 | ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Owner imports the project and sets the homepage | Before Stage 6 |
 | ISS-08 | 13 `TODO(owner)` items (name, email, resume, screenshots and others) | High | Owner | Owner fills `src/data/personal.ts` and supplies files | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
+| ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
+| ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -187,6 +189,44 @@ Details and where each field appears: `PERSONAL-INFO-CHECKLIST.md`.
 **Context.** PRs #3 and #4 were merged without a recorded UAT run. `docs/UAT.md` now holds UAT-01 to UAT-48; only the owner records results there.
 
 ---
+
+## ISS-10 `npm audit`: 5 high-severity advisories in the lint tooling
+
+**Severity** Medium (dev dependency only; nothing in the shipped site). **Status** Decided: accept until a patched release exists.
+
+**Evidence.** The owner's clean install (`npm ci`, 2026-10-08) printed "5 high severity vulnerabilities". `npm audit --json` on the same lockfile:
+
+| Package | Severity | How it gets in |
+|---|---|---|
+| `braces` 3.0.3 | High | Advisory GHSA-vfj7-8cjw-p6xm: stack-exhaustion denial of service through deeply nested patterns; affected range `<=3.0.3` |
+| `micromatch` 4.0.8 | High | Depends on `braces` |
+| `fast-glob` 3.3.1 | High | Depends on `micromatch` |
+| `@next/eslint-plugin-next` 16.4.0 | High | Depends on `fast-glob` |
+| `eslint-config-next` 16.4.0 | High | Direct dev dependency; depends on `@next/eslint-plugin-next` |
+
+One root cause, counted five times along the dependency chain. `npm audit --omit=dev` reports 0 vulnerabilities: none of these packages is part of the site's runtime or bundle. They run only when `npm run lint` runs, on patterns written in this repo's own config.
+
+**Why not `npm audit fix --force`.** npm's suggested fix installs `eslint-config-next@14.2.35`, a downgrade of two major versions that does not match Next 16 and would break the ESLint 9 flat config. `braces` 3.0.3 is already the latest release (published 2024), so no version inside the advisory's range is fixed yet.
+
+**Options.**
+
+| Option | What | Cost |
+|---|---|---|
+| Accept (chosen) | Leave as is; the vulnerable code only parses glob patterns we write ourselves, during lint | `npm ci` keeps printing the warning |
+| `overrides` in `package.json` | Pin a patched `braces` for the whole tree once one is published | Needs a published fix first |
+| Drop `eslint-config-next` | Use `typescript-eslint` and `eslint-plugin-react-hooks` directly | Loses Next's own lint rules (`@next/next/*`); more config to maintain |
+
+**Next step.** Stage 6 adds Dependabot (npm, weekly, grouped minor and patch). When a fixed `braces` (or a `fast-glob` / `@next/eslint-plugin-next` release that avoids it) appears, take that update, re-run `npm audit`, and close this issue with the output.
+
+## ISS-11 ESLint 9.39.5 is no longer supported
+
+**Severity** Low. **Status** Open.
+
+**Evidence.** `npm ci` printed: "npm warn deprecated eslint@9.39.5: This version is no longer supported." On 2026-10-08 the npm registry tags `9.39.5` as `maintenance` and `10.12.0` as `latest`.
+
+**Context.** ESLint only runs in development and CI; the site is unaffected. `eslint-config-next@16.4.0` declares `eslint >=9.0.0` as its peer, so ESLint 10 is allowed on paper, but the plugins it bundles (React, React Hooks, TypeScript, import) have not been checked against ESLint 10 here.
+
+**Fix.** On its own branch: install `eslint@10`, run `npm run lint` on the whole repo, fix or document any rule changes, and confirm CI is green. If a bundled plugin rejects ESLint 10, stay on 9.39.5 and re-check when `eslint-config-next` lists 10 as tested.
 
 ## Closed
 
