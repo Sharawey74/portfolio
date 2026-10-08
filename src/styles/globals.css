@@ -756,8 +756,10 @@ html[data-intro="play"] .intro {
 /* ── Stage 3 ─────────────────────────────────────────────────────────── */
 
 /* M6 sticky stack. Each card sticks below the header, offset by its index;
-   as later cards slide over it, it scales down and dims. Driven by one named
-   view timeline on the list (CSS), or --stack-p from Lenis (fallback). */
+   as later cards slide over it, its text column dims. The screenshot is never
+   dimmed, scaled or filtered (owner, 2026-10-08): scaling resampled small UI
+   text and the fade washed the colors out. Driven by one named view timeline
+   on the list (CSS), or --stack-p from Lenis (fallback). */
 .stack {
   display: grid;
   gap: 4vh;
@@ -772,19 +774,17 @@ html[data-intro="play"] .intro {
   @supports ((animation-timeline: view()) and (animation-range: entry)) {
     @keyframes stack-recede {
       to {
-        scale: 0.92;
         opacity: 0.45;
       }
     }
-    .stack-item:not(:last-child) {
+    .stack-item:not(:last-child) .card-copy {
       animation: stack-recede linear both;
       animation-timeline: --stack;
       animation-range: exit-crossing calc(var(--i) / var(--n) * 100%) exit-crossing calc((var(--i) + 1) / var(--n) * 100%);
     }
   }
 }
-html[data-stack-fallback] .stack-item:not(:last-child) {
-  scale: calc(1 - var(--stack-p, 0) * 0.08);
+html[data-stack-fallback] .stack-item:not(:last-child) .card-copy {
   opacity: calc(1 - var(--stack-p, 0) * 0.55);
 }
 /* Too short for a card to be read before the next one covers it (a laptop at
@@ -794,14 +794,13 @@ html[data-stack-fallback] .stack-item:not(:last-child) {
     position: relative;
     top: auto;
   }
-  .stack-item:not(:last-child) {
+  .stack-item:not(:last-child) .card-copy {
     animation: none !important;
-    scale: none !important;
     opacity: 1 !important;
   }
 }
 /* Scroll-linked and user-driven, not autoplay: exempt from the pause. */
-html[data-motion="paused"] .stack-item {
+html[data-motion="paused"] .stack-item .card-copy {
   animation-play-state: running !important;
 }
 
@@ -871,13 +870,19 @@ html[data-motion="paused"] .clip-reveal {
   animation-play-state: running !important;
 }
 
-/* M7 carousel: opacity crossfade only. */
+/* M7 carousel: the next screenshot wipes in over the current one (clip-path),
+   both fully opaque, so colors never wash out mid-change (an opacity
+   crossfade overlapped two half-transparent images). The outgoing slide stays
+   visible underneath until the wipe ends. */
 .carousel-slide {
-  opacity: 0;
-  transition: opacity var(--dur-3) var(--ease-out);
+  z-index: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0s linear var(--dur-3);
 }
 .carousel-slide[data-active] {
-  opacity: 1;
+  z-index: 1;
+  clip-path: inset(0);
+  transition: clip-path var(--dur-3) var(--ease-out);
 }
 .carousel-btn,
 .flow-btn {
@@ -1328,8 +1333,8 @@ html[data-motion="paused"] .xp-timeline::before {
 /* M12 surfaces. Body's own background is dropped so the fixed layers at
    z-index -1 sit between the page color (html) and the content. Grain is a
    pre-rendered grayscale PNG tile (the SVG filter version cost ~300 ms of
-   main thread at load, Stage 5), above everything at low
-   opacity and without blending, so it costs one composited layer. The
+   main thread at load, Stage 5), behind the content at low opacity and
+   without blending (never over screenshots), one composited layer. The
    hairline grid fades out over the first viewport of scroll (scroll
    timeline; a static fade where unsupported or under reduced motion). */
 body {
@@ -1374,7 +1379,9 @@ html[data-motion="paused"] .surface-grid {
   background: radial-gradient(ellipse at 50% 40%, transparent 55%, var(--g0) 120%);
 }
 .surface-grain {
-  z-index: 70;
+  /* Behind the content: grain textures the page surface only, never the
+     screenshots or cards on top of it. */
+  z-index: -1;
   opacity: 0.045;
   background-image: url("/textures/grain.png");
   background-size: 160px 160px;
