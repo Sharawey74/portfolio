@@ -10,13 +10,19 @@ import { todo } from "./schema.ts";
  * See PERSONAL-INFO-CHECKLIST.md for where each field appears.
  */
 
+/**
+ * A field is exactly one of: a `value` (rendered), a `todo` (owner still has
+ * to decide; listed by `npm run check:launch`), or `withheld` (the owner
+ * decided not to publish it, on that date; rendered as nothing, not a TODO).
+ */
 const field = z
   .object({
     value: z.string().min(1).nullable(),
     todo: todo.optional(),
+    withheld: z.iso.date().optional(),
   })
-  .refine((f) => (f.value === null) === (f.todo !== undefined), {
-    message: "set either value or todo, not both",
+  .refine((f) => [f.value !== null, f.todo !== undefined, f.withheld !== undefined].filter(Boolean).length === 1, {
+    message: "set exactly one of value, todo or withheld",
   });
 
 const personalSchema = z.object({
