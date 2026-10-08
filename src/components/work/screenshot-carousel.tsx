@@ -16,7 +16,9 @@ const INTERVAL = 4500;
  * a "loop" task, so it stops off-screen, on a hidden tab and under the global
  * pause. It also holds while hovered or focused, and always has manual
  * previous / next controls. Under reduced motion it never autoplays.
- * Screenshots render grayscale until hovered or focused (.shot).
+ * Screenshots render in full color, served as the original files (`unoptimized`):
+ * resizing a 1440 px capture to 1080 at quality 75 and then scaling it again in
+ * the browser blurred small UI text (docs/ISSUES.md ISS-25, ISS-26).
  * The first slide carries the shared-element name for the route morph (M8).
  */
 export function ScreenshotCarousel({
@@ -71,10 +73,10 @@ export function ScreenshotCarousel({
               alt={s.alt}
               width={s.width}
               height={s.height}
-              sizes="(min-width: 768px) 50vw, 100vw"
+              unoptimized
               loading="lazy"
               fetchPriority={i === 0 ? "auto" : "low"}
-              className="shot size-full object-cover object-top"
+              className="size-full object-cover object-top"
             />
           );
           return (
