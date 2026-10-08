@@ -45,13 +45,14 @@ export function ScrollSpyNav({
     // The band observer alone misses jumps (hash links, scroll restoration,
     // "Back to top"): a heading can go from above the band to below it with no
     // crossing, leaving the old section current (docs/ISSUES.md ISS-34). A
-    // second observer over the whole viewport fires on any jump, because what
-    // was on screen before it leaves the screen.
+    // second observer watches each target's whole section over the full
+    // viewport: a jump always changes which section is on screen. (Headings
+    // alone are not enough: a jump can carry one past the viewport unseen.)
     const band = new IntersectionObserver(pick, { rootMargin: "0px 0px -55% 0px" });
     const screen = new IntersectionObserver(pick);
     for (const t of targets) {
       band.observe(t);
-      screen.observe(t);
+      screen.observe(t.closest("section") ?? t);
     }
     window.addEventListener("hashchange", pick);
     window.addEventListener("pageshow", pick);
