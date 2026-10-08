@@ -28,7 +28,7 @@ export function Hero() {
       <HeroGraph>
         <HeroGraphStatic className="size-full" />
       </HeroGraph>
-      <div className="grid-12 relative min-h-[inherit] content-end gap-y-10 pt-24 pb-16 md:pb-24 pointer-events-none">
+      <div className="grid-12 relative min-h-[inherit] content-end gap-y-[min(2.5rem,4svh)] pt-24 pb-[min(6rem,8svh)] pointer-events-none">
         <div className="col-span-full md:col-span-11 pointer-events-auto">
           <MonoLabel className="hero-label mb-6 block">{hero.label.text}</MonoLabel>
           <HeroHeadline id="hero-title" text={hero.headline.text} />
@@ -47,12 +47,12 @@ export function Hero() {
         <div className="hero-ctas col-span-full flex flex-wrap gap-3 md:col-span-6 md:col-start-6 pointer-events-auto">
           {showPrimary ? (
             <ButtonLink href={hero.ctaPrimary.href} magnetic>
-              {hero.ctaPrimary.label} <span aria-hidden="true">→</span>
+              {hero.ctaPrimary.label} <span aria-hidden="true" data-arrow="right">→</span>
             </ButtonLink>
           ) : null}
           {resume ? (
             <ButtonLink href={resume} variant="outline" magnetic download>
-              {hero.ctaResume.label} <span aria-hidden="true">↓</span>
+              {hero.ctaResume.label} <span aria-hidden="true" data-arrow="down">↓</span>
             </ButtonLink>
           ) : (
             <Button variant="outline" disabled title={ui.resumeUnavailable}>
