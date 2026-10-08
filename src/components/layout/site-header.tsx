@@ -21,7 +21,7 @@ export function SiteHeader() {
   return (
     <HeaderShell>
       <div className="mx-auto flex h-(--header-h) max-w-(--page-max) items-center justify-between gap-6 px-(--gutter)">
-        <Link href="/" className="shrink-0 font-mono text-mono-lg tracking-wide text-ink">
+        <Link href="/" className="shrink-0 font-display text-h3 leading-none text-ink">
           {personal.name.value ?? personal.github.handle}
         </Link>
         <div className="hidden min-w-0 flex-1 lg:block">
