@@ -153,19 +153,19 @@ Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidan
 Notes:
 - Screenshots and reports are committed one file per commit (CLAUDE.md git rules), or up to four per commit when they are one identical change (for example the four widths of one page and theme). Keep them as compressed PNG/JPEG at 1× so the repo stays small.
 
-## Review round 1: owner review fixes (planned 2026-10-08, not started)
+## Review round 1: owner review fixes (planned 2026-10-08; R0 decided 2026-10-08)
 
 Source: the owner's review of a local production build on 2026-10-08 (21 notes, six screenshots). Every item is an issue in `docs/ISSUES.md` (ISS-12 to ISS-34, with context, options and recommendations) and an owner-reported entry in the `docs/UAT.md` defect log. Branch when started: `feat/owner-review-1`. Stage gating as usual: finish, stop, wait for "continue". Several items change rules the brief fixed (approved hero copy, one accent color, radius, banned fonts, grayscale screenshots); `CLAUDE.md` changes in the same branch as the decision, never before.
 
 R0 Owner decisions (blocks R2 to R4; nothing is coded before these are answered)
-- [ ] ISS-12 hero headline: option A, B, C, D or the owner's own line
-- [ ] ISS-21 palette direction: A crimson ramp (recommended), B warm neutrals + crimson, or C one accent
-- [ ] ISS-22 button radius: pill for buttons and CTAs only (recommended) or 6–8 px on controls
-- [ ] ISS-23 nav, footer and stack captions: Arial as asked, or Hanken Grotesk (recommended, already loaded)
-- [ ] ISS-16 count the first-contributions practice PR or keep it excluded (recommended: excluded)
-- [ ] ISS-17 include the elwahapumps issue or not (recommended: not)
-- [ ] ISS-18 the owner names the metrics they consider outdated
-- [ ] ISS-03 (from Stage 5) keep the still hero graph on phones or revert
+- [x] ISS-12 hero headline: "Software that holds up under load, review and test." (chosen to the owner's brief: software engineering, not only backend; 2026-10-08)
+- [x] ISS-21 palette direction: A, crimson ramp
+- [x] ISS-22 button radius: pill for buttons and CTAs only
+- [x] ISS-23 nav, footer and stack captions: Hanken Grotesk
+- [x] ISS-16 practice PR stays excluded: 8 merged across 6 projects, 3 under review
+- [x] ISS-17 elwahapumps issue left out
+- [x] ISS-18 Eventora's README performance figures (selection in `docs/ISSUES.md` → ISS-18)
+- [x] ISS-03 keep the still hero graph on phones (closed)
 
 R1 Facts and content (data files only)
 - [ ] ISS-14 name "Abdelrhman Mohamed": `personal.name`, LICENSE holder, share images, JSON-LD; `CLAUDE.md` decision line
