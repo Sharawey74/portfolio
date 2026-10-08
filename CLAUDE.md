@@ -155,6 +155,7 @@ Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.con
 | `npm run check:launch` | Lists `TODO(owner)` items; `--strict` or `LAUNCH_STRICT=1` exits 1 if any remain |
 | `npm run check` | facts + contrast + colors |
 | `npm run report:bundle` | First-load JS per prerendered page (gz, `nomodule` polyfills excluded); fails if `/` > 170 KB |
+| `npm run test:smoke` | Playwright smoke tests (`tests/smoke.spec.ts`) against `next start` on port 3110; build first |
 
 Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER` (default 0); documented in `.env.example` and the README. Commit only `.env.example`. To see the contact form locally, build and start with placeholder values for the three Resend variables, and test only paths that stop before sending (validation, honeypot); a valid message would call Resend.
 
@@ -264,6 +265,18 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Local fetch cache:** `.next/cache/fetch-cache` keeps the daily PR status between local builds; delete it to see a fresh status locally.
 - **Images and speed:** `next.config.ts` allows qualities 75 and 90. Serving 1440 px originals to phones cost up to 0.4 s of LCP and 0.4–0.6 s of TBT; keep LCP images on the optimizer.
 - Measured at the end of review round 1: `/` 156.2 KB gz. Lighthouse mobile medians (CPU benchmark 2,212–2,908): LCP `/` 2.43 s, Eventora 2.88 s, Recruiter-Pro 3.28 s, SysPlex 2.65 s; TBT 1,079–1,508 ms; CLS 0.001; accessibility, best practices and SEO 100. TBT and Recruiter-Pro LCP are worse than Stage 5: `docs/ISSUES.md` ISS-36 (re-measure on Vercel). Close the browser pane before Lighthouse runs: its animated hero competes for the CPU.
+
+## Release tooling in place (Stage 6)
+
+- `DEPLOY.md` is the owner's guide: Vercel setup, environment variables, pre-release checklist, release steps, smoke checks, rollback. `CHANGELOG.md` (Keep a Changelog): 0.1.0 to 0.6.0 are backfilled and untagged; v1.0.0 is the first tag.
+- **CI** (`ci.yml`, job name `Lint, typecheck, facts, build, smoke`): the old checks, then Playwright Chromium and `npm run test:smoke`; traces are uploaded on failure. Renaming the job renames the required status check in the owner's ruleset.
+- **Smoke tests** run with `workers: 2`: one `next start` serves them, and more parallel browsers time out on image optimization rather than finding bugs. Add a route to `PAGES` in `tests/smoke.spec.ts` when the site gains one.
+- **Lighthouse CI** (`lighthouse.yml`) runs on Vercel `deployment_status` events for previews, so it starts only once the project is imported and the file is on `main`. LCP and TBT assertions are `warn` while ISS-01, ISS-02 and ISS-36 are open; switch them to `error` when the preview numbers are within budget.
+- **Release** (`release.yml`): a `vX.Y.Z` tag creates the GitHub Release from that CHANGELOG section; it fails if the section is missing or `package.json` has another version.
+- **Dependabot** weekly, npm and actions, minor and patch grouped. Never `npm audit fix --force` (ISS-10).
+- **Withheld personal fields:** `{ value: null, withheld: "<date>" }` keeps a field off the site without counting as a `TODO(owner)`, so `check:launch --strict` can pass.
+- **ESLint 10** is on branch `chore/eslint-10` (ISS-11), not on `main` until the owner merges it.
+- **Lock file line endings:** npm rewrites `package-lock.json` with CRLF on this machine; the repo has it as LF. Convert it back before committing (`git diff --ignore-cr-at-eol --stat` shows the real change).
 
 ## Review and acceptance
 
