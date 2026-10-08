@@ -40,13 +40,17 @@ Node 22.18 or newer (the check scripts are plain `.ts` run by Node directly).
 | `npm run check` | Facts, contrast and one-color checks |
 | `npm run check:facts` | Every claim has `source` + `asOf`; no banned claims; no private terms |
 | `npm run check:contrast` | WCAG ratios for every token pairing, both themes |
-| `npm run check:colors` | Only grays plus the one `--break` color, in source and built CSS |
+| `npm run check:colors` | Only grays plus the three accent tokens (`--c1`, `--c2`, `--break`), in source and built CSS |
 | `npm run check:launch` | Lists `TODO(owner)` items; `-- --strict` or `LAUNCH_STRICT=1` fails if any remain |
 | `npm run report:bundle` | First-load JS per page after a build (budget for `/`: 170 KB gz) |
+| `npm run test:smoke` | Playwright smoke tests against the production build (build first; `npx playwright install chromium` once) |
 
 CI (`.github/workflows/ci.yml`) runs install, lint, typecheck, the facts and
-contrast checks, build, the color check on built CSS, and the bundle budget on
-every push and pull request.
+contrast checks, build, the color check on built CSS, the bundle budget and the
+smoke tests on every push and pull request. Lighthouse runs on each Vercel
+preview, and a `vX.Y.Z` tag creates the GitHub Release; see `DEPLOY.md`, which
+also covers environment variables, release steps and rollback. Changes are
+listed in `CHANGELOG.md`.
 
 ## Where the content lives
 
