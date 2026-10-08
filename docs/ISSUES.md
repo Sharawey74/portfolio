@@ -23,11 +23,11 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-04 | INP is not measured with real visitors | Medium | Open | Needs a field-data source once the site is live | Stage 6 |
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
-| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Owner imports the project and sets the homepage | Before Stage 6 |
+| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Still not imported (rechecked 2026-10-08, Stage 6). `DEPLOY.md` → First-time setup lists the steps | Before v1.0.0 |
 | ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
-| ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
-| ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
+| ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only; Dependabot (weekly, Stage 6) proposes the patched release; never `npm audit fix --force` | Dependabot pull requests |
+| ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Decided | Trial done on branch `chore/eslint-10`: ESLint 10.12 installs with `npm ci`, every plugin's rules fire, lint clean. Three bundled plugins still declare ESLint ≤ 9. Recommendation: merge after its CI is green | When the owner merges `chore/eslint-10` |
 | ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Closed | Applied: label, name as H1, the owner's two paragraphs (`profile.hero`); facts check asserts H1 = name | — |
 | ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Closed | Applied with ISS-12; education stays in About | — |
 | ISS-14 | Public name: "Abdelrhman Mohamed" | High | Closed | Applied: `personal.name`, LICENSE, header, footer, intro, titles, JSON-LD; other spelling banned by the facts check | — |
@@ -252,6 +252,10 @@ One root cause, counted five times along the dependency chain. `npm audit --omit
 **Context.** ESLint only runs in development and CI; the site is unaffected. `eslint-config-next@16.4.0` declares `eslint >=9.0.0` as its peer, so ESLint 10 is allowed on paper, but the plugins it bundles (React, React Hooks, TypeScript, import) have not been checked against ESLint 10 here.
 
 **Fix.** On its own branch: install `eslint@10`, run `npm run lint` on the whole repo, fix or document any rule changes, and confirm CI is green. If a bundled plugin rejects ESLint 10, stay on 9.39.5 and re-check when `eslint-config-next` lists 10 as tested.
+
+**Trial (2026-10-08, Stage 6, branch `chore/eslint-10`, one commit).** `npm install -D eslint@10` → 10.12.0; a clean `npm ci` succeeds; `npm run lint` is clean on the whole repo. Probe files with planted violations confirmed every rule family still fires: `react-hooks/rules-of-hooks`, `react/jsx-key`, `@typescript-eslint/no-unused-vars`, `@next/next/no-img-element`, `jsx-a11y/alt-text`, `jsx-a11y/click-events-have-key-events`, `import/no-anonymous-default-export`. `npm ls eslint` marks the peer as invalid for `eslint-plugin-react` 7.37.5 (declares up to `^9.7`), `eslint-plugin-jsx-a11y` and `eslint-plugin-import` (up to `^9`): they work but are not declared compatible.
+
+**Options.** A: merge `chore/eslint-10` now (supported ESLint; a future plugin bug would show as a lint failure in CI, never on the site). B: stay on 9.39.5 until `eslint-config-next` ships plugins that declare 10. **Recommendation:** A, after its CI run is green; Dependabot will keep both moving.
 
 ---
 
