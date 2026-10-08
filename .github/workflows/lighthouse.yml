@@ -66,7 +66,7 @@ jobs:
 
       - name: Keep the reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: lighthouse-${{ github.event.deployment.sha }}
           path: lhci/
