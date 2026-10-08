@@ -40,9 +40,16 @@ const flow = z
     altLabel: z.string().optional(),
     nodes: z.array(flowNode).min(2),
     steps: z.array(flowStep).min(1),
+    /** Sourced groupings drawn as frames behind their nodes (e.g. where a tier runs). */
+    zones: z
+      .array(z.object({ label: z.string().min(1), note: z.string().min(1), nodes: z.array(z.string()).min(1), source: z.string().min(3) }))
+      .default([]),
   })
   .refine((f) => f.steps.every((s) => f.nodes.some((n) => n.id === s.from) && f.nodes.some((n) => n.id === s.to)), {
     message: "every step must connect two declared nodes",
+  })
+  .refine((f) => f.zones.every((z) => z.nodes.every((id) => f.nodes.some((n) => n.id === id))), {
+    message: "a zone may only group declared nodes",
   });
 
 /** Evidence charts (M9d): committed numbers only, each chart sourced. */
@@ -422,10 +429,19 @@ export const projects = z.array(projectSchema).parse([
         { from: "score", to: "explain", label: "top-K matches", source: "Recruiter-Pro/README.md:229,231" },
       ],
     },
-    screenshots: [],
-    todos: [
-      "TODO(owner): real app screenshots (frontend/Images/*.png are design mockups with placeholder data, not the shipped app)",
+    // Real app screens from the repo's GitHub Pages folder (Recruiter-Pro@daf160b
+    // site/assets/img/screenshots), each viewed on 2026-10-08. Left out: the
+    // landing page (unsourced "22x" / "654 skills" / "0.74s" figures), every
+    // results, shortlist and history screen (the owner's own resume and a
+    // different spelling of the name), and the job search (a banned term typed
+    // in the search box). docs/ISSUES.md ISS-25.
+    screenshots: [
+      { from: "Recruiter-Pro/site/assets/img/screenshots/11-dashboard.webp", src: "/projects/recruiter-pro/11-dashboard.webp", width: 1440, height: 900, alt: "Recruiter-Pro dashboard with the upload area and the four-step processing pipeline" },
+      { from: "Recruiter-Pro/site/assets/img/screenshots/02-jobs.webp", src: "/projects/recruiter-pro/02-jobs.webp", width: 1440, height: 900, alt: "Job market page listing roles from the 800-role corpus with filters" },
+      { from: "Recruiter-Pro/site/assets/img/screenshots/12-job-detail.webp", src: "/projects/recruiter-pro/12-job-detail.webp", width: 1440, height: 1378, alt: "Job detail page with the description, requirements and a form to score one CV against the role" },
+      { from: "Recruiter-Pro/site/assets/img/screenshots/04-upload-empty.webp", src: "/projects/recruiter-pro/04-upload-empty.webp", width: 1440, height: 900, alt: "Upload and match page accepting PDF, DOCX and TXT up to 10 MB" },
     ],
+    todos: [],
   },
 
   // ── SysPlex ───────────────────────────────────────────────────────────
@@ -505,6 +521,10 @@ export const projects = z.array(projectSchema).parse([
         { from: "bash", to: "server", label: "JSON envelope over HTTP", source: "SysPlex/README.md:86,258" },
         { from: "ps", to: "server", label: "JSON envelope as a file", source: "SysPlex/README.md:86,185" },
         { from: "server", to: "dashboard", label: "REST, polled every 2 s", source: "SysPlex/README.md:94,104; SysPlex/server/static/js/dashboard.js:14" },
+      ],
+      zones: [
+        { label: "TIER 1 / COLLECTION", note: "native on the host, full sensor access", nodes: ["go", "bash", "ps"], source: "SysPlex/README.md:69-70" },
+        { label: "TIER 2 / PRESENTATION", note: "in Docker, cap_drop: ALL", nodes: ["server", "dashboard"], source: "SysPlex/README.md:90-91" },
       ],
     },
     screenshots: [],
