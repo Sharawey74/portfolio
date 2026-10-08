@@ -124,7 +124,9 @@ Decisions:
 - A PR closed upstream without merging is dropped from the live list (FACTS-CHECK.md → Stage 4).
 - The `motion` package is still unused; Stage 5 polish removes it unless M15 needs it.
 
-## Stage 5: Design polish, motion completion, optional shader
+## Stage 5: Design polish, motion completion, optional shader · DONE 2026-10-08 · branch `feat/design-polish-motion`
+
+Skills loaded: frontend-design (critique), modern-web-guidance (scrollability-affordance-hints, defer-rendering-heavy-content; apply-webgl-shaders retrieved, not applicable), ui-ux-pro-max (quick-reference audit), git-workflow. Not loaded: ui-ux-pro-max:design-system and ui-ux-pro-max:ui-styling (token architecture and component styling are fixed by the brief; both target new systems and shadcn/ui).
 
 Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidance` (before any HTML/CSS/client JS), then `ui-ux-pro-max:ui-ux-pro-max`, `ui-ux-pro-max:design-system`, `ui-ux-pro-max:ui-styling`. The "Visual system" and "Motion rules" sections of CLAUDE.md override every skill: use the skills for craft, critique and accessibility only. Never change the gray ramp, `--break`, fonts, radius, the no-shadow rule, the easing or the 200/400/800 ms durations. Where frontend-design calls a brief-required choice "generic", the brief wins; record it as **Brief** in `docs/UX-REVIEW.md`.
 
@@ -144,12 +146,61 @@ Skills, in this order: `frontend-design`, `modern-web-guidance:modern-web-guidan
 - [x] Re-run the UI UX Pro Max audit (`references/quick-reference.md`) for all new UI; add rows to `docs/UX-REVIEW.md` (5.3 table)
 - [x] New behavior gets cases in `docs/UAT.md` (never marked passed): UAT-41 to UAT-47; UAT-23 updated (no marquee)
 - [x] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; `/` ≤ 170 KB gz: 156.1 KB gz, case studies 155.6 KB
-- [~] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. After the performance pass (P1–P3, mains power, CPU benchmark 2,732–3,182): CLS 0.001 and a11y / best practices / SEO 100 everywhere; LCP passes on `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, over on Eventora 2.79 s; TBT 695–989 ms on every page (over). Partial: Eventora LCP and TBT need an owner decision (`docs/UX-REVIEW.md` → P5, P6)
+- [~] Lighthouse mobile on the local production build (`portfolio-prod`), median of 3 runs. Targets: LCP < 2.5 s, CLS < 0.05, TBT < 200 ms as the lab proxy for INP. Reports saved to `docs/reports/`. After the performance pass (P1–P3, mains power, CPU benchmark 2,732–3,182): CLS 0.001 and a11y / best practices / SEO 100 everywhere; LCP passes on `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, over on Eventora 2.79 s; TBT 695–989 ms on every page (over). Partial: Eventora LCP and TBT over budget. Owner decision 2026-10-08: option C, accept and re-measure on a Vercel preview in Stage 6 (`docs/ISSUES.md` → ISS-01, ISS-02)
 - [x] 375 px `scrollWidth` check on every page: equal to the viewport at 375, 768, 1280 and 1920 on all 4 pages, both themes
 - [x] After screenshots in `docs/screens/stage5-after/` (32 WebP, 6.6 MB); M1–M15 status table updated
 
 Notes:
 - Screenshots and reports are committed one file per commit (CLAUDE.md git rules), or up to four per commit when they are one identical change (for example the four widths of one page and theme). Keep them as compressed PNG/JPEG at 1× so the repo stays small.
+
+## Review round 1: owner review fixes (planned 2026-10-08; R0 decided 2026-10-08)
+
+Source: the owner's review of a local production build on 2026-10-08 (21 notes, six screenshots). Every item is an issue in `docs/ISSUES.md` (ISS-12 to ISS-34, with context, options and recommendations) and an owner-reported entry in the `docs/UAT.md` defect log. Branch when started: `feat/owner-review-1`. Stage gating as usual: finish, stop, wait for "continue". Several items change rules the brief fixed (approved hero copy, one accent color, radius, banned fonts, grayscale screenshots); `CLAUDE.md` changes in the same branch as the decision, never before.
+
+R0 Owner decisions (blocks R2 to R4; nothing is coded before these are answered)
+- [x] ISS-12 hero (final, 2026-10-08): label "Software engineer", H1 "Abdelrhman Mohamed.", then the owner's two-sentence description reframed to pass the copy rules (`docs/ISSUES.md` → ISS-12)
+- [x] ISS-21 palette direction: A, crimson ramp
+- [x] ISS-22 button radius: pill for buttons and CTAs only
+- [x] ISS-23 nav, footer and stack captions: Hanken Grotesk
+- [x] ISS-16 practice PR stays excluded: 8 merged across 6 projects, 3 under review
+- [x] ISS-17 elwahapumps issue left out
+- [x] ISS-18 Eventora's README performance figures (selection in `docs/ISSUES.md` → ISS-18)
+- [x] ISS-03 keep the still hero graph on phones (closed)
+
+R1 Facts and content (data files only)
+- [ ] ISS-14 name "Abdelrhman Mohamed": `personal.name`, LICENSE holder, share images, JSON-LD; `CLAUDE.md` decision line
+- [ ] ISS-15 email `personal.email`
+- [ ] ISS-12 / ISS-13 hero: label, name as H1, the two description paragraphs; stack line and student sentence removed from the hero; `CLAUDE.md` approved copy and share images updated
+- [ ] ISS-16 `oss.json`: mage #16440 merged 2026-10-07, #2688 retitled; facts-check asserts; headline 8 merged across 6 projects, 3 under review (or as decided)
+- [ ] ISS-17 every filed issue with its state
+- [ ] ISS-18 metrics audit table (site metric, source line, README line today, match), owner review, evidence report and `FACTS-CHECK.md` updated
+- [ ] ISS-19, ISS-20 (later): Alstom internship and the Claude certificates entry once the owner supplies the facts
+
+R2 Visual system and layout (after R0)
+- [ ] Update `CLAUDE.md` "Visual system" with the decided palette, radius and fonts; extend `check-colors.ts` and `check-contrast.ts` to the new tokens; both themes pass
+- [ ] ISS-21 palette tokens and where each tone is used
+- [ ] ISS-22 radius tokens for buttons (and controls if chosen)
+- [ ] ISS-23 font for nav, footer and stack captions
+- [ ] ISS-28 type and spacing rescaled for laptop viewports; display sizes capped by viewport height; tested at 1280×720, 1366×768, 1440×900, 1536×864, 1920×1080
+- [ ] ISS-31 project cards fit one viewport; stack overlap off when the viewport is too short
+- [ ] ISS-29 "Also built" names no longer overlap
+- [ ] ISS-30 stack section as an aligned grid per lane
+- [ ] ISS-24 GitHub and LinkedIn marks (inline SVG, with text labels) in Contact and the footer
+- [ ] ISS-32 one hover / press / focus treatment per control type, within the motion rules
+- [ ] ISS-33 cursor "ON" label bug
+- [ ] ISS-34 scroll-spy current-section bug
+
+R3 Media and diagrams
+- [ ] ISS-25 color screenshots: Eventora dark set and Recruiter-Pro's 13 real screens, each viewed and checked for placeholder or private data before use; carousels on both cards; case-study galleries; closes the Recruiter-Pro screenshot TODO
+- [ ] ISS-26 slide sharpness: measured cause fixed (`sizes`, quality, filter, scaling)
+- [ ] ISS-27 SysPlex diagram recomposed inside the sourced nodes and steps; card preview to match
+
+R4 Verify and record
+- [ ] UI UX Pro Max audit rows for every change (`docs/UX-REVIEW.md`), `frontend-design` critique of the new palette and type
+- [ ] Before and after captures at the laptop sizes above, both themes, in `docs/screens/review-1/`
+- [ ] `npm run check`, `lint`, `typecheck`, `build`, `report:bundle` green; 375 px `scrollWidth` on every page
+- [ ] Lighthouse on mains power, 3 runs per page; no regression against Stage 5 (`docs/reports/`)
+- [ ] Each fixed issue closed in `docs/ISSUES.md` with its evidence; UAT-49 to UAT-51 ready for the owner
 
 ## Stage 6: Release docs, CD and v1.0.0
 
@@ -173,14 +224,16 @@ Notes:
 
 6.2 CD (extend, do not replace, `.github/workflows/ci.yml`)
 - [ ] Playwright smoke job in `ci.yml` or a separate workflow: build, `next start`; every route returns 200; no console errors; header nav works; reduced-motion and JS-off render content
+- [ ] Re-measure Lighthouse on a Vercel preview (3 runs) and act on `docs/ISSUES.md` ISS-01 and ISS-02: close them if within budget, otherwise apply their next option (ISS-01 option A, ISS-02 option B1) and re-measure
 - [ ] `.github/workflows/lighthouse.yml`: on `deployment_status` when the state is `success` and the deployment is not production; Lighthouse CI against the preview URL from the event, 3 runs, CLAUDE.md budgets; uses secret `VERCEL_AUTOMATION_BYPASS_SECRET` if Deployment Protection is on
 - [ ] `.github/workflows/release.yml`: on tag `v*.*.*`, `permissions: contents: write`; extracts that version's CHANGELOG section and fails if it is missing; runs `gh release create`
-- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped
+- [ ] `.github/dependabot.yml`: npm and github-actions, weekly, minor and patch grouped. Watches for the patched `braces` chain (`docs/ISSUES.md` → ISS-10); never `npm audit fix --force` (it downgrades `eslint-config-next` to 14)
+- [ ] Try ESLint 10 on its own branch (`docs/ISSUES.md` → ISS-11): `npm run lint` clean and CI green, or stay on 9.39.5 with the reason recorded
 - [ ] Least-privilege `permissions` in every workflow; actions pinned to at least a major version
 - [ ] Owner actions listed, not performed: import the project in Vercel; add the secret if needed; mark the required status checks in the `main` ruleset (exact job names); set the repo homepage URL
 
 6.3 Release v1.0.0
-- [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left)
+- [ ] Definition of done (below) fully met; `check:launch --strict` passes (no `TODO(owner)` left); `docs/ISSUES.md` has no Open or Owner issue of High severity
 - [ ] Render the owner's release block per `DEPLOY.md`; after the deploy, run the smoke checks on the production URL and confirm the GitHub Release exists
 - [ ] Final message reminds the owner to pin the repo and add the URL to `Sharawey74/Sharawey74` (carried over from the old Stage 5 list)
 
@@ -224,6 +277,7 @@ Notes:
 ## Definition of done (whole project)
 
 - [ ] `docs/UAT.md` signed off by the owner, no open High defects
+- [ ] `docs/ISSUES.md`: every High issue Closed, or Decided with the owner's acceptance recorded
 
 - [ ] `next build` passes; no TypeScript or lint errors; no unused data
 - [ ] Every public claim traces to `FACTS-CHECK.md`; zero banned claims, including alt text and metadata

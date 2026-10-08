@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Context and standing rules for anyone (human or agent) working in this repo.
-Read this first, then `PLAN.md` for where the work stands. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script. Private details that
+Read this first, then `PLAN.md` for where the work stands. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script; `docs/ISSUES.md` is the register of open issues, decisions and proposed fixes; `docs/reports/` holds measurements. Private details that
 must not be in a public repo live in `CLAUDE.local.md` (git-ignored); read it
 too if it exists on this machine.
 
@@ -15,7 +15,8 @@ file and a date.
 
 - Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
-- Work is staged (0 to 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+- Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+- **Pending brief changes.** The owner's review round 1 (2026-10-08) asks to change rules below: the approved hero copy, one accent color, the 0–2 px radius, the Arial ban and grayscale screenshots (`docs/ISSUES.md` ISS-12, ISS-13, ISS-21 to ISS-25). Each rule here stays in force until its decision is recorded in `docs/ISSUES.md`; then this file changes in the same branch as the code.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -50,8 +51,8 @@ All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
 - PhishSniffer: "about 43K emails from public corpora (34,284 train, 8,571 held out)", 97.7% test accuracy.
 - Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
 - Recruiter-Pro: "500+ tests" (README says 544 and 530).
-- Public name spelling is undecided ("Abdelrahman" vs "Abdelrhman"). Never choose; `personal.name` stays `TODO(owner)` until set. LICENSE holder is "Sharawey74" until then.
-- Headline OSS stat is derived, not typed: 7 merged PRs across 5 projects, 4 under review, 2026-08 to 2026-10 (`ossSummary()`).
+- Public name: the owner chose **"Abdelrhman Mohamed"** on 2026-10-08 (`docs/ISSUES.md` ISS-14). Until review round 1 applies it, `personal.name` is still `TODO(owner)` and the LICENSE holder is "Sharawey74"; never use the other spelling.
+- Headline OSS stat is derived, not typed (`ossSummary()`). The committed snapshot says 7 merged across 5 projects, 4 under review; since magefree/mage #16440 merged on 2026-10-07 the true figure is 8 across 6, 3 under review, and review round 1 updates the snapshot (`docs/ISSUES.md` ISS-16).
 
 ## Content model
 
@@ -202,7 +203,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `/` renders Hero → About → Work → Open source → Experience → Contact; all five sections are `live`. `page.tsx` fetches PR status once (`getPullRequests()` in `src/lib/oss-live.ts`) and passes it to About and Open source so their numbers agree. That fetch (`revalidate: 86400`) makes `/` ISR with a 1-day interval; failures fall back to `oss.json` per PR.
 - Components: `src/components/{about,oss,experience,contact,palette}/*`, `layout/site-footer.tsx`, `layout/surfaces.tsx` (M12), `motion/scramble.tsx` (M11). Interface strings for all of them live in `profile.ui.{about,oss,experience,contact,footer,palette}`.
 - **Contact:** Server Action `src/app/actions/contact.ts` (honeypot → config → Zod → rate limit → Resend over `fetch`). `src/lib/contact-config.ts` decides whether the form renders; keep non-action helpers out of the `"use server"` file (every export there becomes a callable endpoint). The action returns the submitted values with a fresh `at`, and the form is keyed on it, because React resets a form after its action.
-- **Palette (M13):** `PaletteDialog` (client) gets a prebuilt item list from `CommandPalette` (server). Open it from anywhere with `window.dispatchEvent(new Event(OPEN_EVENT))`. It is the mobile navigation (header "Menu" below 768 px).
+- **Palette (M13):** `PaletteDialog` (client) gets a prebuilt item list from `CommandPalette` (server). Open it from anywhere with `window.dispatchEvent(new Event(OPEN_EVENT))`. It is the mobile navigation (header "Menu" below 1024 px since Stage 5).
 - **Theme:** `src/components/theme/theme-switch.ts` holds `switchTheme()`; the toggle and the palette both call it.
 - **Scramble (M11):** wrap a mono label in `<ScrambleText text=… />` inside a link or button; one `ScrambleHost` in the layout does the rest.
 - **SEO:** `src/lib/site.ts` (`siteUrl()`), metadata in `layout.tsx` (title template, OG, Twitter, JSON-LD `Person`), per-page canonical in `page.tsx` and the case page, `sitemap.ts`, `robots.ts`, `icon.svg`. Share images: `src/lib/og.tsx` reads colors from the dark tokens in `globals.css` and fetches TTF subsets from Google Fonts at build (next/og's bundled default is Geist, a banned face; a failed fetch fails the build). A child route that sets `openGraph` replaces the parent's whole `openGraph` object, so set all its fields or none.
@@ -233,12 +234,14 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Screenshots:** full-page captures are tiled at the real viewport height and stitched (a single `captureBeyondViewport` shot breaks the sticky stack and lazy images). The sticky cards repeat across tiles; that is the stitching.
 - **Performance pass:** grain is `public/textures/grain.png` (pre-rendered, grayscale), never an SVG filter; the live hero canvas and the M15 shader load only with a fine pointer (`finePointer` in `HeroGraph`); Newsreader loads the normal style only (add `"italic"` in `fonts.ts` only when content uses it, it costs ~140 KB). `content-visibility: auto` was tried below the fold and made layout slower here; do not reapply it without re-measuring.
 - **Measuring main-thread cost:** record a Chrome trace over the DevTools protocol at 4x CPU and break down each task over 50 ms by child event (Layout, UpdateLayoutTree, EvaluateScript); three-run A/B comparisons of `Performance.getMetrics` were too noisy to trust.
+- Measured at the end of Stage 5: `/` 156.1 KB gz, case studies 155.6 KB gz. Lighthouse mobile medians (applied throttling, localhost, mains power): LCP `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, Eventora 2.79 s; TBT 695–989 ms; CLS 0.001; accessibility, best practices and SEO 100. Eventora LCP and TBT are accepted until re-measured on Vercel (`docs/ISSUES.md` ISS-01, ISS-02).
 - **Lighthouse needs a steady CPU.** Runs on battery read a CPU benchmark of 510–670 against 1,500–2,400 for the Stage 4 runs, and TBT came out about four times higher; check `environment.benchmarkIndex` in each JSON before trusting or comparing runs.
 
 ## Review and acceptance
 
 - Before each stage summary, re-run the UI UX Pro Max audit for the new UI against `references/quick-reference.md` and add rows to `docs/UX-REVIEW.md` (verdicts: Pass, Fixed, Open, N/A, Brief, UAT).
 - New user-facing behavior gets a case in `docs/UAT.md` (steps + expected result). Do not mark UAT cases as passed: only the owner records results there.
+- Anything found and not fixed in the same branch goes into `docs/ISSUES.md` with the next `ISS-NN` ID: severity, evidence, cause, options with their cost, a recommendation, and the owner's decision once given (with date). Close an issue only with evidence (command output, report or capture). Never re-number. Owner-only private items stay in `CLAUDE.local.md`.
 - Measure phone layout with `document.documentElement.scrollWidth` at 375 px on every page; flex/grid children holding wide content need `min-w-0`, long tokens need `overflow-wrap: anywhere`, and `sr-only` goes on a wrapper div, never on a `<table>`.
 
 ## Environment gotchas (Windows)

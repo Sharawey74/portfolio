@@ -52,3 +52,7 @@ What changed, each measured before it was kept:
 Tried and rejected: `content-visibility: auto` on below-the-fold sections (layout still touched all 1,727 objects and took about twice as long, likely because of the scroll-linked animations), and `text-wrap: wrap` instead of `pretty` / `balance` (no change).
 
 Still over: Eventora LCP 2.79 s (the HTML takes 0.7 s on slow 4G, the hero image then shares the connection with 207 KB of fonts, 132 KB of it Newsreader with its `opsz` axis, and waits about 0.8 s for the main thread), and TBT 695–989 ms on every page (the browser's first style and layout pass over the page, about 0.45 s at 4x CPU, plus React hydration).
+
+## Decision
+
+Owner, 2026-10-08: accept these numbers and re-measure on a Vercel preview in Stage 6 (option C). Options and next steps: `docs/ISSUES.md` → ISS-01 (Eventora LCP) and ISS-02 (TBT).

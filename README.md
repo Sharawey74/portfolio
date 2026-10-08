@@ -4,9 +4,10 @@ Personal portfolio for Sharawey74: backend systems first, with AI services and
 open-source work as supporting material. Black and white, one accent color,
 every public number traced to a source file and a date.
 
-> Status: Stage 4 of 5 (all sections, command palette, SEO). Build order and
-> progress: `PLAN.md`. Rules and context: `CLAUDE.md`. Design audit:
-> `docs/UX-REVIEW.md`. Owner acceptance script: `docs/UAT.md`.
+> Status: Stage 5 of 6 done (design polish, motion audit, performance pass).
+> Build order and progress: `PLAN.md`. Rules and context: `CLAUDE.md`. Design
+> audit: `docs/UX-REVIEW.md`. Owner acceptance script: `docs/UAT.md`. Open
+> issues and proposed fixes: `docs/ISSUES.md`. Measurements: `docs/reports/`.
 
 ## What is on the site
 
