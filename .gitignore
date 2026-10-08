@@ -40,6 +40,7 @@ PLAN.md
 FACTS-CHECK.md
 PERSONAL-INFO-CHECKLIST.md
 *.local.md
+DEPLOY.md
 
 # local preview config for the desktop app browser
 .claude/launch.json
