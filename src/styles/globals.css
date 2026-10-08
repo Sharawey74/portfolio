@@ -350,17 +350,6 @@
     translate: 0 0;
   }
 
-  /* Screenshots stay grayscale until the reader engages with them. */
-  .shot {
-    filter: grayscale(1) contrast(1.05);
-    transition: filter var(--dur-2) var(--ease-out);
-  }
-  .shot:hover,
-  .shot:focus-visible,
-  :focus-within > .shot,
-  .shot[data-zoomed] {
-    filter: none;
-  }
 }
 
 /* M2 scroll-progress hairline: CSS scroll timeline where supported.
@@ -919,6 +908,29 @@ html[data-motion="paused"] .clip-reveal {
   font-family: var(--font-mono);
   font-size: 14px;
   letter-spacing: 0.02em;
+}
+.flow-detail {
+  fill: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+/* Zones: sourced groupings (e.g. where a tier runs), behind the nodes. */
+.flow-zone {
+  fill: var(--surface-raised);
+  stroke: var(--line-strong);
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
+}
+.flow-zone-label {
+  fill: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.flow-zone-note {
+  fill: var(--text-3);
+  font-family: var(--font-sans);
+  font-size: 13px;
 }
 html[data-reveal="on"] .flow-edge {
   scale: 0;
