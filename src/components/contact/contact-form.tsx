@@ -96,7 +96,7 @@ export function ContactForm({ labels }: { labels: Labels }) {
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex min-h-11 items-center gap-3 rounded-xs bg-ink px-5 text-small font-medium text-page transition-[background-color] duration-200 ease-out hover:bg-ink-soft disabled:cursor-progress disabled:bg-ink-2"
+          className="inline-flex min-h-11 items-center gap-3 rounded-pill bg-ink px-6 text-small font-medium text-page transition-[background-color,color] duration-200 ease-out hover:bg-c2 hover:text-on-c2 disabled:cursor-progress disabled:bg-ink-2"
         >
           {pending ? labels.sending : labels.send} <span aria-hidden="true">→</span>
         </button>

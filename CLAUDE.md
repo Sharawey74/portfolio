@@ -16,7 +16,7 @@ file and a date.
 - Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
-- **Pending brief changes.** The owner's review round 1 (2026-10-08) asks to change rules below: the approved hero copy, one accent color, the 0–2 px radius, the Arial ban and grayscale screenshots (`docs/ISSUES.md` ISS-12, ISS-13, ISS-21 to ISS-25). Each rule here stays in force until its decision is recorded in `docs/ISSUES.md`; then this file changes in the same branch as the code.
+- **Brief changes from review round 1** (owner, 2026-10-08, `docs/ISSUES.md` ISS-12 to ISS-25) are applied below: the hero copy, a three-step accent ramp instead of one accent, pill buttons, Hanken Grotesk for interface labels, brand icons, color screenshots. A later change to these rules follows the same path: decision recorded in `docs/ISSUES.md` first, then this file in the same branch as the code.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -51,8 +51,9 @@ All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
 - PhishSniffer: "about 43K emails from public corpora (34,284 train, 8,571 held out)", 97.7% test accuracy.
 - Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
 - Recruiter-Pro: "500+ tests" (README says 544 and 530).
-- Public name: the owner chose **"Abdelrhman Mohamed"** on 2026-10-08 (`docs/ISSUES.md` ISS-14). Until review round 1 applies it, `personal.name` is still `TODO(owner)` and the LICENSE holder is "Sharawey74"; never use the other spelling.
-- Headline OSS stat is derived, not typed (`ossSummary()`). The committed snapshot says 7 merged across 5 projects, 4 under review; since magefree/mage #16440 merged on 2026-10-07 the true figure is 8 across 6, 3 under review, and review round 1 updates the snapshot (`docs/ISSUES.md` ISS-16).
+- Public name: **"Abdelrhman Mohamed"** (owner, 2026-10-08, `docs/ISSUES.md` ISS-14): `personal.name`, the hero H1, the LICENSE holder and JSON-LD `Person.name`; "Sharawey74" stays as the handle (`alternateName`). The facts check bans the other spelling and asserts the H1 equals the name plus a period.
+- Headline OSS stat is derived, not typed (`ossSummary()`): 8 merged across 6 projects, 3 under review, 2026-08 to 2026-10 (snapshot 2026-10-08; magefree/mage #16440 merged 2026-10-07). The first-contributions practice PR stays excluded (ISS-16). "Issues reported" lists litestar #5020 and #5018 and avoid-ai-writing #333 (ISS-17).
+- Eventora card highlights: 0 oversold seats, 569,066 requests with 0 failed across five capacity runs (A, B, C, G, H; summed and checked), 660 req/s per 1-CPU replica, all "local, Docker Compose" (ISS-18).
 
 ## Content model
 
@@ -72,13 +73,17 @@ Data files import each other with explicit `.ts` extensions (`import { claim } f
 
 ## Approved hero copy
 
-- H1: "Backend systems that stay correct under load." (the final period is the one text use of `--break`)
-- Sub: "Software Engineering student at AASTMT (Jun 2027). Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work."
+Owner's own description, reframed to pass the copy rules and approved on 2026-10-08 (`docs/ISSUES.md` ISS-12, ISS-13). The 2026-10-06 headline and the student sentence are retired; education stays in About.
+
+- Label (mono, above the H1): "Software engineer"
+- H1: "Abdelrhman Mohamed." (the final period is the one text use of `--break`)
+- Lead: "Software Engineer focused on designing and building systems that keep working as load grows, with a strong emphasis on correctness, maintainability and real-world engineering constraints."
+- Second paragraph: "Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software."
 - CTAs: "View My Work", "Download Resume".
 
 ## Visual system (overrides any skill's defaults)
 
-**Color.** All text is black or white (gray steps), never colored, except the H1's final period. Dark is default; light is the exact mirror. Surfaces come from a neutral 12-step ramp (R=G=B), applied by role:
+**Color.** Text is black or white (gray steps), with two exceptions in `--break`: the H1's final period and the section index numbers ("01"). Dark is default; light is the exact mirror. Surfaces come from a neutral 12-step ramp (R=G=B), applied by role:
 
 | Token | Dark | Light | Role |
 |---|---|---|---|
@@ -97,23 +102,30 @@ Data files import each other with explicit `.ts` extensions (`import { claim } f
 
 `globals.css` is the source of truth for the exact values; any value changed to pass contrast is logged in its header comment.
 
-**Break color** `--break`: dark `#FF3B4E`, light `#C4152A`. One token. Setting `--break` equal to `--g11` returns the site to pure black and white.
-- Allowed: live/open status dot, active nav marker, `::selection`, focus ring, the single active packet/node in motion graphics, one highlighted value per chart, the H1 final period, the cursor-ring hover state.
-- Forbidden: body or heading text, backgrounds larger than a chip, gradients, glows, shadows, card borders, more than one break use per section in view. Budget ≤ 2% of viewport pixels.
-- `scripts/check-contrast.ts` requires ≥ 4.5:1 for text use and ≥ 3:1 for graphics in both themes.
-- `scripts/check-colors.ts` fails on any non-gray color literal other than the two `--break` definitions.
+**Accent ramp** (owner decision 2026-10-08, ISS-21 direction A): three crimson steps, each with one job. Nothing else is colored.
+
+| Token | Dark | Light | Job |
+|---|---|---|---|
+| `--c1` deep | #3A0810 | #F6E2E5 | Fills: the Contact band (the one large accent surface), outline-button and header-control hover, the active nav pill, the selected palette option |
+| `--c2` mid | #8E1428 | #A3142A | Filled-button hover (text `--on-c2` #FAFAFA), `::selection`, project-card hover edge, hairlines inside the Contact band |
+| `--break` bright | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the single active packet/node in motion graphics, one highlighted value per chart, the H1 final period, section index numbers, the cursor-ring hover state |
+
+- Forbidden: colored body or heading text (beyond the two `--break` text uses above), gradients, glows, shadows, accent fills on cards or content blocks other than the Contact band, `--break` as a fill larger than a chip.
+- `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1 (including all text roles on `--c1` and `--on-c2` on `--c2`), graphics ≥ 3:1. Light `--c1` was lightened from #F3DADD to #F6E2E5 to keep text-3 at 4.63:1.
+- `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2` and `--break` definitions. Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
 
 **Depth** comes from stacking ramp steps, opacity, 1 px hairlines (`--g4`/`--g5`), grain, scale and `mix-blend-mode`. No shadows, no blur glows.
 
-**No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; always with text. Screenshots render `grayscale(1) contrast(1.05)`, full color on hover, focus and in zoom. Diagrams use line weight, dashes, gray fills and patterns.
+**No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; reported issues ● Closed / ○ Open; always with text. Screenshots render in full color (ISS-25): carousels resized at quality 90 with `sizes` matching the card column, the case-study hero (an LCP image) at the default quality, gallery and zoom as the original files (ISS-26). Diagrams use line weight, dashes, gray fills, patterns and dashed zone frames.
 
 **Type.** Never Inter, Roboto, Arial, system-ui, Space Grotesk or Geist. Fonts in `src/styles/fonts.ts` (swap there only):
 - Display: Newsreader (variable opsz + wght), large, tracking −0.02 to −0.04em, weight 300–400, italic for single emphasis words.
 - Text/UI: Hanken Grotesk, 16–18 px / 1.55.
-- Mono: JetBrains Mono for labels, numbers, metadata, figure captions (11–13 px; labels uppercase, +0.06em).
-- Type scale tokens only (display XL, display L, H2, H3, body, small, mono label); no ad-hoc sizes. Tabular numerals for every figure. Fluid sizes keep max ≤ 2.5 × min so browser zoom still works (display XL is 80–200 px for that reason).
+- Mono: JetBrains Mono for numbers, metadata, sources, figure captions and content labels (11–13 px; labels uppercase, +0.06em).
+- Interface labels (header controls, nav links, footer links, stack captions) use Hanken Grotesk in sentence case (`.ui-label`; ISS-23); their index numbers stay mono. The header wordmark is the name in Newsreader.
+- Type scale tokens only (display XL, display L, H2, H3, body, small, mono label); no ad-hoc sizes. Tabular numerals for every figure. Fluid sizes keep max ≤ 2.5 × min so browser zoom still works. Display sizes are capped by viewport height too (`svh`), for laptops at 125–150% scaling (ISS-28). Display XL is the H1 only, 48–120 px (`min(15vw, 15svh)`): the longest word of the name must fit 288 px at 320.
 
-**Anti-slop.** Banned: purple/blue gradients, neon glow, glass-blur cards, gradient blobs, gradient text, sparkle icons, emoji icons, grids of identical rounded shadowed cards, 3-column icon-feature rows, everything centered, colored left-border stat cards, untouched shadcn/Tailwind default look, drop shadows. Required: asymmetric 12-column editorial grid with deliberate offsets and a consistent baseline; numbered section indices ("01 / Work"); mono figure captions ("FIG. 03 / Booking flow"); hairline rules; oversized numerals; radius 0–2 px; real content (numbers, diagrams, screenshots) as the visual material. Icons are text glyphs (→ ↗ ✓ ○ ·) in mono; a custom 1.5 px-stroke SVG only where unavoidable.
+**Anti-slop.** Banned: purple/blue gradients, neon glow, glass-blur cards, gradient blobs, gradient text, sparkle icons, emoji icons, grids of identical rounded shadowed cards, 3-column icon-feature rows, everything centered, colored left-border stat cards, untouched shadcn/Tailwind default look, drop shadows. Required: asymmetric 12-column editorial grid with deliberate offsets and a consistent baseline; numbered section indices ("01 / Work"); mono figure captions ("FIG. 03 / Booking flow"); hairline rules; oversized numerals; radius 0–2 px on content, pills (`rounded-pill`) on buttons, CTAs and header controls only (ISS-22); real content (numbers, diagrams, screenshots) as the visual material. Icons are text glyphs (→ ↗ ✓ ○ ·) in mono; the GitHub and LinkedIn marks and a 1.5 px-stroke envelope (`src/components/ui/brand-icon.tsx`, always beside a text label; ISS-24) are the only SVG icons.
 
 ## Motion rules
 
@@ -170,7 +182,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - `src/components/theme/*`: pre-paint script and the two-state toggle with the View Transition circle reveal.
 - `src/components/ui/*`: Button / ButtonLink, TextLink, SectionHeading, Rule, Chip, StatusPill, Figure, MonoLabel. Use Tailwind's `sr-only` for visually hidden text.
 - Interface strings (skip link, control labels, status names) live in `profile.ui`.
-- Tailwind utilities: colors `page raised card hover hair line line-strong deco ink ink-2 ink-3 ink-soft break` and `g0`–`g11`; text `display-xl display-l h2 h3 body small mono mono-lg`; `rounded-xs` (1 px), `rounded-sm` (2 px); `ease-out`. The default palette, shadows, blurs and larger radii are removed on purpose.
+- Tailwind utilities: colors `page raised card hover hair line line-strong deco ink ink-2 ink-3 ink-soft break c1 c2 on-c2` and `g0`–`g11`; text `display-xl display-l h2 h3 body small mono mono-lg`; `rounded-xs` (1 px), `rounded-sm` (2 px), `rounded-pill` (buttons only); `ease-out`. The default palette, shadows, blurs and other radii are removed on purpose.
 - Local preview: config `portfolio-prod` (`npm start` on port 3107 after a build) in `.claude/launch.json` inside the repo, git-ignored. The desktop browser resolves it from the session's working directory; a session started on the Desktop needs a copy at `C:\Users\DELL\Desktop\.claude\launch.json`.
 
 ## Hero and navigation in place (Stage 2)
@@ -237,6 +249,22 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - Measured at the end of Stage 5: `/` 156.1 KB gz, case studies 155.6 KB gz. Lighthouse mobile medians (applied throttling, localhost, mains power): LCP `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, Eventora 2.79 s; TBT 695–989 ms; CLS 0.001; accessibility, best practices and SEO 100. Eventora LCP and TBT are accepted until re-measured on Vercel (`docs/ISSUES.md` ISS-01, ISS-02).
 - **Lighthouse needs a steady CPU.** Runs on battery read a CPU benchmark of 510–670 against 1,500–2,400 for the Stage 4 runs, and TBT came out about four times higher; check `environment.benchmarkIndex` in each JSON before trusting or comparing runs.
 
+## Review round 1 in place (2026-10-08)
+
+- **Hero:** label "Software engineer", H1 = the name (asserted equal to `personal.name` plus a period by the facts check), lead and second paragraph; all in `profile.hero`. The share image uses the label as kicker and the name as title.
+- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class; a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answers with the accent ramp (filled → `--c2`, outline → `--c2` edge on `--c1`).
+- **Contact band:** `.contact-band` wraps the Contact section and redefines `--line-hair` / `--line` as `--c2` inside it.
+- **Stack in About:** `.stack-rows` is a subgrid table, chip column and "used in" column; one column below 30 rem.
+- **Work cards:** card figures show their qualifier under the label; "Also built" names sit on their own row; below 40 rem viewport height the sticky stack becomes a plain list. About's flagship cell shows the test count, the Work card leads with performance figures.
+- **Screenshots:** files are copied from the repos' GitHub Pages folders, viewed one by one first. Recruiter-Pro uses 4 of 13 (the others show unsourced figures, the owner's own resume or a banned term); reasons are in a comment in `projects.ts`.
+- **Diagrams:** `flow.zones` (sourced groupings) draw as dashed frames behind their nodes (`flow-parts.tsx`); a layout with `detail: true` shows each node's detail line. SysPlex is laid out as the README's two tiers.
+- **Cursor:** the page flag is `data-cursor-active`; `data-cursor` is only ever a per-element label (ISS-33).
+- **Scroll-spy:** a band observer on the headings plus a whole-viewport observer on their sections, plus `hashchange` and `pageshow` (ISS-34).
+- **Number traps in the facts check:** the banned-number patterns also match coordinates and line numbers ("700", "194"): keep layout coordinates off them and cite another line when a source line has that number.
+- **Local fetch cache:** `.next/cache/fetch-cache` keeps the daily PR status between local builds; delete it to see a fresh status locally.
+- **Images and speed:** `next.config.ts` allows qualities 75 and 90. Serving 1440 px originals to phones cost up to 0.4 s of LCP and 0.4–0.6 s of TBT; keep LCP images on the optimizer.
+- Measured at the end of review round 1: `/` 156.2 KB gz. Lighthouse mobile medians (CPU benchmark 2,212–2,908): LCP `/` 2.43 s, Eventora 2.88 s, Recruiter-Pro 3.28 s, SysPlex 2.65 s; TBT 1,079–1,508 ms; CLS 0.001; accessibility, best practices and SEO 100. TBT and Recruiter-Pro LCP are worse than Stage 5: `docs/ISSUES.md` ISS-36 (re-measure on Vercel). Close the browser pane before Lighthouse runs: its animated hero competes for the CPU.
+
 ## Review and acceptance
 
 - Before each stage summary, re-run the UI UX Pro Max audit for the new UI against `references/quick-reference.md` and add rows to `docs/UX-REVIEW.md` (verdicts: Pass, Fixed, Open, N/A, Brief, UAT).
@@ -257,6 +285,6 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 
 ## Open items owed by the owner
 
-Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, real Recruiter-Pro screenshots, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
+Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
 
 Repo setup still open (checked 2026-10-07): the Vercel project is not imported (no deployments on the repo), and the repo homepage is the placeholder `https://YOUR-PROJECT.vercel.app` (returns 404). Set it to the real Vercel URL once the project exists.

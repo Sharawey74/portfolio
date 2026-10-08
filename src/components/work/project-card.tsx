@@ -24,8 +24,8 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     .filter((m): m is NonNullable<typeof m> => m !== undefined);
 
   return (
-    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 md:p-10 lg:grid-cols-12 lg:gap-6">
-      <div className="flex flex-col gap-6 lg:col-span-5">
+    <InteractiveCard className="project-card grid gap-8 border border-hair bg-card p-6 transition-colors duration-200 ease-out hover:border-c2 md:p-8 lg:grid-cols-12 lg:gap-6">
+      <div className="card-copy flex flex-col gap-6 lg:col-span-5">
         <span aria-hidden="true" className="card-numeral num font-display">
           {String(index + 1).padStart(2, "0")}
         </span>
@@ -36,7 +36,11 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(6.5rem,1fr))] gap-x-4 gap-y-5 border-t border-hair pt-5">
           {highlights.map((m) => (
             <div key={m.id} className="flex min-w-0 flex-col gap-1" title={`${ui.source}: ${m.source} (${ui.asOf} ${m.asOf})`}>
-              <dt className="mono-label order-2 text-ink-3">{m.label}</dt>
+              <dt className="order-2 flex flex-col gap-1">
+                <span className="mono-label text-ink-3">{m.label}</span>
+                {/* Qualifiers travel with their numbers ("local, Docker Compose"). */}
+                {m.qualifier ? <span className="text-small leading-snug text-ink-3">{m.qualifier}</span> : null}
+              </dt>
               <dd className="order-1 font-display text-h3 leading-none whitespace-nowrap">
                 <CountUp display={m.display} />
                 {m.unit ? <span className="ml-1 font-mono text-mono text-ink-3">{m.unit}</span> : null}
@@ -50,11 +54,11 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
             data-cursor={ui.cursorView}
             data-magnetic=""
             data-press=""
-            className="inline-flex min-h-11 items-center gap-3 border border-line-strong px-5 text-small font-medium text-ink transition-colors duration-200 ease-out hover:border-ink hover:bg-hover"
+            className="btn inline-flex min-h-11 items-center gap-3 rounded-pill border border-line-strong px-6 text-small font-medium text-ink transition-colors duration-200 ease-out hover:border-c2 hover:bg-c1"
           >
             {ui.caseStudy}
             <span className="sr-only">: {project.name}</span>
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true" data-arrow="right">→</span>
           </Link>
         </div>
       </div>

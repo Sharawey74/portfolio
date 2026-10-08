@@ -20,7 +20,7 @@ const field = z
   });
 
 const personalSchema = z.object({
-  /** Spelling differs across files ("Abdelrahman" vs "Abdelrhman"); the owner decides. */
+  /** Chosen by the owner on 2026-10-08 (docs/ISSUES.md ISS-14). */
   name: field,
   email: field,
   /** Never rendered unless set. */
@@ -38,8 +38,8 @@ const personalSchema = z.object({
 });
 
 export const personal = personalSchema.parse({
-  name: { value: null, todo: "TODO(owner): public name and its spelling (Abdelrahman or Abdelrhman)" },
-  email: { value: null, todo: "TODO(owner): public contact email" },
+  name: { value: "Abdelrhman Mohamed" },
+  email: { value: "abdelrhmanhamied004@gmail.com" },
   phone: { value: null, todo: "TODO(owner): phone number, only if it should be public" },
   portrait: { value: null, todo: "TODO(owner): portrait photo under /public" },
   location: { value: null, todo: "TODO(owner): location line" },

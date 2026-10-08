@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-06",
+  "fetchedAt": "2026-10-08",
   "source": "gh pr view <n> -R <repo> --json title,state,createdAt,mergedAt,additions,deletions",
   "pullRequests": [
     { "repo": "python/typeshed", "number": 16443, "title": "Widen tarfile.open() preset to int", "state": "merged", "createdAt": "2026-09-25", "mergedAt": "2026-09-25", "additions": 5, "deletions": 5, "fixes": 16442 },
@@ -11,10 +11,12 @@
     { "repo": "conorbronsdon/avoid-ai-writing", "number": 342, "title": "fix(scripts): use the resolved interpreter in read_manifest_version", "state": "merged", "createdAt": "2026-09-23", "mergedAt": "2026-09-23", "additions": 1, "deletions": 1, "fixes": 333 },
     { "repo": "litestar-org/litestar", "number": 5019, "title": "fix: do not suggest FromQuery for path parameter defaults", "state": "open", "createdAt": "2026-08-26", "mergedAt": null, "additions": 76, "deletions": 8, "fixes": 5018 },
     { "repo": "eclipse-collections/eclipse-collections", "number": 1965, "title": "Add iteration pattern examples for primitive bags to reference guide", "state": "open", "createdAt": "2026-08-22", "mergedAt": null, "additions": 50, "deletions": 0, "fixes": 1387, "note": "Has a merge conflict" },
-    { "repo": "simplesamlphp/simplesamlphp", "number": 2688, "title": "Remove deprecated Twig includes from the release autoloader", "state": "open", "createdAt": "2026-10-02", "mergedAt": null, "additions": 15, "deletions": 0, "fixes": 2687 },
-    { "repo": "magefree/mage", "number": 16440, "title": "Boosters: fixed wrong card count in 30A, SWS and MH3 (#16370)", "state": "open", "createdAt": "2026-10-03", "mergedAt": null, "additions": 52, "deletions": 14, "fixes": 16370 }
+    { "repo": "simplesamlphp/simplesamlphp", "number": 2688, "title": "Document the Twig conflict when an application loads its own Twig", "state": "open", "createdAt": "2026-10-02", "mergedAt": null, "additions": 29, "deletions": 0, "fixes": 2687, "note": "Retitled during review; first titled \"Remove deprecated Twig includes from the release autoloader\"" },
+    { "repo": "magefree/mage", "number": 16440, "title": "Boosters: fixed wrong card count in 30A, SWS and MH3 (#16370)", "state": "merged", "createdAt": "2026-10-03", "mergedAt": "2026-10-07", "additions": 52, "deletions": 14, "fixes": 16370 }
   ],
   "issues": [
-    { "repo": "litestar-org/litestar", "number": 5020, "title": "Bug: click 8.5.0 breaks test collection via rich-click get_binary_stream deprecation", "state": "closed", "createdAt": "2026-08-26", "note": "Reported; fixed upstream in rich-click" }
+    { "repo": "litestar-org/litestar", "number": 5020, "title": "Bug: click 8.5.0 breaks test collection via rich-click get_binary_stream deprecation", "state": "closed", "createdAt": "2026-08-26", "note": "Reported; fixed upstream in rich-click" },
+    { "repo": "litestar-org/litestar", "number": 5018, "title": "Bug: Error message suggests FromQuery for path parameter defaults", "state": "open", "createdAt": "2026-08-26", "note": "Reported; pull request #5019 proposes the fix" },
+    { "repo": "conorbronsdon/avoid-ai-writing", "number": 333, "title": "sync-plugin-skill.sh hardcodes python3 at line 75 and exits 127 on Windows", "state": "closed", "createdAt": "2026-09-22", "note": "Reported, then fixed by pull request #342" }
   ]
 }

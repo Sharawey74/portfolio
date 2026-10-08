@@ -20,8 +20,8 @@ export function SiteHeader() {
   const navItems = sections.filter((s) => s.live).map(({ id, index, title }) => ({ id, index, title }));
   return (
     <HeaderShell>
-      <div className="mx-auto flex h-(--header-h) max-w-(--page-max) items-center justify-between gap-6 px-(--gutter)">
-        <Link href="/" className="shrink-0 font-mono text-mono-lg tracking-wide text-ink">
+      <div className="mx-auto flex h-(--header-h) max-w-(--page-max) items-center justify-between gap-3 px-(--gutter) sm:gap-6">
+        <Link href="/" className="shrink-0 font-display text-body leading-none text-ink md:text-h3">
           {personal.name.value ?? personal.github.handle}
         </Link>
         <div className="hidden min-w-0 flex-1 lg:block">

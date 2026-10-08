@@ -9,14 +9,14 @@ the site looks finished either way.
 non-zero only with `--strict`, or when `LAUNCH_STRICT=1` is set on the Vercel
 production build.
 
-Supplied by the owner on 2026-10-08, applied in review round 1 (`docs/ISSUES.md`): **name** "Abdelrhman Mohamed" (ISS-14), **email** abdelrhmanhamied004@gmail.com (ISS-15). Still to come later: the Alstom internship (ISS-19) and the Claude certificates (ISS-20).
+Supplied by the owner on 2026-10-08 and applied in review round 1 on the same day (`docs/ISSUES.md`): **name** "Abdelrhman Mohamed" (ISS-14), **email** abdelrhmanhamied004@gmail.com (ISS-15). Still to come later: the Alstom internship (ISS-19) and the Claude certificates (ISS-20).
 
 | Field | Where it appears | File | Notes |
 |---|---|---|---|
-| `name` | Header wordmark, hero, intro sequence (M1), footer, page titles, OG image, JSON-LD `Person.name` | `src/data/personal.ts` | Spelling differs across your files ("Abdelrahman" vs "Abdelrhman"). Also update the holder in `LICENSE`. |
-| `email` | Contact section, footer, command palette "Email" action | `src/data/personal.ts` | Separate from `CONTACT_TO_EMAIL`, which is where the form delivers. |
+| `name` | Header wordmark, hero, intro sequence (M1), footer, page titles, OG image, JSON-LD `Person.name` | `src/data/personal.ts` | **Done 2026-10-08**: "Abdelrhman Mohamed", also the `LICENSE` holder and the hero H1. |
+| `email` | Contact section, footer, command palette "Email" action | `src/data/personal.ts` | **Done 2026-10-08**. Separate from `CONTACT_TO_EMAIL`, which is where the form delivers. |
 | `phone` | Contact section only | `src/data/personal.ts` | Never rendered unless set. |
-| `portrait` | About bento | `src/data/personal.ts` + file under `/public` | Rendered grayscale like screenshots. |
+| `portrait` | About bento | `src/data/personal.ts` + file under `/public` | Rendered in full color, like the screenshots since review round 1. |
 | `location` | About bento, JSON-LD `Person.address` | `src/data/personal.ts` | |
 | `bio` | About bento | `src/data/personal.ts` | Plain, specific, verb-led; the facts check scans it for banned words. |
 | `availability` | Hero meta line, contact section | `src/data/personal.ts` | |
@@ -30,7 +30,7 @@ Supplied by the owner on 2026-10-08, applied in review round 1 (`docs/ISSUES.md`
 | Item | File |
 |---|---|
 | Is the Eventora Railway API intentionally down? | `src/data/projects.ts` |
-| Real Recruiter-Pro app screenshots (the PNGs in the repo are mockups) | `src/data/projects.ts` |
+| ~~Real Recruiter-Pro app screenshots~~ **Done 2026-10-08**: 4 of the 13 GitHub Pages screens, chosen after viewing each (`docs/ISSUES.md` ISS-25) | `src/data/projects.ts` |
 | One SysPlex dashboard screenshot | `src/data/projects.ts` |
 | Final-year FinTech capstone description (hidden until set) | `src/data/experience.ts` |
 

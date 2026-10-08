@@ -2,6 +2,7 @@ import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
 import { SectionHeading } from "@/components/ui/section-heading.tsx";
 import { ScrambleText } from "@/components/motion/scramble.tsx";
+import { BrandIcon, type IconKind } from "@/components/ui/brand-icon.tsx";
 import { contactConfigured } from "@/lib/contact-config.ts";
 import { ContactForm } from "./contact-form.tsx";
 
@@ -9,6 +10,8 @@ import { ContactForm } from "./contact-form.tsx";
  * 05 / Contact. The form renders only when the deployment has the Resend
  * variables; otherwise a plain notice says so and the direct links carry the
  * section. Email, phone and availability appear only once set in personal.ts.
+ * The section sits on the deep accent band (--c1), the page's one large use
+ * of the accent ramp (docs/ISSUES.md ISS-21); hairlines turn --c2 inside it.
  */
 export function ContactSection() {
   const { ui, sections } = profile;
@@ -16,14 +19,15 @@ export function ContactSection() {
   const section = sections.find((s) => s.id === "contact")!;
   const configured = contactConfigured();
 
-  const links = [
-    ...(personal.email.value ? [{ label: personal.email.value, href: `mailto:${personal.email.value}` }] : []),
+  const links: { label: string; href: string; icon?: IconKind }[] = [
+    ...(personal.email.value ? [{ label: personal.email.value, href: `mailto:${personal.email.value}`, icon: "email" as const }] : []),
     ...(personal.phone.value ? [{ label: personal.phone.value, href: `tel:${personal.phone.value.replace(/\s+/g, "")}` }] : []),
-    { label: `GitHub / ${personal.github.handle}`, href: personal.github.href },
-    { label: "LinkedIn", href: personal.linkedin.href },
+    { label: `GitHub / ${personal.github.handle}`, href: personal.github.href, icon: "github" },
+    { label: "LinkedIn", href: personal.linkedin.href, icon: "linkedin" },
   ];
 
   return (
+    <div className="contact-band">
     <section aria-labelledby="contact" className="grid-12 gap-y-16 py-24 md:py-32">
       <SectionHeading id="contact" index={section.index} title={section.title} />
 
@@ -64,7 +68,10 @@ export function ContactSection() {
             return (
               <li key={l.href} className="border-t border-hair">
                 <a href={l.href} rel={external ? "noreferrer" : undefined} className="contact-link font-mono text-mono-lg">
-                  <ScrambleText text={l.label} />
+                  <span className="flex min-w-0 items-center gap-3">
+                    {l.icon ? <BrandIcon kind={l.icon} /> : null}
+                    <ScrambleText text={l.label} />
+                  </span>
                   <span aria-hidden="true">{external ? "↗" : "→"}</span>
                   {external ? <span className="sr-only"> ({ui.externalLink})</span> : null}
                 </a>
@@ -75,5 +82,6 @@ export function ContactSection() {
         {personal.availability.value ? <p className="text-small text-ink-2">{personal.availability.value}</p> : null}
       </div>
     </section>
+    </div>
   );
 }

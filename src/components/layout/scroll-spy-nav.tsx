@@ -9,8 +9,8 @@ export type SpyItem = { id: string; index: string; title: string };
 /**
  * M13 scroll-spy. One IntersectionObserver over the target sections marks the
  * last section whose top has passed 45% of the viewport as current: the link gets
- * aria-current="true", and the --break marker dot (an allowed break use) plus
- * full ink weight. The state is never conveyed by color alone.
+ * aria-current="true", the --break marker dot, full ink and a --c1 pill. The
+ * state is never conveyed by color alone.
  *
  * Native `scroll-target-group` + `:target-current` is Chromium-only (2026), so
  * the observer is the single mechanism everywhere.
@@ -42,9 +42,26 @@ export function ScrollSpyNav({
       for (const t of targets) if (t.getBoundingClientRect().top <= line) id = t.id;
       setCurrent(id);
     };
-    const io = new IntersectionObserver(pick, { rootMargin: "0px 0px -55% 0px" });
-    for (const t of targets) io.observe(t);
-    return () => io.disconnect();
+    // The band observer alone misses jumps (hash links, scroll restoration,
+    // "Back to top"): a heading can go from above the band to below it with no
+    // crossing, leaving the old section current (docs/ISSUES.md ISS-34). A
+    // second observer watches each target's whole section over the full
+    // viewport: a jump always changes which section is on screen. (Headings
+    // alone are not enough: a jump can carry one past the viewport unseen.)
+    const band = new IntersectionObserver(pick, { rootMargin: "0px 0px -55% 0px" });
+    const screen = new IntersectionObserver(pick);
+    for (const t of targets) {
+      band.observe(t);
+      screen.observe(t.closest("section") ?? t);
+    }
+    window.addEventListener("hashchange", pick);
+    window.addEventListener("pageshow", pick);
+    return () => {
+      band.disconnect();
+      screen.disconnect();
+      window.removeEventListener("hashchange", pick);
+      window.removeEventListener("pageshow", pick);
+    };
   }, [items]);
 
   if (items.length === 0) return null;
@@ -56,9 +73,9 @@ export function ScrollSpyNav({
           const active = item.id === current;
           return (
             <li key={item.id}>
-              <a href={`${base}#${item.id}`} aria-current={active ? "true" : undefined} className="spy-link mono-label">
+              <a href={`${base}#${item.id}`} aria-current={active ? "true" : undefined} className="spy-link ui-label">
                 <span aria-hidden="true" className="spy-dot" />
-                <span className="num spy-index">{item.index}</span>
+                <span className="num spy-index font-mono text-mono">{item.index}</span>
                 <ScrambleText text={item.title} />
               </a>
             </li>

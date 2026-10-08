@@ -24,7 +24,7 @@ export function PaletteTrigger({ labels }: { labels: { open: string; menu: strin
       onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))}
       aria-haspopup="dialog"
       aria-keyshortcuts="Control+K Meta+K"
-      className="mono-label inline-flex min-h-11 items-center gap-2 px-2 text-ink-2 hover:text-ink"
+      className="ui-label inline-flex min-h-11 rounded-pill transition-colors duration-200 ease-out hover:bg-c1 items-center gap-2 px-3 text-ink-2 hover:text-ink"
     >
       <span className="lg:hidden">
         <ScrambleText text={labels.menu} />

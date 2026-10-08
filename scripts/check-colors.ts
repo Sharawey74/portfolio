@@ -1,22 +1,24 @@
 /**
  * One-color check. Run: node scripts/check-colors.ts
  *
- * The site ships exactly one non-gray color: --break. This scans
+ * The site's only non-gray colors are the crimson ramp: --c1, --c2 and --break
+ * (owner decision 2026-10-08, docs/ISSUES.md ISS-21). This scans
  *   - every .css and .svg file under src/ and public/
  *   - whole-string color literals ("#ff0000", 'rgb(...)') and SVG paint
  *     attributes in .ts / .tsx under src/
  *   - the built CSS in .next/static when a build exists
  * and fails on any color that is not neutral (R=G=B, zero chroma), except the
- * two --break definitions in globals.css and their compiled copies.
- * Screenshots are grayscale by CSS filter, so raster images are not scanned.
+ * ramp's definitions in globals.css and their compiled copies.
+ * Raster images (screenshots) are not scanned.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { extname, join, relative } from "node:path";
 
 const root = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 const css = readFileSync(join(root, "src/styles/globals.css"), "utf8");
+const ACCENT_DECL = /--(break|c1|c2):\s*#/;
 const BREAK_VALUES = new Set(
-  [...css.matchAll(/--break:\s*(#[0-9a-f]{6})/gi)].map((m) => m[1]!.toLowerCase()),
+  [...css.matchAll(/--(?:break|c1|c2):\s*(#[0-9a-f]{6})/gi)].map((m) => m[1]!.toLowerCase()),
 );
 
 const errors: string[] = [];
@@ -52,7 +54,7 @@ function scanCss(text: string, rel: string, allowBreakDecl: boolean) {
     for (const m of code.matchAll(/#[0-9a-f]{3,8}(?![0-9a-z_-])/gi)) {
       const hex = m[0];
       if (![4, 5, 7, 9].includes(hex.length) || neutralHex(hex)) continue;
-      const isBreak = allowBreakDecl && /--break:\s*#/.test(code.slice(0, m.index! + 1)) && BREAK_VALUES.has(hex.toLowerCase());
+      const isBreak = allowBreakDecl && ACCENT_DECL.test(code.slice(0, m.index! + 1)) && BREAK_VALUES.has(hex.toLowerCase());
       if (!isBreak) errors.push(`${rel}:${i + 1} non-gray ${hex}`);
     }
     for (const m of code.matchAll(/\b(rgba?|hsla?|oklch|oklab|lch|lab|hwb|color)\(([^()]*)\)/gi)) {
@@ -114,5 +116,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  `color check: ok (${files} source files, ${built} built CSS files; non-gray values: ${[...BREAK_VALUES].join(", ")} as --break only)`,
+  `color check: ok (${files} source files, ${built} built CSS files; non-gray values: ${[...BREAK_VALUES].join(", ")} as --c1, --c2, --break only)`,
 );

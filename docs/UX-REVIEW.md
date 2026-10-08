@@ -405,3 +405,54 @@ Before the pass (2026-10-07): LCP 2.52–2.83 s on every page, TBT 1,164–2,043
 | P6 | TBT 695–989 ms: the first full style and layout pass (~0.45 s at 4x CPU) plus React hydration | Decided: accept and re-measure on Vercel (`docs/ISSUES.md` → ISS-02) |
 
 The owner chose option C on 2026-10-08: accept the numbers now and re-measure on a Vercel preview in Stage 6. The options, evidence and next steps for P2, P5 and P6 are in `docs/ISSUES.md` (ISS-01 to ISS-03); open items from here on are tracked there.
+
+## Review round 1 (2026-10-08)
+
+The owner's review of a local production build (21 notes, six screenshots) became ISS-12 to ISS-34 in `docs/ISSUES.md`; this section is the design side of the fixes. Skills used: `frontend-design` (critique of the new palette and type, below), `ui-ux-pro-max` quick reference (rule rows), `modern-web-guidance` patterns already in place from Stages 3–5 (no new platform features: `svh` units and CSS subgrid are Baseline widely available).
+
+### `frontend-design` critique of the new palette and type
+
+Plan before code: grays stay; one crimson family in three steps, each with one job; the boldness goes to one place, a full-width deep band behind Contact; elsewhere crimson only answers an action (hover, active, selected) or marks (section numbers, the H1 period, focus). Checked against the skill's list of generated defaults: a near-black page with a single bright red accent is one of them, which is what the site was; the deep band and the mid step move it off that default without adding a second hue.
+
+| # | Finding | Verdict |
+|---|---|---|
+| C1 | The Contact band is the one large color surface and lands at the end of the page, where the reader acts; the rest of the page stays quiet | Keep |
+| C2 | Light theme: `--c1` is a pale rose (#F6E2E5), because text-3 must keep 4.5:1 on it; it reads lighter than "heavy crimson". A deeper light band would need darker text inside it | Owner (UAT-50, UAT-55) |
+| C3 | Color screenshots bring Eventora's violet and Recruiter-Pro's navy and lilac into a gray and crimson page. They are content, framed by hairlines on a raised surface, and the owner asked for color | Owner (UAT-54) |
+| C4 | The mono uppercase label above the H1 and the section eyebrows ("01 / ABOUT") are among the skill's template tells; both are the brief's (numbered indices) and the owner's (label) choices | Brief |
+| C5 | Header wordmark and H1 both show the name at the top of `/`; the wordmark is the persistent home link and is set smaller in the same face | Keep |
+| C6 | Pills only on actions, square content: actions are now recognisable at a glance | Keep |
+| C7 | Interface labels in the text face, sentence case; numbers and sources stay mono: two faces, two jobs | Keep |
+
+### UI UX Pro Max rules for the changed UI
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `color-contrast` | Pass | `npm run check:contrast`: 36 pairings per theme incl. all text roles on `--c1` and `--on-c2` on `--c2`; tightest margin 1.03x (light text-3 on `--c1`, 4.63:1) |
+| `color-not-only` | Pass | Active nav: dot + full ink + pill; issue state ● / ○ + text; card hover edge is decoration only |
+| `touch-target-size` | Pass | Header controls, nav and footer links `min-h-11` (44 px); buttons `min-h-11` |
+| `hover-vs-tap` | Pass | Tailwind `hover:` utilities apply only under `(hover: hover)`; the plain-CSS hovers (nav pill, arrow nudge) stay ISS-06 |
+| `focus-states` | Pass | Global `:focus-visible` ring in `--break` (≥ 3:1 on every surface, including `--c1`) |
+| `icon-label` | Pass | Brand icons `aria-hidden`, always next to their text label |
+| `image-alt` | Pass | Each Recruiter-Pro screenshot has an alt describing the screen |
+| `image-sharpness` | Fixed | ISS-26: no filter; carousel at quality 90 with matching `sizes`; the owner confirms in UAT-20 / UAT-54 |
+| `font-size-readable` | Pass | Interface labels 14 px; detail lines in diagrams 12 px at 1:1, about 10 px in the card preview (decorative, `aria-hidden`) |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 320 and 375 on all four pages |
+| `viewport-height` | Fixed | ISS-28: hero (name, both paragraphs, both CTAs) fits the first screen at 1280×720, 1366×768, 1536×864, 1920×1080 |
+| `consistent-radius` | Pass | Two radii with two jobs: pill (actions), 0–2 px (content) |
+| `motion-consistency` | Pass | New hovers 200 ms, `--ease-out`, color and transform only |
+| `cursor-feedback` | Fixed | ISS-33 |
+| `nav-current-state` | Fixed | ISS-34 |
+
+Captures: `docs/screens/review-1/` (hero, first Work card and Contact at 1280×720, 1366×768, 1536×864, 1920×1080 and 375×812, both themes; SysPlex diagram; Recruiter-Pro case study; 32 WebP, 1.5 MB).
+
+### Lighthouse (median of 3, mobile, applied throttling, mains power, CPU benchmark 2,212–2,908)
+
+| Page | Perf | LCP (< 2.5 s) | TBT (< 200 ms) | CLS | A11y / BP / SEO |
+|---|---|---|---|---|---|
+| `/` | 66 | 2.43 s (pass) | 1,508 ms | 0.001 | 100 / 100 / 100 |
+| `/projects/eventora` | 65 | 2.88 s | 1,224 ms | 0.001 | 100 / 100 / 100 |
+| `/projects/recruiter-pro` | 62 | 3.28 s | 1,120 ms | 0.001 | 100 / 100 / 100 |
+| `/projects/sysplex` | 68 | 2.65 s | 1,079 ms | 0.001 | 100 / 100 / 100 |
+
+Worse than Stage 5 on TBT everywhere and on Recruiter-Pro's LCP (now a screenshot): `docs/ISSUES.md` ISS-36, decided like ISS-01 / ISS-02 (re-measure on Vercel). The image A/B that brought it down from the first attempt is in `docs/reports/lighthouse-review1.md`. First-load JS: `/` 156.2 KB gz (budget 170).

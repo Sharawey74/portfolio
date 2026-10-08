@@ -115,6 +115,7 @@ export function OssSection({ prs, live }: { prs: PullRequest[]; live: boolean })
                   </TextLink>
                 </p>
                 <p className="font-mono text-mono text-ink-3">
+                  <span aria-hidden="true">{i.state === "closed" ? "● " : "○ "}</span>
                   {i.state === "closed" ? t.closed : ui.statusOpen} · {i.note}
                 </p>
               </li>

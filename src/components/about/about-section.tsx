@@ -27,7 +27,9 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
   const oss = ossSummary(prs);
   const school = experience.education[0]!;
   const flagship = caseStudies.find((p) => p.tier === "flagship")!;
-  const flagshipMetric = flagship.metrics.find((m) => m.id === flagship.highlights[0]);
+  // Tests stay in About while the Work card leads with performance figures
+  // (docs/ISSUES.md ISS-18).
+  const flagshipMetric = flagship.metrics.find((m) => m.id === "tests") ?? flagship.metrics.find((m) => m.id === flagship.highlights[0]);
   const evidence = (source: string, asOf: string) => `${ui.source}: ${source} (${ui.asOf} ${asOf})`;
 
   return (
@@ -42,7 +44,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
         ) : null}
         {personal.portrait.value ? (
           <li className="bento-cell md:col-span-2 md:row-span-2 p-0!">
-            <Image src={personal.portrait.value} alt="" width={600} height={750} className="shot size-full object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
+            <Image src={personal.portrait.value} alt="" width={600} height={750} className="size-full object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
           </li>
         ) : null}
 
@@ -127,11 +129,13 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
               <div key={lane} className="grid gap-4 border-t border-hair py-6 md:grid-cols-10 md:gap-6">
                 <dt className="font-display text-h3 md:col-span-3">{t.lanes[lane]}</dt>
                 <dd className="md:col-span-7">
-                  <ul className="flex flex-wrap gap-x-5 gap-y-3">
+                  {/* One row per technology: the chip column and the "used in"
+                      column line up across rows (docs/ISSUES.md ISS-30). */}
+                  <ul className="stack-rows">
                     {chips.map((c) => (
-                      <li key={c.name} className="flex flex-col items-start gap-1" title={evidence(c.source, c.asOf)}>
+                      <li key={c.name} title={evidence(c.source, c.asOf)}>
                         <Chip name={c.name} qualifier={c.qualifier} />
-                        <span className="font-mono text-mono text-ink-3">
+                        <span className="text-small text-ink-3">
                           <span className="sr-only">{t.usedIn}: </span>
                           {c.qualifier ? c.usedIn.join(", ") : c.usedIn.map(projectName).join(", ")}
                         </span>

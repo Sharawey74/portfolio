@@ -36,8 +36,10 @@ export function WorkSection() {
         <ul className="flex flex-col">
           {secondaryProjects.map((p) => (
             <li key={p.slug} className="grid gap-4 border-t border-hair py-8 md:grid-cols-10 md:gap-6">
-              <h3 className="font-display text-h2 md:col-span-3">{p.name}</h3>
-              <div className="flex flex-col gap-3 md:col-span-4">
+              {/* Name on its own row: in a 3-of-10 column the display-size
+                  names ran into the description (docs/ISSUES.md ISS-29). */}
+              <h3 className="font-display text-h2 [overflow-wrap:anywhere] md:col-span-10">{p.name}</h3>
+              <div className="flex flex-col gap-3 md:col-span-6">
                 <p className="text-ink-2">{p.summary.text}</p>
                 {p.facts.map((f) => (
                   <p key={f.text} className="text-small text-ink-3">
@@ -58,7 +60,7 @@ export function WorkSection() {
                   ))}
                 </p>
               </div>
-              <dl className="flex flex-col gap-4 md:col-span-3">
+              <dl className="flex flex-col gap-4 md:col-span-4">
                 {p.metrics
                   .filter((m) => m.id !== "commits")
                   .map((m) => (

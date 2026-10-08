@@ -1,6 +1,7 @@
 import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
 import { ScrambleText } from "@/components/motion/scramble.tsx";
+import { BrandIcon, type IconKind } from "@/components/ui/brand-icon.tsx";
 import { FooterPaletteButton } from "./footer-palette-button.tsx";
 
 /**
@@ -11,10 +12,10 @@ export function SiteFooter() {
   const { ui, sections } = profile;
   const live = sections.filter((s) => s.live);
   const name = personal.name.value ?? personal.github.handle;
-  const outbound = [
-    { label: "GitHub", href: personal.github.href },
-    { label: "LinkedIn", href: personal.linkedin.href },
-    ...(personal.email.value ? [{ label: ui.palette.email, href: `mailto:${personal.email.value}` }] : []),
+  const outbound: { label: string; href: string; icon: IconKind }[] = [
+    { label: "GitHub", href: personal.github.href, icon: "github" },
+    { label: "LinkedIn", href: personal.linkedin.href, icon: "linkedin" },
+    ...(personal.email.value ? [{ label: ui.palette.email, href: `mailto:${personal.email.value}`, icon: "email" as const }] : []),
   ];
 
   return (
@@ -26,8 +27,8 @@ export function SiteFooter() {
           <ul className="flex flex-col gap-1">
             {live.map((s) => (
               <li key={s.id}>
-                <a href={`/#${s.id}`} className="footer-link mono-label">
-                  <span className="num text-ink-3">{s.index}</span> <ScrambleText text={s.title} />
+                <a href={`/#${s.id}`} className="footer-link ui-label">
+                  <span className="num font-mono text-mono text-ink-3">{s.index}</span> <ScrambleText text={s.title} />
                 </a>
               </li>
             ))}
@@ -39,7 +40,8 @@ export function SiteFooter() {
             const external = l.href.startsWith("https://");
             return (
               <li key={l.href}>
-                <a href={l.href} rel={external ? "noreferrer" : undefined} className="footer-link mono-label">
+                <a href={l.href} rel={external ? "noreferrer" : undefined} className="footer-link ui-label">
+                  <BrandIcon kind={l.icon} />
                   <ScrambleText text={l.label} /> <span aria-hidden="true">{external ? "↗" : "→"}</span>
                   {external ? <span className="sr-only"> ({ui.externalLink})</span> : null}
                 </a>
@@ -54,7 +56,7 @@ export function SiteFooter() {
         <div className="col-span-full flex flex-col gap-3 border-t border-hair pt-6 md:flex-row md:items-baseline md:justify-between">
           <p className="max-w-[60ch] text-small text-ink-3">{ui.footer.sources}</p>
           <p className="font-mono text-mono text-ink-3">{ui.footer.license}</p>
-          <a href="#main" className="footer-link mono-label">
+          <a href="#main" className="footer-link ui-label">
             <ScrambleText text={ui.footer.backToTop} /> <span aria-hidden="true">↑</span>
           </a>
         </div>

@@ -64,6 +64,11 @@ Section numbers refer to the report.
 | Local, Docker Compose: 1 replica 660 req/s, p95 511 ms | PERFORMANCE.md:382,386,411 | 2026-10-06 |
 | Local, Docker Compose: 2 replicas behind nginx 800 req/s, p95 9.0 ms | PERFORMANCE.md:400,416 | 2026-10-06 |
 | Local, Docker Compose: 100-VU inventory burst, 0 oversell | PERFORMANCE.md:321 | 2026-10-06 |
+| Local, Docker Compose: 569,066 requests, 0 failed, 0 server errors across five capacity runs | README.md:349; PERFORMANCE.md:381-383 (A 94,332, B 107,839, C 92,964), 400-401 (G 140,548, H 133,383); sum checked 2026-10-08 | 2026-10-08 |
+| Local, Docker Compose: 1-replica median 2.40 ms at the 660 req/s ceiling | PERFORMANCE.md:385-386 | 2026-10-08 |
+| Local, Docker Compose: 2-replica ceiling 870 req/s, 0 errors; scaling factor 1.32× (sub-linear) | PERFORMANCE.md:401, 414 | 2026-10-08 |
+| Local, Docker Compose: read path CPU-bound, both replicas at 105% of 1 CPU, pool and Redis with headroom | PERFORMANCE.md:425-434; README.md:348 | 2026-10-08 |
+| Local, Docker Compose: booking creation p95 55.4 ms at 20 VUs, 0 server errors | README.md:356; PERFORMANCE.md:320 (cited by README line: the check bans the number of the PERFORMANCE.md line) | 2026-10-08 |
 | Stack versions | pom.xml:8,17,58,78-80,89,139-170; docker-compose.yml:12,29,41; docker-compose.scale.yml:75; frontend/package.json:19,20,33,35 | 2026-10-06 |
 | CI: GitHub Actions, 3 jobs, green 2026-09-07 | .github/workflows/main.yml:13-70; report:119 | 2026-09-07 |
 | Hosted API 404; frontend only linked as live | report:113 | 2026-10-06 |
@@ -111,7 +116,8 @@ Section numbers refer to the report.
 ### Open source (`src/data/oss.json`)
 
 Titles, states and dates fetched read-only with `gh pr view` on 2026-10-06 and
-cross-checked with report §4.2-4.4.
+cross-checked with report §4.2-4.4; re-fetched for all 11 PRs and 3 issues on
+2026-10-08 (review round 1).
 
 | PR | State | Note |
 |---|---|---|
@@ -124,12 +130,18 @@ cross-checked with report §4.2-4.4.
 | conorbronsdon/avoid-ai-writing#342 | merged 2026-09-23 | |
 | litestar-org/litestar#5019 | **open** | fix for #5018; never "merged" or "accepted" |
 | eclipse-collections/eclipse-collections#1965 | **open** | has a merge conflict |
-| simplesamlphp/simplesamlphp#2688 | **open** | maintainer prefers a docs route (2026-10-05, report:363) |
-| magefree/mage#16440 | **open** | |
+| simplesamlphp/simplesamlphp#2688 | **open** | retitled "Document the Twig conflict when an application loads its own Twig", +29/−0 (2026-10-08); the maintainer preferred a docs route (report:363) |
+| magefree/mage#16440 | merged 2026-10-07 | |
 | litestar-org/litestar#5020 (issue) | closed | reported only; fixed upstream, fix not claimed |
+| litestar-org/litestar#5018 (issue) | open | reported; #5019 proposes the fix |
+| conorbronsdon/avoid-ai-writing#333 (issue) | closed 2026-09-23 | reported, then fixed by the owner's #342 |
 
-Headline (derived in `ossSummary()`, asserted by the check): **7 merged PRs
-across 5 projects, 4 under review, 2026-08 to 2026-10.**
+Headline (derived in `ossSummary()`, asserted by the check): **8 merged PRs
+across 6 projects, 3 under review, 2026-08 to 2026-10** (was 7 / 5 / 4 until
+mage #16440 merged).
+
+Also excluded: Ahmedtamer-1/elwahapumps#1 (issue on a small personal project,
+owner decision 2026-10-08).
 
 Excluded: firstcontributions#123531 (onboarding PR); Micrometer #7625 and #7886
 (comment-only, no PR).
@@ -203,7 +215,7 @@ already mapped above. Numbers shown there are derived, never typed:
 
 | Shown | Derived from | Source carried |
 |---|---|---|
-| About: "7 merged pull requests across 5 projects, 4 under review" | `ossSummary(prs)`, the same list the Open source section renders | evidence-report.md:309-364, as of the snapshot date |
+| About: "8 merged pull requests across 6 projects, 3 under review" (7 / 5 / 4 until 2026-10-07) | `ossSummary(prs)`, the same list the Open source section renders | evidence-report.md:309-364, as of the snapshot date |
 | About: "2 internships" | `experience.roles.length` (both roles are internships) | evidence-report.md:408 per role |
 | About: flagship card | Eventora `summary` and its first `highlights` metric (228 tests) | the claim's own source |
 | Open source: dates, line counts, "Fixes #n" | `oss.json` fields | `gh pr view`, 2026-10-06 |
@@ -261,7 +273,9 @@ already mapped above. Numbers shown there are derived, never typed:
 
 ## Owner review, round 1 (2026-10-08)
 
-Recorded here so the next data update starts from verified facts; applied in `PLAN.md` → Review round 1.
+Recorded here so the next data update starts from verified facts; applied in `PLAN.md` → Review round 1 (R1 applied on `feat/owner-review-1`, 2026-10-08).
+
+Hero copy: the owner's own description, reframed to pass the copy rules (banned "robust"; unqualified "reliable", "scalable", "production-ready"), approved 2026-10-08 (ISS-12). Source `owner:approved-copy`, asOf 2026-10-08. "Keep working as load grows" rests on the Eventora rows above (569,066 requests, 0 failed; Railway ramp 10→200 VUs); "tested, deployable" on 228 / 500+ / 104 automated tests and the Docker images.
 
 | Fact | Evidence | Applies to |
 |---|---|---|
@@ -271,7 +285,8 @@ Recorded here so the next data update starts from verified facts; applied in `PL
 | simplesamlphp/simplesamlphp #2688 retitled "Document the Twig conflict when an application loads its own Twig", still open | `gh pr view 2688`, 2026-10-08 | `oss.json` title and note (ISS-16) |
 | Issues filed outside own repos: litestar #5020 (closed), avoid-ai-writing #333 (closed), litestar #5018 (open), elwahapumps #1 (open) | `gh search issues --author Sharawey74`, 2026-10-08 | `oss.json → issues` (ISS-17) |
 | Eventora, Recruiter-Pro and SysPlex have no commits after the pinned evidence commits | `git rev-list --count <pin>..origin/main` = 0 for all three, 2026-10-08 | Metrics audit (ISS-18) |
-| Recruiter-Pro now has 13 app screenshots in `site/assets/img/screenshots/` | `git ls-files`, 2026-10-08; to be viewed before use | ISS-25; may close the Recruiter-Pro screenshot TODO |
+| Recruiter-Pro now has 13 app screenshots in `site/assets/img/screenshots/` | `git ls-files`, 2026-10-08; each viewed before use | ISS-25: 4 used (11-dashboard, 02-jobs, 12-job-detail, 04-upload-empty) at Recruiter-Pro@daf160b; 01 shows unsourced figures ("22x faster", "654 distinct skills", "0.74s per résumé") that conflict with the site's 679 skills and ~4.5 s; 05-10 and 13 show the owner's own resume under a different spelling; 03 has a banned term in the search box (ISS-35) |
+| SysPlex runs in two tiers: collection natively on the host (full sensor access), presentation in Docker with `cap_drop: ALL` | SysPlex/README.md:69-70, 90-91 at 9f3cce9 | `projects.ts → sysplex.flow.zones` (ISS-27) |
 
 ## Open questions for the owner
 

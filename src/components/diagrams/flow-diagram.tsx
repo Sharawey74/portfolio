@@ -7,6 +7,7 @@ import { useMotionPrefs } from "@/lib/motion/preferences.ts";
 import { subscribe } from "@/lib/motion/scheduler.ts";
 import { useInView } from "@/lib/motion/use-in-view.ts";
 import { exitPoint, layouts } from "./layouts.ts";
+import { FlowZones, NodeText } from "./flow-parts.tsx";
 
 type Flow = NonNullable<Project["flow"]>;
 type Labels = { play: string; pause: string; step: string; restart: string; scrub: string; steps: string; scrollHint: string };
@@ -188,6 +189,7 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
               <line x1="0" y1="0" x2="0" y2="6" stroke="var(--line-hair)" strokeWidth="2" />
             </pattern>
           </defs>
+          <FlowZones flow={flow} layout={layout} />
           <g>
             {edges.map((e, i) => {
               const [[x1, y1], [x2, y2]] = segment(e.a, e.b);
@@ -224,9 +226,7 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
                     className="flow-box"
                   />
                   <rect x={cx - w / 2} y={cy - h / 2} width={w} height={h} rx="2" className="flow-box-face" />
-                  <text x={cx} y={cy + 5} textAnchor="middle" className="flow-label">
-                    {n.label}
-                  </text>
+                  <NodeText cx={cx} cy={cy} label={n.label} detail={n.detail} layout={layout} />
                 </g>
               );
             })}

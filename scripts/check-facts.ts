@@ -60,6 +60,8 @@ const banned: [string, RegExp][] = [
   ["RAG", /\bRAG\b/],
   ["ChromaDB", /chroma/i],
   ["30-resume", /30[- ]resume/i],
+  // The owner's public name is spelled "Abdelrhman" (docs/ISSUES.md ISS-14)
+  ["name spelling", /abdelrahman/i],
   // PhishSniffer
   ["XGBoost", /xgboost/i],
   ["50+ features", /50\+?\s*features/i],
@@ -145,8 +147,9 @@ for (const [repo, n] of [
 if (pr("firstcontributions/first-contributions", 123531)) errors.push("oss.json: first-contributions PR must be excluded");
 
 const s = ossSummary();
-if (s.merged !== 7 || s.mergedProjects !== 5 || s.open !== 4) {
-  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; approved headline is 7 / 5 / 4`);
+// magefree/mage #16440 merged on 2026-10-07 (docs/ISSUES.md ISS-16).
+if (s.merged !== 8 || s.mergedProjects !== 6 || s.open !== 3) {
+  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; recorded headline is 8 / 6 / 3`);
 }
 
 const eventora = projects.find((p) => p.slug === "eventora");
@@ -179,6 +182,11 @@ for (const c of experience.certifications) {
   if (/\b(19|20)\d{2}\b/.test(JSON.stringify(c).replace(/"asOf":"[^"]+"/, ""))) {
     errors.push(`experience.ts: certification "${c.name}" carries a date`);
   }
+}
+
+// The H1 is the public name (docs/ISSUES.md ISS-12, ISS-14).
+if (profile.hero.headline.text !== `${personal.name.value}.`) {
+  errors.push(`profile.ts: hero headline "${profile.hero.headline.text}" must be personal.name plus a period`);
 }
 
 if (skills.length === 0 || !profile.hero.headline.text || !personal.github.href) {

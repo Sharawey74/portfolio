@@ -1,5 +1,6 @@
 import type { Project } from "@/data/projects.ts";
 import { exitPoint, layouts } from "./layouts.ts";
+import { FlowZones, NodeText } from "./flow-parts.tsx";
 
 type Flow = NonNullable<Project["flow"]>;
 
@@ -17,6 +18,7 @@ export function FlowPreview({ slug, flow }: { slug: string; flow: Flow }) {
 
   return (
     <svg viewBox={`0 0 ${layout.width} ${layout.height}`} aria-hidden="true" focusable="false" className="block h-auto w-full">
+      <FlowZones flow={flow} layout={layout} />
       {[...pairs.values()].map(([a, b]) => {
         const [ax, ay] = layout.at[a]!;
         const [bx, by] = layout.at[b]!;
@@ -29,9 +31,7 @@ export function FlowPreview({ slug, flow }: { slug: string; flow: Flow }) {
         return (
           <g key={n.id}>
             <rect x={cx - w / 2} y={cy - h / 2} width={w} height={h} rx="2" className="flow-box-face" />
-            <text x={cx} y={cy + 5} textAnchor="middle" className="flow-label">
-              {n.label}
-            </text>
+            <NodeText cx={cx} cy={cy} label={n.label} detail={n.detail} layout={layout} />
           </g>
         );
       })}
