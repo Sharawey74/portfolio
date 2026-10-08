@@ -19,7 +19,7 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 |---|---|---|---|---|---|
 | ISS-01 | Eventora case study: mobile LCP 2.79 s (budget 2.5 s) | High | Decided | Option C: accept, re-measure on a Vercel preview | Stage 6 (Lighthouse on previews) |
 | ISS-02 | Main-thread blocking: TBT 695–989 ms on every page (target 200 ms) | High | Decided | Option C: accept, re-measure on a Vercel preview | Stage 6 |
-| ISS-03 | Phones and tablets show the still hero graph, not the live canvas | Medium | Owner | Kept for now; owner confirms or reverts after UAT-48 | Owner's UAT run |
+| ISS-03 | Phones and tablets show the still hero graph, not the live canvas | Medium | Closed | Owner decision 2026-10-08: keep the still graph on touch devices | — |
 | ISS-04 | INP is not measured with real visitors | Medium | Open | Needs a field-data source once the site is live | Stage 6 |
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
@@ -28,18 +28,18 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
-| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Owner | Owner picks or writes the new line (options in the detail); it replaces the approved hero copy | Review round 1, R0 |
+| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | New line, chosen on the owner's brief (software engineering, not only backend): "Software that holds up under load, review and test." | Review round 1, R1 |
 | ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Decided | Remove the sentence; keep the stack line. Education stays in About | Review round 1, R1 |
 | ISS-14 | Public name: "Abdelrhman Mohamed" | High | Decided | Owner chose the spelling on 2026-10-08; set `personal.name`, the LICENSE holder, the share images and JSON-LD | Review round 1, R1 |
 | ISS-15 | Contact email: abdelrhmanhamied004@gmail.com | High | Decided | Set `personal.email`; it appears in Contact, the footer and the palette | Review round 1, R1 |
-| ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Decided | Update the snapshot: 8 merged across 6 projects, 3 under review (the practice PR stays excluded unless the owner says otherwise) | Review round 1, R1 |
-| ISS-17 | Show every issue the owner filed, open and closed (4), not only litestar #5020 | Medium | Decided | List all four with their state; owner confirms whether the elwahapumps issue belongs | Review round 1, R1 |
-| ISS-18 | Owner reports some project metrics are out of date | High | Open | Re-verify every shown metric against each repo's README and code; owner names the ones they mean | Review round 1, R1 |
+| ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Decided | Update the snapshot: 8 merged across 6 projects, 3 under review; the practice PR stays excluded (owner, 2026-10-08) | Review round 1, R1 |
+| ISS-17 | Show every issue the owner filed, open and closed, not only litestar #5020 | Medium | Decided | List the three OSS issues with their state; elwahapumps #1 left out (owner, 2026-10-08) | Review round 1, R1 |
+| ISS-18 | Owner reports some project metrics are out of date | High | Decided | Owner pointed at Eventora's README performance section: bring its strongest figures onto the card and case study (selection in the detail) | Review round 1, R1 |
 | ISS-19 | Add the Alstom internship | Medium | Owner (later) | Needs title, dates and what was done, from the owner | When the owner supplies it |
 | ISS-20 | Add the Claude certificates as one entry | Low | Owner (later) | Needs the certificate names, from the owner | When the owner supplies it |
-| ISS-21 | Add a heavy crimson secondary color and make the whole palette work together | High | Owner | Brief change: today the brief allows one accent (`--break`). Two directions in the detail; owner picks | Review round 1, R0 |
-| ISS-22 | Round the buttons ("View My Work", "Download Resume", all CTAs) | Medium | Owner | Brief change (radius is 0–2 px today). Owner picks pill or a small radius | Review round 1, R0 |
-| ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Owner | Brief change (Arial is banned today). Recommend Hanken Grotesk, already loaded; owner decides | Review round 1, R0 |
+| ISS-21 | Add a heavy crimson secondary color and make the whole palette work together | High | Decided | Direction A, a three-step crimson ramp on the gray ramp (owner, 2026-10-08) | Review round 1, R2 |
+| ISS-22 | Round the buttons ("View My Work", "Download Resume", all CTAs) | Medium | Decided | Pill radius on buttons and CTAs only; cards and content stay square (owner, 2026-10-08) | Review round 1, R2 |
+| ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Decided | Hanken Grotesk, sentence case, for the nav, footer and stack captions; Arial stays out (owner, 2026-10-08) | Review round 1, R2 |
 | ISS-24 | GitHub and LinkedIn as icons in Contact (and the footer) | Medium | Decided | Brief change: monochrome brand marks as inline SVG next to their text labels | Review round 1, R2 |
 | ISS-25 | Work and case studies: show screenshots in full color, several per project, from the projects' GitHub Pages | High | Decided | Brief change (screenshots are grayscale today). Eventora: the 15 dark screens; Recruiter-Pro: its 13 real screens (replaces the mockup TODO) | Review round 1, R3 |
 | ISS-26 | Work card slides look blurred | High | Open | Find the cause (grayscale filter, image size picked, card scaling) and fix | Review round 1, R3 |
@@ -48,7 +48,7 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 | ISS-29 | "Also built": project names overlap their descriptions | High | Open | Long names (LexIntelligence, PhishSniffer) overflow a 3-of-10 column; fix the layout | Review round 1, R2 |
 | ISS-30 | "Stack, by where it was used" looks cramped and mixed | Medium | Open | Rebuild as an aligned grid (technology, where used) per lane | Review round 1, R2 |
 | ISS-31 | Sticky project stack hides part of each card on a laptop screen | Medium | Open | Cards taller than the viewport get covered by the next card; fit or relax the stack | Review round 1, R2 |
-| ISS-32 | Buttons and CTAs should feel more responsive and interactive | Medium | Owner | Hover, press and focus treatment per control, after ISS-21 and ISS-22 are decided | Review round 1, R2 |
+| ISS-32 | Buttons and CTAs should feel more responsive and interactive | Medium | Decided | Hover, press and focus treatment per control with the crimson ramp and pill buttons (ISS-21, ISS-22 decided) | Review round 1, R2 |
 | ISS-33 | The custom cursor shows an "ON" label everywhere | High | Open | Bug: the label lookup matches the page's own `data-cursor="on"`; fix the selector | Review round 1, R2 |
 | ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Open | Bug in the scroll-spy's update timing; reproduce and fix | Review round 1, R2 |
 
@@ -137,7 +137,7 @@ None of the large layouts in the trace was forced by our JavaScript, and there a
 
 ## ISS-03 Phones and tablets show the still hero graph
 
-**Severity** Medium (visible design change). **Status** Owner: kept for now, the owner confirms or reverts.
+**Severity** Medium (visible design change). **Status** Closed: kept (owner, 2026-10-08).
 
 **Context.** M4 is the hero's node graph: a static SVG rendered on the server, swapped on idle for a live canvas that drifts, leans toward the pointer and moves one red packet along the edges. Since the Stage 5 performance pass (commit `perf(hero): keep the static graph on coarse pointers`), `HeroGraph` loads the live layer only when `finePointer` is true (`(pointer: fine) and (hover: hover)`). Phones and tablets keep the static graph: same nodes and edges, no motion, no packet.
 
@@ -151,7 +151,7 @@ None of the large layouts in the trace was forced by our JavaScript, and there a
 | Revert | One-line change in `src/components/hero/hero-graph.tsx` (`wanted` without `finePointer`) | About 0.9 s more main-thread work on phones; TBT rises again on mobile |
 | Lighter canvas on touch | Live canvas at 30 fps with fewer nodes, no pointer lean | Engineering time; still costs main thread; needs re-measuring |
 
-**Next step.** Owner runs UAT-48 (phone and desktop) and records the choice here.
+**Decision (owner, 2026-10-08).** Keep: touch devices show the still graph. Closed.
 
 ## ISS-04 INP is not measured with real visitors
 
@@ -265,7 +265,7 @@ Verified read-only on 2026-10-08 while writing this round: live PR and issue sta
 
 ### ISS-12 Hero headline
 
-**UAT** UAT-01 (content), new case UAT-49. **Severity** High. **Status** Owner: pick a line.
+**UAT** UAT-01 (content), new case UAT-49. **Severity** High. **Status** Decided (2026-10-08).
 
 **Note.** "Title has to be more creative, enhanced and optimized to show SE in a professional way, not as a normal sentence."
 
@@ -281,6 +281,12 @@ Verified read-only on 2026-10-08 while writing this round: live PR and issue sta
 | D | I build backend systems that hold under concurrency. | First person, plain; still a claim without a number |
 
 **Recommendation.** B or C. B is unusual and verifiable; C sets up the evidence-led layout. Either way the final period keeps the break mark.
+
+**Decision (owner, 2026-10-08).** None of A–D: the owner asked for a creative, professional line about software engineering, not only backend, and left the wording to the build. Chosen line:
+
+> **Software that holds up under load, review and test.**
+
+Each of the three words is backed by evidence already on the site, so the headline is a claim the page proves: *load* (the Eventora k6 campaigns, Railway ramp), *review* (8 pull requests merged upstream after maintainer review, ISS-16), *test* (228 automated tests in Eventora, 500+ in Recruiter-Pro, 104 in SysPlex). It names software in general, not one layer. The final period keeps the break mark. The sub (ISS-13) names the stack. If the owner wants different wording, only `profile.ts` and the approved copy in `CLAUDE.md` change.
 
 ### ISS-13 Hero sub without "Software Engineering student at AASTMT (Jun 2027)"
 
@@ -318,6 +324,8 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 
 **Counting.** The owner's log says 8 merged (9 with mage). It counts `firstcontributions/first-contributions` #123531, a practice repository whose purpose is adding a name to a list; the site excludes it by an earlier decision (`FACTS-CHECK.md` → Open source). Excluding it, the numbers become **8 merged across 6 projects, 3 under review, 2026-08 to 2026-10**. Recommendation: keep it excluded. If the owner wants it counted, say so and the headline becomes 9 across 7.
 
+**Decision (owner, 2026-10-08).** Excluded: 8 merged across 6 projects, 3 under review.
+
 **Change.** `oss.json` (mage merged with date and the new #2688 title and note), `scripts/check-facts.ts` asserts, `CLAUDE.md` headline line, `FACTS-CHECK.md`.
 
 ### ISS-17 List every issue filed, open and closed
@@ -333,11 +341,13 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 | litestar-org/litestar #5018 | open | The bug that PR #5019 fixes |
 | Ahmedtamer-1/elwahapumps #1 | open | The owner's own log calls it a small personal project, not OSS |
 
-**Change.** `oss.json → issues` gets all four with state and a one-line note each; the section lists them under "Issues reported" with open/closed shown by shape and text, like the PRs. **Question for the owner:** include elwahapumps #1? Recommendation: leave it out, for the reason the owner's log gives.
+**Change.** `oss.json → issues` gets litestar #5020, avoid-ai-writing #333 and litestar #5018 with state and a one-line note each; the section lists them under "Issues reported" with open/closed shown by shape and text, like the PRs.
+
+**Decision (owner, 2026-10-08).** elwahapumps #1 is left out.
 
 ### ISS-18 Some metrics are out of date
 
-**UAT** UAT-03. **Severity** High. **Status** Open: the owner names the metrics they mean.
+**UAT** UAT-03. **Severity** High. **Status** Decided: Eventora performance figures (2026-10-08).
 
 **Evidence.** Eventora, Recruiter-Pro and SysPlex have no commits after the evidence commits the site is pinned to (`ef96703`, `daf160b`, `9f3cce9`; checked with `git rev-list` on 2026-10-08). So the code has not moved; any mismatch is between what the site shows and what a README says. Known README inconsistencies, all already decided in `FACTS-CHECK.md`:
 
@@ -347,6 +357,29 @@ The live site already re-reads PR state daily (ISR), so a deployed `/` would sho
 | Recruiter-Pro | 530 tests and 83.7% (README:433), 544 elsewhere, 84.07% (README:37, 81) | 500+ tests, 84.07% branch coverage | Two README sections disagree |
 
 **Plan.** A metrics audit table: every metric on the site, its current source line, the README line that states it today, and match / mismatch. The owner marks the ones they consider outdated; a newer number must come from the repo (README, test report or CI run), and the evidence report is updated with it.
+
+**Decision (owner, 2026-10-08).** Review Eventora's README "Performance" section and use its most valuable figures. Read on 2026-10-08 at the pinned commit `ef96703` (README.md:331-375, PERFORMANCE.md):
+
+| Figure | Source | Qualifier that must stay with it | On the site today |
+|---|---|---|---|
+| **569,066 requests, 0 failed, 0 server errors** across five capacity runs | README.md:349 | local, Docker Compose; 1 CPU, 512 MB, `prod` profile | No. Verify the sum against the five runs in PERFORMANCE.md before use |
+| **0 oversold seats**: 100 VUs against an 8-seat tier, 99.9%+ rejected with 409, zero 5xx | README.md:355; PERFORMANCE.md:321 | local | Yes (`burst-oversell`), case study only |
+| **Exactly 50 of 100 threads** get the 50 seats, every run | README.md:357; PERFORMANCE.md:334 | full reservation path | As a key decision, not as a figure |
+| **660 req/s per 1-CPU instance**, median **2.40 ms**, 0 errors | README.md:344; PERFORMANCE.md:382 | read path; local, Docker Compose; 1 CPU, 5-connection pool | 660 and p95 511 ms yes; the 2.40 ms median no |
+| **870 req/s** across 2 replicas, 0 errors | README.md:345; PERFORMANCE.md:318,401 | read path; local | Only in the chart footnote |
+| **1.32×** horizontal scaling factor | README.md:346; PERFORMANCE.md:414 | local, 1 → 2 replicas | No |
+| **800 req/s at p95 9.0 ms** on 2 replicas | README.md:347; PERFORMANCE.md:400 | read path; local | Yes |
+| **CPU-bound, not database-bound**: both replicas at 105% of their 1-CPU budget while Postgres, Redis and the pool kept headroom | README.md:348; PERFORMANCE.md:433 | local | No |
+| Booking creation under contention: p95 **55.4 ms**, 0 server errors | README.md:356; PERFORMANCE.md:194,320 | 20 VUs, local | No |
+| Railway ramp: 32,577 requests, 0 failed, p95 394 ms at 200 VUs | README.md:362; PERFORMANCE.md:283-291 | read path, live Railway, single replica | Yes (card highlight) |
+
+**Selection.**
+- Card highlights (three numbers on the Work card): **0 oversold seats**, **569,066 requests / 0 failed**, **660 req/s per 1-CPU instance**. The 228 tests and 84.1% coverage stay on the case study and in About's flagship cell.
+- Case study "Evidence": add 569,066 / 0 failed, the 2.40 ms median, 870 req/s, 1.32×, the CPU-bound finding (as a claim with its source) and the 55.4 ms booking p95; keep the rest.
+- Not used: README "11 states" (the enum has 10; decided earlier); p99 (not captured, README:374).
+- Every figure keeps its qualifier on screen, per `FACTS-CHECK.md` ("read path", "local, Docker Compose").
+
+Recruiter-Pro and SysPlex: no outdated figure named; the audit table still covers them.
 
 ### ISS-19 Alstom internship (later)
 
@@ -366,7 +399,7 @@ The brief's visual system in `CLAUDE.md` overrides any skill; these notes change
 
 ### ISS-21 Heavy crimson secondary color, one harmonized palette
 
-**UAT** UAT-24 (both themes), new case UAT-50. **Severity** High. **Status** Owner: pick a direction.
+**UAT** UAT-24 (both themes), new case UAT-50. **Severity** High. **Status** Decided: direction A (2026-10-08).
 
 **Note.** "Add heavy crimson as a secondary color so it does not look fully dark, or another color if more suitable with black and white; make all the colors suitable with each other."
 
@@ -380,17 +413,23 @@ The brief's visual system in `CLAUDE.md` overrides any skill; these notes change
 
 Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics ≥ 3:1). Text stays gray except where the owner allows crimson text.
 
+**Decision (owner, 2026-10-08).** Direction A: a three-step crimson ramp on the existing grays. `frontend-design` critiques the result in round 1 before it is kept.
+
 ### ISS-22 Rounded buttons
 
-**UAT** UAT-45, new case UAT-50. **Severity** Medium. **Status** Owner: pick a radius.
+**UAT** UAT-45, new case UAT-50. **Severity** Medium. **Status** Decided: pill on buttons (2026-10-08).
 
 **Context.** Radius is 0–2 px everywhere today (brief). Options: full pill (`9999px`) for buttons and CTAs only, cards stay square (recommended: clear contrast between actions and content); or a small radius (6–8 px) for buttons, chips and inputs.
 
+**Decision (owner, 2026-10-08).** Pill on buttons and CTAs only.
+
 ### ISS-23 Arial for the nav bar, the footer and the stack captions
 
-**UAT** new case UAT-50. **Severity** Medium. **Status** Owner: confirm Arial or accept the alternative.
+**UAT** new case UAT-50. **Severity** Medium. **Status** Decided: Hanken Grotesk (2026-10-08).
 
 **Context.** Those labels are JetBrains Mono, uppercase, letter-spaced. The brief bans Arial by name; Arial is also not installed on Linux and many Android phones, so they would fall back to another face. **Recommendation:** Hanken Grotesk (the site's text face, already loaded, no extra download) in sentence case for the nav, footer and stack captions; mono stays for numbers and source lines. If the owner still prefers Arial, it is a one-line font stack change.
+
+**Decision (owner, 2026-10-08).** Hanken Grotesk, sentence case.
 
 ### ISS-24 GitHub and LinkedIn icons
 
@@ -456,7 +495,7 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 ### ISS-32 More responsive buttons and CTAs
 
-**UAT** UAT-45, UAT-19. **Severity** Medium. **Status** Owner (after ISS-21 and ISS-22).
+**UAT** UAT-45, UAT-19. **Severity** Medium. **Status** Decided (follows ISS-21, ISS-22).
 
 **Context.** Today: hover steps a color or border, press drops 1 px, focus shows the ring, primary CTAs lean toward the pointer (magnet). **Plan.** One treatment per control type, inside the motion rules (transform and opacity only, 200 ms, one easing): primary button fills with the accent on hover, its arrow moves 4 px; secondary button gets the accent border; text links get an underline that draws in; palette and nav items get the active marker on hover. Final values after the palette and radius decisions.
 
