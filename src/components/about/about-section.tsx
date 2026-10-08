@@ -44,7 +44,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
         ) : null}
         {personal.portrait.value ? (
           <li className="bento-cell md:col-span-2 md:row-span-2 p-0!">
-            <Image src={personal.portrait.value} alt="" width={600} height={750} className="shot size-full object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
+            <Image src={personal.portrait.value} alt="" width={600} height={750} className="size-full object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
           </li>
         ) : null}
 
