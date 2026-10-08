@@ -8,8 +8,8 @@ type Shot = { src: string; alt: string; width: number; height: number };
 /**
  * Screenshot grid with a zoom view: a native modal <dialog> (focus trap, Esc,
  * top layer) opened with showModal(). closedby="any" gives light dismiss;
- * Safari lacks it, so a click on the backdrop closes it there too. Thumbnails
- * are grayscale; the zoomed image is in full color.
+ * Safari lacks it, so a click on the backdrop closes it there too. Images are
+ * the original files in full color (docs/ISSUES.md ISS-25, ISS-26).
  */
 export function ZoomGallery({
   shots,
@@ -60,9 +60,9 @@ export function ZoomGallery({
                 alt=""
                 width={s.width}
                 height={s.height}
-                sizes="(min-width: 768px) 33vw, 50vw"
+                unoptimized
                 loading="lazy"
-                className="shot aspect-[16/10] w-full object-cover object-top transition-[scale] duration-400 ease-out group-hover:scale-[1.02]"
+                className="aspect-[16/10] w-full object-cover object-top"
               />
             </button>
           </li>
@@ -77,7 +77,7 @@ export function ZoomGallery({
       >
         {open ? (
           <figure className="flex flex-col gap-3">
-            <Image src={open.src} alt={open.alt} width={open.width} height={open.height} sizes="90vw" className="max-h-[80vh] w-auto" />
+            <Image src={open.src} alt={open.alt} width={open.width} height={open.height} unoptimized className="max-h-[80vh] w-auto" />
             <figcaption className="flex items-center justify-between gap-6 font-mono text-mono text-ink-2">
               <span>{open.alt}</span>
               <button type="button" onClick={() => setOpen(null)} className="flow-btn" autoFocus>
