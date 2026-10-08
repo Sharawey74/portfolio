@@ -28,7 +28,7 @@ Last updated: 2026-10-08 (end of Stage 5; ISS-10 and ISS-11 from the owner's cle
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only, nothing ships; never run `npm audit fix --force`; take the patched release when it exists | Weekly (Stage 6 Dependabot) |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Open | Move to ESLint 10 on its own branch, once the Next lint config is verified with it | Stage 6 or next maintenance branch |
-| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | New line, chosen on the owner's brief (software engineering, not only backend): "Software that holds up under load, review and test." | Review round 1, R1 |
+| ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Decided | Owner chose (2026-10-08): name and role above, H1 "Software engineer building systems that stay correct under concurrency." | Review round 1, R1 |
 | ISS-13 | Hero sub: remove "Software Engineering student at AASTMT (Jun 2027)" | Medium | Decided | Remove the sentence; keep the stack line. Education stays in About | Review round 1, R1 |
 | ISS-14 | Public name: "Abdelrhman Mohamed" | High | Decided | Owner chose the spelling on 2026-10-08; set `personal.name`, the LICENSE holder, the share images and JSON-LD | Review round 1, R1 |
 | ISS-15 | Contact email: abdelrhmanhamied004@gmail.com | High | Decided | Set `personal.email`; it appears in Contact, the footer and the palette | Review round 1, R1 |
@@ -282,11 +282,15 @@ Verified read-only on 2026-10-08 while writing this round: live PR and issue sta
 
 **Recommendation.** B or C. B is unusual and verifiable; C sets up the evidence-led layout. Either way the final period keeps the break mark.
 
-**Decision (owner, 2026-10-08).** None of A–D: the owner asked for a creative, professional line about software engineering, not only backend, and left the wording to the build. Chosen line:
+**Decision (owner, 2026-10-08), second round.** The owner rejected a slogan about software ("Software that holds up under load, review and test.") and asked for a professional description of *them* as a software engineer. From four directions offered, the owner chose "name + role + focus":
 
-> **Software that holds up under load, review and test.**
+| Element | Text |
+|---|---|
+| Label above the H1 (mono, uppercase like the section indices) | Abdelrhman Mohamed / Software engineer |
+| H1 (final period in `--break`) | Software engineer building systems that stay correct under concurrency. |
+| Sub (ISS-13) | Java and Spring Boot, Redis, RabbitMQ, plus Python AI services and open-source work. |
 
-Each of the three words is backed by evidence already on the site, so the headline is a claim the page proves: *load* (the Eventora k6 campaigns, Railway ramp), *review* (8 pull requests merged upstream after maintainer review, ISS-16), *test* (228 automated tests in Eventora, 500+ in Recruiter-Pro, 104 in SysPlex). It names software in general, not one layer. The final period keeps the break mark. The sub (ISS-13) names the stack. If the owner wants different wording, only `profile.ts` and the approved copy in `CLAUDE.md` change.
+Evidence behind the H1: Eventora's oversell tests (0 oversold seats with 100 VUs against 8 seats; exactly 50 of 100 threads get 50 seats) and the reservation flow diagram on the case study. The label uses the name decided in ISS-14. Directions not chosen: a three-pillar focus statement, "end to end" range, and "problems I solve". Changes `profile.ts` (hero) and the approved copy in `CLAUDE.md` in round 1.
 
 ### ISS-13 Hero sub without "Software Engineering student at AASTMT (Jun 2027)"
 
