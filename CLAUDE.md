@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Context and standing rules for anyone (human or agent) working in this repo.
-Read this first, then `PLAN.md` for where the work stands. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script; `docs/ISSUES.md` is the register of open issues, decisions and proposed fixes; `docs/reports/` holds measurements. Private details that
+Read this first, then `PLAN.md` for where the work stands. `PLAN.md`, `FACTS-CHECK.md` and `PERSONAL-INFO-CHECKLIST.md` are local only since 2026-10-08 (git-ignored on every branch, owner's request): keep them up to date on this machine as before, but they are never committed, and a fresh clone does not have them. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script; `docs/ISSUES.md` is the register of open issues, decisions and proposed fixes; `docs/reports/` holds measurements. Private details that
 must not be in a public repo live in `CLAUDE.local.md` (git-ignored); read it
 too if it exists on this machine.
 
