@@ -9,6 +9,8 @@ the site looks finished either way.
 non-zero only with `--strict`, or when `LAUNCH_STRICT=1` is set on the Vercel
 production build.
 
+Supplied by the owner on 2026-10-08, applied in review round 1 (`docs/ISSUES.md`): **name** "Abdelrhman Mohamed" (ISS-14), **email** abdelrhmanhamied004@gmail.com (ISS-15). Still to come later: the Alstom internship (ISS-19) and the Claude certificates (ISS-20).
+
 | Field | Where it appears | File | Notes |
 |---|---|---|---|
 | `name` | Header wordmark, hero, intro sequence (M1), footer, page titles, OG image, JSON-LD `Person.name` | `src/data/personal.ts` | Spelling differs across your files ("Abdelrahman" vs "Abdelrhman"). Also update the holder in `LICENSE`. |
