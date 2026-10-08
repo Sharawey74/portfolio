@@ -5,6 +5,11 @@ starts as `{ value: null, todo: "TODO(owner): …" }`. To fill one, set `value`
 and delete the `todo` key. An empty field renders nothing (no placeholder), so
 the site looks finished either way.
 
+To keep a field off the site for good (phone, GPA, a portrait you would rather
+not show), replace the `todo` with the date you decided:
+`phone: { value: null, withheld: "2026-10-09" }`. It still renders nothing,
+and it no longer counts as a `TODO(owner)`, so the strict launch check can pass.
+
 `npm run check:launch` lists what is still open (added in Stage 1). It exits
 non-zero only with `--strict`, or when `LAUNCH_STRICT=1` is set on the Vercel
 production build.
