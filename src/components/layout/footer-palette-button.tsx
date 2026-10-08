@@ -11,7 +11,7 @@ export function FooterPaletteButton({ label }: { label: string }) {
       aria-haspopup="dialog"
       aria-keyshortcuts="Control+K Meta+K"
       onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))}
-      className="footer-link mono-label"
+      className="footer-link ui-label"
     >
       <ScrambleText text={label} />
     </button>
