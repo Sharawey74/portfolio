@@ -15,7 +15,8 @@ file and a date.
 
 - Repo: `C:\Users\DELL\Desktop\portfolio-site`, remote `Sharawey74/portfolio`, default branch `main`.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
-- Work is staged (0 to 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+- Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
+- **Pending brief changes.** The owner's review round 1 (2026-10-08) asks to change rules below: the approved hero copy, one accent color, the 0–2 px radius, the Arial ban and grayscale screenshots (`docs/ISSUES.md` ISS-12, ISS-13, ISS-21 to ISS-25). Each rule here stays in force until its decision is recorded in `docs/ISSUES.md`; then this file changes in the same branch as the code.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -50,8 +51,8 @@ All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
 - PhishSniffer: "about 43K emails from public corpora (34,284 train, 8,571 held out)", 97.7% test accuracy.
 - Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
 - Recruiter-Pro: "500+ tests" (README says 544 and 530).
-- Public name spelling is undecided ("Abdelrahman" vs "Abdelrhman"). Never choose; `personal.name` stays `TODO(owner)` until set. LICENSE holder is "Sharawey74" until then.
-- Headline OSS stat is derived, not typed: 7 merged PRs across 5 projects, 4 under review, 2026-08 to 2026-10 (`ossSummary()`).
+- Public name: the owner chose **"Abdelrhman Mohamed"** on 2026-10-08 (`docs/ISSUES.md` ISS-14). Until review round 1 applies it, `personal.name` is still `TODO(owner)` and the LICENSE holder is "Sharawey74"; never use the other spelling.
+- Headline OSS stat is derived, not typed (`ossSummary()`). The committed snapshot says 7 merged across 5 projects, 4 under review; since magefree/mage #16440 merged on 2026-10-07 the true figure is 8 across 6, 3 under review, and review round 1 updates the snapshot (`docs/ISSUES.md` ISS-16).
 
 ## Content model
 
