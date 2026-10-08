@@ -1,0 +1,73 @@
+name: Lighthouse
+
+# Runs when Vercel reports a successful preview deployment (one per pull
+# request push). Production deployments are skipped. Needs the Vercel project
+# to be imported (DEPLOY.md). If Deployment Protection is on, add the repo
+# secret VERCEL_AUTOMATION_BYPASS_SECRET (Vercel → Settings → Deployment
+# Protection → Protection Bypass for Automation).
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-${{ github.event.deployment.sha }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse on the preview
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment.environment != 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Budgets from CLAUDE.md. CLS and accessibility fail the job; LCP and
+      # TBT warn, because their overruns are accepted until measured here
+      # (docs/ISSUES.md ISS-01, ISS-02, ISS-36). Tighten them to "error"
+      # once the preview numbers are within budget.
+      - name: Run Lighthouse CI (3 runs per page, mobile)
+        env:
+          BASE: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+        run: |
+          headers='{}'
+          if [ -n "$BYPASS" ]; then headers="{\"x-vercel-protection-bypass\":\"$BYPASS\"}"; fi
+          cat > lighthouserc.json <<EOF
+          {
+            "ci": {
+              "collect": {
+                "url": ["$BASE/", "$BASE/projects/eventora", "$BASE/projects/recruiter-pro", "$BASE/projects/sysplex"],
+                "numberOfRuns": 3,
+                "settings": { "extraHeaders": $headers }
+              },
+              "assert": {
+                "assertions": {
+                  "categories:accessibility": ["error", { "minScore": 1 }],
+                  "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05, "aggregationMethod": "median" }],
+                  "largest-contentful-paint": ["warn", { "maxNumericValue": 2500, "aggregationMethod": "median" }],
+                  "total-blocking-time": ["warn", { "maxNumericValue": 200, "aggregationMethod": "median" }]
+                }
+              },
+              "upload": { "target": "filesystem", "outputDir": "lhci" }
+            }
+          }
+          EOF
+          npx -y @lhci/cli@0.15.x autorun
+
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ github.event.deployment.sha }}
+          path: lhci/
+          retention-days: 30
