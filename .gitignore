@@ -38,3 +38,8 @@ CLAUDE.local.md
 
 # local preview config for the desktop app browser
 .claude/launch.json
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/
