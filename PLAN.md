@@ -158,7 +158,7 @@ Notes:
 Source: the owner's review of a local production build on 2026-10-08 (21 notes, six screenshots). Every item is an issue in `docs/ISSUES.md` (ISS-12 to ISS-34, with context, options and recommendations) and an owner-reported entry in the `docs/UAT.md` defect log. Branch when started: `feat/owner-review-1`. Stage gating as usual: finish, stop, wait for "continue". Several items change rules the brief fixed (approved hero copy, one accent color, radius, banned fonts, grayscale screenshots); `CLAUDE.md` changes in the same branch as the decision, never before.
 
 R0 Owner decisions (blocks R2 to R4; nothing is coded before these are answered)
-- [x] ISS-12 hero headline: "Software that holds up under load, review and test." (chosen to the owner's brief: software engineering, not only backend; 2026-10-08)
+- [x] ISS-12 hero: label "Abdelrhman Mohamed / Software engineer", H1 "Software engineer building systems that stay correct under concurrency." (owner's choice, 2026-10-08)
 - [x] ISS-21 palette direction: A, crimson ramp
 - [x] ISS-22 button radius: pill for buttons and CTAs only
 - [x] ISS-23 nav, footer and stack captions: Hanken Grotesk
