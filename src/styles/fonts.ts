@@ -31,9 +31,14 @@ export const sans = Hanken_Grotesk({
   variable: "--font-hanken",
 });
 
-/** Labels, numbers, metadata, figure captions. */
+/**
+ * Labels, numbers, metadata, figure captions. Weight 400 only: nothing sets
+ * another weight on mono text, and the static file is 20.7 KB against 39.5 KB
+ * for the variable one (preloaded on every page; docs/ISSUES.md ISS-36).
+ */
 export const mono = JetBrains_Mono({
   subsets: ["latin"],
+  weight: "400",
   display: "swap",
   variable: "--font-jetbrains",
 });
