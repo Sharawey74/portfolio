@@ -23,7 +23,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-04 | INP is not measured with real visitors | Medium | Open | Needs a field-data source once the site is live | Stage 6 |
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
-| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Owner | Still not imported (rechecked 2026-10-08, Stage 6). `DEPLOY.md` → First-time setup lists the steps | Before v1.0.0 |
+| ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Closed | Imported 2026-10-09; production `abdelrhaman-mohamed.vercel.app`, also the repo homepage (detail below) | — |
 | ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
 | ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only; Dependabot (weekly, Stage 6) proposes the patched release; never `npm audit fix --force` | Dependabot pull requests |
@@ -55,7 +55,9 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot) | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
 | ISS-37 | Smoke tests timed out when about 8 browsers ran in parallel against one local `next start` | Medium | Closed | Fixed in Stage 6: 2 workers, 60 s per test, 1 retry in CI; 20/20 on three later runs | — |
 | ISS-38 | Commands that reach the npm registry or GitHub can fail for network reasons (`ECONNRESET`), not because of the project | Low | Decided | Retry; nothing in the repo to fix. How to tell a network failure from a real one is in the detail | When it recurs |
-| ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Fixed | Numerals use `--text-3` instead of `--deco` (branch `fix/card-numeral-contrast`); confirm on that PR's preview Lighthouse run | Before v1.0.0 |
+| ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Closed | Numerals use `--text-3` instead of `--deco` (#18); the preview Lighthouse run on #18 passed accessibility on all four pages | — |
+| ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Owner (later) | Owner decision 2026-10-09: set them in one batch with the resume PDF, the Alstom internship (ISS-19), the certificates (ISS-20) and the other `TODO(owner)` items (ISS-08); steps in `DEPLOY.md` → Contact form | Before v1.0.0 |
+| ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -626,7 +628,7 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 ### ISS-39 Card numerals fail contrast in the light theme
 
-**Severity** High (the Lighthouse workflow fails on accessibility below 100; WCAG 1.4.3). **Status** Fixed, awaiting the preview run.
+**Severity** High (the Lighthouse workflow fails on accessibility below 100; WCAG 1.4.3). **Status** Closed 2026-10-09: the Lighthouse run on #18's preview (Actions run 37935559731) reported only LCP warnings, no accessibility failure, on `/` and the three case studies; #18 is merged.
 
 **Evidence.** First `lighthouse.yml` run, 2026-10-09, on the preview of `docs/vercel-live` (3 mobile runs per page): `/` accessibility 0.97 on all three runs, the only failing audit `color-contrast`, on `li.stack-item … span.card-numeral` ("01", "02", "03"): foreground #999999 on #EEEEEE, 2.45:1, 48.6 px normal weight, expected 3:1. The three case studies scored 100.
 
@@ -635,6 +637,26 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **Fix.** `.card-numeral` uses `--text-3` (`--g8`): light #666666 on #EEEEEE about 4.9:1, dark #8F8F8F on #111111 about 5.9:1, both above 4.5:1. Rule for later: anything rendered as text uses a text role, never `--deco`. Close with the next preview's Lighthouse accessibility 100 on `/`.
 
 **Same run, performance** (for ISS-01, ISS-02, ISS-36; Vercel preview, CPU benchmark 2,854–3,081): median LCP `/` 2.88 s, Eventora 3.63 s, Recruiter-Pro 3.03 s, SysPlex 2.87 s; median TBT `/` 138 ms, Eventora 131 ms, Recruiter-Pro 90 ms, SysPlex 81 ms; CLS 0.001. TBT is within the 200 ms budget on Vercel; LCP is still over 2.5 s on every page.
+
+### ISS-40 Contact form not connected on production
+
+**Severity** Medium (visitors still reach the owner through the email, GitHub and LinkedIn links). **Status** Owner (later).
+
+**Context.** `contactConfigured()` (`src/lib/contact-config.ts`) renders the form only when `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are set; production has none of them, so `/#contact` shows the "not connected" note.
+
+**Decision (owner, 2026-10-09).** Do it later, in one batch with the resume PDF, the Alstom internship (ISS-19), the certificates (ISS-20) and the remaining `TODO(owner)` items (ISS-08).
+
+**Steps when the time comes** (`DEPLOY.md` → Contact form): a Resend account and a sending-only API key; in Vercel, Production only, `RESEND_API_KEY` as a secret, `CONTACT_TO_EMAIL` = the Resend account's email, `CONTACT_FROM_EMAIL` = `Portfolio <onboarding@resend.dev>` (no verified domain yet, and Resend's shared sender delivers only to the account's own address); redeploy; send one test message. Close with the test message received.
+
+### ISS-41 Local-only files lost on a branch switch
+
+**Severity** Medium (the plan, facts log and checklist exist only on this machine). **Status** Closed 2026-10-09.
+
+**What happened.** The local `main` branch still pointed at a commit from before the untracking (067492d), where the three files were tracked. `git switch main` replaced the ignored working copies with the committed ones (git treats ignored files as expendable), and `git pull` then fast-forwarded across the untracking commit, which deleted them. `DEPLOY.md` survived because it was never tracked there.
+
+**Recovery.** Each file restored from the parent of its newest untracking commit (`ed8de71~1`, 2026-10-08 22:55, for `PLAN.md` and `PERSONAL-INFO-CHECKLIST.md`; `FACTS-CHECK.md` was the same in both). The session logs show no edit to these files after that commit, so nothing was lost.
+
+**Prevention.** Never check out a commit or branch from before 2026-10-08 23:00 in this folder (the old `feat/*` branches, `chore/eslint-10` before its untracking commit). To read an old branch, use `git show <branch>:<path>` or a separate worktree. Local `main` is now current. Keep a copy of the local-only files outside the repo.
 
 ---
 
