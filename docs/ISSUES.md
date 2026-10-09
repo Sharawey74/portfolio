@@ -606,6 +606,16 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Options.** A: trace and trim the first layout (fewer nodes in the stack table, lighter Contact band, lazy diagram zones). B: accept and re-measure on Vercel (CDN, real HTTP/2), as decided for ISS-01 / ISS-02. **Recommendation:** B now, A in Stage 6 if the preview numbers confirm it.
 
+**Vercel preview, 2026-10-09** (first `lighthouse.yml` runs, numbers in ISS-39): TBT 81–138 ms, within budget, so the TBT half of this issue is answered. LCP medians 2.87–3.63 s on all four pages, still over.
+
+**Diagnosis, 2026-10-09** (`perf/lcp-vercel`, local Lighthouse 12 plus Chrome traces at 4x CPU):
+- On the text pages the LCP element is body text (`/` the hero's second paragraph, SysPlex the summary), and the whole cost is "render delay". The intro is not the cause: a build without it measured the same.
+- Lighthouse CI uses simulated throttling, which charges every request started before the observed paint. Before first paint each page requests the HTML, 11.5 KB of CSS, three preloaded fonts (203 KB: Newsreader 129 KB, JetBrains Mono 39.5 KB, Hanken 34 KB) and about 160 KB of JavaScript. On the slow-4G profile the fonts delay the CSS (it arrives at about 1.5 s with applied throttling), and the first style and layout pass then takes 0.5–1.3 s at 4x CPU for 429 elements. Ablating CSS features by injected overrides was too noisy to single one out (the same wall as in Stage 5).
+- Not preloading Hanken and JetBrains made it worse (FCP later, CLS 0.043 on Recruiter-Pro): reverted.
+- Done: JetBrains Mono at weight 400 only (the only weight used), 39.5 KB to 20.7 KB, no visible change.
+- Measured, needs an owner decision because it changes the look: Newsreader without the `opsz` axis, 129 KB to 57 KB. Best local runs: SysPlex 3.62 to 3.12 s, `/` 3.78 to 3.25 s (noisy, CPU benchmark 1,341–2,930). The headline is drawn from the text master instead of the display master: heavier hairlines, slightly wider. Not enough on its own to reach 2.5 s.
+- Real visitors: with applied throttling the text paints at 2.4–2.9 s, and unthrottled at 0.26–1.3 s; simulated lab numbers sit above both. Field data (Vercel Speed Insights) would show the visitors' actual LCP.
+
 ### ISS-37 Smoke tests timed out under parallel load
 
 **Severity** Medium (a flaky check in CI is worse than none: people learn to ignore red). **Status** Closed (2026-10-08, Stage 6).
