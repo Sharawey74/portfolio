@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { experience } from "@/data/experience.ts";
 import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
@@ -75,6 +76,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Intro />
         <Cursor />
         <ScrambleHost />
+        {/* Real-visitor Core Web Vitals (docs/ISSUES.md ISS-36). Vercel builds
+            only: its script lives at /_vercel/speed-insights, which local
+            and CI servers do not have, so it would log a 404 there. */}
+        {process.env.VERCEL === "1" ? <SpeedInsights /> : null}
         <script
           type="application/ld+json"
           // Built from the typed data files; "<" is escaped so no value can close the tag.
