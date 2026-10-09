@@ -300,4 +300,4 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 
 Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
 
-Repo setup still open (checked 2026-10-07): the Vercel project is not imported (no deployments on the repo), and the repo homepage is the placeholder `https://YOUR-PROJECT.vercel.app` (returns 404). Set it to the real Vercel URL once the project exists.
+Vercel is live since 2026-10-09 (ISS-07): production is `https://portfolio-virid-delta-2g04ymqux2.vercel.app`, also the repo homepage. The team-scoped `*-sharawey74s-projects.vercel.app` URLs need a Vercel login; never give them out as the public link. If the production domain changes, update the homepage too. Still open on the repo side: the Resend variables (contact form) and the `main` ruleset.
