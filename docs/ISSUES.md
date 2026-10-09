@@ -192,9 +192,13 @@ None of the large layouts in the trace was forced by our JavaScript, and there a
 
 ## ISS-07 Vercel project not imported; repo homepage placeholder
 
-**Severity** High (blocks previews, the Stage 6 Lighthouse workflow, and launch). **Status** Owner.
+**Severity** High (blocks previews, the Stage 6 Lighthouse workflow, and launch). **Status** Closed 2026-10-09.
 
 **Context.** Checked 2026-10-07: no deployments on the repo; the repo homepage is `https://YOUR-PROJECT.vercel.app`, which returns 404. Steps: `README.md` → "Deploying on Vercel" (and `DEPLOY.md` in Stage 6).
+
+**Resolution (2026-10-09).** The owner imported the project. Evidence: GitHub deployment 6960554515 (Production, `0b36553`, the merge of #13); `https://portfolio-virid-delta-2g04ymqux2.vercel.app` returns 200 for `/`, `/projects/eventora`, `/sitemap.xml` and `/robots.txt`, and its canonical and share-image URLs use that domain. The repo homepage now points there. `VERCEL_AUTOMATION_BYPASS_SECRET` is set as an Actions secret. The Lighthouse workflow ran on the production deployment and was skipped, as designed (previews only).
+
+Still open, outside this issue: the contact form shows "not connected" until the three Resend variables are set; the team-scoped URL `portfolio-sharawey74s-projects.vercel.app` sits behind Vercel Authentication (302 to the Vercel login), so only the production domain above is public. Later the same day the owner replaced the generated domain with `https://abdelrhaman-mohamed.vercel.app` (`/` and `/projects/eventora` return 200; the old domain now returns 404), and the repo homepage follows it. The `main` ruleset was saved later the same day (active; pull request, merge commits only, required check `Lint, typecheck, facts, build, smoke`, no deletion or force push).
 
 ## ISS-08 `TODO(owner)` items
 
