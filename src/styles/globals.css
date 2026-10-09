@@ -832,7 +832,8 @@ html[data-motion="paused"] .stack-item .card-copy {
   display: block;
   font-size: var(--text-display-l);
   line-height: 1;
-  color: var(--deco);
+  /* Text, so a text role: --deco (light #999999 on --g2) measured 2.45:1 (ISS-39). */
+  color: var(--text-3);
   pointer-events: none;
 }
 /* Parallax on decoration only: the numeral drifts against the card. */

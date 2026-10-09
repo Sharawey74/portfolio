@@ -55,6 +55,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot) | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
 | ISS-37 | Smoke tests timed out when about 8 browsers ran in parallel against one local `next start` | Medium | Closed | Fixed in Stage 6: 2 workers, 60 s per test, 1 retry in CI; 20/20 on three later runs | — |
 | ISS-38 | Commands that reach the npm registry or GitHub can fail for network reasons (`ECONNRESET`), not because of the project | Low | Decided | Retry; nothing in the repo to fix. How to tell a network failure from a real one is in the detail | When it recurs |
+| ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Fixed | Numerals use `--text-3` instead of `--deco` (branch `fix/card-numeral-contrast`); confirm on that PR's preview Lighthouse run | Before v1.0.0 |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -618,6 +619,18 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **Cause.** The connection to the registry was reset mid-response (Wi-Fi, ISP, a proxy or antivirus inspecting HTTPS, or the registry itself). Nothing in the project.
 
 **How to tell.** A network failure names the network: `ECONNRESET`, `ETIMEDOUT`, `ENOTFOUND`, `EAI_AGAIN`, "Internal Server Error" or 5xx from GitHub, "unable to get local issuer certificate" (this clone needs `http.sslBackend=schannel`). A project failure names a file, a rule or a test. **Action:** wait a minute and rerun the same command; if it keeps failing, check the connection or `npm config get proxy`. The owner's local guide (`PORTFOLIO-GUIDE.local.md`, not in git) explains each command and its failures.
+
+### ISS-39 Card numerals fail contrast in the light theme
+
+**Severity** High (the Lighthouse workflow fails on accessibility below 100; WCAG 1.4.3). **Status** Fixed, awaiting the preview run.
+
+**Evidence.** First `lighthouse.yml` run, 2026-10-09, on the preview of `docs/vercel-live` (3 mobile runs per page): `/` accessibility 0.97 on all three runs, the only failing audit `color-contrast`, on `li.stack-item … span.card-numeral` ("01", "02", "03"): foreground #999999 on #EEEEEE, 2.45:1, 48.6 px normal weight, expected 3:1. The three case studies scored 100.
+
+**Cause.** The numeral used `--deco` (`--g7`), the "decoration only" step. In dark it happens to pass (#666666 on #111111, about 3.3:1); in light it does not. Lighthouse's Chrome reports `prefers-color-scheme: light`, so CI tests the light theme, while the local runs so far ran the dark one. `aria-hidden` does not exempt visible text from the contrast audit. `check:contrast` did not catch it because it checks text roles, and this text used a decoration token.
+
+**Fix.** `.card-numeral` uses `--text-3` (`--g8`): light #666666 on #EEEEEE about 4.9:1, dark #8F8F8F on #111111 about 5.9:1, both above 4.5:1. Rule for later: anything rendered as text uses a text role, never `--deco`. Close with the next preview's Lighthouse accessibility 100 on `/`.
+
+**Same run, performance** (for ISS-01, ISS-02, ISS-36; Vercel preview, CPU benchmark 2,854–3,081): median LCP `/` 2.88 s, Eventora 3.63 s, Recruiter-Pro 3.03 s, SysPlex 2.87 s; median TBT `/` 138 ms, Eventora 131 ms, Recruiter-Pro 90 ms, SysPlex 81 ms; CLS 0.001. TBT is within the 200 ms budget on Vercel; LCP is still over 2.5 s on every page.
 
 ---
 
