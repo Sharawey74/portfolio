@@ -616,6 +616,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 - Measured, needs an owner decision because it changes the look: Newsreader without the `opsz` axis, 129 KB to 57 KB. Best local runs: SysPlex 3.62 to 3.12 s, `/` 3.78 to 3.25 s (noisy, CPU benchmark 1,341–2,930). The headline is drawn from the text master instead of the display master: heavier hairlines, slightly wider. Not enough on its own to reach 2.5 s.
 - Real visitors: with applied throttling the text paints at 2.4–2.9 s, and unthrottled at 0.26–1.3 s; simulated lab numbers sit above both. Field data (Vercel Speed Insights) would show the visitors' actual LCP.
 
+**Owner decision, 2026-10-09.** Keep the display font as it is (the `opsz` axis stays; the look wins over about 0.5 s of simulated LCP). Add Vercel Speed Insights (`@vercel/speed-insights`, rendered only when `VERCEL=1`, +1.2 KB gz on `/`, 157.4 KB of 170) and judge LCP on real visitors' 75th percentile once it has data; the Lighthouse LCP assertion stays `warn` until then. If the field LCP is over 2.5 s, reopen option A (first layout and JavaScript). The owner switches Speed Insights on in Vercel (project → Speed Insights → Enable); it sends anonymous performance numbers, no personal data.
+
 ### ISS-37 Smoke tests timed out under parallel load
 
 **Severity** Medium (a flaky check in CI is worse than none: people learn to ignore red). **Status** Closed (2026-10-08, Stage 6).
