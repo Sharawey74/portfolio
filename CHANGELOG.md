@@ -16,6 +16,14 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 - `lighthouse.yml`: Lighthouse on every Vercel preview deployment, 3 runs, against the budgets.
 - `release.yml`: a `v*.*.*` tag creates the GitHub Release from this file's section for that version.
 - Dependabot for npm and GitHub Actions, weekly, minor and patch updates grouped.
+- Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
+
+### Changed
+- ESLint 10 and the current majors of the GitHub Actions used by CI.
+- The mono face loads at weight 400 only (39.5 KB to 20.7 KB, preloaded on every page).
+
+### Fixed
+- The Work card numerals in the light theme had 2.45:1 contrast; they now use the text-3 gray (4.95:1 light, 5.84:1 dark).
 
 ## [0.6.0] - 2026-10-08
 
