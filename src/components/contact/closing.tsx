@@ -38,7 +38,7 @@ export function Closing() {
                   href={l.href}
                   rel={external ? "noreferrer" : undefined}
                   data-press=""
-                  className="icon-link inline-flex min-h-11 max-w-full items-center gap-2.5 rounded-pill border border-line px-4 text-small text-ink transition-[border-color,background-color,translate] duration-200 ease-out hover:-translate-y-px hover:border-line-strong hover:bg-hover"
+                  className="btn icon-link inline-flex min-h-11 max-w-full items-center gap-2.5 rounded-pill border border-line px-4 text-small text-ink transition-[border-color,background-color,translate] duration-200 ease-out hover:-translate-y-px hover:border-line-strong hover:bg-hover"
                 >
                   {l.icon ? <BrandIcon kind={l.icon} /> : null}
                   <span className="min-w-0 wrap-anywhere">{l.label}</span>
