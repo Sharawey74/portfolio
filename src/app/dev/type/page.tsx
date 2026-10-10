@@ -8,6 +8,7 @@ import { Rule } from "@/components/ui/rule.tsx";
 import { SectionHeading } from "@/components/ui/section-heading.tsx";
 import { StatusPill } from "@/components/ui/status-pill.tsx";
 import { TextLink } from "@/components/ui/text-link.tsx";
+import { BrandIcon } from "@/components/ui/brand-icon.tsx";
 import { KernelDemo } from "./kernel-demo.tsx";
 import { ScrollSpyNav } from "@/components/layout/scroll-spy-nav.tsx";
 import { RevealText } from "@/components/motion/reveal-text.tsx";
@@ -21,7 +22,8 @@ const SPECIMEN_INDEX = [
 ];
 
 /**
- * Developer specimen: type scale, ramp, break-color rules, base components and
+ * Developer specimen: type scale, ramp and edge lines, break-color rules,
+ * base components (Stage 7: pills, section cards, brand-icon links, arrows) and
  * the motion kernel. Not public: noindex, and 404 on the Vercel production
  * deployment. Copy here describes the design system, not the owner.
  */
@@ -33,8 +35,9 @@ export const metadata: Metadata = {
 const SCALE = [
   ["display-xl", "font-display text-display-xl font-light", "Correct under load"],
   ["display-l", "font-display text-display-l", "Booking lifecycle"],
-  ["h2", "font-display text-h2", "Ten states, one guard"],
-  ["h3", "font-sans text-h3 font-medium", "Optimistic locking returns 409"],
+  ["section", "font-heading text-section text-gradient", "Every figure has a source."],
+  ["h2", "font-heading text-h2", "Ten states, one guard"],
+  ["h3", "font-heading text-h3", "Optimistic locking returns 409"],
   ["body", "font-sans text-body", "A Redis Lua script checks availability and decrements in one atomic step."],
   ["small", "font-sans text-small text-ink-2", "Local, Docker Compose. Read path only."],
   ["mono label", "mono-label text-ink-3", "Source · PERFORMANCE.md:400"],
@@ -58,19 +61,19 @@ const RAMP = [
 const BREAK_ALLOWED = [
   "Live / open status dot",
   "Active nav marker",
-  "::selection",
   "Focus ring",
+  "The pause switch track when on",
   "The single active packet or node in a motion graphic",
   "One highlighted value per chart",
-  "The H1 final period",
-  "Cursor ring hover state",
+  "The H1 and wordmark periods, section index numbers",
+  "Brand icons on hover",
+  "The hero glow and pill arc; the glow behind the closing line",
 ];
 const BREAK_FORBIDDEN = [
-  "Body or heading text",
-  "Backgrounds larger than a chip",
-  "Gradients, glows, shadows",
+  "Body or heading text beyond the uses above",
+  "Fills larger than a chip",
+  "Glows anywhere else; drop shadows; purple or blue gradients",
   "Card borders",
-  "More than one use per section in view",
 ];
 
 export default function TypeSpecimen() {
@@ -105,7 +108,7 @@ export default function TypeSpecimen() {
 
       <SectionHeading id="ramp" index="02" title="Ramp" />
       <ul className="col-span-full grid grid-cols-2 gap-px bg-hair md:col-span-10 md:col-start-2 md:grid-cols-6">
-        {RAMP.map(([token, role]) => (
+        {[...RAMP, ["edge", "line: borders, card top edge"] as const, ["edge-soft", "line-hair: dividers"] as const].map(([token, role]) => (
           <li key={token} className="flex flex-col gap-8 bg-page p-3">
             <span className="block h-16 border border-hair" style={{ background: `var(--${token})` }} />
             <span className="flex flex-col gap-1">
@@ -135,8 +138,8 @@ export default function TypeSpecimen() {
           </ul>
         </div>
         <p className="text-small text-ink-3 md:col-span-2">
-          One token. Budget: at most 2% of viewport pixels. Setting --break to --g11 returns the site to pure black
-          and white. Select this sentence to see ::selection; tab through the controls below to see the focus ring.
+          One bright token, with --c1 and --c2 behind it for the palette option and ::selection. Budget: at most 2%
+          of viewport pixels. Tab through the controls below to see the focus ring.
         </p>
       </div>
 
@@ -162,6 +165,31 @@ export default function TypeSpecimen() {
           <Chip name="PyTorch" qualifier="notebook" />
           <StatusPill status="merged" />
           <StatusPill status="open" />
+        </div>
+        <div role="group" aria-label="Pill group" className="pill-group self-start">
+          <button type="button" aria-pressed="true" className="pill-option">
+            Selected
+          </button>
+          <button type="button" aria-pressed="false" className="pill-option">
+            Option
+          </button>
+          <button type="button" aria-pressed="false" className="pill-option">
+            Option
+          </button>
+        </div>
+        <div className="surface-card lift flex flex-col gap-3 p-6">
+          <MonoLabel>surface-card · lift</MonoLabel>
+          <p className="font-heading text-h3">Section card</p>
+          <p className="text-ink-2">24 px radius, the stronger edge on top, an opaque fill one step above the page.</p>
+          <p className="flex flex-wrap gap-x-6 text-small">
+            <a href="#components" className="nudge inline-flex items-center gap-1.5 text-ink">
+              Next <span aria-hidden="true" data-arrow="right">→</span>
+            </a>
+            <a href="https://github.com/Sharawey74" rel="noreferrer" className="icon-link inline-flex items-center gap-2 text-ink">
+              <BrandIcon kind="github" />
+              GitHub
+            </a>
+          </p>
         </div>
         <Rule />
         <Figure number={3} caption="Booking flow" description="Placeholder figure for the specimen.">

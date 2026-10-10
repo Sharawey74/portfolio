@@ -320,16 +320,20 @@ export const projects = z.array(projectSchema).parse([
         footnote: "The line is the k6 stage schedule (configured targets), not measured VUs. Results are whole-run aggregates.",
       },
     ],
+    // The first six are the home card's slider, in the order the owner
+    // approved with the Stage 7 mock-up (docs/ISSUES.md ISS-42; the landing
+    // page was dropped). The first is also the case-study hero (M8 morph).
     screenshots: [
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/01-landing-hero-dark.webp", src: "/projects/eventora/01-landing-hero-dark.webp", width: 1440, height: 900, alt: "Eventora home page with event search, dark theme" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/02-search-results.webp", src: "/projects/eventora/02-search-results.webp", width: 1440, height: 900, alt: "Event search results filtered by text, city, category and date, light theme" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/04-ticket-selection-cart-dark.webp", src: "/projects/eventora/04-ticket-selection-cart-dark.webp", width: 1440, height: 900, alt: "Event page with ticket tier selection" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/06-booking-confirmation-dark.webp", src: "/projects/eventora/06-booking-confirmation-dark.webp", width: 1440, height: 1582, alt: "Booking confirmation with the reference, total paid and QR tickets, dark theme" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/09-organizer-dashboard-dark.webp", src: "/projects/eventora/09-organizer-dashboard-dark.webp", width: 1440, height: 2618, alt: "Organizer dashboard" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/10-organizer-attendees-checkin-dark.webp", src: "/projects/eventora/10-organizer-attendees-checkin-dark.webp", width: 1440, height: 1226, alt: "Organizer attendee check-in list" },
+      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/13-refund-request.webp", src: "/projects/eventora/13-refund-request.webp", width: 1440, height: 900, alt: "Refund request form" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/12-featured-events-dark.webp", src: "/projects/eventora/12-featured-events-dark.webp", width: 1440, height: 900, alt: "Featured events grid" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/05-stripe-checkout.webp", src: "/projects/eventora/05-stripe-checkout.webp", width: 1440, height: 908, alt: "Stripe-hosted checkout step" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/03-event-detail-dark.webp", src: "/projects/eventora/03-event-detail-dark.webp", width: 1440, height: 1458, alt: "Event detail page" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/08-booking-detail-qr-ticket-dark.webp", src: "/projects/eventora/08-booking-detail-qr-ticket-dark.webp", width: 1440, height: 1367, alt: "Booking detail with QR ticket" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/09-organizer-dashboard-dark.webp", src: "/projects/eventora/09-organizer-dashboard-dark.webp", width: 1440, height: 2618, alt: "Organizer dashboard" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/10-organizer-attendees-checkin-dark.webp", src: "/projects/eventora/10-organizer-attendees-checkin-dark.webp", width: 1440, height: 1226, alt: "Organizer attendee check-in list" },
-      { from: "Event-Ticketing-Platform/site/assets/img/screenshots/13-refund-request.webp", src: "/projects/eventora/13-refund-request.webp", width: 1440, height: 900, alt: "Refund request form" },
     ],
     todos: ["TODO(owner): confirm whether the Railway API is intentionally down (report §7 q3)"],
   },

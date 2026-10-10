@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Three layers:
- *   1. Primitives: the 12-step neutral ramp (R=G=B) and the accent ramp:
- *      --c1 deep (fills: the Contact band, outline-button hover, selected
- *      option), --c2 mid (filled-button hover, selection, card hover edge),
- *      --break bright (marks, focus ring, section indices, the H1 period).
+ * Design tokens (Stage 7 values, docs/ISSUES.md ISS-42: a black page, a
+ * neutral ramp tuned to the approved mock-up, translucent blue-white edges).
+ * Three layers:
+ *   1. Primitives: the 12-step neutral ramp (R=G=B), the two edge colors
+ *      (--edge, --edge-soft: translucent lines, the one non-neutral allowance
+ *      besides the accent) and the accent ramp:
+ *      --c1 deep (the palette's selected option; the Contact band and the
+ *      button hovers moved to the neutral ramp in Stage 7), --c2 mid
+ *      (selection), --break bright (marks, focus ring, section indices, the
+ *      H1 period, the hero and closing glows).
  *      --on-c2 is the text color on --c2 (neutral). Owner decision
  *      2026-10-08, docs/ISSUES.md ISS-21 (direction A).
  *   2. Semantic roles: surfaces, lines, text. Components use these, never primitives.
@@ -16,23 +21,31 @@
  *   - light --g8 #707070 -> #666666. With #707070, text-3 measured 4.27:1 on
  *     the light card (#EEEEEE) and 4.00:1 on the light hover surface (#E7E7E7);
  *     #666666 gives 4.64:1 or better on every light surface.
+ *   - Stage 7.4.1 (docs/ISSUES.md ISS-43, owner note on a grey, washed-out
+ *     look): dark --g8 #858585 -> #949494 and --g9 #a3a3a3 -> #b8b8b8, light
+ *     --g8 #666666 -> #5c5c5c and --g9 #4d4d4d -> #404040 (secondary text one
+ *     step stronger in each theme); edges 0.19 / 0.11 -> 0.22 / 0.14 (dark)
+ *     and 0.16 / 0.09 -> 0.18 / 0.11 (light); grain 0.045 -> 0.02; cards on
+ *     an opaque fill; heading gradient ends at 75 % instead of 50 %.
  * The primitive blocks are parsed by the check scripts; keep their markers.
  */
 
 /* tokens:dark */
 :root {
-  --g0: #050505;
-  --g1: #0a0a0a;
-  --g2: #111111;
-  --g3: #181818;
-  --g4: #212121;
-  --g5: #2e2e2e;
-  --g6: #444444;
-  --g7: #666666;
-  --g8: #8f8f8f;
-  --g9: #b3b3b3;
-  --g10: #e0e0e0;
-  --g11: #fafafa;
+  --g0: #000000;
+  --g1: #050505;
+  --g2: #0a0a0a;
+  --g3: #121212;
+  --g4: #1c1c1c;
+  --g5: #262626;
+  --g6: #3d3d3d;
+  --g7: #5e5e5e;
+  --g8: #949494;
+  --g9: #b8b8b8;
+  --g10: #d4d4d4;
+  --g11: #f0f0f0;
+  --edge: rgba(214, 235, 253, 0.22);
+  --edge-soft: rgba(217, 237, 254, 0.14);
   --break: #ff3b4e;
   --c1: #3a0810;
   --c2: #8e1428;
@@ -43,18 +56,20 @@
 
 /* tokens:light */
 :root[data-theme="light"] {
-  --g0: #fafafa;
-  --g1: #f5f5f5;
-  --g2: #eeeeee;
-  --g3: #e7e7e7;
-  --g4: #dedede;
-  --g5: #d1d1d1;
-  --g6: #bbbbbb;
+  --g0: #ffffff;
+  --g1: #fafafa;
+  --g2: #f5f5f5;
+  --g3: #ededed;
+  --g4: #e3e3e3;
+  --g5: #d4d4d4;
+  --g6: #b8b8b8;
   --g7: #999999;
-  --g8: #666666;
-  --g9: #4c4c4c;
-  --g10: #1f1f1f;
-  --g11: #050505;
+  --g8: #5c5c5c;
+  --g9: #404040;
+  --g10: #262626;
+  --g11: #111111;
+  --edge: rgba(18, 30, 45, 0.18);
+  --edge-soft: rgba(18, 30, 45, 0.11);
   --break: #c4152a;
   --c1: #f6e2e5;
   --c2: #a3142a;
@@ -69,18 +84,20 @@
 /* tokens:light-media */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --g0: #fafafa;
-    --g1: #f5f5f5;
-    --g2: #eeeeee;
-    --g3: #e7e7e7;
-    --g4: #dedede;
-    --g5: #d1d1d1;
-    --g6: #bbbbbb;
+    --g0: #ffffff;
+    --g1: #fafafa;
+    --g2: #f5f5f5;
+    --g3: #ededed;
+    --g4: #e3e3e3;
+    --g5: #d4d4d4;
+    --g6: #b8b8b8;
     --g7: #999999;
-    --g8: #666666;
-    --g9: #4c4c4c;
-    --g10: #1f1f1f;
-    --g11: #050505;
+    --g8: #5c5c5c;
+    --g9: #404040;
+    --g10: #262626;
+    --g11: #111111;
+    --edge: rgba(18, 30, 45, 0.18);
+    --edge-soft: rgba(18, 30, 45, 0.11);
     --break: #c4152a;
     --c1: #f6e2e5;
     --c2: #a3142a;
@@ -96,8 +113,8 @@
   --surface-raised: var(--g1);
   --surface-card: var(--g2);
   --surface-hover: var(--g3);
-  --line-hair: var(--g4);
-  --line: var(--g5);
+  --line-hair: var(--edge-soft);
+  --line: var(--edge);
   --line-strong: var(--g6);
   --deco: var(--g7);
   --text-3: var(--g8);
@@ -113,7 +130,7 @@
   /* Layout */
   --gutter: clamp(1rem, 0.6rem + 1.6vw, 2rem);
   --page-max: 96rem;
-  --header-h: 3.5rem;
+  --header-h: 4rem;
 }
 
 /* Layer 3: Tailwind theme. Defaults that the brief bans are reset. */
@@ -130,7 +147,10 @@
 
   --radius-xs: 1px;
   --radius-sm: 2px;
-  /* Buttons and CTAs only (ISS-22); content stays square. */
+  /* Stage 7 (ISS-42): pills for buttons, badges, tabs and header controls;
+     24 px section cards; 14 px for media and panels inside them. */
+  --radius-inner: 0.875rem;
+  --radius-card: 1.5rem;
   --radius-pill: 9999px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -150,6 +170,8 @@
   --color-g9: var(--g9);
   --color-g10: var(--g10);
   --color-g11: var(--g11);
+  --color-edge: var(--edge);
+  --color-edge-soft: var(--edge-soft);
   --color-break: var(--break);
   --color-c1: var(--c1);
   --color-c2: var(--c2);
@@ -168,8 +190,9 @@
   --color-ink: var(--text-1);
 
   --font-display: var(--font-newsreader), "Iowan Old Style", "Times New Roman", serif;
-  --font-sans: var(--font-hanken), "Helvetica Neue", sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-heading: var(--font-instrument), "Helvetica Neue", sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-commit), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Type scale. Fluid sizes keep max <= 2.5 x min so browser zoom still scales them. */
   /* Display sizes are capped by viewport height as well as width, so a laptop
@@ -183,6 +206,10 @@
   --text-display-l: clamp(3rem, min(1.667rem + 5.333vw, 11svh), 7rem);
   --text-display-l--line-height: 0.98;
   --text-display-l--letter-spacing: -0.03em;
+  /* Section titles in the heading face (Stage 7): 40-56 px, tight tracking. */
+  --text-section: clamp(2.5rem, 2.071rem + 1.786vw, 3.5rem);
+  --text-section--line-height: 1.15;
+  --text-section--letter-spacing: -0.05em;
   --text-h2: clamp(2rem, 1.333rem + 2.667vw, 4rem);
   --text-h2--line-height: 1.05;
   --text-h2--letter-spacing: -0.02em;
@@ -225,6 +252,29 @@
   h3 {
     text-wrap: balance;
     font-weight: 400;
+  }
+
+  /* font-size-adjust's computed value inherits as a number, so an element in
+     another face would be scaled by the body face's x-height (Inter's is
+     taller than Newsreader's: the H1 grew about 20 % and clipped at 375 px).
+     Recompute it from each element's own font. */
+  h1,
+  h2,
+  h3,
+  code,
+  kbd,
+  .font-display,
+  .font-heading,
+  .font-mono,
+  .mono-label {
+    font-size-adjust: from-font;
+  }
+
+  /* Section headings and H3s use the heading face; the H1 and display lines
+     set font-display themselves. */
+  h2,
+  h3 {
+    font-family: var(--font-heading);
   }
 
   p,
@@ -308,13 +358,6 @@
     translate: 0 0.25rem;
   }
 
-  /* Contact: the deep accent band. Hairlines inside it use --c2. */
-  .contact-band {
-    --line-hair: var(--c2);
-    --line: var(--c2);
-    background: var(--c1);
-  }
-
   /* About stack: one row per technology, chip and "used in" in aligned
      columns (docs/ISSUES.md ISS-30). */
   .stack-rows {
@@ -361,6 +404,100 @@
     translate: 0 0;
   }
 
+  /* Stage 7 (ISS-42). Gradient text: H1 and H2 only. The full text color to
+     45 %, fading to 75 % opacity (50 % read as grey, ISS-43); the period and section indices keep --break
+     through -webkit-text-fill-color on their own span. */
+  .text-gradient,
+  .text-gradient .w-i {
+    background-image: linear-gradient(to right bottom, var(--text-1) 45%, color-mix(in srgb, var(--text-1) 75%, transparent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient .accent-mark {
+    -webkit-text-fill-color: var(--break);
+    color: var(--break);
+  }
+
+  /* Section card: 24 px radius, the stronger edge on top, a faint raised fill.
+     The fill is opaque (mixed with the page color) so the grain stays outside
+     cards (ISS-43). */
+  .surface-card {
+    border: 1px solid var(--edge-soft);
+    border-top-color: var(--edge);
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, var(--text-1) 3%, var(--surface-page));
+  }
+
+  /* Header: no bar, the page fades in behind it (Resend-style). */
+  .header-fade {
+    background: linear-gradient(var(--surface-page) 55%, transparent);
+  }
+
+  /* Switch control (pause): a pill track with a sliding knob. */
+  .switch-track {
+    position: relative;
+    display: inline-block;
+    width: 1.875rem;
+    height: 1.125rem;
+    border-radius: var(--radius-pill);
+    background: var(--line-strong);
+    transition: background-color var(--dur-1) var(--ease-out);
+  }
+  .switch-knob {
+    position: absolute;
+    inset-block-start: 0.125rem;
+    inset-inline-start: 0.125rem;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 50%;
+    background: var(--text-1);
+    transition: translate var(--dur-2) var(--ease-out);
+  }
+  [aria-checked="true"] > .switch-track {
+    background: var(--break);
+  }
+  [aria-checked="true"] > .switch-track > .switch-knob {
+    translate: 0.75rem 0;
+  }
+
+  /* Theme toggle: the half-filled disc turns half a circle with the theme. */
+  .theme-glyph {
+    transition: rotate var(--dur-3) var(--ease-out);
+  }
+  .theme-glyph[data-theme-glyph="light"] {
+    rotate: 180deg;
+  }
+
+  /* Outbound and next arrows nudge toward where they point. */
+  .nudge > [data-arrow] {
+    display: inline-block;
+    transition: translate var(--dur-1) var(--ease-out);
+  }
+  .nudge:hover > [data-arrow="right"] {
+    translate: 0.25rem 0;
+  }
+  .nudge:hover > [data-arrow="out"] {
+    translate: 0.125rem -0.125rem;
+  }
+
+  /* Brand icons lift and take the accent on hover (owner request 2026-10-10). */
+  .icon-link > svg {
+    transition: translate var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .icon-link:hover > svg {
+    translate: 0 -0.125rem;
+    color: var(--break);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .switch-knob,
+    .theme-glyph,
+    .nudge > [data-arrow],
+    .icon-link > svg {
+      transition: none;
+    }
+  }
 }
 
 /* M2 scroll-progress hairline: CSS scroll timeline where supported.
@@ -539,6 +676,7 @@ html[data-reveal="on"] .rv:not(.is-in) .w-i {
 @keyframes rv-safety {
   to {
     translate: 0 0;
+    filter: none;
   }
 }
 
@@ -572,11 +710,161 @@ html[data-reveal="on"]:not([data-intro]) .hero-ctas {
   animation: fade-up var(--dur-3) var(--ease-out) 820ms backwards;
 }
 
+/* Stage 7 hero (ISS-42). The H1's words blur into focus as they rise
+   (one-shot, 900 ms, 130 ms apart); the pill and the figures fade up around
+   them. Opacity, filter and translate only. */
+@keyframes hero-focus {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    translate: 0 0.2em;
+  }
+}
+html[data-reveal="on"]:not([data-intro]) .hero-h1 .w-i {
+  animation: hero-focus 900ms var(--ease-out) backwards;
+  animation-delay: calc(80ms + var(--i, 0) * 130ms);
+}
+.hero-h1 .w {
+  overflow: visible;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-pill {
+  animation: fade-up var(--dur-3) var(--ease-out) backwards;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-figures {
+  animation: fade-up var(--dur-3) var(--ease-out) 950ms backwards;
+}
+
 /* Reveals and the intro are one-shot entrances, and .title-track follows the
    reader's own scrolling: none of them autoplay, so the pause leaves them be
    (pausing them could strand text half-revealed). */
-html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .intro, .intro *, .title-track) {
+html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .hero-pill, .hero-figures, .intro, .intro *, .title-track) {
   animation-play-state: running !important;
+}
+
+/* Announcement pill: a 1 px edge with an accent arc circling it every 6 s (a
+   loop, so the pause stops it; the pill's own fade-in is exempt above). */
+.hero-pill {
+  position: relative;
+  display: inline-flex;
+  padding: 1px;
+  border-radius: var(--radius-pill);
+  background: var(--edge);
+  overflow: hidden;
+  isolation: isolate;
+  transition: translate var(--dur-1) var(--ease-out);
+}
+.hero-pill::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  z-index: -1;
+  background: conic-gradient(from 0deg, transparent 0 62%, var(--break) 80%, transparent 92%);
+  animation: hero-spin 6s linear infinite;
+}
+.hero-pill:hover {
+  translate: 0 -1px;
+}
+.hero-pill-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--text-1);
+}
+.hero-pill-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--break);
+  animation: hero-blink 2.4s ease-in-out infinite;
+}
+@keyframes hero-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes hero-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Hero light: glow, rays, two rings and a core. Loops stop with the pause;
+   static under reduced motion. */
+.hero-light {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  aspect-ratio: 1;
+  margin-inline-start: auto;
+}
+.hero-light > span {
+  position: absolute;
+  border-radius: 50%;
+}
+.hero-light-glow {
+  inset: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 60%, transparent) 0, transparent 45%);
+  filter: blur(2.5rem);
+  opacity: 0.4;
+  animation: hero-pulse 6s ease-in-out infinite;
+}
+.hero-light-rays {
+  inset: 8%;
+  background: repeating-conic-gradient(from 0deg, transparent 0 9deg, color-mix(in srgb, var(--text-1) 9%, transparent) 9.5deg, transparent 10.5deg);
+  -webkit-mask: radial-gradient(circle, #000 0, transparent 68%);
+  mask: radial-gradient(circle, #000 0, transparent 68%);
+  animation: hero-spin 60s linear infinite;
+}
+.hero-light-ring {
+  inset: 18%;
+  border: 1px solid var(--edge);
+  animation: hero-drift 9s ease-in-out infinite;
+}
+.hero-light-ring-inner {
+  inset: 30%;
+  border-color: var(--edge-soft);
+  animation-duration: 12s;
+  animation-direction: reverse;
+}
+.hero-light-core {
+  inset: calc(50% - 0.4375rem);
+  background: radial-gradient(circle, var(--text-1) 0 40%, var(--break) 70%, transparent 72%);
+  animation: hero-pulse 3s ease-in-out infinite;
+}
+.hero-light-core::after {
+  content: "";
+  position: absolute;
+  inset: -2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 45%, transparent) 0, transparent 70%);
+}
+:root[data-theme="light"] .hero-light-glow {
+  opacity: 0.25;
+}
+@keyframes hero-pulse {
+  50% {
+    opacity: 0.85;
+    scale: 1.08;
+  }
+}
+@keyframes hero-drift {
+  50% {
+    rotate: 8deg;
+    scale: 1.04;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-pill::before,
+  .hero-pill-dot,
+  .hero-light > span {
+    animation: none;
+  }
+  .hero-pill {
+    transition: none;
+  }
 }
 
 /* H1 words pinned to measured widths during the weight effect: center the
@@ -657,34 +945,6 @@ html[data-intro="play"] .intro {
   }
 }
 
-/* M4: static SVG until the canvas is live, then crossfade. A soft alpha mask
-   keeps the graph away from the reading line. */
-.hero-graph {
-  z-index: -1;
-  mask-image: radial-gradient(120% 90% at 70% 35%, #000 35%, transparent 85%);
-}
-/* On narrow screens the text fills the width: keep the graph in the top-right
-   corner so no line crosses the headline or sub. */
-@media (width < 48rem) {
-  .hero-graph {
-    mask-image: radial-gradient(85% 38% at 100% 0%, #000 25%, transparent 100%);
-  }
-}
-.hero-graph-static {
-  transition: opacity var(--dur-3) var(--ease-out);
-}
-.hero-graph[data-live] .hero-graph-static {
-  opacity: 0;
-}
-.hero-graph canvas {
-  animation: fade-in var(--dur-3) var(--ease-out);
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 /* M13 smart header */
 .site-header {
   transition: translate var(--dur-2) var(--ease-out);
@@ -693,7 +953,8 @@ html[data-intro="play"] .intro {
   translate: 0 -100%;
 }
 
-/* M13 scroll-spy nav. Active state: marker dot (--break), full ink, --c1 pill. */
+/* M13 scroll-spy nav. Active state: marker dot (--break), full ink, a neutral
+   pill with the stronger edge (Stage 7: the accent stays for marks). */
 .spy-nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -708,16 +969,21 @@ html[data-intro="play"] .intro {
   align-items: center;
   gap: 0.5rem;
   padding-inline: 0.75rem;
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
   color: var(--text-2);
   transition:
     color var(--dur-1) var(--ease-out),
-    background-color var(--dur-1) var(--ease-out);
+    background-color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
 }
 .spy-link:hover,
 .spy-link[aria-current="true"] {
   color: var(--text-1);
-  background: var(--c1);
+  background: var(--surface-hover);
+}
+.spy-link[aria-current="true"] {
+  border-color: var(--edge);
 }
 .spy-dot {
   width: 0.375rem;
@@ -732,6 +998,14 @@ html[data-intro="play"] .intro {
 }
 .spy-index {
   color: var(--text-3);
+}
+/* Stage 7 header: with the Contact pill and the pause switch, the five links
+   only fit on one line from 1024 px without their numbers; the numbers return
+   at 1536 px (the section titles always show them). */
+@media (width < 96rem) {
+  .site-header .spy-index {
+    display: none;
+  }
 }
 
 /* M3 section titles settle in scale as they enter. Decorative: no fallback. */
@@ -755,69 +1029,20 @@ html[data-intro="play"] .intro {
 
 /* ── Stage 3 ─────────────────────────────────────────────────────────── */
 
-/* M6 sticky stack. Each card sticks below the header, offset by its index;
-   as later cards slide over it, its text column dims. The screenshot is never
-   dimmed, scaled or filtered (owner, 2026-10-08): scaling resampled small UI
-   text and the fade washed the colors out. Driven by one named view timeline
-   on the list (CSS), or --stack-p from Lenis (fallback). */
-.stack {
-  display: grid;
-  gap: 4vh;
-  view-timeline: --stack block;
-}
-.stack-item {
-  position: sticky;
-  top: calc(var(--header-h) + 1.5rem + var(--i) * 1.25rem);
-  transform-origin: 50% 0;
-}
-@media (prefers-reduced-motion: no-preference) {
-  @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    @keyframes stack-recede {
-      to {
-        opacity: 0.45;
-      }
-    }
-    .stack-item:not(:last-child) .card-copy {
-      animation: stack-recede linear both;
-      animation-timeline: --stack;
-      animation-range: exit-crossing calc(var(--i) / var(--n) * 100%) exit-crossing calc((var(--i) + 1) / var(--n) * 100%);
-    }
-  }
-}
-html[data-stack-fallback] .stack-item:not(:last-child) .card-copy {
-  opacity: calc(1 - var(--stack-p, 0) * 0.55);
-}
-/* Too short for a card to be read before the next one covers it (a laptop at
-   150% scaling is 720 CSS px tall): a plain list (docs/ISSUES.md ISS-31). */
-@media (height < 40rem) {
-  .stack-item {
-    position: relative;
-    top: auto;
-  }
-  .stack-item:not(:last-child) .card-copy {
-    animation: none !important;
-    opacity: 1 !important;
-  }
-}
-/* Scroll-linked and user-driven, not autoplay: exempt from the pause. */
-html[data-motion="paused"] .stack-item .card-copy {
-  animation-play-state: running !important;
-}
-
 /* M7 card surface: spotlight is a radial alpha mask over a hairline grid. */
 .card-surface {
   position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
 }
 .card-spot {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background-image:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--text-1) 6%, transparent), transparent 60%),
     linear-gradient(var(--line-hair) 1px, transparent 1px),
     linear-gradient(90deg, var(--line-hair) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-size: 100% 100%, 24px 24px, 24px 24px;
+  border-radius: inherit;
   mask-image: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), #000, transparent 70%);
   opacity: 0;
   transition: opacity var(--dur-2) var(--ease-out);
@@ -828,32 +1053,6 @@ html[data-motion="paused"] .stack-item .card-copy {
 .card-surface > :not(.card-spot) {
   position: relative;
 }
-.card-numeral {
-  display: block;
-  font-size: var(--text-display-l);
-  line-height: 1;
-  /* Text, so a text role: --deco (light #999999 on --g2) measured 2.45:1 (ISS-39). */
-  color: var(--text-3);
-  pointer-events: none;
-}
-/* Parallax on decoration only: the numeral drifts against the card. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports ((animation-timeline: view()) and (animation-range: entry)) {
-    @keyframes numeral-drift {
-      from {
-        translate: 0 0.6rem;
-      }
-      to {
-        translate: 0 -0.6rem;
-      }
-    }
-    .card-numeral {
-      animation: numeral-drift linear both;
-      animation-timeline: view();
-    }
-  }
-}
-
 /* M7 clip-path reveal for card media, enabled only with data-reveal. */
 html[data-reveal="on"] .clip-reveal {
   transition: clip-path var(--dur-3) var(--ease-out);
@@ -871,21 +1070,96 @@ html[data-motion="paused"] .clip-reveal {
   animation-play-state: running !important;
 }
 
-/* M7 carousel: the next screenshot wipes in over the current one (clip-path),
+/* M7 slider: the next screenshot wipes in over the current one (clip-path),
    both fully opaque, so colors never wash out mid-change (an opacity
-   crossfade overlapped two half-transparent images). The outgoing slide stays
-   visible underneath until the wipe ends. */
+   crossfade overlapped two half-transparent images). The wipe comes from the
+   side the slider travels from; the outgoing slide stays visible underneath
+   until it ends. */
 .carousel-slide {
   z-index: 0;
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0s linear var(--dur-3);
+}
+.carousel[data-dir="prev"] .carousel-slide:not([data-active]) {
+  clip-path: inset(0 0 0 100%);
 }
 .carousel-slide[data-active] {
   z-index: 1;
   clip-path: inset(0);
   transition: clip-path var(--dur-3) var(--ease-out);
 }
-.carousel-btn,
+/* Progress bars: done = full, upcoming = empty, active fills with --p while
+   the slider plays (written by its scheduler task) and is full otherwise. */
+.carousel-bar {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  overflow: clip;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+}
+.carousel-bar > i {
+  position: absolute;
+  inset: 0;
+  background: var(--text-1);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+.carousel-bar[data-state="done"] > i,
+.carousel-bar[data-state="on"] > i {
+  transform: scaleX(1);
+}
+.carousel[data-playing] .carousel-bar[data-state="on"] > i {
+  transform: scaleX(var(--p, 0));
+}
+.carousel-arrow {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 50%;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  margin-block-start: -1.375rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--surface-page) 80%, transparent);
+  color: var(--text-1);
+  transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), translate var(--dur-1) var(--ease-out);
+}
+.carousel-arrow:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-page);
+}
+/* Dots: 24 px targets around a 6 px dot; the current one stretches. */
+.carousel-dot {
+  display: inline-grid;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+}
+.carousel-dot > span {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: var(--radius-pill);
+  /* A control: text-3 keeps the dot at 3:1 or more in both themes. */
+  background: var(--text-3);
+  transition: width var(--dur-2) var(--ease-out), background-color var(--dur-2) var(--ease-out);
+}
+.carousel-dot:hover > span {
+  background: var(--text-2);
+}
+.carousel-dot[aria-current="true"] > span {
+  width: 1.375rem;
+  background: var(--text-1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .carousel-slide,
+  .carousel-slide[data-active],
+  .carousel-dot > span {
+    transition: none;
+  }
+}
 .flow-btn {
   display: inline-flex;
   min-height: 2.75rem;
@@ -895,13 +1169,12 @@ html[data-motion="paused"] .clip-reveal {
   gap: 0.5rem;
   padding-inline: 0.75rem;
   border: 1px solid var(--line);
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-pill);
   color: var(--text-2);
   transition:
     color var(--dur-1) var(--ease-out),
     border-color var(--dur-1) var(--ease-out);
 }
-.carousel-btn:hover,
 .flow-btn:hover,
 .flow-btn[aria-pressed="true"] {
   color: var(--text-1);
@@ -1059,6 +1332,11 @@ html[data-reveal="on"] .chart-reveal:not(.is-in) .chart-line {
 html[data-vt="none"] .case {
   animation: fade-in var(--dur-2) var(--ease-out);
 }
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
 ::view-transition {
   pointer-events: none;
 }
@@ -1069,11 +1347,6 @@ html[data-vt="none"] .case {
    and keyboard focus land below the fixed header, also without Lenis. */
 html {
   scroll-padding-top: calc(var(--header-h) + 1rem);
-}
-/* R2 focus-not-obscured: a focused control in an earlier stacked card would
-   sit under the next sticky card; lift its card above the stack. */
-.stack-item:focus-within {
-  z-index: 2;
 }
 /* R7 cursor-pointer: Tailwind v4 preflight gives buttons the default arrow.
    The custom cursor (fine pointer, motion allowed) still hides it. */
@@ -1093,14 +1366,12 @@ button:not(:disabled),
 
 /* ── Stage 4 ─────────────────────────────────────────────────────────── */
 
-/* About bento: hairline seams (1 px gap over the hairline color), varied
-   spans, no radius, no shadow. One column on phones. */
+/* About bento: section cards with varied spans (Stage 7). One column on
+   phones. */
 .bento {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 1px;
-  border: 1px solid var(--line-hair);
-  background: var(--line-hair);
+  gap: 1.25rem;
 }
 @media (width >= 48rem) {
   .bento {
@@ -1112,44 +1383,39 @@ button:not(:disabled),
   min-width: 0;
   flex-direction: column;
   gap: 0.75rem;
+  overflow: clip;
   padding: clamp(1.25rem, 1rem + 1vw, 2rem);
-  background: var(--surface-page);
+  border: 1px solid var(--edge-soft);
+  border-top-color: var(--edge);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--text-1) 3%, var(--surface-page));
 }
 
-/* Open source timeline. Month labels stick below the header on wide screens;
-   each entry hangs off a hairline with a node whose shape carries the status:
-   merged = filled square, open = hollow square (the pill repeats it in text). */
-.oss-timeline {
-  display: flex;
-  flex-direction: column;
-}
-.oss-month {
+/* Open source and reported issues: status rows in one section card
+   (Stage 7). The status pill sits right from 40 rem, under the text below. */
+.oss-row {
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
+  padding: 1rem clamp(1rem, 0.5rem + 1.5vw, 1.5rem);
   border-top: 1px solid var(--line-hair);
-  padding-top: 1.5rem;
-  padding-bottom: 1rem;
+  transition: background-color var(--dur-1) var(--ease-out);
 }
-@media (width >= 48rem) {
-  .oss-month {
-    grid-template-columns: 10rem minmax(0, 1fr);
-    gap: var(--gutter);
+.oss-row:first-child {
+  border-top: 0;
+}
+.oss-row:hover {
+  background: color-mix(in srgb, var(--text-1) 3%, transparent);
+}
+@media (width >= 40rem) {
+  .oss-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.5rem;
   }
-  .oss-month-label {
-    position: sticky;
-    top: calc(var(--header-h) + 1.5rem);
-    align-self: start;
-  }
 }
-.oss-item {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  border-left: 1px solid var(--line);
-  padding: 0 0 2rem 1.75rem;
+.oss-row-status {
+  justify-self: start;
 }
-.oss-node,
 .xp-node {
   position: absolute;
   inset-block-start: 0.45rem;
@@ -1157,10 +1423,8 @@ button:not(:disabled),
   width: 0.5625rem;
   height: 0.5625rem;
   border: 1px solid var(--text-1);
+  border-radius: 50%;
   background: var(--surface-page);
-}
-.oss-node[data-state="merged"] {
-  background: var(--text-1);
 }
 
 /* Experience timeline: the rule draws down with scroll (view timeline). */
@@ -1259,17 +1523,7 @@ html[data-motion="paused"] .xp-timeline::before {
   overflow: hidden;
 }
 
-/* Direct links (contact) and footer links: mono rows, 44 px targets. */
-.contact-link {
-  display: flex;
-  min-height: 3.25rem;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--text-2);
-  overflow-wrap: anywhere;
-  transition: color var(--dur-1) var(--ease-out);
-}
+/* Footer links: 44 px targets. */
 .footer-link {
   display: inline-flex;
   min-height: 2.75rem;
@@ -1278,7 +1532,6 @@ html[data-motion="paused"] .xp-timeline::before {
   color: var(--text-2);
   transition: color var(--dur-1) var(--ease-out);
 }
-.contact-link:hover,
 .footer-link:hover {
   color: var(--text-1);
 }
@@ -1336,8 +1589,8 @@ html[data-motion="paused"] .xp-timeline::before {
    pre-rendered grayscale PNG tile (the SVG filter version cost ~300 ms of
    main thread at load, Stage 5), behind the content at low opacity and
    without blending (never over screenshots), one composited layer. The
-   hairline grid fades out over the first viewport of scroll (scroll
-   timeline; a static fade where unsupported or under reduced motion). */
+   hairline grid covers the first screen only and scrolls away with it.
+   */
 body {
   background: transparent;
 }
@@ -1349,6 +1602,12 @@ body {
   pointer-events: none;
 }
 .surface-grid {
+  /* Part of the first screen, not the viewport: it scrolls away with the
+     hero. As a fixed layer it faded on a scroll timeline, and under reduced
+     motion (no fade) its lines sat over every screen of the page (ISS-43). */
+  position: absolute;
+  inset-block: 0 auto;
+  height: 100svh;
   z-index: -1;
   background-image:
     linear-gradient(to right, var(--line-hair) 1px, transparent 1px),
@@ -1358,32 +1617,16 @@ body {
   opacity: 0.5;
   mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: scroll()) {
-    @keyframes grid-fade {
-      to {
-        opacity: 0;
-      }
-    }
-    .surface-grid {
-      animation: grid-fade linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 100vh;
-    }
-  }
-}
-html[data-motion="paused"] .surface-grid {
-  animation-play-state: running !important;
-}
 .surface-vignette {
   z-index: -1;
   background: radial-gradient(ellipse at 50% 40%, transparent 55%, var(--g0) 120%);
 }
 .surface-grain {
   /* Behind the content: grain textures the page surface only, never the
-     screenshots or cards on top of it. */
+     screenshots or cards on top of it. At 0.045 it lifted black to an
+     average of (6, 6, 6) and read as haze; 0.02 keeps the texture (ISS-43). */
   z-index: -1;
-  opacity: 0.045;
+  opacity: 0.02;
   background-image: url("/textures/grain.png");
   background-size: 160px 160px;
 }
@@ -1401,16 +1644,256 @@ html[data-motion="paused"] .surface-grid {
    so it composes with the magnet's transform). Disabled controls do not
    respond. In the base layer, so a component's own transition list wins. */
 @layer base {
-  :is(button, [role="button"], [role="option"], a.contact-link, a[data-press]):not(:disabled, [aria-disabled="true"]) {
+  :is(button, [role="button"], [role="option"], a[data-press]):not(:disabled, [aria-disabled="true"]) {
     transition-property: translate, color, background-color, border-color, text-decoration-color;
     transition-duration: var(--dur-1);
     transition-timing-function: var(--ease-out);
   }
-  :is(button, [role="button"], [role="option"], a.contact-link, a[data-press]):not(:disabled, [aria-disabled="true"]):active {
+  :is(button, [role="button"], [role="option"], a[data-press]):not(:disabled, [aria-disabled="true"]):active {
     translate: 0 1px;
   }
   button:disabled,
   [aria-disabled="true"] {
     cursor: not-allowed;
   }
+}
+
+/* ── Stage 7.4 (docs/ISSUES.md ISS-42) ───────────────────────────────── */
+
+/* Pill groups: the Work tabs and the Open source filter. The selected or
+   pressed pill is filled with the text color. */
+.pill-group {
+  display: inline-flex;
+  max-width: 100%;
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding: 0.25rem;
+  border: 1px solid var(--edge-soft);
+  border-radius: var(--radius-pill);
+  scrollbar-width: none;
+}
+.pill-option {
+  display: inline-flex;
+  min-height: 2.25rem;
+  flex: none;
+  align-items: center;
+  gap: 0.375rem;
+  padding-inline: 0.875rem;
+  border-radius: var(--radius-pill);
+  color: var(--text-2);
+  font-size: var(--text-small);
+  line-height: var(--text-small--line-height);
+  transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+}
+@media (width >= 40rem) {
+  .pill-option {
+    padding-inline: 1rem;
+  }
+}
+.pill-option:hover {
+  background: var(--surface-hover);
+  color: var(--text-1);
+}
+.pill-option:is([aria-selected="true"], [aria-pressed="true"]) {
+  background: var(--text-1);
+  color: var(--surface-page);
+}
+
+/* Controls that need scripts appear only when scripts run (data-js is set
+   before first paint); with JS off, every tab panel shows, stacked. */
+html:not([data-js]) .js-only,
+html:not([data-js]) .work-tablist {
+  display: none;
+}
+html[data-js] .work-panel:not([data-active]) {
+  display: none;
+}
+
+/* "Every figure has a source.": a 3 × 3 grid of cells on one section card,
+   seams drawn by a 1 px gap over the soft edge. */
+.figure-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  overflow: clip;
+  border: 1px solid var(--edge-soft);
+  border-top-color: var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--edge-soft);
+}
+@media (width >= 40rem) {
+  .figure-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (width >= 64rem) {
+  .figure-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.figure-cell {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  background: var(--surface-page);
+  transition: background-color var(--dur-1) var(--ease-out);
+}
+.figure-cell:hover {
+  background: var(--surface-raised);
+}
+
+/* Closing line: the one soft accent glow outside the hero, behind the text. */
+.closing {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+.closing-glow {
+  position: absolute;
+  z-index: -1;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  width: min(56rem, 100%);
+  height: 28rem;
+  margin-inline: auto;
+  translate: 0 -55%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--break) 20%, transparent), transparent);
+  pointer-events: none;
+}
+
+.nudge > [data-arrow="down"] {
+  display: inline-block;
+  transition: translate var(--dur-1) var(--ease-out);
+}
+.nudge:hover > [data-arrow="down"] {
+  translate: 0 0.25rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nudge > [data-arrow="down"] {
+    transition: none;
+  }
+}
+
+/* ── Stage 7.5 motion (docs/ISSUES.md ISS-42) ────────────────────────── */
+
+/* Section blocks rise as they scroll in: scroll-linked (view timeline), so
+   they follow the reader and do not autoplay. Translate only: a fade on a
+   scroll-linked entrance once left text at 1.66:1 mid entry (Stage 4), and a
+   0.97 scale shrank the slider dots below the fold to 23.3 px, under the
+   24 px target size Lighthouse measures at load (Stage 7.6). Children of .rise-group stagger by their position. Static
+   without scroll-timeline support and under reduced motion. */
+.rise-group > :nth-child(2) { --i: 1; }
+.rise-group > :nth-child(3) { --i: 2; }
+.rise-group > :nth-child(4) { --i: 3; }
+.rise-group > :nth-child(5) { --i: 4; }
+.rise-group > :nth-child(6) { --i: 5; }
+.rise-group > :nth-child(7) { --i: 6; }
+.rise-group > :nth-child(8) { --i: 7; }
+.rise-group > :nth-child(9) { --i: 8; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes rise-in {
+      from {
+        translate: 0 2.5rem;
+      }
+    }
+    .rise,
+    .rise-group > * {
+      animation: rise-in linear both;
+      animation-timeline: view();
+      animation-range: entry calc(var(--i, 0) * 4%) cover calc(22% + var(--i, 0) * 4%);
+    }
+  }
+}
+
+/* Section titles' words blur into focus as they rise (small layers, one-shot,
+   triggered once in view by RevealText). */
+html[data-reveal="on"] .rv .w-i {
+  transition:
+    translate var(--dur-3) var(--ease-out),
+    filter var(--dur-3) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+html[data-reveal="on"] .rv:not(.is-in) .w-i {
+  filter: blur(8px);
+}
+
+/* Tab swap: the newly shown project card fades and rises in (user-triggered;
+   @starting-style, so no script). */
+html[data-reveal="on"] .work-panel {
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    translate var(--dur-2) var(--ease-out);
+}
+@starting-style {
+  html[data-reveal="on"] .work-panel[data-active] {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+/* Filter: rows that come back into the list fade and rise, 30 ms apart. Rows
+   that stay keep their place without moving. */
+html[data-reveal="on"] .oss-row {
+  transition:
+    opacity var(--dur-2) var(--ease-out),
+    translate var(--dur-2) var(--ease-out),
+    background-color var(--dur-1) var(--ease-out);
+}
+html[data-reveal="on"] .oss-row:nth-child(2) { transition-delay: 30ms, 30ms, 0ms; }
+html[data-reveal="on"] .oss-row:nth-child(3) { transition-delay: 60ms, 60ms, 0ms; }
+html[data-reveal="on"] .oss-row:nth-child(4) { transition-delay: 90ms, 90ms, 0ms; }
+html[data-reveal="on"] .oss-row:nth-child(5) { transition-delay: 120ms, 120ms, 0ms; }
+html[data-reveal="on"] .oss-row:nth-child(n + 6) { transition-delay: 150ms, 150ms, 0ms; }
+@starting-style {
+  html[data-reveal="on"] .oss-row {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}
+
+/* Interactive cards lift 2 px and their top edge brightens on hover (fine
+   pointers; the spotlight is in .card-spot). */
+@media (hover: hover) and (pointer: fine) {
+  .lift {
+    transition:
+      translate var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
+  }
+  .lift:hover {
+    translate: 0 -2px;
+    border-color: var(--edge);
+    border-top-color: color-mix(in srgb, var(--text-1) 30%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lift:hover {
+    translate: none;
+  }
+}
+
+/* The closing glow breathes slowly: a loop, so it runs only while visible
+   (LoopGate sets data-visible), stops with the pause and is still under
+   reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes glow-breathe {
+    to {
+      opacity: 0.6;
+      scale: 1.08;
+    }
+  }
+  .closing-glow {
+    animation: glow-breathe 7s var(--ease-out) infinite alternate;
+  }
+  .closing-glow:not([data-visible]) {
+    animation-play-state: paused;
+  }
+}
+
+/* Scroll-linked rises and the one-shot swaps are not autoplay: exempt from
+   the pause like .title-track (pausing could strand a card mid-entry). */
+html[data-motion="paused"] :is(.rise, .rise-group > *) {
+  animation-play-state: running !important;
 }

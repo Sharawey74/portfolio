@@ -44,9 +44,21 @@ export function ThemeToggle({ labels }: { labels: { toLight: string; toDark: str
       aria-label={label}
       title={label}
       disabled={theme === null}
-      className="ui-label inline-flex min-h-11 rounded-pill transition-colors duration-200 ease-out hover:bg-c1 min-w-11 items-center justify-center text-ink-2 hover:text-ink"
+      className="ui-label inline-flex min-h-11 min-w-11 items-center justify-center rounded-pill text-ink-2 transition-colors duration-200 ease-out hover:bg-hover hover:text-ink"
     >
-      <span aria-hidden="true" className="text-body leading-none">{theme === "light" ? "●" : "○"}</span>
+      {/* A half-filled disc that turns half a circle with the theme (Stage 7). */}
+      <svg
+        viewBox="0 0 24 24"
+        width="18"
+        height="18"
+        aria-hidden="true"
+        focusable="false"
+        className="theme-glyph"
+        data-theme-glyph={theme === "light" ? "light" : "dark"}
+      >
+        <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M12 4a8 8 0 0 0 0 16z" fill="currentColor" />
+      </svg>
     </button>
   );
 }

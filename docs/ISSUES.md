@@ -52,12 +52,15 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-33 | The custom cursor shows an "ON" label everywhere | High | Closed | Flag renamed to `data-cursor-active`; probe shows no label over plain text | — |
 | ISS-34 | The header marks "05 Contact" as current while the hero is on screen | Medium | Closed | Section-level viewport observer plus `hashchange` / `pageshow`; probe passes all five jump cases | — |
 | ISS-35 | Recruiter-Pro's scoring screens (results, score breakdown, shortlist, history) show the owner's own resume under another spelling of the name, so the site cannot use them | Low | Owner | Re-capture those screens with a sample resume (and no search term on the jobs page), then add the best two to `projects.ts` | When the owner re-captures |
-| ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot) | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
+| ISS-36 | After round 1, TBT is 300–500 ms higher than Stage 5 on every page, and Recruiter-Pro's case-study LCP is 3.28 s (its page now opens with a screenshot). On Vercel (2026-10-09): TBT within budget, simulated LCP 2.9–3.0 s; Speed Insights live, waiting for field data | High | Decided | Option C, as for ISS-01 / ISS-02: accept for now, re-measure on a Vercel preview; if it holds there, trace the first layout pass (more DOM in About's stack table, the Contact band, diagram zones) | Stage 6 |
 | ISS-37 | Smoke tests timed out when about 8 browsers ran in parallel against one local `next start` | Medium | Closed | Fixed in Stage 6: 2 workers, 60 s per test, 1 retry in CI; 20/20 on three later runs | — |
 | ISS-38 | Commands that reach the npm registry or GitHub can fail for network reasons (`ECONNRESET`), not because of the project | Low | Decided | Retry; nothing in the repo to fix. How to tell a network failure from a real one is in the detail | When it recurs |
 | ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Closed | Numerals use `--text-3` instead of `--deco` (#18); the preview Lighthouse run on #18 passed accessibility on all four pages | — |
-| ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Owner (later) | Owner decision 2026-10-09: set them in one batch with the resume PDF, the Alstom internship (ISS-19), the certificates (ISS-20) and the other `TODO(owner)` items (ISS-08); steps in `DEPLOY.md` → Contact form | Before v1.0.0 |
+| ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Closed | Connected 2026-10-10: the three variables set on Production, redeployed, the form renders on `/`, and the owner's test message arrived | — |
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
+| ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
+| ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
+| ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002). Watch the Stage 7 PR preview (Lighthouse CI fails on CLS) and Speed Insights; if it recurs, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -618,6 +621,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Owner decision, 2026-10-09.** Keep the display font as it is (the `opsz` axis stays; the look wins over about 0.5 s of simulated LCP). Add Vercel Speed Insights (`@vercel/speed-insights`, rendered only when `VERCEL=1`, +1.2 KB gz on `/`, 157.4 KB of 170) and judge LCP on real visitors' 75th percentile once it has data; the Lighthouse LCP assertion stays `warn` until then. If the field LCP is over 2.5 s, reopen option A (first layout and JavaScript). The owner switches Speed Insights on in Vercel (project → Speed Insights → Enable); it sends anonymous performance numbers, no personal data.
 
+**After the merge (#19, production `0a306d9`, 2026-10-09).** Preview Lighthouse run on #19 (Actions run 37944429794, CPU benchmark 2,106–2,592, slower than the first run's 2,854–3,081): median LCP `/` 2.98 s, Eventora 3.03 s, Recruiter-Pro 3.03 s, SysPlex 2.89 s (first run 2.88 / 3.63 / 3.03 / 2.87); median TBT 301 / 223 / 153 / 201 ms; CLS 0.001; accessibility 100 on every page. The mono saving is within run-to-run noise. Speed Insights checked on production in a browser: its script loads from a first-party path (`/<id>/script.js`, `window.si` defined), no console errors. The Vercel page shows "Get Started" until the first visits are recorded. **Next:** read the Mobile LCP at the 75th percentile after a day or two of visits; under 2.5 s closes ISS-01, ISS-02 and this issue (and switches the Lighthouse LCP assertion to `error` only if the lab numbers also fit, otherwise it stays `warn` with the field number as the budget of record); over 2.5 s reopens option A.
+
 ### ISS-37 Smoke tests timed out under parallel load
 
 **Severity** Medium (a flaky check in CI is worse than none: people learn to ignore red). **Status** Closed (2026-10-08, Stage 6).
@@ -652,7 +657,9 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 ### ISS-40 Contact form not connected on production
 
-**Severity** Medium (visitors still reach the owner through the email, GitHub and LinkedIn links). **Status** Owner (later).
+**Severity** Medium (visitors still reach the owner through the email, GitHub and LinkedIn links). **Status** Closed 2026-10-10.
+
+**Resolution.** The owner set `RESEND_API_KEY` (secret), `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` (`onboarding@resend.dev`) on Production only and redeployed. Evidence: the production `/` serves the `contact-form` element with its fields (checked 2026-10-10 12:05 UTC), and the owner's test message arrived in the inbox. Previews keep the "not connected" note by design. With the shared sender, delivery works only to the Resend account's own address; a verified own domain lifts that (`DEPLOY.md` → Contact form, step 5).
 
 **Context.** `contactConfigured()` (`src/lib/contact-config.ts`) renders the form only when `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are set; production has none of them, so `/#contact` shows the "not connected" note.
 
@@ -670,6 +677,87 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Prevention.** Never check out a commit or branch from before 2026-10-08 23:00 in this folder (the old `feat/*` branches, `chore/eslint-10` before its untracking commit). To read an old branch, use `git show <branch>:<path>` or a separate worktree. Local `main` is now current. Keep a copy of the local-only files outside the repo.
 
+### ISS-42 Redesign before launch (Stage 7)
+
+**Severity** High (it changes every page and the brief). **Status** Decided (owner, 2026-10-10); planned, not started.
+
+**Request.** The owner wants the site to look like resend.com (black background, structure, type, components, borders, accents, gradients) with the motion and transitions of the GetLayers templates (getlayers.ai/templates, "Stride" in particular).
+
+**What the references use** (observed in a browser on 2026-10-10):
+- *resend.com:* background `#000`; sticky transparent header, 58 px. Fonts: Domaine Display (Klim, commercial) for the H1 at 96 px weight 400; ABC Favorit (Dinamo, commercial) for section headings at 56 px, tracking −2.8 px; Inter for body and nav; Commit Mono (free, OFL) for code. Headings use gradient text (white 30 % to 50 % white). Text `#F0F0F0`, secondary `#A1A4A5`; borders `rgba(214,235,253,0.19)` and `0.145`; section cards 24 px radius with a top border, buttons and badges as pills. Accents are small and per product (mint `#A1FCEA`, faint colored glows, a 30 s rotating gradient border on the announcement pill, a 6 s color pulse). The 3D objects are pre-rendered videos (`cube.mp4`, `3d-react.mp4` and others), not live WebGL. Logo marquees run at 180 s per loop and pause on hover; hover transitions are 200–300 ms ease-out. Page order: hero, a code block with language tabs, feature grids, an editor demo, a 3×3 grid, a closing headline, footer.
+- *GetLayers "Stride":* a Premium template with a commercial licence; only a 7.3 s preview video is public, the prompt and code are paid. A deep-blue gradient hero with a three.js light filament, headline words that blur into focus, count-up stats, then bento cards, a carousel and a chrome 3D object.
+
+**Constraints that shaped the decision.** Resend's display and heading fonts are commercial licences, its 3D videos and brand are its own, and Stride's code is paid: a literal copy is not possible without licences, and a recognisable clone of a developer tool's homepage would undercut a portfolio built on sourced evidence. A live WebGL hero adds weight right after the LCP work (ISS-36), so it must load after the first paint.
+
+**Owner decisions, 2026-10-10.**
+1. Resend-style with own assets: the structure, black look, type hierarchy, gradient headings, translucent borders, rounded cards, pill buttons and a code-block section, built here; GetLayers-style motion implemented here; no copied files, fonts, videos or code.
+2. Free lookalike fonts: a free display serif near Domaine (candidates: Instrument Serif, or keep Newsreader), a free grotesk near Favorit for section headings (candidates chosen in the mock-up), Inter for body (the current ban is lifted by this decision), Commit Mono for code (the same free font Resend uses; self-hosted).
+3. Accent: mostly monochrome like Resend, with red where Resend uses mint: live dots, focus rings, one highlight per chart, the hero glow.
+4. Timing: before v1.0.0, so the owner's content batch (ISS-40, ISS-08, ISS-19, ISS-20) and the UAT (ISS-09) happen once, on the new design.
+5. Plan and document first; no code until the mock-up is approved.
+
+**What stays.** All content and data files, the facts and honesty rules, the banned claims, the content model, accessibility (contrast checks, reduced motion, pause control, JS-off content), the budgets (`/` ≤ 170 KB JS, CLS < 0.05), CI and the smoke tests.
+
+**Rules this replaces** (in `CLAUDE.md`, rewritten in the Stage 7 branch together with the code, as the brief requires): no gradients or gradient text; content radius 0–2 px; Inter banned; the crimson ramp; the editorial 12-column offsets as the main layout; Newsreader, Hanken Grotesk and JetBrains Mono as the only faces.
+
+**Mock-up v1, 2026-10-10** (7.1, a private design canvas the owner opens from the link in the session): the home page in dark and light (header, hero with gradient H1, red announcement pill, CSS stand-in for the hero light, four sourced figures, the Eventora card plus two compact cards, a tabbed code block with three real excerpts pinned to commits, a 3×3 grid of sourced figures, a closing line, footer) and a board of choices (two display serifs, three heading grotesks, color tokens, motion list). Tweaks switch theme, fonts and the red. Two pieces of new copy are left as bracketed placeholders for the owner: the code section's intro line and the grid's heading. Awaiting the owner's choices and approval.
+
+**Owner choices on v1, 2026-10-10.** Display serif: Newsreader (kept, with its `opsz` axis). Heading grotesk: Instrument Sans. Red: `#FF3B4E`. The "From the source" code section is dropped. Every component interactive and animated, including a screenshot slider for the work.
+
+**Mock-up v2, same day.** Project tabs (Eventora, Recruiter-Pro, SysPlex) swap the work card with a blur-and-rise; each card has a screenshot slider (progress bars that fill and advance, pause on hover or focus, arrows, dots, arrow keys; SysPlex shows its owed-screenshot placeholder); figures count up on load and when the grid enters the viewport; an Open source list with an All / Merged / Under review filter (11 / 8 / 3, snapshot 2026-10-08); a pause-animations switch and an animated theme toggle in the header; a pointer-following red spotlight on cards; arrow and outward-link icons nudge on hover; sections rise as they scroll in. Grid heading drafted as "Every figure has a source." (alternatives in the session). Reduced motion turns every animation off; the pause switch stops all loops.
+
+**Approved by the owner, 2026-10-10 (mock-up v3).** Grid heading A, "Every figure has a source." Additions in v3, all to carry into the site: brand icons (GitHub mark, LinkedIn mark, a line envelope for email; the Gmail logo is not used) on a row of pill links under the closing line and in the footer, with a lift and red tint on hover; the Eventora screenshots become search results (`02-search-results-dark.webp`, new, copied from the Eventora repo's `site/assets/img/screenshots/` after viewing it: seed data only), ticket tier selection, organizer dashboard, attendee check-in and refund request, and the landing-page screenshot is removed. Owner follow-up the same day: the search slide uses the light-theme file (`02-search-results.webp`), and the dark booking confirmation (`06-booking-confirmation-dark.webp`, demo event and demo tickets from the repo's showcase site) is added after ticket selection, both viewed first and copied from the same folder (on the site it is the case-study hero today, so 7.4 picks a new hero); an "Also built" row with PhishSniffer (97.7 % test accuracy on 8,571 held-out samples; live demo and source) and LexIntelligence (10/10 self-run scenarios; "No automated tests." kept as its caveat).
+
+**7.2 foundation, 2026-10-10** (`feat/redesign-foundation`). Tokens retuned (black page, gray ramp, `--edge` / `--edge-soft`), the color check accepts the two edge declarations only (as `rgba()` in source and 8-digit hex in the built CSS); fonts Inter, Instrument Sans and Commit Mono (`@fontsource/commit-mono` 5.3.0, OFL) added beside Newsreader, the share image's small lines moved to Instrument Sans (Commit Mono is not on Google Fonts); header, footer, buttons, section headings and the active nav restyled; `CLAUDE.md` visual system rewritten. Found and fixed on the way: `font-size-adjust: from-font` on the body inherits as a number, so with Inter as the body face the H1 grew about 20 % and clipped at 375 px; it is now recomputed on every element in another face. Checks: lint, typecheck, facts, contrast, colors, build, `/` 157.5 KB, smoke 20/20 (a first run right after the build had 2 load timeouts that passed alone, as in ISS-37).
+
+**7.3 hero, 2026-10-10** (`feat/redesign-hero`, stacked on the foundation branch). Announcement pill (`profile.hero.announce`, numbers from `ossSummary()` over the page's PR list), H1 blur-in with gradient text, a CSS-only light (`HeroLight`: no script, no request), the figures strip (`profile.hero.figures`: metric ids resolved from `projects.ts`, CountUp). The M4 node-graph canvas and the optional M15 shader are no longer rendered: the approved mock-up has the light instead. Their files (`hero-graph*.tsx`, `hero-canvas.tsx`, `hero-shader.tsx`, `node-field.ts`) stay until the 7.6 cleanup decides whether anything reuses them. Header: section links from 1280 px, numbers and the pause label from 1536 px (they wrapped at 1024 and 1440). Local Lighthouse on `/` read LCP 4.07 s with a CPU benchmark of 1,887–2,069, not comparable to the earlier 3,109 runs; preloaded fonts went from 203 KB to 177 KB, while Commit Mono (47 KB) and Instrument Sans (30 KB) now load early because the hero uses them. The preview run on Vercel is the measurement of record (ISS-36).
+
+**One branch, 2026-10-10.** Owner decision: all of Stage 7 lands as one branch and one pull request, `feat/stage7-redesign`, which carries the commits made on the step branches named above (those were never pushed).
+
+**7.4 sections and case studies, 2026-10-10** (`feat/stage7-redesign`). Work: project tabs with one card at a time (the M6 sticky stack, its Lenis fallback and the card numeral are retired, as in the approved mock-up); the slider with progress bars, round arrows, dots, arrow keys and a direction-aware wipe; Eventora's six slides in the approved order, the landing screenshot removed from the site, and the search results screenshot now the case-study hero (M8 pair); "Also built" as two cards. Open source: status rows in one card with an All / Merged / Open filter ("Open" matches the pill text; the mock-up said "Under review"). New unnumbered blocks before Contact: the figure grid ("Every figure has a source.", nine metric ids in `profile.figures`, sources linked to the pinned lines) and the closing line with the one glow outside the hero. Contact: the `--c1` band is retired (`--c1` now only backs the palette's active option); the form sits on a card and the direct links moved up to the closing pills. About, Experience and the case studies restyled (cards, heading face, rounded media). Tabs and filter hide content only under a new pre-paint `data-js` flag, so JS-off visitors see everything. Found and fixed: inactive dots under 3:1; the case-study H1 seam with gradient text (that H1 stays solid). Checks: lint, typecheck, facts, contrast, colors, build, `/` 157.5 KB, smoke 21/21.
+
+**7.5 motion, 2026-10-10.** Section blocks rise as they scroll in (scroll-linked translate and scale, no opacity, so text never drops in contrast mid-entry), title words blur into focus, the chosen tab's card and returning filter rows fade up (`@starting-style`), cards lift 2 px with a neutral spotlight (the 4° tilt removed, as in the mock-up), the closing glow breathes only while visible (`LoopGate`), stops with the pause and is still under reduced motion. Checks: lint, typecheck, facts, contrast, colors, build, `/` 157.4 KB, smoke 21/21; probes in `docs/UX-REVIEW.md` → Stage 7.5.
+
+**7.6 QA, 2026-10-10.** The retired M4 canvas and M15 shader removed (with their CSS and the shader variable); `/dev/type` updated. Found and fixed: Lighthouse `target-size` on the slider dots (the rise's 0.97 scale shrank them to 23.3 px below the fold; the rise is now translate only). Accessibility, best practices and SEO 100 on all four pages; keyboard walk of `/` 139 stops with visible rings; widths at 320 and 375 clean on every page in both themes; smoke 21/21; `/` 157.4 KB. One home run showed a 0.182 layout shift from a late text-font swap (ISS-44, watching). Performance numbers wait for the preview: the local CPU benchmark was about half the earlier runs.
+
+**Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
+
+
+### ISS-43 Grey, washed-out appearance
+
+**Severity** High (the owner's first impression of the whole site; readability of most copy). **Status** Fixed 2026-10-10 in Stage 7.4.1 on `feat/stage7-redesign`; closes when the owner accepts it (UAT-68). **Reported** by the owner, 2026-10-10, with requirements: deep black, bright primary text, readable secondary text, subtle but visible borders, grain kept but not foggy, screenshots in their original colors, fix the root cause, keep the design.
+
+**Evidence** (local production build, 1440 × 900, motion allowed, every reveal run, pixels sampled from screenshots of four scrolled positions; script and captures in the session scratchpad, before set `haze-before/`):
+- Page black, left gutter, dark theme: average (6, 6, 6), brightest pixel 11. With the grain layer hidden: (0, 0, 0). Hiding the grid or the vignette changes nothing once past the first screen (the grid's scroll timeline has faded it to 0). Light theme: white measures 249 with the grain, 255 without; the vignette takes 1 more.
+- Overlays after all reveals: only the hero glow (opacity 0.83, blur 40 px, inside the hero), the card spotlight (opacity 0 until hovered), the grid (0) and the grain (0.045). No text or image sits under an `opacity`, `filter`, `backdrop-filter` or `mix-blend-mode`.
+- Screenshots: the active Eventora slide renders at (223, 221, 230) average against (225, 222, 231) for the same area of the original file, through `/_next/image` at 828 px, quality 90. They are not muted by the page.
+- Text: most paragraph and card copy is `--text-2` (#A3A3A3), metadata and sources `--text-3` (#858585), both at 12–18 px; section H2s are gradient text from the full text color at 30 % to 50 % alpha at the end (about #787878 on black).
+- Cards: `.surface-card` and `.bento-cell` fill with the text color at 2.5 % over a transparent background, so the grain shows through every card; edges at 0.19 and 0.11 alpha.
+
+**Cause.** Not one overlay but four shared settings adding up: the grain lifts the whole black page; translucent cards carry that haze into every card; the secondary text roles are one step too dim for body-size copy; the heading gradient fades too far.
+
+**Fix** (at the tokens and shared layers, no per-section brightness):
+1. Grain at a lower opacity, so the texture stays but the average lift is about a third.
+2. Cards on an opaque fill (the same tone, mixed with the page color), so grain stays outside them.
+3. `--text-2` and `--text-3` one step brighter in dark (and one step darker in light); the contrast check re-run.
+4. Heading gradient holds the full color longer and ends at 75 % instead of 50 %.
+5. Edge lines slightly stronger, still translucent.
+Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md` token table and gradient rule updated in the same branch.
+
+
+**Found while fixing.** The M12 grid was a fixed layer faded out by a scroll timeline. Under reduced motion there is no fade, so its lines sat at 0.5 over every screen of the page (probe: opacity 0.5 at 850, 1,300, 3,400 and 6,400 px scrolled). It is now an absolute layer on the first screen only and scrolls away for everyone.
+
+**After** (same script and positions, set `haze-after/`, side-by-side `compare-*.png`): black (3, 3, 3), brightest 5; light white 252; secondary text #B8B8B8 dark, #404040 light; `check:contrast` tightest margin 1.09x dark and 1.08x light (was 1.03x); slide still within 2/255 of its file; smoke 21/21; `/` 157.5 KB gz; `scrollWidth` = viewport at 1440 and 375 in every theme and motion mode.
+
+### ISS-44 Occasional hero layout shift from the text font swap
+
+**Severity** Medium (CLS budget 0.05; Lighthouse CI asserts CLS as an error). **Status** Open, watching.
+
+**Evidence.** Stage 7.6 local Lighthouse (devtools throttling, CPU benchmark 1,537–1,718): `/` read CLS 0.182 once, with the shift on `p.hero-more`; two reruns of `/` and the three case studies read 0.002. Only the hero's second paragraph moved, which is what a late swap of Inter (the lead's face, `display: swap`, preloaded, metric-adjusted fallback) does when the fallback wraps the lead to a different number of lines.
+
+**Options.** A: leave as is and judge on the preview and Speed Insights field CLS (no cost; risk: real visitors on slow connections see the jump). B: Inter `display: "optional"` in `fonts.ts`, as Newsreader already is (no shift ever; a visitor on a slow first load reads the fallback face for that visit). C: reserve the lead's height (fragile across widths and zoom).
+
+**Recommendation.** A until the Stage 7 preview runs; B if the preview or the field shows the shift.
 ---
 
 # Closed

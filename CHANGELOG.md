@@ -12,17 +12,27 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ### Added
 - A deploy guide for the owner (hosting, Vercel import steps, environment variables, pre-release checklist, release and rollback steps), kept on the owner's machine rather than in the repository.
-- Playwright smoke tests in CI: every route returns 200, no console errors, header navigation, reduced-motion and JavaScript-off rendering, no horizontal scroll at 375 px.
+- Playwright smoke tests in CI: every route returns 200, no console errors, header navigation, the Work tabs and the open-source filter, reduced-motion and JavaScript-off rendering, no horizontal scroll at 375 px.
 - `lighthouse.yml`: Lighthouse on every Vercel preview deployment, 3 runs, against the budgets.
 - `release.yml`: a `v*.*.*` tag creates the GitHub Release from this file's section for that version.
 - Dependabot for npm and GitHub Actions, weekly, minor and patch updates grouped.
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
+- Motion (Stage 7.5): section blocks rise into place as they scroll in, section titles blur into focus, the chosen project card and returning open-source rows fade up, cards lift with a soft spotlight instead of tilting, and the closing glow breathes while on screen; all still under reduced motion, and the glow stops with "Pause animations".
+- Redesign sections (Stage 7.4): Work shows one project at a time behind tabs, with a screenshot slider (progress bars, arrows, dots, arrow keys) and Eventora's six screens in a new order without the landing page; "Also built" as two cards; Open source as status rows with an All / Merged / Open filter; a grid of nine sourced figures ("Every figure has a source."); a closing line with a soft glow and direct-link pills before Contact; the Contact band retired and the form on a card; About, Experience and the case studies on rounded cards in the new heading face.
+- Redesign hero (Stage 7.3): an announcement pill with the derived open-source count and a circling accent edge; the name's words blur into focus in gradient text; a CSS light with rays and rings on wide screens (the node-graph canvas is retired); four Eventora figures that count up under the hero; header links from 1280 px, their numbers and the pause label from 1536 px.
+- Redesign foundation (Stage 7.2): a black page and retuned gray ramp with translucent edge lines; Inter for text, Instrument Sans for section headings with a soft gradient, Commit Mono for code and captions, Newsreader kept for the name; a fading header with a pause switch, a turning theme icon and a Contact pill; a footer with titled columns and icons that lift and turn red; pill buttons that lift on hover.
 - ESLint 10 and the current majors of the GitHub Actions used by CI.
 - The mono face loads at weight 400 only (39.5 KB to 20.7 KB, preloaded on every page).
 
+### Removed
+- The node-graph hero canvas and the optional WebGL hero shader (replaced by the CSS light in Stage 7.3), with the `NEXT_PUBLIC_ENABLE_SHADER` setting.
+- The sticky stack of project cards and its scroll fallback (replaced by project tabs in Stage 7.4).
+
 ### Fixed
+- Slider dots measured 23.3 px while their section was still below the fold (a scale on the scroll-in effect); the effect now only moves blocks, and the dots stay 24 px.
+- The grey, washed-out look (Stage 7.4.1): a deeper black (lighter grain), brighter secondary text, opaque cards, slightly stronger edges, section titles that no longer fade to grey, and the background grid limited to the first screen (with reduced motion it covered every screen).
 - The Work card numerals in the light theme had 2.45:1 contrast; they now use the text-3 gray (4.95:1 light, 5.84:1 dark).
 
 ## [0.6.0] - 2026-10-08

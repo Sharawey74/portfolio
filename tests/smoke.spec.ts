@@ -55,6 +55,23 @@ test("header navigation jumps to a section and marks it current", async ({ page 
   await expect(nav.locator('[aria-current="true"]')).toContainText("Work");
 });
 
+test("work tabs switch projects and the open-source filter narrows the list", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  const work = page.locator('section[aria-labelledby="work"]');
+  await work.getByRole("tab", { name: "Recruiter-Pro" }).click();
+  await expect(work.getByRole("heading", { level: 3, name: "Recruiter-Pro", exact: true })).toBeVisible();
+  await expect(work.getByRole("heading", { level: 3, name: "Eventora", exact: true })).toBeHidden();
+  const oss = page.locator('section[aria-labelledby="open-source"]');
+  const rows = oss.locator("ul").first().locator(":scope > li");
+  const all = await rows.count();
+  await oss.getByRole("button", { name: /^Open/ }).click();
+  const open = await rows.count();
+  expect(open).toBeGreaterThan(0);
+  expect(open).toBeLessThan(all);
+  await expect(rows.getByText("Merged", { exact: true })).toHaveCount(0);
+});
+
 test.describe("content without motion or JavaScript", () => {
   test("reduced motion shows the hero and section titles statically", async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: "reduce" });

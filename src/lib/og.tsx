@@ -31,8 +31,10 @@ async function googleFont(family: string, axes: string, text: string): Promise<A
 }
 
 /**
- * Black-and-white share card: mono kicker, a display title whose final period
- * may take the break color (as on the site), and a mono footer line.
+ * Black-and-white share card: a small kicker, a display title whose final
+ * period may take the break color (as on the site), and a small footer line.
+ * The small lines use Instrument Sans, the site's heading face: the site's
+ * mono (Commit Mono) is self-hosted and not on Google Fonts.
  */
 export async function renderOg({ kicker, title, footer }: { kicker: string; title: string; footer: string }) {
   const c = await tokens();
@@ -41,9 +43,9 @@ export async function renderOg({ kicker, title, footer }: { kicker: string; titl
   // the final period rides inside the last word (it never wraps alone).
   const words = (endsWithPeriod ? title.slice(0, -1) : title).split(" ");
   const fontSize = title.length > 60 ? 72 : title.length > 40 ? 88 : 112;
-  const [display, mono] = await Promise.all([
+  const [display, small] = await Promise.all([
     googleFont("Newsreader", "opsz,wght@72,400", title),
-    googleFont("JetBrains+Mono", "wght@400", `${kicker}${footer}`),
+    googleFont("Instrument+Sans", "wght@400", `${kicker}${footer}`),
   ]);
 
   return new ImageResponse(
@@ -76,7 +78,7 @@ export async function renderOg({ kicker, title, footer }: { kicker: string; titl
       ...OG_SIZE,
       fonts: [
         { name: "Display", data: display, weight: 400, style: "normal" },
-        { name: "Mono", data: mono, weight: 400, style: "normal" },
+        { name: "Mono", data: small, weight: 400, style: "normal" },
       ],
     },
   );

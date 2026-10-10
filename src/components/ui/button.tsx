@@ -3,18 +3,18 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "filled" | "outline";
 
 /**
- * Pill shape for buttons and CTAs only (owner decision, docs/ISSUES.md ISS-22);
- * content stays square. Hover answers with the accent ramp (ISS-21, ISS-32):
- * filled turns --c2, outline gets a --c2 edge on a --c1 fill, and a trailing
+ * Pill buttons (ISS-22). Stage 7 (ISS-42): hover lifts the button 1 px and
+ * shifts it within the neutral ramp (filled to --text-soft, outline to the
+ * hover surface with the strong line); the accent stays for marks. A trailing
  * arrow glyph (`data-arrow`) moves 4 px in its direction.
  */
 const base =
   "btn inline-flex min-h-11 items-center gap-3 rounded-pill px-6 font-sans text-small font-medium " +
-  "transition-[background-color,color,border-color,translate] duration-200 ease-out";
+  "transition-[background-color,color,border-color,translate] duration-200 ease-out hover:-translate-y-px";
 
 const variants: Record<Variant, string> = {
-  filled: "bg-ink text-page hover:bg-c2 hover:text-on-c2",
-  outline: "border border-line-strong text-ink hover:border-c2 hover:bg-c1",
+  filled: "bg-ink text-page hover:bg-ink-soft",
+  outline: "border border-line text-ink hover:border-line-strong hover:bg-hover",
 };
 
 const disabledStyle = "border border-hair text-ink-3 cursor-not-allowed";

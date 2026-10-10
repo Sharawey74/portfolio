@@ -11,8 +11,10 @@ const RADIUS = 280;
 const EASE = 0.18;
 
 /**
- * The hero H1 (M3). Words rise on load (CSS, see .rv-load), and on desktop
- * with a fine pointer each word's Newsreader weight follows cursor proximity.
+ * The hero H1 (M3). Words blur into focus and rise on load (CSS, see
+ * .hero-h1 .w-i), in gradient text with the --break period (Stage 7), and on
+ * desktop with a fine pointer each word's Newsreader weight follows cursor
+ * proximity.
  *
  * Weight changes glyph widths, so while the effect is active every word is
  * pinned to its measured width at the base weight: the line never reflows and
@@ -90,8 +92,8 @@ export function HeroHeadline({ text, id }: { text: string; id: string }) {
   }, [enabled]);
 
   return (
-    <h1 ref={ref} id={id} className="rv-load hero-h1 font-display text-display-xl font-light">
-      <SplitWords text={text.replace(/\.$/, "")} trailing={<span className="text-break">.</span>} />
+    <h1 ref={ref} id={id} className="rv-load hero-h1 text-gradient font-display text-display-xl font-light">
+      <SplitWords text={text.replace(/\.$/, "")} trailing={<span className="accent-mark text-break">.</span>} />
     </h1>
   );
 }

@@ -21,6 +21,7 @@
     "test:smoke": "playwright test"
   },
   "dependencies": {
+    "@fontsource/commit-mono": "^5.3.0",
     "@vercel/speed-insights": "^2.0.0",
     "lenis": "^1.3.26",
     "next": "^16.4.0",

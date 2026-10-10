@@ -28,7 +28,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
   }, [lenis]);
 
   return (
-    <header ref={ref} className="site-header fixed inset-x-0 top-0 z-50 border-b border-hair bg-page">
+    <header ref={ref} className="site-header header-fade fixed inset-x-0 top-0 z-50">
       {children}
     </header>
   );
