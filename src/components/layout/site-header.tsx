@@ -26,7 +26,8 @@ export function SiteHeader() {
           {personal.name.value ?? personal.github.handle}
           {personal.name.value ? <span className="text-break">.</span> : null}
         </Link>
-        <div className="hidden min-w-0 flex-1 lg:block">
+        {/* From 1280 px (Stage 7: the Contact pill and switch need the room); below, "Menu" opens the palette. */}
+        <div className="hidden min-w-0 flex-1 xl:block">
           <ScrollSpyNav items={navItems} label={ui.navLabel} />
         </div>
         <div className="flex shrink-0 items-center gap-1">
