@@ -347,7 +347,7 @@ export const profile = profileSchema.parse({
     footer: {
       nav: "Site index",
       sectionsTitle: "Sections",
-      elsewhereTitle: "Elsewhere",
+      elsewhereTitle: "Social",
       backToTop: "Back to top",
       sources: "Every number on this site names its source file and the date it was checked; the case studies link to the cited lines.",
       license: "Code MIT. Writing and photographs all rights reserved.",
