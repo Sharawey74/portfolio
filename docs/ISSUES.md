@@ -58,6 +58,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Closed | Numerals use `--text-3` instead of `--deco` (#18); the preview Lighthouse run on #18 passed accessibility on all four pages | — |
 | ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Owner (later) | Owner decision 2026-10-09: set them in one batch with the resume PDF, the Alstom internship (ISS-19), the certificates (ISS-20) and the other `TODO(owner)` items (ISS-08); steps in `DEPLOY.md` → Contact form | Before v1.0.0 |
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
+| ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -671,6 +672,31 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **Recovery.** Each file restored from the parent of its newest untracking commit (`ed8de71~1`, 2026-10-08 22:55, for `PLAN.md` and `PERSONAL-INFO-CHECKLIST.md`; `FACTS-CHECK.md` was the same in both). The session logs show no edit to these files after that commit, so nothing was lost.
 
 **Prevention.** Never check out a commit or branch from before 2026-10-08 23:00 in this folder (the old `feat/*` branches, `chore/eslint-10` before its untracking commit). To read an old branch, use `git show <branch>:<path>` or a separate worktree. Local `main` is now current. Keep a copy of the local-only files outside the repo.
+
+### ISS-42 Redesign before launch (Stage 7)
+
+**Severity** High (it changes every page and the brief). **Status** Decided (owner, 2026-10-10); planned, not started.
+
+**Request.** The owner wants the site to look like resend.com (black background, structure, type, components, borders, accents, gradients) with the motion and transitions of the GetLayers templates (getlayers.ai/templates, "Stride" in particular).
+
+**What the references use** (observed in a browser on 2026-10-10):
+- *resend.com:* background `#000`; sticky transparent header, 58 px. Fonts: Domaine Display (Klim, commercial) for the H1 at 96 px weight 400; ABC Favorit (Dinamo, commercial) for section headings at 56 px, tracking −2.8 px; Inter for body and nav; Commit Mono (free, OFL) for code. Headings use gradient text (white 30 % to 50 % white). Text `#F0F0F0`, secondary `#A1A4A5`; borders `rgba(214,235,253,0.19)` and `0.145`; section cards 24 px radius with a top border, buttons and badges as pills. Accents are small and per product (mint `#A1FCEA`, faint colored glows, a 30 s rotating gradient border on the announcement pill, a 6 s color pulse). The 3D objects are pre-rendered videos (`cube.mp4`, `3d-react.mp4` and others), not live WebGL. Logo marquees run at 180 s per loop and pause on hover; hover transitions are 200–300 ms ease-out. Page order: hero, a code block with language tabs, feature grids, an editor demo, a 3×3 grid, a closing headline, footer.
+- *GetLayers "Stride":* a Premium template with a commercial licence; only a 7.3 s preview video is public, the prompt and code are paid. A deep-blue gradient hero with a three.js light filament, headline words that blur into focus, count-up stats, then bento cards, a carousel and a chrome 3D object.
+
+**Constraints that shaped the decision.** Resend's display and heading fonts are commercial licences, its 3D videos and brand are its own, and Stride's code is paid: a literal copy is not possible without licences, and a recognisable clone of a developer tool's homepage would undercut a portfolio built on sourced evidence. A live WebGL hero adds weight right after the LCP work (ISS-36), so it must load after the first paint.
+
+**Owner decisions, 2026-10-10.**
+1. Resend-style with own assets: the structure, black look, type hierarchy, gradient headings, translucent borders, rounded cards, pill buttons and a code-block section, built here; GetLayers-style motion implemented here; no copied files, fonts, videos or code.
+2. Free lookalike fonts: a free display serif near Domaine (candidates: Instrument Serif, or keep Newsreader), a free grotesk near Favorit for section headings (candidates chosen in the mock-up), Inter for body (the current ban is lifted by this decision), Commit Mono for code (the same free font Resend uses; self-hosted).
+3. Accent: mostly monochrome like Resend, with red where Resend uses mint: live dots, focus rings, one highlight per chart, the hero glow.
+4. Timing: before v1.0.0, so the owner's content batch (ISS-40, ISS-08, ISS-19, ISS-20) and the UAT (ISS-09) happen once, on the new design.
+5. Plan and document first; no code until the mock-up is approved.
+
+**What stays.** All content and data files, the facts and honesty rules, the banned claims, the content model, accessibility (contrast checks, reduced motion, pause control, JS-off content), the budgets (`/` ≤ 170 KB JS, CLS < 0.05), CI and the smoke tests.
+
+**Rules this replaces** (in `CLAUDE.md`, rewritten in the Stage 7 branch together with the code, as the brief requires): no gradients or gradient text; content radius 0–2 px; Inter banned; the crimson ramp; the editorial 12-column offsets as the main layout; Newsreader, Hanken Grotesk and JetBrains Mono as the only faces.
+
+**Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
 
 ---
 
