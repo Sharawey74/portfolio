@@ -63,16 +63,16 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
           </div>
           <div className="hero-ctas flex flex-wrap gap-3">
             {showPrimary ? (
-              <ButtonLink href={hero.ctaPrimary.href} magnetic>
+              <ButtonLink href={hero.ctaPrimary.href} variant="quiet">
                 {hero.ctaPrimary.label} <span aria-hidden="true" data-arrow="right">→</span>
               </ButtonLink>
             ) : null}
             {resume ? (
-              <ButtonLink href={resume} variant="outline" magnetic download>
+              <ButtonLink href={resume} variant="quiet" download>
                 {hero.ctaResume.label} <span aria-hidden="true" data-arrow="down">↓</span>
               </ButtonLink>
             ) : (
-              <Button variant="outline" disabled title={ui.resumeUnavailable}>
+              <Button variant="quiet" disabled title={ui.resumeUnavailable}>
                 {hero.ctaResume.label}
               </Button>
             )}
