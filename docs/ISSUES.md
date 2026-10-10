@@ -62,6 +62,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
 | ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002). Watch the Stage 7 PR preview (Lighthouse CI fails on CLS) and Speed Insights; if it recurs, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
 | ISS-45 | Owner review 2: the announcement pill should answer on hover like the direct-link pills; the closing glow should match the mock-up's red exactly; every card should be animated and reactive with the pill's circling red edge | Medium | Decided | Owner decisions 2026-10-10: the arc on every card on hover and keyboard focus (not always on), the pill keeps its arc and gains the hover; implemented the same day | — |
+| ISS-46 | Publish the owner's resume PDF as given | Medium | Decided | Owner decision 2026-10-10: `public/resume.pdf` is the owner's own document, exempt from the facts rules and the private-terms list; it contains the phone number, the GPA and wording the site does not use (XGBoost, 95%+, 50+ features, 130+ tests, LangChain for Recruiter-Pro, OAuth 2.0, MySQL, Microservices, CQRS), now public by the owner's choice | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -777,6 +778,16 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 **Done.** Pill: lifts 1 px, its edge and fill brighten, the arrow nudges 4 px. Glow: the mock-up's orb (radial accent to 42 %, 40 px blur, 900 × 420, opacity pulsing 0.75 to 1 over 6 s ease-in-out; 0.18 when still), only while on screen, stopped by the pause. Cards (`.surface-card`, `.bento-cell`, `.figure-grid`, the case-study evidence grid): a 1 px ring masked to the border with the pill's conic arc, turning every 6 s on hover or focus (a registered `--arc` angle, so only the hovered card repaints; still under reduced motion), plus a 2 px lift. The scroll-in rise moved from `translate` to `transform` so the lift is not overridden. Checks: closing pill text over the red 5.84:1 or more (light) and about 10:1 (dark); smoke 21/21; `/` 157.4 KB. `CLAUDE.md` accent rules updated in the same branch.
 
 **Follow-up, same day.** The owner asked for the buttons too (screenshots of View My Work, Download Resume, Case study, Source). Every `.btn` pill (hero CTAs, Case study, Source, the closing link pills, the contact submit) now shows the circling edge on hover and keyboard focus, lifts 1 px and nudges its arrow; Source became a pill button. Disabled buttons do not react (Download Resume stays disabled until the resume PDF exists). Orascom set to July 2026 only by the owner (resume over report; `FACTS-CHECK.md`).
+
+### ISS-46 The resume PDF ships as the owner's own document
+
+**Severity** Medium (public, permanent once pushed). **Status** Decided by the owner, 2026-10-10.
+
+**What.** The owner supplied `Abdelrahman_Resume.pdf` (2 pages) for the Download Resume button. Before publishing it was checked: it carries the phone number and GPA (both kept off the site by the private list) and claims the site's facts check bans or does not use (XGBoost, 95%+, 50+ features, 130+ tests, LangChain for Recruiter-Pro, OAuth 2.0, MySQL, Microservices, CQRS). The owner was told, then asked for an exception.
+
+**Decision.** The PDF is published unchanged at `/resume.pdf` as the owner's own document. It is exempt from the facts rules (`CLAUDE.md` honesty rules apply to the site's pages, not to this file) and from the private-terms list. Once pushed to the public repo the file stays in its history even if replaced later. The site's own copy keeps following the report.
+
+**Same day.** The hero's View My Work and Download Resume and the card's Case study now use the Source button's look (`variant="quiet"`, `quietButton`), without the magnetic pull or cursor label, by owner request.
 ---
 
 # Closed
