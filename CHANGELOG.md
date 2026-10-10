@@ -26,6 +26,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 - The mono face loads at weight 400 only (39.5 KB to 20.7 KB, preloaded on every page).
 
 ### Fixed
+- The grey, washed-out look (Stage 7.4.1): a deeper black (lighter grain), brighter secondary text, opaque cards, slightly stronger edges, section titles that no longer fade to grey, and the background grid limited to the first screen (with reduced motion it covered every screen).
 - The Work card numerals in the light theme had 2.45:1 contrast; they now use the text-3 gray (4.95:1 light, 5.84:1 dark).
 
 ## [0.6.0] - 2026-10-08
