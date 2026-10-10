@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Three layers:
- *   1. Primitives: the 12-step neutral ramp (R=G=B) and the accent ramp:
+ * Design tokens (Stage 7 values, docs/ISSUES.md ISS-42: a black page, a
+ * neutral ramp tuned to the approved mock-up, translucent blue-white edges).
+ * Three layers:
+ *   1. Primitives: the 12-step neutral ramp (R=G=B), the two edge colors
+ *      (--edge, --edge-soft: translucent lines, the one non-neutral allowance
+ *      besides the accent) and the accent ramp:
  *      --c1 deep (fills: the Contact band, outline-button hover, selected
  *      option), --c2 mid (filled-button hover, selection, card hover edge),
  *      --break bright (marks, focus ring, section indices, the H1 period).
@@ -21,18 +25,20 @@
 
 /* tokens:dark */
 :root {
-  --g0: #050505;
-  --g1: #0a0a0a;
-  --g2: #111111;
-  --g3: #181818;
-  --g4: #212121;
-  --g5: #2e2e2e;
-  --g6: #444444;
-  --g7: #666666;
-  --g8: #8f8f8f;
-  --g9: #b3b3b3;
-  --g10: #e0e0e0;
-  --g11: #fafafa;
+  --g0: #000000;
+  --g1: #050505;
+  --g2: #0a0a0a;
+  --g3: #121212;
+  --g4: #1c1c1c;
+  --g5: #262626;
+  --g6: #3d3d3d;
+  --g7: #5e5e5e;
+  --g8: #858585;
+  --g9: #a3a3a3;
+  --g10: #d4d4d4;
+  --g11: #f0f0f0;
+  --edge: rgba(214, 235, 253, 0.19);
+  --edge-soft: rgba(217, 237, 254, 0.11);
   --break: #ff3b4e;
   --c1: #3a0810;
   --c2: #8e1428;
@@ -43,18 +49,20 @@
 
 /* tokens:light */
 :root[data-theme="light"] {
-  --g0: #fafafa;
-  --g1: #f5f5f5;
-  --g2: #eeeeee;
-  --g3: #e7e7e7;
-  --g4: #dedede;
-  --g5: #d1d1d1;
-  --g6: #bbbbbb;
+  --g0: #ffffff;
+  --g1: #fafafa;
+  --g2: #f5f5f5;
+  --g3: #ededed;
+  --g4: #e3e3e3;
+  --g5: #d4d4d4;
+  --g6: #b8b8b8;
   --g7: #999999;
   --g8: #666666;
-  --g9: #4c4c4c;
-  --g10: #1f1f1f;
-  --g11: #050505;
+  --g9: #4d4d4d;
+  --g10: #262626;
+  --g11: #111111;
+  --edge: rgba(18, 30, 45, 0.16);
+  --edge-soft: rgba(18, 30, 45, 0.09);
   --break: #c4152a;
   --c1: #f6e2e5;
   --c2: #a3142a;
@@ -69,18 +77,20 @@
 /* tokens:light-media */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
-    --g0: #fafafa;
-    --g1: #f5f5f5;
-    --g2: #eeeeee;
-    --g3: #e7e7e7;
-    --g4: #dedede;
-    --g5: #d1d1d1;
-    --g6: #bbbbbb;
+    --g0: #ffffff;
+    --g1: #fafafa;
+    --g2: #f5f5f5;
+    --g3: #ededed;
+    --g4: #e3e3e3;
+    --g5: #d4d4d4;
+    --g6: #b8b8b8;
     --g7: #999999;
     --g8: #666666;
-    --g9: #4c4c4c;
-    --g10: #1f1f1f;
-    --g11: #050505;
+    --g9: #4d4d4d;
+    --g10: #262626;
+    --g11: #111111;
+    --edge: rgba(18, 30, 45, 0.16);
+    --edge-soft: rgba(18, 30, 45, 0.09);
     --break: #c4152a;
     --c1: #f6e2e5;
     --c2: #a3142a;
@@ -96,8 +106,8 @@
   --surface-raised: var(--g1);
   --surface-card: var(--g2);
   --surface-hover: var(--g3);
-  --line-hair: var(--g4);
-  --line: var(--g5);
+  --line-hair: var(--edge-soft);
+  --line: var(--edge);
   --line-strong: var(--g6);
   --deco: var(--g7);
   --text-3: var(--g8);
@@ -113,7 +123,7 @@
   /* Layout */
   --gutter: clamp(1rem, 0.6rem + 1.6vw, 2rem);
   --page-max: 96rem;
-  --header-h: 3.5rem;
+  --header-h: 4rem;
 }
 
 /* Layer 3: Tailwind theme. Defaults that the brief bans are reset. */
@@ -130,7 +140,10 @@
 
   --radius-xs: 1px;
   --radius-sm: 2px;
-  /* Buttons and CTAs only (ISS-22); content stays square. */
+  /* Stage 7 (ISS-42): pills for buttons, badges, tabs and header controls;
+     24 px section cards; 14 px for media and panels inside them. */
+  --radius-inner: 0.875rem;
+  --radius-card: 1.5rem;
   --radius-pill: 9999px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -150,6 +163,8 @@
   --color-g9: var(--g9);
   --color-g10: var(--g10);
   --color-g11: var(--g11);
+  --color-edge: var(--edge);
+  --color-edge-soft: var(--edge-soft);
   --color-break: var(--break);
   --color-c1: var(--c1);
   --color-c2: var(--c2);
@@ -168,8 +183,9 @@
   --color-ink: var(--text-1);
 
   --font-display: var(--font-newsreader), "Iowan Old Style", "Times New Roman", serif;
-  --font-sans: var(--font-hanken), "Helvetica Neue", sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-heading: var(--font-instrument), "Helvetica Neue", sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-commit), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Type scale. Fluid sizes keep max <= 2.5 x min so browser zoom still scales them. */
   /* Display sizes are capped by viewport height as well as width, so a laptop
@@ -183,6 +199,10 @@
   --text-display-l: clamp(3rem, min(1.667rem + 5.333vw, 11svh), 7rem);
   --text-display-l--line-height: 0.98;
   --text-display-l--letter-spacing: -0.03em;
+  /* Section titles in the heading face (Stage 7): 40-56 px, tight tracking. */
+  --text-section: clamp(2.5rem, 2.071rem + 1.786vw, 3.5rem);
+  --text-section--line-height: 1.15;
+  --text-section--letter-spacing: -0.05em;
   --text-h2: clamp(2rem, 1.333rem + 2.667vw, 4rem);
   --text-h2--line-height: 1.05;
   --text-h2--letter-spacing: -0.02em;
@@ -225,6 +245,29 @@
   h3 {
     text-wrap: balance;
     font-weight: 400;
+  }
+
+  /* font-size-adjust's computed value inherits as a number, so an element in
+     another face would be scaled by the body face's x-height (Inter's is
+     taller than Newsreader's: the H1 grew about 20 % and clipped at 375 px).
+     Recompute it from each element's own font. */
+  h1,
+  h2,
+  h3,
+  code,
+  kbd,
+  .font-display,
+  .font-heading,
+  .font-mono,
+  .mono-label {
+    font-size-adjust: from-font;
+  }
+
+  /* Section headings and H3s use the heading face; the H1 and display lines
+     set font-display themselves. */
+  h2,
+  h3 {
+    font-family: var(--font-heading);
   }
 
   p,
@@ -361,6 +404,98 @@
     translate: 0 0;
   }
 
+  /* Stage 7 (ISS-42). Gradient text: H1 and H2 only. The text color at 30 %
+     fading to half its opacity; the period and section indices keep --break
+     through -webkit-text-fill-color on their own span. */
+  .text-gradient,
+  .text-gradient .w-i {
+    background-image: linear-gradient(to right bottom, var(--text-1) 30%, color-mix(in srgb, var(--text-1) 50%, transparent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient .accent-mark {
+    -webkit-text-fill-color: var(--break);
+    color: var(--break);
+  }
+
+  /* Section card: 24 px radius, the stronger edge on top, a faint raised fill. */
+  .surface-card {
+    border: 1px solid var(--edge-soft);
+    border-top-color: var(--edge);
+    border-radius: var(--radius-card);
+    background: color-mix(in srgb, var(--text-1) 2.5%, transparent);
+  }
+
+  /* Header: no bar, the page fades in behind it (Resend-style). */
+  .header-fade {
+    background: linear-gradient(var(--surface-page) 55%, transparent);
+  }
+
+  /* Switch control (pause): a pill track with a sliding knob. */
+  .switch-track {
+    position: relative;
+    display: inline-block;
+    width: 1.875rem;
+    height: 1.125rem;
+    border-radius: var(--radius-pill);
+    background: var(--line-strong);
+    transition: background-color var(--dur-1) var(--ease-out);
+  }
+  .switch-knob {
+    position: absolute;
+    inset-block-start: 0.125rem;
+    inset-inline-start: 0.125rem;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 50%;
+    background: var(--text-1);
+    transition: translate var(--dur-2) var(--ease-out);
+  }
+  [aria-checked="true"] > .switch-track {
+    background: var(--break);
+  }
+  [aria-checked="true"] > .switch-track > .switch-knob {
+    translate: 0.75rem 0;
+  }
+
+  /* Theme toggle: the half-filled disc turns half a circle with the theme. */
+  .theme-glyph {
+    transition: rotate var(--dur-3) var(--ease-out);
+  }
+  .theme-glyph[data-theme-glyph="light"] {
+    rotate: 180deg;
+  }
+
+  /* Outbound and next arrows nudge toward where they point. */
+  .nudge > [data-arrow] {
+    display: inline-block;
+    transition: translate var(--dur-1) var(--ease-out);
+  }
+  .nudge:hover > [data-arrow="right"] {
+    translate: 0.25rem 0;
+  }
+  .nudge:hover > [data-arrow="out"] {
+    translate: 0.125rem -0.125rem;
+  }
+
+  /* Brand icons lift and take the accent on hover (owner request 2026-10-10). */
+  .icon-link > svg {
+    transition: translate var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+  .icon-link:hover > svg {
+    translate: 0 -0.125rem;
+    color: var(--break);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .switch-knob,
+    .theme-glyph,
+    .nudge > [data-arrow],
+    .icon-link > svg {
+      transition: none;
+    }
+  }
 }
 
 /* M2 scroll-progress hairline: CSS scroll timeline where supported.
@@ -693,7 +828,8 @@ html[data-intro="play"] .intro {
   translate: 0 -100%;
 }
 
-/* M13 scroll-spy nav. Active state: marker dot (--break), full ink, --c1 pill. */
+/* M13 scroll-spy nav. Active state: marker dot (--break), full ink, a neutral
+   pill with the stronger edge (Stage 7: the accent stays for marks). */
 .spy-nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -708,16 +844,21 @@ html[data-intro="play"] .intro {
   align-items: center;
   gap: 0.5rem;
   padding-inline: 0.75rem;
+  border: 1px solid transparent;
   border-radius: var(--radius-pill);
   color: var(--text-2);
   transition:
     color var(--dur-1) var(--ease-out),
-    background-color var(--dur-1) var(--ease-out);
+    background-color var(--dur-1) var(--ease-out),
+    border-color var(--dur-1) var(--ease-out);
 }
 .spy-link:hover,
 .spy-link[aria-current="true"] {
   color: var(--text-1);
-  background: var(--c1);
+  background: var(--surface-hover);
+}
+.spy-link[aria-current="true"] {
+  border-color: var(--edge);
 }
 .spy-dot {
   width: 0.375rem;
