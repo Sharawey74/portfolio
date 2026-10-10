@@ -23,7 +23,7 @@ First tagged release and launch. It collects everything since 0.6.0: the release
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
-- Hero: a slowly turning wireframe sphere (an inner sphere, flat rings, a particle cloud and a pulsing core over thin rings and crosshairs) replaces the CSS light on screens 1280 px and wider, and leans toward the mouse; it is still under reduced motion and stops with "Pause animations". The name no longer breaks inside a word at 1024 px.
+- Hero: the background takes the approved mock-up's surface (dark grey, a fine grid with faint red dots at the crossings, a soft red glow on the right). A slowly turning wireframe sphere (an inner sphere, flat rings, a particle cloud, a glowing core and a white node circling it), set right of thin rings and crosshairs and cut by the column edge, replaces the CSS light on screens 1280 px and wider, and leans toward the mouse; it is still under reduced motion and stops with "Pause animations". The name no longer breaks inside a word at 1024 px.
 - Hero: the label decodes, the name's letters rise one by one and the period lands last with a pulse, and a hairline draws under "keep working as load grows"; on a mouse, the name reacts like a lens (weight and optical size) and brightens toward the pointer.
 - Tech chips, status badges and the tab and filter pills react like the cards: an accent edge circles the one under the pointer, and chips and badges lift.
 - Eventora's case study drops its Limits section and the note beside the Frontend link; the footer's second column is titled "Social".
