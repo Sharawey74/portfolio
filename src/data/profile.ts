@@ -36,6 +36,23 @@ const profileSchema = z.object({
     figures: z.array(z.object({ project: z.string(), metric: z.string() })).min(1).max(4),
   }),
   sections: z.array(sectionSchema).min(1),
+  /**
+   * "Every figure has a source." (Stage 7): a grid of metric ids from
+   * projects.ts (label, qualifier and source come from there), or the derived
+   * open-source count. A missing id fails the build.
+   */
+  figures: z.object({
+    title: claim,
+    items: z
+      .array(z.union([z.object({ project: z.string(), metric: z.string() }), z.object({ oss: z.literal("merged") })]))
+      .min(3)
+      .max(9),
+  }),
+  /** Closing line before Contact (Stage 7), with the one soft glow outside the hero. */
+  closing: z.object({
+    line: claim,
+    cta: z.object({ label: z.string(), href: z.string().startsWith("#") }),
+  }),
   meta: z.object({
     title: z.string().min(1),
     description: z.string().min(1).max(160),
@@ -56,6 +73,9 @@ const profileSchema = z.object({
     externalLink: z.string(),
     caseStudy: z.string(),
     alsoBuilt: z.string(),
+    projectTabs: z.string(),
+    figure: z.string(),
+    screenshot: z.string(),
     carouselLabel: z.string(),
     previous: z.string(),
     next: z.string(),
@@ -112,6 +132,9 @@ const profileSchema = z.object({
       closed: z.string(),
       liveStatus: z.string(),
       snapshotStatus: z.string(),
+      filter: z.string(),
+      all: z.string(),
+      showing: z.string(),
     }),
     experience: z.object({
       education: z.string(),
@@ -192,6 +215,24 @@ export const profile = profileSchema.parse({
     { live: true, id: "experience", index: "04", title: "Experience" },
     { live: true, id: "contact", index: "05", title: "Contact" },
   ],
+  figures: {
+    title: { text: "Every figure has a source.", source: "owner:approved-copy", asOf: "2026-10-10" },
+    items: [
+      { project: "eventora", metric: "tests" },
+      { project: "eventora", metric: "coverage" },
+      { project: "eventora", metric: "states" },
+      { project: "eventora", metric: "migrations" },
+      { project: "recruiter-pro", metric: "branch-coverage" },
+      { project: "recruiter-pro", metric: "skills" },
+      { project: "recruiter-pro", metric: "adrs" },
+      { oss: "merged" },
+      { project: "sysplex", metric: "pytest" },
+    ],
+  },
+  closing: {
+    line: { text: "Systems that keep working as load grows.", source: "owner:approved-copy", asOf: "2026-10-10" },
+    cta: { label: "Send a message", href: "#contact" },
+  },
   meta: {
     title: "Abdelrhman Mohamed / Software engineer",
     description:
@@ -211,6 +252,9 @@ export const profile = profileSchema.parse({
     externalLink: "opens an external site",
     caseStudy: "Case study",
     alsoBuilt: "Also built",
+    projectTabs: "Projects",
+    figure: "Fig.",
+    screenshot: "Screenshot",
     carouselLabel: "Screenshots",
     previous: "Previous screenshot",
     next: "Next screenshot",
@@ -273,6 +317,9 @@ export const profile = profileSchema.parse({
       closed: "Closed",
       liveStatus: "Status from GitHub, refreshed daily",
       snapshotStatus: "Status as of the last snapshot",
+      filter: "Show pull requests",
+      all: "All",
+      showing: "Showing",
     },
     experience: {
       education: "Education",
