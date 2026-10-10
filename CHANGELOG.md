@@ -19,6 +19,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
+- Redesign hero (Stage 7.3): an announcement pill with the derived open-source count and a circling accent edge; the name's words blur into focus in gradient text; a CSS light with rays and rings on wide screens (the node-graph canvas is retired); four Eventora figures that count up under the hero; header links from 1280 px, their numbers and the pause label from 1536 px.
 - Redesign foundation (Stage 7.2): a black page and retuned gray ramp with translucent edge lines; Inter for text, Instrument Sans for section headings with a soft gradient, Commit Mono for code and captions, Newsreader kept for the name; a fading header with a pause switch, a turning theme icon and a Contact pill; a footer with titled columns and icons that lift and turn red; pill buttons that lift on hover.
 - ESLint 10 and the current majors of the GitHub Actions used by CI.
 - The mono face loads at weight 400 only (39.5 KB to 20.7 KB, preloaded on every page).
