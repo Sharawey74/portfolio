@@ -801,66 +801,74 @@ html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .
 
 /* Hero core (owner's mock-up, 2026-10-11, ISS-51): the reticle and the accent
    emitter in CSS; the canvas sphere (hero-core-canvas.tsx) sits between them.
-   Ring sizes are the mock-up's 540 / 420 / 300 / 150 px over a 620 px column,
-   as shares of the box. The loops run only while the box is on screen
+   The box is the mock-up's 620 px column, capped by the viewport height; ring
+   and axis sizes are the mock-up's 540 / 420 / 300 / 150 / 640 / 520 px as
+   shares of that height (cqh). The reticle may overflow the column, the
+   canvas is cut at its edge. The loops run only while the box is on screen
    (data-visible), stop with the pause, and are still under reduced motion. */
 .hero-core {
   position: relative;
   width: 100%;
-  max-width: 34rem;
-  aspect-ratio: 1;
-  margin-inline-start: auto;
+  height: min(38.75rem, 72svh);
+  container-type: size;
 }
+.hero-core-reticle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 103cqh;
+  height: 103cqh;
+  translate: -50% -50%;
+  /* The rings fade outward and warm toward the centre (ISS-51). */
+  -webkit-mask: radial-gradient(closest-side, #000 72%, transparent 100%);
+  mask: radial-gradient(closest-side, #000 72%, transparent 100%);
+}
+.hero-core-reticle > span,
 .hero-core > span {
   position: absolute;
   inset: 0;
   margin: auto;
   border-radius: 50%;
 }
-.hero-core-bloom {
-  inset: -20% !important;
-  background: radial-gradient(circle, color-mix(in srgb, var(--break) 22%, transparent) 0%, color-mix(in srgb, var(--break) 6%, transparent) 42%, transparent 72%);
-  filter: blur(4rem);
-  opacity: 0.75;
-}
 .hero-core-ring {
   border: 1px solid color-mix(in srgb, var(--text-1) 4%, transparent);
 }
 .hero-core-ring-1 {
-  width: 87%;
-  height: 87%;
+  width: 84%;
+  height: 84%;
   opacity: 0.85;
   animation: core-pulse 4s ease-in-out infinite;
 }
 .hero-core-ring-2 {
-  width: 68%;
-  height: 68%;
+  width: 66%;
+  height: 66%;
   border-style: dashed;
   border-color: color-mix(in srgb, var(--text-1) 6%, transparent);
 }
 .hero-core-ring-3 {
-  width: 48%;
-  height: 48%;
+  width: 47%;
+  height: 47%;
   border-color: color-mix(in srgb, var(--break) 20%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--break) 7%, transparent), transparent);
 }
 .hero-core-ring-4 {
-  width: 24%;
-  height: 24%;
+  width: 23.5%;
+  height: 23.5%;
   border-color: color-mix(in srgb, var(--break) 30%, transparent);
 }
 .hero-core-axis {
-  width: 103%;
+  width: 100%;
   height: 1px;
   border-radius: 0 !important;
   background: color-mix(in srgb, var(--text-1) 4%, transparent);
 }
 .hero-core-axis-v {
   width: 1px;
-  height: 103%;
+  height: 100%;
 }
 .hero-core-axis-d1,
 .hero-core-axis-d2 {
-  width: 84%;
+  width: 81%;
   background: color-mix(in srgb, var(--text-1) 2.5%, transparent);
   rotate: 45deg;
 }
@@ -899,11 +907,8 @@ html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .
   border-radius: 50%;
   background: radial-gradient(circle, color-mix(in srgb, var(--break) 55%, transparent) 0, transparent 70%);
 }
-.hero-core:not([data-visible]) > span {
+.hero-core:not([data-visible]) :is(span, .hero-core-reticle > span) {
   animation-play-state: paused;
-}
-:root[data-theme="light"] .hero-core-bloom {
-  opacity: 0.45;
 }
 @keyframes core-pulse {
   50% {
@@ -918,10 +923,49 @@ html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .
     opacity: 0;
   }
 }
+
+/* Hero backdrop (ISS-51, the mock-up's page surface, on the first screen):
+   a raised fill (the mock-up's near-black surface, here the neutral --g3), its 80 px
+   hairline grid at 2.5 %, accent dots at the grid crossings and a large soft
+   accent bloom on the right. It fades into the page at the hero's foot. It
+   covers the M12 grid (the hero is its own stacking context). */
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: clip;
+  background:
+    linear-gradient(to right, color-mix(in srgb, var(--text-1) 2.5%, transparent) 1px, transparent 1px) 0 0 / 80px 80px,
+    linear-gradient(to bottom, color-mix(in srgb, var(--text-1) 2.5%, transparent) 1px, transparent 1px) 0 0 / 80px 80px,
+    var(--g3);
+  -webkit-mask: linear-gradient(to bottom, #000 78%, transparent);
+  mask: linear-gradient(to bottom, #000 78%, transparent);
+}
+.hero-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 40%, transparent) 1px, transparent 1px) -1px -1px / 80px 80px;
+  opacity: 0.4;
+}
+.hero-backdrop-bloom {
+  position: absolute;
+  right: 0;
+  top: 25%;
+  width: min(43.75rem, 120vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 22%, transparent) 0%, color-mix(in srgb, var(--break) 6%, transparent) 42%, transparent 72%);
+  filter: blur(4rem);
+  opacity: 0.75;
+}
+:root[data-theme="light"] .hero-backdrop-bloom {
+  opacity: 0.45;
+}
 @media (prefers-reduced-motion: reduce) {
   .hero-pill::before,
   .hero-pill-dot,
-  .hero-core > span {
+  .hero-core span {
     animation: none;
   }
   .hero-pill {
