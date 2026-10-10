@@ -43,9 +43,9 @@ export function ZoomGallery({
 
   return (
     <>
-      <ul className="grid grid-cols-2 gap-px bg-hair md:grid-cols-3">
+      <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
         {shots.map((s) => (
-          <li key={s.src} className="bg-page">
+          <li key={s.src} className="overflow-clip rounded-inner border border-hair bg-raised">
             <button
               type="button"
               onClick={() => setOpen(s)}
