@@ -24,8 +24,8 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-05 | Open source shows up to four break-color dots at once | Low | Decided | Kept: the brief's open-status rule | When the PR list changes |
 | ISS-06 | Some plain-CSS hover styles can stick after a tap on touch screens | Low | Open | Wrap them in `(hover: hover)` | Next UI change |
 | ISS-07 | Vercel project not imported; repo homepage is a placeholder URL | High | Closed | Imported 2026-10-09; production `abdelrhaman-mohamed.vercel.app`, also the repo homepage (detail below) | — |
-| ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Owner | Name, email and the Recruiter-Pro screenshots are done (round 1); the rest is the owner's (`npm run check:launch` lists them) | Before v1.0.0 |
-| ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Owner | Owner runs `docs/UAT.md` (UAT-01 to UAT-48) | Before v1.0.0 |
+| ISS-08 | 10 `TODO(owner)` items (13 before round 1) (name, email, resume, screenshots and others) | High | Closed | 2026-10-10: every item decided (ISS-19, ISS-20, ISS-46, ISS-47); `npm run check:launch -- --strict` passes with no items left | — |
+| ISS-09 | No owner UAT run recorded for Stages 3–5 | High | Decided | Owner decision 2026-10-10: the UAT run (`docs/UAT.md`, UAT-01 to UAT-75) happens after v1.0.0; defects found then go into later releases | After v1.0.0 |
 | ISS-10 | `npm audit`: 5 high-severity advisories, all in the lint tooling (`braces` via `eslint-config-next`) | Medium | Decided | Accept for now: dev-only; Dependabot (weekly, Stage 6) proposes the patched release; never `npm audit fix --force` | Dependabot pull requests |
 | ISS-11 | `npm ci` warns that ESLint 9.39.5 is no longer supported | Low | Decided | Trial done on branch `chore/eslint-10`: ESLint 10.12 installs with `npm ci`, every plugin's rules fire, lint clean. Three bundled plugins still declare ESLint ≤ 9. Recommendation: merge after its CI is green | When the owner merges `chore/eslint-10` |
 | ISS-12 | Hero headline: owner wants a more professional, distinctive line for a software engineer | High | Closed | Applied: label, name as H1, the owner's two paragraphs (`profile.hero`); facts check asserts H1 = name | — |
@@ -63,6 +63,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002); not in 12 Stage 7 preview runs (worst 0.011, medians 0.002–0.005). Watching Speed Insights field CLS; if it shows there, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
 | ISS-45 | Owner review 2: the announcement pill should answer on hover like the direct-link pills; the closing glow should match the mock-up's red exactly; every card should be animated and reactive with the pill's circling red edge | Medium | Decided | Owner decisions 2026-10-10: the arc on every card on hover and keyboard focus (not always on), the pill keeps its arc and gains the hover; implemented the same day | — |
 | ISS-46 | The resume PDF and the Download Resume button | Medium | Decided | Owner decision 2026-10-10: no resume on the site. The button is removed (`personal.resumePdf` withheld); the PDF briefly added that day was never pushed and was dropped from the branch history before any push | — |
+| ISS-47 | Owner decisions for v1.0.0: the remaining personal fields, the capstone, the Railway API question, the SysPlex screenshot, the certificates, UAT timing and the branch for pre-release edits | Medium | Decided | 2026-10-10: phone, portrait, location, bio, availability and GPA withheld (not shown); capstone stays hidden; no Railway API link (frontend only, as now); SysPlex screenshot in a later release; certificates stay as they are; UAT after v1.0.0 (ISS-09); every edit before v1.0.0 on one branch, `chore/release-v1` | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -792,6 +793,21 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 **Then removed, same day.** The owner asked for the resume button to be removed. `personal.resumePdf` is now withheld (2026-10-10), so the hero shows only View My Work and the palette has no resume entry. The PDF had been committed locally but never pushed (the remote branch ended at `88ff24e`), so that one commit was dropped from the branch (`git rebase --onto`) rather than deleted in a new commit: the file with the phone number never reaches the public history. The exception below no longer applies; a future resume goes through the normal rules (facts and private terms) unless the owner decides again.
 
 **Same day.** The hero's View My Work and Download Resume and the card's Case study now use the Source button's look (`variant="quiet"`, `quietButton`), without the magnetic pull or cursor label, by owner request.
+
+### ISS-47 Owner decisions before v1.0.0
+
+**Severity** Medium. **Status** Decided 2026-10-10 (owner, in chat).
+
+- **Personal fields:** phone, portrait, location, bio, availability and GPA are withheld (`{ value: null, withheld: "2026-10-10" }`): nothing renders for them and they no longer count as owed.
+- **Capstone:** stays hidden (`experience.capstone` withheld).
+- **Railway API** (report §7 q3): not shown; the Eventora card keeps linking only the frontend as live. The question is closed for the site.
+- **SysPlex screenshot:** a later release; the card and case study keep the diagram.
+- **Certificates:** stay as on the site (the evidence report's wording); the resume's longer names are not used.
+- **Orascom points:** unchanged (only the month moved to July, ISS-46 follow-up).
+- **UAT:** after v1.0.0 (ISS-09).
+- **Branch:** every edit to docs or code before v1.0.0 goes on one branch, `chore/release-v1` (cut from `feat/stage7-redesign` while its follow-up pull request was open, so it carries those commits until that merges).
+
+Result: `npm run check:launch -- --strict` passes ("no TODO(owner) items left"), so the production build can set `LAUNCH_STRICT=1`.
 ---
 
 # Closed
