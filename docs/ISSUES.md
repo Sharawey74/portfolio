@@ -807,6 +807,7 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 - **Certificates:** stay as on the site (the evidence report's wording); the resume's longer names are not used.
 - **Orascom points:** unchanged (only the month moved to July, ISS-46 follow-up).
 - **UAT:** after v1.0.0 (ISS-09).
+- **Site icon:** the owner's briefcase glyph replaces the old mark (`src/app/icon.svg`): drawn light on the dark tile so it stays visible in light and dark browser tabs. If the glyph came from an icon library, its licence may ask for attribution; the owner supplied it.
 - **Branch:** every edit to docs or code before v1.0.0 goes on one branch, `chore/release-1.0.0`, cut from `main` after #21 (an earlier local name, `chore/release-v1`, was never pushed).
 
 Result: `npm run check:launch -- --strict` passes ("no TODO(owner) items left"), so the production build can set `LAUNCH_STRICT=1`.
