@@ -21,6 +21,12 @@
  *   - light --g8 #707070 -> #666666. With #707070, text-3 measured 4.27:1 on
  *     the light card (#EEEEEE) and 4.00:1 on the light hover surface (#E7E7E7);
  *     #666666 gives 4.64:1 or better on every light surface.
+ *   - Stage 7.4.1 (docs/ISSUES.md ISS-43, owner note on a grey, washed-out
+ *     look): dark --g8 #858585 -> #949494 and --g9 #a3a3a3 -> #b8b8b8, light
+ *     --g8 #666666 -> #5c5c5c and --g9 #4d4d4d -> #404040 (secondary text one
+ *     step stronger in each theme); edges 0.19 / 0.11 -> 0.22 / 0.14 (dark)
+ *     and 0.16 / 0.09 -> 0.18 / 0.11 (light); grain 0.045 -> 0.02; cards on
+ *     an opaque fill; heading gradient ends at 75 % instead of 50 %.
  * The primitive blocks are parsed by the check scripts; keep their markers.
  */
 
@@ -34,12 +40,12 @@
   --g5: #262626;
   --g6: #3d3d3d;
   --g7: #5e5e5e;
-  --g8: #858585;
-  --g9: #a3a3a3;
+  --g8: #949494;
+  --g9: #b8b8b8;
   --g10: #d4d4d4;
   --g11: #f0f0f0;
-  --edge: rgba(214, 235, 253, 0.19);
-  --edge-soft: rgba(217, 237, 254, 0.11);
+  --edge: rgba(214, 235, 253, 0.22);
+  --edge-soft: rgba(217, 237, 254, 0.14);
   --break: #ff3b4e;
   --c1: #3a0810;
   --c2: #8e1428;
@@ -58,12 +64,12 @@
   --g5: #d4d4d4;
   --g6: #b8b8b8;
   --g7: #999999;
-  --g8: #666666;
-  --g9: #4d4d4d;
+  --g8: #5c5c5c;
+  --g9: #404040;
   --g10: #262626;
   --g11: #111111;
-  --edge: rgba(18, 30, 45, 0.16);
-  --edge-soft: rgba(18, 30, 45, 0.09);
+  --edge: rgba(18, 30, 45, 0.18);
+  --edge-soft: rgba(18, 30, 45, 0.11);
   --break: #c4152a;
   --c1: #f6e2e5;
   --c2: #a3142a;
@@ -86,12 +92,12 @@
     --g5: #d4d4d4;
     --g6: #b8b8b8;
     --g7: #999999;
-    --g8: #666666;
-    --g9: #4d4d4d;
+    --g8: #5c5c5c;
+    --g9: #404040;
     --g10: #262626;
     --g11: #111111;
-    --edge: rgba(18, 30, 45, 0.16);
-    --edge-soft: rgba(18, 30, 45, 0.09);
+    --edge: rgba(18, 30, 45, 0.18);
+    --edge-soft: rgba(18, 30, 45, 0.11);
     --break: #c4152a;
     --c1: #f6e2e5;
     --c2: #a3142a;
@@ -398,12 +404,12 @@
     translate: 0 0;
   }
 
-  /* Stage 7 (ISS-42). Gradient text: H1 and H2 only. The text color at 30 %
-     fading to half its opacity; the period and section indices keep --break
+  /* Stage 7 (ISS-42). Gradient text: H1 and H2 only. The full text color to
+     45 %, fading to 75 % opacity (50 % read as grey, ISS-43); the period and section indices keep --break
      through -webkit-text-fill-color on their own span. */
   .text-gradient,
   .text-gradient .w-i {
-    background-image: linear-gradient(to right bottom, var(--text-1) 30%, color-mix(in srgb, var(--text-1) 50%, transparent));
+    background-image: linear-gradient(to right bottom, var(--text-1) 45%, color-mix(in srgb, var(--text-1) 75%, transparent));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -413,12 +419,14 @@
     color: var(--break);
   }
 
-  /* Section card: 24 px radius, the stronger edge on top, a faint raised fill. */
+  /* Section card: 24 px radius, the stronger edge on top, a faint raised fill.
+     The fill is opaque (mixed with the page color) so the grain stays outside
+     cards (ISS-43). */
   .surface-card {
     border: 1px solid var(--edge-soft);
     border-top-color: var(--edge);
     border-radius: var(--radius-card);
-    background: color-mix(in srgb, var(--text-1) 2.5%, transparent);
+    background: color-mix(in srgb, var(--text-1) 3%, var(--surface-page));
   }
 
   /* Header: no bar, the page fades in behind it (Resend-style). */
@@ -1403,7 +1411,7 @@ button:not(:disabled),
   border: 1px solid var(--edge-soft);
   border-top-color: var(--edge);
   border-radius: var(--radius-card);
-  background: color-mix(in srgb, var(--text-1) 2.5%, transparent);
+  background: color-mix(in srgb, var(--text-1) 3%, var(--surface-page));
 }
 
 /* Open source and reported issues: status rows in one section card
@@ -1604,8 +1612,8 @@ html[data-motion="paused"] .xp-timeline::before {
    pre-rendered grayscale PNG tile (the SVG filter version cost ~300 ms of
    main thread at load, Stage 5), behind the content at low opacity and
    without blending (never over screenshots), one composited layer. The
-   hairline grid fades out over the first viewport of scroll (scroll
-   timeline; a static fade where unsupported or under reduced motion). */
+   hairline grid covers the first screen only and scrolls away with it.
+   */
 body {
   background: transparent;
 }
@@ -1617,6 +1625,12 @@ body {
   pointer-events: none;
 }
 .surface-grid {
+  /* Part of the first screen, not the viewport: it scrolls away with the
+     hero. As a fixed layer it faded on a scroll timeline, and under reduced
+     motion (no fade) its lines sat over every screen of the page (ISS-43). */
+  position: absolute;
+  inset-block: 0 auto;
+  height: 100svh;
   z-index: -1;
   background-image:
     linear-gradient(to right, var(--line-hair) 1px, transparent 1px),
@@ -1626,32 +1640,16 @@ body {
   opacity: 0.5;
   mask-image: linear-gradient(to bottom, black, transparent 85%);
 }
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: scroll()) {
-    @keyframes grid-fade {
-      to {
-        opacity: 0;
-      }
-    }
-    .surface-grid {
-      animation: grid-fade linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 100vh;
-    }
-  }
-}
-html[data-motion="paused"] .surface-grid {
-  animation-play-state: running !important;
-}
 .surface-vignette {
   z-index: -1;
   background: radial-gradient(ellipse at 50% 40%, transparent 55%, var(--g0) 120%);
 }
 .surface-grain {
   /* Behind the content: grain textures the page surface only, never the
-     screenshots or cards on top of it. */
+     screenshots or cards on top of it. At 0.045 it lifted black to an
+     average of (6, 6, 6) and read as haze; 0.02 keeps the texture (ISS-43). */
   z-index: -1;
-  opacity: 0.045;
+  opacity: 0.02;
   background-image: url("/textures/grain.png");
   background-size: 160px 160px;
 }
