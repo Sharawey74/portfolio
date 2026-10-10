@@ -80,7 +80,6 @@ export const experience = experienceSchema.parse({
       end: "2026-07",
       points: [
         { text: "CCNA-aligned networking: routing, VLAN segmentation, NAT, IP addressing, switching.", source: APPROVED, asOf: VERIFIED },
-        { text: "Copper and fiber cabling.", source: APPROVED, asOf: VERIFIED },
         { text: "Guided data-center rack walkthrough: firewall, servers, UPS.", source: APPROVED, asOf: VERIFIED },
       ],
       projects: [],
