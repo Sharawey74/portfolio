@@ -17,6 +17,7 @@ file and a date.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
 - **Brief changes from review round 1** (owner, 2026-10-08, `docs/ISSUES.md` ISS-12 to ISS-25) are applied below: the hero copy, a three-step accent ramp instead of one accent, pill buttons, Hanken Grotesk for interface labels, brand icons, color screenshots. A later change to these rules follows the same path: decision recorded in `docs/ISSUES.md` first, then this file in the same branch as the code.
+- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. The visual system below still applies until the Stage 7 foundation branch rewrites it; nothing is copied from either site. The first step is an HTML mock-up for the owner's approval.
 
 ## Source of truth and honesty rules (highest priority)
 
