@@ -16,13 +16,15 @@ export function PauseToggle({ labels }: { labels: { pause: string; play: string 
       type="button"
       role="switch"
       aria-checked={paused}
+      title={labels.pause}
       onClick={() => setPaused(!paused)}
       className="ui-label inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-pill px-3 text-ink-2 transition-colors duration-200 ease-out hover:bg-hover hover:text-ink"
     >
       <span aria-hidden="true" className="switch-track">
         <span className="switch-knob" />
       </span>
-      <span className="max-md:sr-only">{labels.pause}</span>
+      {/* Visible from 1536 px; below, the header has room for the switch only. */}
+      <span className="max-2xl:sr-only">{labels.pause}</span>
     </button>
   );
 }
