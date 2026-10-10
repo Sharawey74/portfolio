@@ -64,6 +64,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-45 | Owner review 2: the announcement pill should answer on hover like the direct-link pills; the closing glow should match the mock-up's red exactly; every card should be animated and reactive with the pill's circling red edge | Medium | Decided | Owner decisions 2026-10-10: the arc on every card on hover and keyboard focus (not always on), the pill keeps its arc and gains the hover; implemented the same day | — |
 | ISS-46 | The resume PDF and the Download Resume button | Medium | Decided | Owner decision 2026-10-10: no resume on the site. The button is removed (`personal.resumePdf` withheld); the PDF briefly added that day was never pushed and was dropped from the branch history before any push | — |
 | ISS-47 | Owner decisions for v1.0.0: the remaining personal fields, the capstone, the Railway API question, the SysPlex screenshot, the certificates, UAT timing and the branch for pre-release edits | Medium | Decided | 2026-10-10: phone, portrait, location, bio, availability and GPA withheld (not shown); capstone stays hidden; no Railway API link (frontend only, as now); SysPlex screenshot in a later release; certificates stay as they are; UAT after v1.0.0 (ISS-09); every edit before v1.0.0 on one branch, `chore/release-1.0.0` | — |
+| ISS-48 | The Eventora "Limits" lines, the "Frontend only" note and the footer title "Elsewhere" do not suit the site (owner) | Low | Decided | 2026-10-10: Eventora shows no Limits section and no note beside its Frontend link; the footer column is "Social". The honesty rules still hold: the API is never called live, and the Railway figures keep "read path" | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -811,6 +812,12 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 - **Branch:** every edit to docs or code before v1.0.0 goes on one branch, `chore/release-1.0.0`, cut from `main` after #21 (an earlier local name, `chore/release-v1`, was never pushed).
 
 Result: `npm run check:launch -- --strict` passes ("no TODO(owner) items left"), so the production build can set `LAUNCH_STRICT=1`.
+
+### ISS-48 Eventora limits, the frontend note and the footer title
+
+**Severity** Low. **Status** Decided 2026-10-10 (owner, with a screenshot of the Limits section).
+
+The owner found the two Eventora limits ("The hosted API answered 404 …", "The Railway ramp exercised the read path only …") and the "Frontend only" note not suitable, and asked for "Elsewhere" to become "social or contact". Done: Eventora's `caveats` is empty (so its case study has no Limits heading), the Frontend link has no note, and the footer column reads "Social" ("Contact" is already a section name). What still keeps the facts honest: only the frontend is linked as live (the banned "live API" claim stays banned), and every Railway figure carries "read path" in its own qualifier. Recruiter-Pro, SysPlex and LexIntelligence keep their limits.
 ---
 
 # Closed
