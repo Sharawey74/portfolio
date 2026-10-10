@@ -508,3 +508,17 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 320 and 375 on all four pages, both themes; on phones the slider dots stack above the caption (they squeezed it at 375) |
 | `performance` | Pass | `/` first-load JS 157.5 KB gz (budget 170); the tabs and filter receive server-rendered nodes, so no data file (or Zod) is shipped to the client |
 | `smoke` | Pass | 21/21, with a new test for the tabs and the filter |
+
+
+## Stage 7.4.1, contrast and clarity (2026-10-10, ISS-43)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `color-contrast` | Fixed | Secondary text `--text-2` #A3A3A3 → #B8B8B8 dark, #4D4D4D → #404040 light; `--text-3` #858585 → #949494 dark, #666666 → #5C5C5C light. `npm run check:contrast`: tightest margin 1.09x dark, 1.08x light (was 1.03x); text-3 on the hover surface 6.18:1 dark, 5.71:1 light (was 5.08 and 4.90) |
+| `background-depth` | Fixed | Page black sampled from pixels at four scrolled positions: average (6, 6, 6), brightest 11 → (3, 3, 3), brightest 5; light white 249 → 252. Grain 0.045 → 0.02 (texture kept) |
+| `surface-separation` | Fixed | Cards on an opaque fill (text color mixed into the page color), so the grain no longer shows through them; edges 0.19 / 0.11 → 0.22 / 0.14 (dark), 0.16 / 0.09 → 0.18 / 0.11 (light) |
+| `typography-hierarchy` | Fixed | Section H2 gradient: full color to 45 %, ending at 75 % (was 30 % → 50 %, the end about #787878 on black) |
+| `reduced-motion` | Fixed | The M12 grid stayed at 0.5 over every screen under reduced motion (it faded only on a scroll timeline). It is now an absolute first-screen layer and scrolls away for every visitor; probe: its bottom is above the viewport once scrolled, in all four theme × motion modes |
+| `image-fidelity` | Pass | Active Eventora slide rendered at (223, 221, 230) average against (225, 222, 231) in the original file; no filter, opacity or blend above any screenshot |
+| `overlays` | Pass | After every reveal, only the hero glow, the hidden card spotlight, the first-screen grid and the grain are translucent; no text sits under opacity, filter or blend |
+| `horizontal-scroll` | Pass | `scrollWidth` = viewport at 1440 and 375, both themes, motion on and reduced; smoke 21/21; `/` 157.5 KB gz |
