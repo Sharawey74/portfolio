@@ -67,7 +67,7 @@ All copy lives in typed data files. Components contain no copy. Updating the sit
 | `src/data/profile.ts` | Approved hero copy, section indices, site meta |
 | `src/data/projects.ts` | Five projects: eventora (flagship), recruiter-pro, sysplex (case studies), lexintelligence, phishsniffer (secondary grid) |
 | `src/data/oss.json` + `oss.ts` | PR snapshot (fallback for the ISR refresh) and `ossSummary()` |
-| `src/data/experience.ts` | Two internships, AASTMT, four undated certifications, hidden capstone TODO |
+| `src/data/experience.ts` | Three internships (Alstom, Orascom, Telecom Egypt), AASTMT, five undated certification entries, hidden capstone TODO |
 | `src/data/skills.ts` | Tech chips by lane with `usedIn` validated against project slugs |
 
 Data files import each other with explicit `.ts` extensions (`import { claim } from "./schema.ts"`) so Node can run the check scripts with native type stripping. `tsconfig.json` sets `allowImportingTsExtensions`; keep it.
