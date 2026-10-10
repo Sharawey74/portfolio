@@ -775,6 +775,8 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 **Decisions** (owner, via the question card): the circling edge runs on every card while it is hovered or holds keyboard focus (recommended option; always-on for every card would have broken the three-animating-regions rule); the pill keeps its circling arc and gains the hover.
 
 **Done.** Pill: lifts 1 px, its edge and fill brighten, the arrow nudges 4 px. Glow: the mock-up's orb (radial accent to 42 %, 40 px blur, 900 × 420, opacity pulsing 0.75 to 1 over 6 s ease-in-out; 0.18 when still), only while on screen, stopped by the pause. Cards (`.surface-card`, `.bento-cell`, `.figure-grid`, the case-study evidence grid): a 1 px ring masked to the border with the pill's conic arc, turning every 6 s on hover or focus (a registered `--arc` angle, so only the hovered card repaints; still under reduced motion), plus a 2 px lift. The scroll-in rise moved from `translate` to `transform` so the lift is not overridden. Checks: closing pill text over the red 5.84:1 or more (light) and about 10:1 (dark); smoke 21/21; `/` 157.4 KB. `CLAUDE.md` accent rules updated in the same branch.
+
+**Follow-up, same day.** The owner asked for the buttons too (screenshots of View My Work, Download Resume, Case study, Source). Every `.btn` pill (hero CTAs, Case study, Source, the closing link pills, the contact submit) now shows the circling edge on hover and keyboard focus, lifts 1 px and nudges its arrow; Source became a pill button. Disabled buttons do not react (Download Resume stays disabled until the resume PDF exists). Orascom set to July 2026 only by the owner (resume over report; `FACTS-CHECK.md`).
 ---
 
 # Closed
