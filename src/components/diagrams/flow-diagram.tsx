@@ -177,7 +177,7 @@ export function FlowDiagram({ slug, flow, labels }: { slug: string; flow: Flow; 
 
   return (
     <div ref={figure} className="flow flex flex-col gap-6" data-drawn={drawn ? "" : undefined}>
-      <div className="flow-canvas overflow-x-auto border border-hair bg-raised" data-lenis-prevent>
+      <div className="flow-canvas overflow-x-auto rounded-inner border border-hair bg-raised" data-lenis-prevent>
         <svg
           viewBox={`0 0 ${layout.width} ${layout.height}`}
           className="block h-auto w-full min-w-[640px]"
