@@ -6,11 +6,17 @@ import { subscribe } from "@/lib/motion/scheduler.ts";
 /**
  * The hero core's sphere (ISS-51), loaded on idle by HeroCore. The owner's
  * mock-up drew it with Three.js; this draws the same scene on a 2D canvas, so
- * no 3D library ships: a geodesic sphere (icosahedron, each edge in three) at
- * radius 4.8, an inner one (each edge in two) at 3.6, four planar rings from
- * 1.8 to 5.7, 140 particles between radius 2.5 and 6 and a pulsing core,
- * seen by a 45 degree camera 18 units away. Wireframe only, so draw order
- * does not matter and each layer is one path.
+ * no 3D library ships (about 150 KB gz, more with a bloom pass):
+ * - a "geodesic 2-frequency" sphere (Three.js IcosahedronGeometry detail 2:
+ *   each icosahedron edge in three) at radius 4.8, and an inner one (detail
+ *   1) at 3.6, turning on their own axes;
+ * - four planar rings from 1.8 to 5.7, and a white node orbiting the outer one;
+ * - 260 particles between radius 2.5 and 6, sizes and brightness varied;
+ * - a pulsing core with a red bloom, which also lights the inner sphere;
+ * - the group set 4.5 units right of centre, so the column edge cuts it, and
+ *   leaning toward the mouse with inertia (Euler XYZ, eased 5 % a frame).
+ * Seen by a 45 degree camera 18 units away. Depth stands in for lighting and
+ * occlusion: edges are sorted into bands by depth, and the far ones fade.
  */
 
 type Vec = [number, number, number];
@@ -19,6 +25,8 @@ const CAMERA_Z = 18;
 const FOCAL = 1 / Math.tan((22.5 * Math.PI) / 180);
 const LEAN = 0.8;
 const EASE = 0.05;
+const OFFSET_X = 4.5;
+const BANDS = 5;
 
 /** Unique edges of an icosahedron with each edge split in `n`, on a sphere. */
 function geodesic(radius: number, n: number): { points: Vec[]; edges: [number, number][] } {
@@ -97,6 +105,13 @@ function particles(count: number): Vec[] {
   });
 }
 
+/** A token's hex value with alpha, for canvas gradients. */
+function alpha(hex: string, a: number): string {
+  const x = hex.replace("#", "");
+  const n = parseInt(x.length === 3 ? [...x].map((c) => c + c).join("") : x.slice(0, 6), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+}
+
 /** Euler XYZ, as Three.js applies it: z first, then y, then x. */
 function rotate([x, y, z]: Vec, rx: number, ry: number, rz: number): Vec {
   let c = Math.cos(rz);
@@ -114,7 +129,8 @@ function rotate([x, y, z]: Vec, rx: number, ry: number, rz: number): Vec {
 const OUTER = geodesic(4.8, 3);
 const MID = geodesic(3.6, 2);
 const RINGS = rings();
-const CLOUD = particles(140);
+const CLOUD = particles(260);
+const CLOUD_LOOK = CLOUD.map((_, i) => ({ size: 0.06 + ((i * 37) % 9) / 100, alpha: 0.35 + ((i * 53) % 11) / 20 }));
 
 export default function HeroCoreCanvas({ active, still, tilt }: { active: boolean; still: boolean; tilt: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -134,12 +150,15 @@ export default function HeroCoreCanvas({ active, still, tilt }: { active: boolea
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
     let color = "";
+    let node = "";
     let w = 0;
     let h = 0;
     const st = state.current;
 
     const readColor = () => {
-      color = getComputedStyle(canvas).getPropertyValue("--break").trim();
+      const css = getComputedStyle(canvas);
+      color = css.getPropertyValue("--break").trim();
+      node = css.getPropertyValue("--text-1").trim();
     };
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -155,28 +174,51 @@ export default function HeroCoreCanvas({ active, still, tilt }: { active: boolea
       if (!w || !h) return;
       const scale = (h / 2) * FOCAL;
       const [gx, gy] = st.group;
-      const project = (v: Vec, own: Vec): [number, number, number] => {
+      // [screen x, screen y, perspective factor, depth 0 (far) to 1 (near)]
+      const project = (v: Vec, own: Vec): [number, number, number, number] => {
         const [x, y, z] = rotate(rotate(v, own[0], own[1], own[2]), gx, gy, 0);
         const k = scale / (CAMERA_Z - z);
-        return [w / 2 + x * k, h / 2 - y * k, k];
+        return [w / 2 + (x + OFFSET_X) * k, h / 2 - y * k, k, (z + 6) / 12];
       };
       ctx.clearRect(0, 0, w, h);
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
       ctx.lineWidth = 1;
+      const [cx, cy, ck] = project([0, 0, 0], [0, 0, 0]);
+      const pulse = 1 + Math.sin(st.time * 3) * 0.15;
 
-      const mesh = ({ points, edges }: typeof OUTER, own: Vec, alpha: number) => {
+      // Bloom and the core's light on the inner sphere: a soft red disc under
+      // the wireframes, added onto what is behind it.
+      ctx.globalCompositeOperation = "lighter";
+      const bloom = ctx.createRadialGradient(cx, cy, 0, cx, cy, 3.6 * ck);
+      bloom.addColorStop(0, alpha(color, 0.55));
+      bloom.addColorStop(0.35, alpha(color, 0.18));
+      bloom.addColorStop(1, alpha(color, 0));
+      ctx.globalAlpha = 0.9;
+      ctx.fillStyle = bloom;
+      ctx.fillRect(cx - 3.6 * ck, cy - 3.6 * ck, 7.2 * ck, 7.2 * ck);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = color;
+
+      const mesh = ({ points, edges }: typeof OUTER, own: Vec, near: number, far: number) => {
         const p = points.map((v) => project(v, own));
-        ctx.globalAlpha = alpha;
-        ctx.beginPath();
-        for (const [a, b] of edges) {
-          ctx.moveTo(p[a]![0], p[a]![1]);
-          ctx.lineTo(p[b]![0], p[b]![1]);
+        const bands: [number, number][][] = Array.from({ length: BANDS }, () => []);
+        for (const e of edges) {
+          const d = (p[e[0]]![3] + p[e[1]]![3]) / 2;
+          bands[Math.min(BANDS - 1, Math.max(0, Math.floor(d * BANDS)))]!.push(e);
         }
-        ctx.stroke();
+        bands.forEach((band, i) => {
+          ctx.globalAlpha = far + ((near - far) * i) / (BANDS - 1);
+          ctx.beginPath();
+          for (const [a, b] of band) {
+            ctx.moveTo(p[a]![0], p[a]![1]);
+            ctx.lineTo(p[b]![0], p[b]![1]);
+          }
+          ctx.stroke();
+        });
       };
-      mesh(OUTER, st.outer, 0.22);
-      mesh(MID, st.mid, 0.4);
+      mesh(OUTER, st.outer, 0.5, 0.08);
+      mesh(MID, st.mid, 0.6, 0.15);
 
       ctx.globalAlpha = 0.35;
       ctx.beginPath();
@@ -189,17 +231,31 @@ export default function HeroCoreCanvas({ active, still, tilt }: { active: boolea
       }
       ctx.stroke();
 
-      ctx.globalAlpha = 0.8;
-      for (const v of CLOUD) {
-        const [x, y, k] = project(v, [0, st.cloud, 0]);
-        const size = 0.12 * k;
+      CLOUD.forEach((v, i) => {
+        const [x, y, k, d] = project(v, [0, st.cloud, 0]);
+        const look = CLOUD_LOOK[i]!;
+        const size = look.size * k;
+        ctx.globalAlpha = look.alpha * (0.45 + 0.55 * d);
         ctx.fillRect(x - size / 2, y - size / 2, size, size);
-      }
+      });
 
-      const [cx, cy, k] = project([0, 0, 0], [0, 0, 0]);
       ctx.globalAlpha = 1;
       ctx.beginPath();
-      ctx.arc(cx, cy, 0.55 * (1 + Math.sin(st.time * 3) * 0.15) * k, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 0.55 * pulse * ck, 0, Math.PI * 2);
+      ctx.fill();
+
+      // The white node on the outer ring, with a small halo.
+      const a = st.time * 0.35;
+      const r = RINGS[RINGS.length - 1]![0]![0];
+      const [nx, ny, nk] = project([Math.cos(a) * r, Math.sin(a) * r, 0], [0, 0, 0]);
+      const halo = ctx.createRadialGradient(nx, ny, 0, nx, ny, 0.5 * nk);
+      halo.addColorStop(0, alpha(node, 0.7));
+      halo.addColorStop(1, alpha(node, 0));
+      ctx.fillStyle = halo;
+      ctx.fillRect(nx - 0.5 * nk, ny - 0.5 * nk, nk, nk);
+      ctx.fillStyle = node;
+      ctx.beginPath();
+      ctx.arc(nx, ny, 0.09 * nk, 0, Math.PI * 2);
       ctx.fill();
     };
 
