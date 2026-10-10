@@ -46,7 +46,7 @@ export function FigureGrid({ prs }: { prs: PullRequest[] }) {
   return (
     <section aria-labelledby="figures" className="grid-12 gap-y-12 py-24 md:py-32">
       <RevealText as="h2" id="figures" text={figures.title.text} className="col-span-full max-w-[18ch] font-heading text-section text-gradient md:col-span-10 md:col-start-2" />
-      <dl className="figure-grid col-span-full md:col-span-10 md:col-start-2">
+      <dl className="figure-grid rise col-span-full md:col-span-10 md:col-start-2">
         {items.map((f) => {
           const href = sourceHref(f.source);
           return (

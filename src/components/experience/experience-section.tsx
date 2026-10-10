@@ -70,7 +70,7 @@ export function ExperienceSection() {
         </ol>
       </div>
 
-      <div className="col-span-full grid gap-5 md:col-span-10 md:col-start-2 md:grid-cols-10">
+      <div className="rise-group col-span-full grid gap-5 md:col-span-10 md:col-start-2 md:grid-cols-10">
         <div className="surface-card flex flex-col gap-4 p-6 md:col-span-5 md:p-7">
           <MonoLabel>{t.education}</MonoLabel>
           <ul className="flex flex-col">

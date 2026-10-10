@@ -27,7 +27,7 @@ export function ContactSection() {
       </div>
 
       {configured ? (
-        <div className="surface-card col-span-full p-6 md:col-span-6 md:col-start-6 md:p-8">
+        <div className="surface-card rise col-span-full p-6 md:col-span-6 md:col-start-6 md:p-8">
           <ContactForm
             labels={{
               name: t.name,

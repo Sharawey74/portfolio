@@ -56,7 +56,7 @@ export function OssSection({ prs, live }: { prs: PullRequest[]; live: boolean })
     <section aria-labelledby="open-source" className="grid-12 gap-y-16 py-24 md:py-32">
       <SectionHeading id="open-source" index={section.index} title={section.title} />
 
-      <div className="col-span-full flex flex-col gap-3 md:col-span-10 md:col-start-2" title={`${ui.source}: ${s.source} (${ui.asOf} ${s.asOf})`}>
+      <div className="rise col-span-full flex flex-col gap-3 md:col-span-10 md:col-start-2" title={`${ui.source}: ${s.source} (${ui.asOf} ${s.asOf})`}>
         <OssFilter
           label={t.filter}
           labels={{ all: t.all, merged: ui.statusMerged, open: ui.statusOpen }}
@@ -71,7 +71,7 @@ export function OssSection({ prs, live }: { prs: PullRequest[]; live: boolean })
       </div>
 
       {oss.issues.length > 0 ? (
-        <div className="col-span-full flex flex-col gap-4 md:col-span-10 md:col-start-2">
+        <div className="rise col-span-full flex flex-col gap-4 md:col-span-10 md:col-start-2">
           <MonoLabel>{t.issues}</MonoLabel>
           <ul className="surface-card overflow-clip">
             {oss.issues.map((i) => (
