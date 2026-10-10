@@ -477,3 +477,17 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `font-loading` | Fixed | Inter's x-height, inherited through `font-size-adjust: from-font`, scaled the H1 about 20 % and clipped "Abdelrhman" at 375 px. Recomputed per face; the H1's words now end at 294 px (375) and 250 px (320) |
 | `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375 and 320 on `/`; smoke tests 20/20 |
 | `performance` | Pass | First-load JS on `/` 157.5 KB gz (budget 170); heading and mono faces not preloaded, so the preloads stay Newsreader and Inter |
+
+
+## Stage 7.3, hero (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `reduced-motion` | Pass | The H1 blur, pill and figures fades are under `data-reveal` (static without motion); the pill arc, its dot and the hero light have `animation: none` under `prefers-reduced-motion`; figures render their final value in the server HTML |
+| `pause-control` | Pass | The arc, dot and light are loops and stop with the global pause; the pill's and figures' one-shot fades are on the exemption list so paused visitors never get stranded hidden text |
+| `color-not-only` | Pass | The pill's red dot and arc are decoration; the text carries the meaning |
+| `touch-target-size` | Accepted | The pill is about 38 px tall (Resend-like proportion); it duplicates the Open source nav link and the palette entry |
+| `layout-shift` | Pass | Local Lighthouse CLS 0.002 on `/`, 0.004 on SysPlex |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375; the pill wraps to two lines at 375 instead of overflowing; smoke 20/20 |
+| `nav-fits` | Fixed | With the Contact pill and the switch the five links wrapped at 1024 and 1440 px. Links start at 1280 px (`xl`), their numbers and the switch label at 1536 px; checked at 1024, 1280, 1440, 1600 |
+| `performance` | Pass | `/` first-load JS 156.8 KB gz (was 157.5 KB: the node-graph canvas host is no longer loaded); the light is CSS only. Preloaded fonts 177 KB (Inter, Newsreader; was 203 KB with three faces). Local LCP not comparable to earlier runs (CPU benchmark 1,887–2,069 against about 3,100); the Vercel preview run decides (ISS-36) |
