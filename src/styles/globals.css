@@ -1999,14 +1999,14 @@ html[data-motion="paused"] :is(.rise, .rise-group > *) {
   }
 }
 
-/* Buttons share the cards' circling accent edge while hovered or focused
+/* Buttons, and since ISS-49 the small pills, share the cards' circling accent edge while hovered or focused
    (owner, 2026-10-10, ISS-45): every pill with .btn (hero CTAs, Case study,
    Source, the closing link pills, the contact submit). Disabled buttons do
    not react. The outward arrow nudges up and right like the others. */
-.btn {
+:is(.btn, .chip, .status-pill, .pill-option) {
   position: relative;
 }
-.btn::after {
+:is(.btn, .chip, .status-pill, .pill-option)::after {
   content: "";
   position: absolute;
   inset: -1px;
@@ -2020,7 +2020,7 @@ html[data-motion="paused"] :is(.rise, .rise-group > *) {
   pointer-events: none;
   transition: opacity var(--dur-2) var(--ease-out);
 }
-.btn:not(:disabled, [aria-disabled="true"]):is(:hover, :focus-visible)::after {
+:is(.btn, .chip, .status-pill, .pill-option):not(:disabled, [aria-disabled="true"]):is(:hover, :focus-visible)::after {
   opacity: 1;
   animation: arc-turn 3s linear infinite;
 }
@@ -2032,7 +2032,26 @@ html[data-motion="paused"] :is(.rise, .rise-group > *) {
   transition: translate var(--dur-1) var(--ease-out);
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn:is(:hover, :focus-visible)::after {
+  :is(.btn, .chip, .status-pill, .pill-option):is(:hover, :focus-visible)::after {
     animation: none;
+  }
+}
+
+/* Small pills (tech chips, status badges, tab and filter pills) react like
+   the cards (owner, 2026-10-10, ISS-49): the accent edge above, and a 1 px
+   lift on hover for fine pointers. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(.chip, .status-pill) {
+    transition:
+      translate var(--dur-1) var(--ease-out),
+      border-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out);
+  }
+  :is(.chip, .status-pill):hover {
+    translate: 0 -1px;
+  }
+  .chip:hover {
+    border-color: var(--line-strong);
+    color: var(--text-1);
   }
 }
