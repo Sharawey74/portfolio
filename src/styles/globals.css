@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* Docs hold reference mock-ups (HTML with their own classes and colors): never
+   compile their classes into the site. */
+@source not "../../docs";
 
 /*
  * Design tokens (Stage 7 values, docs/ISSUES.md ISS-42: a black page, a
@@ -796,75 +799,129 @@ html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .
   }
 }
 
-/* Hero light: glow, rays, two rings and a core. Loops stop with the pause;
-   static under reduced motion. */
-.hero-light {
+/* Hero core (owner's mock-up, 2026-10-11, ISS-51): the reticle and the accent
+   emitter in CSS; the canvas sphere (hero-core-canvas.tsx) sits between them.
+   Ring sizes are the mock-up's 540 / 420 / 300 / 150 px over a 620 px column,
+   as shares of the box. The loops run only while the box is on screen
+   (data-visible), stop with the pause, and are still under reduced motion. */
+.hero-core {
   position: relative;
   width: 100%;
-  max-width: 30rem;
+  max-width: 34rem;
   aspect-ratio: 1;
   margin-inline-start: auto;
 }
-.hero-light > span {
+.hero-core > span {
   position: absolute;
+  inset: 0;
+  margin: auto;
   border-radius: 50%;
 }
-.hero-light-glow {
+.hero-core-bloom {
+  inset: -20% !important;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 22%, transparent) 0%, color-mix(in srgb, var(--break) 6%, transparent) 42%, transparent 72%);
+  filter: blur(4rem);
+  opacity: 0.75;
+}
+.hero-core-ring {
+  border: 1px solid color-mix(in srgb, var(--text-1) 4%, transparent);
+}
+.hero-core-ring-1 {
+  width: 87%;
+  height: 87%;
+  opacity: 0.85;
+  animation: core-pulse 4s ease-in-out infinite;
+}
+.hero-core-ring-2 {
+  width: 68%;
+  height: 68%;
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--text-1) 6%, transparent);
+}
+.hero-core-ring-3 {
+  width: 48%;
+  height: 48%;
+  border-color: color-mix(in srgb, var(--break) 20%, transparent);
+}
+.hero-core-ring-4 {
+  width: 24%;
+  height: 24%;
+  border-color: color-mix(in srgb, var(--break) 30%, transparent);
+}
+.hero-core-axis {
+  width: 103%;
+  height: 1px;
+  border-radius: 0 !important;
+  background: color-mix(in srgb, var(--text-1) 4%, transparent);
+}
+.hero-core-axis-v {
+  width: 1px;
+  height: 103%;
+}
+.hero-core-axis-d1,
+.hero-core-axis-d2 {
+  width: 84%;
+  background: color-mix(in srgb, var(--text-1) 2.5%, transparent);
+  rotate: 45deg;
+}
+.hero-core-axis-d2 {
+  rotate: -45deg;
+}
+.hero-core-tick {
+  width: 3rem;
+  height: 3rem;
+  inset: 0 auto 0 -1.5rem !important;
+  border: 1px solid var(--edge-soft);
+}
+.hero-core-canvas {
+  position: absolute;
   inset: 0;
-  background: radial-gradient(circle, color-mix(in srgb, var(--break) 60%, transparent) 0, transparent 45%);
-  filter: blur(2.5rem);
-  opacity: 0.4;
-  animation: hero-pulse 6s ease-in-out infinite;
+  width: 100%;
+  height: 100%;
+  animation: fade-in var(--dur-3) var(--ease-out);
 }
-.hero-light-rays {
-  inset: 8%;
-  background: repeating-conic-gradient(from 0deg, transparent 0 9deg, color-mix(in srgb, var(--text-1) 9%, transparent) 9.5deg, transparent 10.5deg);
-  -webkit-mask: radial-gradient(circle, #000 0, transparent 68%);
-  mask: radial-gradient(circle, #000 0, transparent 68%);
-  animation: hero-spin 60s linear infinite;
+.hero-core-emitter {
+  width: 0.875rem;
+  height: 0.875rem;
+  background: radial-gradient(circle, var(--break) 0 45%, color-mix(in srgb, var(--break) 40%, transparent) 70%, transparent 72%);
+  opacity: 0.6;
+  animation: core-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
-.hero-light-ring {
-  inset: 18%;
-  border: 1px solid var(--edge);
-  animation: hero-drift 9s ease-in-out infinite;
+.hero-core-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--text-1);
 }
-.hero-light-ring-inner {
-  inset: 30%;
-  border-color: var(--edge-soft);
-  animation-duration: 12s;
-  animation-direction: reverse;
-}
-.hero-light-core {
-  inset: calc(50% - 0.4375rem);
-  background: radial-gradient(circle, var(--text-1) 0 40%, var(--break) 70%, transparent 72%);
-  animation: hero-pulse 3s ease-in-out infinite;
-}
-.hero-light-core::after {
+.hero-core-dot::after {
   content: "";
   position: absolute;
-  inset: -2rem;
+  inset: -0.75rem;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--break) 45%, transparent) 0, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 55%, transparent) 0, transparent 70%);
 }
-:root[data-theme="light"] .hero-light-glow {
-  opacity: 0.25;
+.hero-core:not([data-visible]) > span {
+  animation-play-state: paused;
 }
-@keyframes hero-pulse {
+:root[data-theme="light"] .hero-core-bloom {
+  opacity: 0.45;
+}
+@keyframes core-pulse {
   50% {
-    opacity: 0.85;
-    scale: 1.08;
+    opacity: 1;
+    scale: 1.04;
   }
 }
-@keyframes hero-drift {
-  50% {
-    rotate: 8deg;
-    scale: 1.04;
+@keyframes core-ping {
+  75%,
+  100% {
+    scale: 2;
+    opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-pill::before,
   .hero-pill-dot,
-  .hero-light > span {
+  .hero-core > span {
     animation: none;
   }
   .hero-pill {
@@ -873,9 +930,12 @@ html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .
 }
 
 /* H1 words pinned to measured widths during the weight effect: center the
-   glyphs so a heavier word grows evenly into the word gap. */
+   glyphs so a heavier word grows evenly into the word gap. Each letter is an
+   inline-block (ISS-50), which lets a line break between letters: keep every
+   word whole (at 1024 px "Abdelrhman" broke after "Abdel", ISS-51). */
 .hero-h1 .w {
   text-align: center;
+  white-space: nowrap;
 }
 
 /* M1 intro: counter 000 -> 100 (800 ms), a 300 ms hold, then a 400 ms
