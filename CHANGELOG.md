@@ -10,7 +10,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
-## [1.0.0] - 2026-10-10
+## [1.0.0] - 2026-10-11
 
 First tagged release and launch. It collects everything since 0.6.0: the release tooling (Stage 6), the Stage 7 redesign (pull requests #20 and #21) and the pre-release decisions (`docs/ISSUES.md` ISS-47). Measured on the Vercel preview: accessibility and best practices 100, TBT 30–82 ms, CLS 0.002–0.005; Speed Insights Real Experience Score 100 at p75 (desktop).
 
