@@ -237,21 +237,12 @@ export const projects = z.array(projectSchema).parse([
     ],
     links: [
       { label: "Source", href: "https://github.com/Sharawey74/Event-Ticketing-Platform", kind: "repo", status: 200, source: "curl probe", asOf: VERIFIED },
-      { label: "Frontend", href: "https://event-ticketing-platform-nu.vercel.app", kind: "live", status: 200, note: "Frontend only", source: "curl probe", asOf: VERIFIED },
+      { label: "Frontend", href: "https://event-ticketing-platform-nu.vercel.app", kind: "live", status: 200, source: "curl probe", asOf: VERIFIED },
       { label: "Project site", href: "https://sharawey74.github.io/Event-Ticketing-Platform/", kind: "site", status: 200, source: "curl probe", asOf: VERIFIED },
     ],
-    caveats: [
-      {
-        text: "The hosted API answered 404 on every probed path on 2026-10-06, so only the frontend is linked as live.",
-        source: "evidence-report.md:113",
-        asOf: VERIFIED,
-      },
-      {
-        text: "The Railway ramp exercised the read path only (browse and search); no run above 200 VUs is recorded.",
-        source: "Event-Ticketing-Platform/PERFORMANCE.md:265-275",
-        asOf: "2026-07-04",
-      },
-    ],
+    // Limits are not shown for Eventora (owner, 2026-10-10, ISS-48); the
+    // figures keep their "read path" and "local, Docker Compose" qualifiers.
+    caveats: [],
     flow: {
       caption: "Reservation flow, concurrency-critical path",
       source: "Event-Ticketing-Platform/README.md:118-148",
