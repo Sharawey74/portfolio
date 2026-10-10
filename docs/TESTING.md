@@ -178,7 +178,7 @@ For blocking time, record a Chrome trace over the DevTools protocol at 4× CPU a
   - `pre-commit`: one file per commit (up to four for one identical change);
   - `commit-msg`: a Conventional Commits subject of at most 72 characters, with no AI attribution;
   - `pre-push`: never deletes a remote branch; only docs go directly to `main`.
-- **Commit lint before a PR:** `gitflow.sh lint origin/main` checks every commit on the branch against the same rules. Latest: 62 commits, all within the rules.
+- **Commit lint before a PR:** `gitflow.sh lint origin/main` checks every commit on the branch against the same rules; the PR description quotes its result.
 - **Release dry run:** before tagging, run the `awk` from `release.yml` on `CHANGELOG.md` to confirm it extracts the `## [x.y.z]` section, and confirm `package.json` has the same version. The release workflow fails otherwise.
 
 ## 5. Reviews by a person
