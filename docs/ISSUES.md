@@ -62,7 +62,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
 | ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002). Watch the Stage 7 PR preview (Lighthouse CI fails on CLS) and Speed Insights; if it recurs, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
 | ISS-45 | Owner review 2: the announcement pill should answer on hover like the direct-link pills; the closing glow should match the mock-up's red exactly; every card should be animated and reactive with the pill's circling red edge | Medium | Decided | Owner decisions 2026-10-10: the arc on every card on hover and keyboard focus (not always on), the pill keeps its arc and gains the hover; implemented the same day | — |
-| ISS-46 | Publish the owner's resume PDF as given | Medium | Decided | Owner decision 2026-10-10: `public/resume.pdf` is the owner's own document, exempt from the facts rules and the private-terms list; it contains the phone number, the GPA and wording the site does not use (XGBoost, 95%+, 50+ features, 130+ tests, LangChain for Recruiter-Pro, OAuth 2.0, MySQL, Microservices, CQRS), now public by the owner's choice | — |
+| ISS-46 | The resume PDF and the Download Resume button | Medium | Decided | Owner decision 2026-10-10: no resume on the site. The button is removed (`personal.resumePdf` withheld); the PDF briefly added that day was never pushed and was dropped from the branch history before any push | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -781,11 +781,13 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 
 ### ISS-46 The resume PDF ships as the owner's own document
 
-**Severity** Medium (public, permanent once pushed). **Status** Decided by the owner, 2026-10-10.
+**Severity** Medium (public, permanent once pushed). **Status** Decided by the owner, 2026-10-10: removed.
 
 **What.** The owner supplied `Abdelrahman_Resume.pdf` (2 pages) for the Download Resume button. Before publishing it was checked: it carries the phone number and GPA (both kept off the site by the private list) and claims the site's facts check bans or does not use (XGBoost, 95%+, 50+ features, 130+ tests, LangChain for Recruiter-Pro, OAuth 2.0, MySQL, Microservices, CQRS). The owner was told, then asked for an exception.
 
 **Decision.** The PDF is published unchanged at `/resume.pdf` as the owner's own document. It is exempt from the facts rules (`CLAUDE.md` honesty rules apply to the site's pages, not to this file) and from the private-terms list. Once pushed to the public repo the file stays in its history even if replaced later. The site's own copy keeps following the report.
+
+**Then removed, same day.** The owner asked for the resume button to be removed. `personal.resumePdf` is now withheld (2026-10-10), so the hero shows only View My Work and the palette has no resume entry. The PDF had been committed locally but never pushed (the remote branch ended at `88ff24e`), so that one commit was dropped from the branch (`git rebase --onto`) rather than deleted in a new commit: the file with the phone number never reaches the public history. The exception below no longer applies; a future resume goes through the normal rules (facts and private terms) unless the owner decides again.
 
 **Same day.** The hero's View My Work and Download Resume and the card's Case study now use the Source button's look (`variant="quiet"`, `quietButton`), without the magnetic pull or cursor label, by owner request.
 ---
