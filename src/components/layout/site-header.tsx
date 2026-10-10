@@ -18,11 +18,13 @@ import { ScrollSpyNav } from "./scroll-spy-nav.tsx";
 export function SiteHeader() {
   const { ui, sections } = profile;
   const navItems = sections.filter((s) => s.live).map(({ id, index, title }) => ({ id, index, title }));
+  const contact = sections.find((s) => s.id === "contact" && s.live);
   return (
     <HeaderShell>
       <div className="mx-auto flex h-(--header-h) max-w-(--page-max) items-center justify-between gap-3 px-(--gutter) sm:gap-6">
-        <Link href="/" className="shrink-0 font-display text-body leading-none text-ink md:text-h3">
+        <Link href="/" className="shrink-0 font-display text-body leading-none tracking-tight text-ink md:text-h3">
           {personal.name.value ?? personal.github.handle}
+          {personal.name.value ? <span className="text-break">.</span> : null}
         </Link>
         <div className="hidden min-w-0 flex-1 lg:block">
           <ScrollSpyNav items={navItems} label={ui.navLabel} />
@@ -31,6 +33,15 @@ export function SiteHeader() {
           <PaletteTrigger labels={{ open: ui.palette.open, menu: ui.palette.menu }} />
           <PauseToggle labels={{ pause: ui.pauseAnimations, play: ui.playAnimations }} />
           <ThemeToggle labels={{ toLight: ui.themeToLight, toDark: ui.themeToDark }} />
+          {contact ? (
+            <a
+              href={`/#${contact.id}`}
+              data-press=""
+              className="nudge ui-label ml-1 hidden min-h-9 items-center gap-1.5 rounded-pill bg-ink px-4 text-page transition-[background-color,translate] duration-200 ease-out hover:-translate-y-px hover:bg-ink-soft sm:inline-flex"
+            >
+              {contact.title} <span data-arrow="right" aria-hidden="true">→</span>
+            </a>
+          ) : null}
         </div>
       </div>
     </HeaderShell>
