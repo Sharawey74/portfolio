@@ -522,3 +522,18 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `image-fidelity` | Pass | Active Eventora slide rendered at (223, 221, 230) average against (225, 222, 231) in the original file; no filter, opacity or blend above any screenshot |
 | `overlays` | Pass | After every reveal, only the hero glow, the hidden card spotlight, the first-screen grid and the grain are translucent; no text sits under opacity, filter or blend |
 | `horizontal-scroll` | Pass | `scrollWidth` = viewport at 1440 and 375, both themes, motion on and reduced; smoke 21/21; `/` 157.5 KB gz |
+
+
+## Stage 7.5, motion (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | Rises animate `translate` and `scale`; swaps and row entries `opacity` and `translate`; the glow `opacity` and `scale`; title words `translate` and a per-word `filter` (small layers). No layout properties |
+| `contrast-during-motion` | Pass | Scroll-linked rises keep opacity 1: probe mid-entry on the figure grid read translate 27 px, scale 0.98, opacity 1 |
+| `reduced-motion` | Pass | Under reduced motion: 0 of 14 rise blocks animate, no glow animation, the tab swap shows the panel at opacity 1 at once, title words unblurred |
+| `pause-control` | Pass | The closing glow is the one new loop: paused off-screen (`LoopGate`), running in view, paused by the switch. Rises are scroll-linked and swaps one-shot, so the pause leaves them be |
+| `loop-offscreen` | Pass | Glow off-screen: `animation-play-state: paused`, no `data-visible`; in view: running |
+| `feedback` | Pass | Tab switch fades in over 400 ms (opacity 0 → 0.93 at 150 ms → 1); returning filter rows stagger 30 ms; cards lift 2 px with the spotlight (fine pointer only); no tilt |
+| `animating-regions` | Pass | At most the scroll-linked block entering, one user-triggered swap and the glow per viewport; the hero light is off-screen once scrolled |
+| `performance` | Pass | `/` first-load JS 157.4 KB gz; the tilt's per-frame scheduler task is gone; `LoopGate` is one observer; no console errors |
+| `smoke` | Pass | 21/21 |
