@@ -111,11 +111,11 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 | Token | Dark | Light | Job |
 |---|---|---|---|
-| `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow and the announcement pill's moving edge |
+| `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow, the closing glow, the announcement pill's moving edge, and the same circling edge on a hovered or focused card (ISS-45) |
 | `--c2` | #8E1428 | #A3142A | `::selection` (text `--on-c2`) |
 | `--c1` | #3A0810 | #F6E2E5 | The palette's selected option (the Contact band is retired since 7.4) |
 
-- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the full text color to 45 %, fading to 75 %; 50 % read as grey, ISS-43), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
+- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the full text color to 45 %, fading to 75 %; 50 % read as grey, ISS-43), red glows in the hero and behind the closing line only (the closing one is the mock-up's orb: accent to 42 %, 40 px blur, pulsing 0.75 to 1; ISS-45), translucent edge lines, and a circling accent edge on a card only while it is hovered or focused. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
 - `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1, graphics ≥ 3:1.
 - `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2`, `--break` and `--edge` / `--edge-soft` definitions (the compiler writes the edges as 8-digit hex in the built CSS; both forms are accepted only in those declarations). Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
 
@@ -313,6 +313,14 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Section titles** blur into focus as their words rise (`.rv`; the 4 s safety animation also clears the blur).
 - **Cards:** `.lift` lifts 2 px and brightens the top edge on hover (fine pointer); `InteractiveCard` is a spotlight only (soft light plus the hairline grid under the pointer). The 4° tilt was removed: the approved mock-up has a lift.
 - **CSS loops pause off-screen through `LoopGate`** (`src/components/motion/loop-gate.tsx`, one IntersectionObserver setting `data-visible`): the closing glow breathes only while visible, stops with the pause and is still under reduced motion. The hero light still relies on the browser's off-screen throttling; give it a gate if it ever grows.
+
+## Owner review 2 (2026-10-10, ISS-45)
+
+- **Card edge:** `.surface-card`, `.bento-cell` and `.figure-grid` get an `::after` ring masked to the border (`mask` with `content-box exclude`) carrying the pill's conic arc, turned by the registered `--arc` angle while hovered or focused; clipped cards keep `overflow-clip-margin: 1px`. Hover and focus only, by owner decision: never make it always-on (many cards share a screen; the three-regions rule). Cards also lift 2 px on hover.
+- **The rise uses `transform`, the lift uses `translate`:** an animated property overrides a hover rule on the same property, so keep them on different properties.
+- **Closing glow:** the mock-up's numbers exactly (see the visual system). Check text contrast over it after any change: closing pills measured 5.84:1 (light) and about 10:1 (dark).
+- **Experience:** the Alstom internship and the Anthropic Academy entry come from the owner's resume (`owner:resume`), used only for internships and certificates. Source strings on certificates must not contain a date: the facts check reads them.
+- **Commit messages:** the git hook reads "anthropic" and "claude" as AI attribution; describe such changes without those words.
 
 ## QA in place (Stage 7.6)
 
