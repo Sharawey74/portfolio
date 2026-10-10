@@ -491,3 +491,20 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375; the pill wraps to two lines at 375 instead of overflowing; smoke 20/20 |
 | `nav-fits` | Fixed | With the Contact pill and the switch the five links wrapped at 1024 and 1440 px. Links start at 1280 px (`xl`), their numbers and the switch label at 1536 px; checked at 1024, 1280, 1440, 1600 |
 | `performance` | Pass | `/` first-load JS 156.8 KB gz (was 157.5 KB: the node-graph canvas host is no longer loaded); the light is CSS only. Preloaded fonts 177 KB (Inter, Newsreader; was 203 KB with three faces). Local LCP not comparable to earlier runs (CPU benchmark 1,887–2,069 against about 3,100); the Vercel preview run decides (ISS-36) |
+
+
+## Stage 7.4, sections and case studies (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `aria` | Pass | Work: `role="tablist"` / `tab` / `tabpanel` with `aria-selected`, `aria-controls`, roving `tabIndex`, arrow keys, Home and End. Open source filter: a labelled `role="group"` of `aria-pressed` buttons, with a polite live line ("Showing 3 of 11"). Slider: `aria-roledescription="carousel"` region, focusable, ← → keys; dots name their slide and carry `aria-current`; progress bars `aria-hidden` |
+| `progressive-enhancement` | Pass | Tablist and filter show, and inactive panels hide, only under `html[data-js]` (set before first paint): with JS off all three project cards and all rows render, no controls (Playwright, JS disabled: 3 visible panels, tablist and filter hidden). Server HTML matches the first client render, so no shift on hydration |
+| `pause-control` | Pass | Slider autoplay is a scheduler `loop` task: stops off-screen, on a hidden tab, under the pause and while hovered or focused; never runs under reduced motion (bars then show position only) |
+| `color-contrast` | Fixed | Inactive slider dots were `--line-strong` (about 1.9:1 on black, under the 3:1 for controls); now `--text-3`, 5.0:1 or more in both themes. `npm run check:contrast` ok |
+| `color-not-only` | Pass | PR status by shape and text (filled ✓ Merged, outlined ○ Open + dot); reported issues ● Closed / ○ Open with text; the current dot is longer as well as brighter |
+| `touch-target-size` | Pass | Tabs and filter pills 36 px tall in a 44 px group; slider arrows 44 px; dots 24 px targets around a 6 px dot (WCAG 2.5.8 minimum); contact pills `min-h-11` |
+| `typography` | Fixed | The case-study H1 with gradient text showed a seam where "E" and "v" overlap at −0.04em (Chrome paints overlapping clipped glyphs that way); that H1 stays solid. The home H1 and section H2s keep the gradient, no seams in the captures |
+| `content-hierarchy` | Pass | One featured card at a time (was three stacked); "Also built" as two equal cards; the figure grid is an unnumbered block, not in the nav |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 320 and 375 on all four pages, both themes; on phones the slider dots stack above the caption (they squeezed it at 375) |
+| `performance` | Pass | `/` first-load JS 157.5 KB gz (budget 170); the tabs and filter receive server-rendered nodes, so no data file (or Zod) is shipped to the client |
+| `smoke` | Pass | 21/21, with a new test for the tabs and the filter |
