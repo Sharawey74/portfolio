@@ -202,7 +202,8 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - The pre-paint script (`theme-script.tsx`) also sets `data-reveal="on"` (motion allowed) and `data-intro="play"` (first visit this session). Hidden-then-revealed CSS keys off `data-reveal`, so JS-off and reduced motion get static text.
 - One-shot entrances (`.rv`, `.rv-load`, `.hero-ctas`, `.intro`) and the scroll-linked `.title-track` are exempt from the global pause: they do not autoplay, and pausing could strand text half-revealed. Loops must not be added to that list.
 - `src/components/intro/intro.tsx`: M1, CSS-only.
-- `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths), `HeroGraph` (lazy host), `hero-canvas.tsx` (default export, lazy chunk), `HeroGraphStatic`, `node-field.ts` (seeded geometry shared by SVG and canvas).
+- `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths; since Stage 7.3 gradient text and a blur-in per word), `HeroLight` (CSS-only light, Stage 7.3), `HeroFigures` (metric ids from `profile.hero.figures`, CountUp). Not rendered since Stage 7.3 (kept until the 7.6 cleanup): `HeroGraph` (lazy host), `hero-canvas.tsx`, `HeroGraphStatic`, `hero-shader.tsx` (M15), `node-field.ts`.
+- The hero's announcement pill fills `profile.hero.announce.template` from `ossSummary()` over the page's PR list (passed from `page.tsx`), like About and Open source.
 - `src/components/layout/header-shell.tsx` (hide on scroll down via Lenis) and `scroll-spy-nav.tsx` (`ScrollSpyNav`, reusable; `/dev/type` uses it as a specimen index).
 - Measured at the end of Stage 2: `/` first-load JS 145.0 KB gz; canvas chunk 1.6 KB gz, loaded on idle.
 
@@ -246,7 +247,7 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 
 ## Polish in place (Stage 5)
 
-- **Breakpoints:** the header's section links and the two-column project card start at 1024 px (`lg`). Below that the header button reads "Menu" (the palette) and the card is one column. At 768 px both the five links and a 5/12 card column overflowed.
+- **Breakpoints:** the two-column project card starts at 1024 px (`lg`); the header's section links start at 1280 px (`xl`, since Stage 7.3: with the Contact pill and the pause switch they wrapped to two lines at 1024 and, with their numbers, at 1440). Below that the header button reads "Menu" (the palette). The links' index numbers and the pause switch's text label show from 1536 px (`2xl`). At 768 px both the five links and a 5/12 card column overflowed.
 - **No stack marquee:** the tech chips appear once on `/`, in About (owner decision D2). M6 is the sticky stack plus numeral parallax.
 - **Case-study headings:** every section heading is `font-display text-h2`; display sizes are for the H1 only.
 - **Durations:** every JS-driven duration reads `DUR_MS` from `src/lib/motion/tokens.ts`; CSS uses `--dur-1/2/3`. The intro is 800 ms count + 300 ms hold + 400 ms lift.
