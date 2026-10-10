@@ -23,6 +23,7 @@ First tagged release and launch. It collects everything since 0.6.0: the release
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
+- Eventora's case study drops its Limits section and the note beside the Frontend link; the footer's second column is titled "Social".
 - Site icon: a briefcase on the dark tile.
 - Lighthouse CI now fails a preview whose median Total Blocking Time is over 200 ms (it warned before); LCP still warns.
 - Owner review 2: the announcement pill answers on hover like the link pills; the glow behind the closing line matches the approved mock-up; every card and button shows a circling accent edge and lifts while hovered or focused; the Source link is a pill button, and View My Work and Case study share its quiet look without the magnetic pull.
