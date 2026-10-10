@@ -60,6 +60,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
 | ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
 | ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
+| ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002). Watch the Stage 7 PR preview (Lighthouse CI fails on CLS) and Speed Insights; if it recurs, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -717,6 +718,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **7.5 motion, 2026-10-10.** Section blocks rise as they scroll in (scroll-linked translate and scale, no opacity, so text never drops in contrast mid-entry), title words blur into focus, the chosen tab's card and returning filter rows fade up (`@starting-style`), cards lift 2 px with a neutral spotlight (the 4° tilt removed, as in the mock-up), the closing glow breathes only while visible (`LoopGate`), stops with the pause and is still under reduced motion. Checks: lint, typecheck, facts, contrast, colors, build, `/` 157.4 KB, smoke 21/21; probes in `docs/UX-REVIEW.md` → Stage 7.5.
 
+**7.6 QA, 2026-10-10.** The retired M4 canvas and M15 shader removed (with their CSS and the shader variable); `/dev/type` updated. Found and fixed: Lighthouse `target-size` on the slider dots (the rise's 0.97 scale shrank them to 23.3 px below the fold; the rise is now translate only). Accessibility, best practices and SEO 100 on all four pages; keyboard walk of `/` 139 stops with visible rings; widths at 320 and 375 clean on every page in both themes; smoke 21/21; `/` 157.4 KB. One home run showed a 0.182 layout shift from a late text-font swap (ISS-44, watching). Performance numbers wait for the preview: the local CPU benchmark was about half the earlier runs.
+
 **Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
 
 
@@ -745,6 +748,16 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 **Found while fixing.** The M12 grid was a fixed layer faded out by a scroll timeline. Under reduced motion there is no fade, so its lines sat at 0.5 over every screen of the page (probe: opacity 0.5 at 850, 1,300, 3,400 and 6,400 px scrolled). It is now an absolute layer on the first screen only and scrolls away for everyone.
 
 **After** (same script and positions, set `haze-after/`, side-by-side `compare-*.png`): black (3, 3, 3), brightest 5; light white 252; secondary text #B8B8B8 dark, #404040 light; `check:contrast` tightest margin 1.09x dark and 1.08x light (was 1.03x); slide still within 2/255 of its file; smoke 21/21; `/` 157.5 KB gz; `scrollWidth` = viewport at 1440 and 375 in every theme and motion mode.
+
+### ISS-44 Occasional hero layout shift from the text font swap
+
+**Severity** Medium (CLS budget 0.05; Lighthouse CI asserts CLS as an error). **Status** Open, watching.
+
+**Evidence.** Stage 7.6 local Lighthouse (devtools throttling, CPU benchmark 1,537–1,718): `/` read CLS 0.182 once, with the shift on `p.hero-more`; two reruns of `/` and the three case studies read 0.002. Only the hero's second paragraph moved, which is what a late swap of Inter (the lead's face, `display: swap`, preloaded, metric-adjusted fallback) does when the fallback wraps the lead to a different number of lines.
+
+**Options.** A: leave as is and judge on the preview and Speed Insights field CLS (no cost; risk: real visitors on slow connections see the jump). B: Inter `display: "optional"` in `fonts.ts`, as Newsreader already is (no shift ever; a visitor on a slow first load reads the fallback face for that visit). C: reserve the lead's height (fragile across widths and zoom).
+
+**Recommendation.** A until the Stage 7 preview runs; B if the preview or the field shows the shift.
 ---
 
 # Closed
