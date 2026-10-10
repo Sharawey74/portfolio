@@ -35,8 +35,8 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-16 | Open source numbers are out of date: magefree/mage #16440 merged on 2026-10-07; simplesamlphp #2688 was retitled | High | Closed | Applied: snapshot 2026-10-08, 8 merged across 6 projects, 3 under review; asserted by the facts check | — |
 | ISS-17 | Show every issue the owner filed, open and closed, not only litestar #5020 | Medium | Closed | Applied: litestar #5020, #5018 and avoid-ai-writing #333 with ● / ○ and text | — |
 | ISS-18 | Owner reports some project metrics are out of date | High | Closed | Applied: card leads with 0 oversold, 569,066 requests / 0 failed, 660 req/s; case study adds 2.40 ms, 870 req/s, 1.32×, 55.4 ms, CPU-bound finding | — |
-| ISS-19 | Add the Alstom internship | Medium | Owner (later) | Needs title, dates and what was done, from the owner | When the owner supplies it |
-| ISS-20 | Add the Claude certificates as one entry | Low | Owner (later) | Needs the certificate names, from the owner | When the owner supplies it |
+| ISS-19 | Add the Alstom internship | Medium | Closed | Added 2026-10-10 from the owner's resume: Systems Engineering Intern, Aug to Sep 2026, three points (fault tracing, manual audit, incident-data sprint) | — |
+| ISS-20 | Add the Claude certificates as one entry | Low | Closed | Added 2026-10-10 from the owner's resume as one undated entry: Anthropic Academy, Claude 101, Claude Code 101, Claude Code in Action, Agent Skills, Subagents | — |
 | ISS-21 | Add a heavy crimson secondary color and make the whole palette work together | High | Closed | Applied: `--c1` / `--c2` / `--break`, Contact band, checks extended; owner confirms in UAT-50 | UAT-50 |
 | ISS-22 | Round the buttons ("View My Work", "Download Resume", all CTAs) | Medium | Closed | Applied: `rounded-pill` on buttons, CTAs and header controls | UAT-50 |
 | ISS-23 | Use Arial for the nav bar, the footer and the stack captions | Medium | Closed | Applied: `.ui-label` (Hanken Grotesk, sentence case) on nav, footer, header controls; stack captions in the text face | UAT-50 |
@@ -61,6 +61,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
 | ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
 | ISS-44 | Occasional layout shift in the hero: the second paragraph moved (CLS 0.182) when Inter swapped in late and re-wrapped the lead | Medium | Open | Seen in 1 of 7 local Lighthouse runs (6 read 0.002). Watch the Stage 7 PR preview (Lighthouse CI fails on CLS) and Speed Insights; if it recurs, set Inter to `display: optional` like Newsreader | Before v1.0.0 |
+| ISS-45 | Owner review 2: the announcement pill should answer on hover like the direct-link pills; the closing glow should match the mock-up's red exactly; every card should be animated and reactive with the pill's circling red edge | Medium | Decided | Owner decisions 2026-10-10: the arc on every card on hover and keyboard focus (not always on), the pill keeps its arc and gains the hover; implemented the same day | — |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -433,15 +434,19 @@ Recruiter-Pro and SysPlex: no outdated figure named; the audit table still cover
 
 ### ISS-19 Alstom internship (later)
 
-**UAT** new case when added. **Severity** Medium. **Status** Owner, later.
+**UAT** UAT-71. **Severity** Medium. **Status** Closed 2026-10-10.
 
 **Needs from the owner.** Role title, start and end month, the work done (2–3 specific points), any project produced, and a source (offer letter, certificate or the newest resume line). Goes into `experience.ts → roles` like the other two internships; About's internship count derives from the list.
 
+**Done 2026-10-10.** The owner shared the resume and asked that only the internships and certificates be taken from it. Added as the first role (source `owner:resume`), wording kept to the resume's figures (10+ subsystem interfaces; 660 pages; 78 findings, 11 critical; 150+ scripted checks; 5 alarm formats, 5 metrics). "Innovation" was dropped (it trips the banned word "innovative"). The resume differs from the evidence report on the Orascom role (end month July rather than August, "certified 90-hour", other points) and on certificate wording ("Generative AI Practice", "Artificial Intelligence, Associate Level (Machine Learning)", "Microsoft · Sprints"); per the rules the report stays and the differences are logged in `FACTS-CHECK.md` for the owner to decide. Nothing else from the resume is used.
+
 ### ISS-20 Claude certificates as one entry (later)
 
-**UAT** UAT-28 ("no dates on certificates"). **Severity** Low. **Status** Owner, later.
+**UAT** UAT-28 ("no dates on certificates"), UAT-71. **Severity** Low. **Status** Closed 2026-10-10.
 
 **Needs from the owner.** The exact certificate names and the issuer as printed. One entry, e.g. "Claude courses (Anthropic): <names>", without dates (brief rule).
+
+**Done 2026-10-10.** One entry from the resume: issuer "Anthropic Academy", names "Claude 101, Claude Code 101, Claude Code in Action, Agent Skills, Subagents", no date (the facts check asserts it). Credential IDs on the resume's other certificates are not published.
 
 ## Visual system (changes to the brief)
 
@@ -758,6 +763,18 @@ Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md
 **Options.** A: leave as is and judge on the preview and Speed Insights field CLS (no cost; risk: real visitors on slow connections see the jump). B: Inter `display: "optional"` in `fonts.ts`, as Newsreader already is (no shift ever; a visitor on a slow first load reads the fallback face for that visit). C: reserve the lead's height (fragile across widths and zoom).
 
 **Recommendation.** A until the Stage 7 preview runs; B if the preview or the field shows the shift.
+
+### ISS-45 Owner review 2: pill hover, the mock-up's glow, red edges on cards
+
+**Severity** Medium (owner's look and feel). **Status** Decided and implemented 2026-10-10 on `feat/stage7-redesign`.
+
+**Requests** (owner, 2026-10-10, with a screenshot of the pill): the "8 merged pull requests" pill animated like the email / GitHub / LinkedIn pills; the exact red under "Systems that keep working as load grows." from the mock-up; all cards and sections animated and reactive, with the red edge the pill has.
+
+**Finding on the glow.** In the mock-up the closing orb had `opacity: 0.18` inline, but its pulse animation set opacity 0.75 to 1, which overrides the inline value while it runs; so the red seen there was about five times what the site shipped (20 % accent at the centre, no blur).
+
+**Decisions** (owner, via the question card): the circling edge runs on every card while it is hovered or holds keyboard focus (recommended option; always-on for every card would have broken the three-animating-regions rule); the pill keeps its circling arc and gains the hover.
+
+**Done.** Pill: lifts 1 px, its edge and fill brighten, the arrow nudges 4 px. Glow: the mock-up's orb (radial accent to 42 %, 40 px blur, 900 × 420, opacity pulsing 0.75 to 1 over 6 s ease-in-out; 0.18 when still), only while on screen, stopped by the pause. Cards (`.surface-card`, `.bento-cell`, `.figure-grid`, the case-study evidence grid): a 1 px ring masked to the border with the pill's conic arc, turning every 6 s on hover or focus (a registered `--arc` angle, so only the hovered card repaints; still under reduced motion), plus a 2 px lift. The scroll-in rise moved from `translate` to `transform` so the lift is not overridden. Checks: closing pill text over the red 5.84:1 or more (light) and about 10:1 (dark); smoke 21/21; `/` 157.4 KB. `CLAUDE.md` accent rules updated in the same branch.
 ---
 
 # Closed
