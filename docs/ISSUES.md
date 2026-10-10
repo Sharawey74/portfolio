@@ -59,7 +59,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Closed | Connected 2026-10-10: the three variables set on Production, redeployed, the form renders on `/`, and the owner's test message arrived | — |
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
 | ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
-| ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Open | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
+| ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Fixed, owner to review | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -720,7 +720,7 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 ### ISS-43 Grey, washed-out appearance
 
-**Severity** High (the owner's first impression of the whole site; readability of most copy). **Status** Open, being fixed in Stage 7.4.1 on `feat/stage7-redesign`. **Reported** by the owner, 2026-10-10, with requirements: deep black, bright primary text, readable secondary text, subtle but visible borders, grain kept but not foggy, screenshots in their original colors, fix the root cause, keep the design.
+**Severity** High (the owner's first impression of the whole site; readability of most copy). **Status** Fixed 2026-10-10 in Stage 7.4.1 on `feat/stage7-redesign`; closes when the owner accepts it (UAT-68). **Reported** by the owner, 2026-10-10, with requirements: deep black, bright primary text, readable secondary text, subtle but visible borders, grain kept but not foggy, screenshots in their original colors, fix the root cause, keep the design.
 
 **Evidence** (local production build, 1440 × 900, motion allowed, every reveal run, pixels sampled from screenshots of four scrolled positions; script and captures in the session scratchpad, before set `haze-before/`):
 - Page black, left gutter, dark theme: average (6, 6, 6), brightest pixel 11. With the grain layer hidden: (0, 0, 0). Hiding the grid or the vignette changes nothing once past the first screen (the grid's scroll timeline has faded it to 0). Light theme: white measures 249 with the grain, 255 without; the vignette takes 1 more.
@@ -739,6 +739,10 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 5. Edge lines slightly stronger, still translucent.
 Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md` token table and gradient rule updated in the same branch.
 
+
+**Found while fixing.** The M12 grid was a fixed layer faded out by a scroll timeline. Under reduced motion there is no fade, so its lines sat at 0.5 over every screen of the page (probe: opacity 0.5 at 850, 1,300, 3,400 and 6,400 px scrolled). It is now an absolute layer on the first screen only and scrolls away for everyone.
+
+**After** (same script and positions, set `haze-after/`, side-by-side `compare-*.png`): black (3, 3, 3), brightest 5; light white 252; secondary text #B8B8B8 dark, #404040 light; `check:contrast` tightest margin 1.09x dark and 1.08x light (was 1.03x); slide still within 2/255 of its file; smoke 21/21; `/` 157.5 KB gz; `scrollWidth` = viewport at 1440 and 375 in every theme and motion mode.
 ---
 
 # Closed
