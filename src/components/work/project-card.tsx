@@ -80,7 +80,7 @@ export function ProjectCard({ project }: { project: Project }) {
             </div>
           ))}
         </dl>
-        <p className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-small">
+        <p className="mt-auto flex flex-wrap items-center gap-3 pt-2 text-small">
           <Link
             href={`/projects/${project.slug}`}
             data-cursor={ui.cursorView}
@@ -93,7 +93,12 @@ export function ProjectCard({ project }: { project: Project }) {
             <span aria-hidden="true" data-arrow="right">→</span>
           </Link>
           {repo ? (
-            <a href={repo.href} rel="noreferrer" className="nudge inline-flex min-h-11 items-center gap-1.5 text-ink-2 hover:text-ink">
+            <a
+              href={repo.href}
+              rel="noreferrer"
+              data-press=""
+              className="btn inline-flex min-h-11 items-center gap-2 rounded-pill border border-hair px-5 font-medium text-ink-2 transition-[background-color,border-color,color,translate] duration-200 ease-out hover:-translate-y-px hover:border-line-strong hover:bg-hover hover:text-ink"
+            >
               {repo.label}
               <span className="sr-only">
                 : {project.name} ({ui.externalLink})
