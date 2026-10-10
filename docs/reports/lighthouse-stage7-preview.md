@@ -29,3 +29,16 @@ SEO reads 58–61 on every preview: Vercel serves preview deployments with `x-ro
 | sysplex | 86 | 100 | 100 | 3.79 s (over) | 46 ms (pass) | 0.005 (pass) |
 
 Reading: the redesign kept TBT and CLS within budget (TBT down from 81–138 ms) and LCP in the same band as before (simulated, driven by the bytes before first paint, ISS-36). The late-font layout shift seen once locally (ISS-44) did not appear in 12 preview runs (worst 0.011). LCP is judged on Speed Insights' field p75 (ISS-36).
+
+## Owner review 2 preview (`608eaa7`, 2026-10-10 19:26 UTC)
+
+The same workflow on the branch after the owner review 2 commits (card and button edges, the mock-up glow, the quiet buttons, the Alstom entry, the resume removal), medians of 3 runs:
+
+| Page | Perf | A11y | Best pr. | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|
+| home | 84 | 100 | 100 | 3.23 s | 82 ms | 0.002 |
+| eventora | 91 | 100 | 100 | 3.33 s | 62 ms | 0.002 |
+| recruiter-pro | 91 | 100 | 100 | 3.33 s | 68 ms | 0.002 |
+| sysplex | 95 | 100 | 100 | 2.88 s | 30 ms | 0.005 |
+
+Within run-to-run noise of the #20 preview; TBT and CLS stay within budget.
