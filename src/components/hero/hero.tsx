@@ -4,6 +4,7 @@ import { ossSummary, type PullRequest } from "@/data/oss.ts";
 import { ButtonLink } from "@/components/ui/button.tsx";
 import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { RevealText } from "@/components/motion/reveal-text.tsx";
+import { ScrambleText } from "@/components/motion/scramble.tsx";
 import { HeroHeadline } from "./hero-headline.tsx";
 import { HeroLight } from "./hero-light.tsx";
 import { HeroFigures } from "./hero-figures.tsx";
@@ -47,7 +48,9 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
             </a>
           ) : null}
           <div>
-            <MonoLabel className="hero-label mb-5 block">{hero.label.text}</MonoLabel>
+            <MonoLabel className="hero-label mb-5 block">
+              <ScrambleText text={hero.label.text} />
+            </MonoLabel>
             <HeroHeadline id="hero-title" text={hero.headline.text} />
           </div>
           <div className="max-w-[60ch] space-y-4">
@@ -57,6 +60,7 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
               mode="lines"
               offset={8}
               text={hero.lead.text}
+              mark={hero.leadMark}
               className="hero-sub text-ink-soft"
             />
             <p className="hero-more text-ink-2">{hero.more.text}</p>
