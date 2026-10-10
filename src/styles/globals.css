@@ -1751,15 +1751,21 @@ html[data-js] .work-panel:not([data-active]) {
   overflow: clip;
 }
 .closing-glow {
+  /* The approved mock-up's orb, as rendered there (owner, 2026-10-10,
+     ISS-45): the accent at the centre fading out by 42 % of the radius,
+     blurred 40 px, its opacity pulsing between 0.75 and 1. 0.18 is the
+     still state (reduced motion), as in the mock-up. */
   position: absolute;
   z-index: -1;
-  inset-block-start: 50%;
-  inset-inline: 0;
-  width: min(56rem, 100%);
-  height: 28rem;
-  margin-inline: auto;
-  translate: 0 -55%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--break) 20%, transparent), transparent);
+  inset-block-start: 55%;
+  inset-inline-start: 50%;
+  width: min(56.25rem, 100%);
+  height: 26.25rem;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, var(--break) 0, transparent 42%);
+  opacity: 0.18;
+  filter: blur(40px);
   pointer-events: none;
 }
 
@@ -1794,9 +1800,11 @@ html[data-js] .work-panel:not([data-active]) {
 .rise-group > :nth-child(9) { --i: 8; }
 @media (prefers-reduced-motion: no-preference) {
   @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    /* transform, not translate: the hover lift uses translate, and an
+       animated property would override it. */
     @keyframes rise-in {
       from {
-        translate: 0 2.5rem;
+        transform: translateY(2.5rem);
       }
     }
     .rise,
@@ -1874,18 +1882,23 @@ html[data-reveal="on"] .oss-row:nth-child(n + 6) { transition-delay: 150ms, 150m
   }
 }
 
-/* The closing glow breathes slowly: a loop, so it runs only while visible
-   (LoopGate sets data-visible), stops with the pause and is still under
-   reduced motion. */
+/* The closing glow pulses as in the mock-up (6 s, ease-in-out, the easing the
+   mock-up used): a loop, so it runs only while visible (LoopGate sets
+   data-visible), stops with the pause and is still under reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-  @keyframes glow-breathe {
-    to {
-      opacity: 0.6;
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      opacity: 0.75;
+      scale: 1;
+    }
+    50% {
+      opacity: 1;
       scale: 1.08;
     }
   }
   .closing-glow {
-    animation: glow-breathe 7s var(--ease-out) infinite alternate;
+    animation: glow-pulse 6s ease-in-out infinite;
   }
   .closing-glow:not([data-visible]) {
     animation-play-state: paused;
@@ -1896,4 +1909,92 @@ html[data-reveal="on"] .oss-row:nth-child(n + 6) { transition-delay: 150ms, 150m
    the pause like .title-track (pausing could strand a card mid-entry). */
 html[data-motion="paused"] :is(.rise, .rise-group > *) {
   animation-play-state: running !important;
+}
+
+/* ── Owner review 2 (2026-10-10, docs/ISSUES.md ISS-45) ───────────────── */
+
+/* Announcement pill: the arc keeps circling; on hover it answers like the
+   direct-link pills under the closing line: it lifts, its edge and fill
+   brighten, and the arrow nudges. */
+.hero-pill {
+  transition:
+    translate var(--dur-1) var(--ease-out),
+    background-color var(--dur-1) var(--ease-out);
+}
+.hero-pill:hover,
+.hero-pill:focus-visible {
+  background: var(--line-strong);
+}
+.hero-pill-inner {
+  transition: background-color var(--dur-1) var(--ease-out);
+}
+.hero-pill:hover .hero-pill-inner,
+.hero-pill:focus-visible .hero-pill-inner {
+  background: var(--surface-hover);
+}
+.hero-pill-inner > [data-arrow] {
+  display: inline-block;
+  transition: translate var(--dur-1) var(--ease-out);
+}
+.hero-pill:hover .hero-pill-inner > [data-arrow] {
+  translate: 0.25rem 0;
+}
+
+/* Cards: the pill's circling accent edge, shown while a card is hovered or
+   holds keyboard focus (owner: hover and focus only, so a screen with many
+   cards never has more than one circling). A 1 px ring over the card's own
+   border, masked to the border, with the same conic arc turning every 6 s.
+   The angle is a registered property, so only the hovered card repaints. */
+@property --arc {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes arc-turn {
+  to {
+    --arc: 360deg;
+  }
+}
+:is(.surface-card, .bento-cell, .figure-grid) {
+  position: relative;
+}
+:is(.surface-card, .bento-cell, .figure-grid)::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--arc), transparent 0 62%, var(--break) 80%, transparent 92%);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+:is(.surface-card, .bento-cell, .figure-grid):is(:hover, :focus-within)::after {
+  opacity: 1;
+  animation: arc-turn 6s linear infinite;
+}
+/* Clipped cards keep 1 px outside their box so the ring is not cut off. */
+:is(.bento-cell, .figure-grid, .surface-card.overflow-clip) {
+  overflow-clip-margin: 1px;
+}
+/* Every card lifts a little while hovered (fine pointers). */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  :is(.surface-card, .bento-cell, .figure-grid) {
+    transition:
+      translate var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
+  }
+  :is(.surface-card, .bento-cell, .figure-grid):hover {
+    translate: 0 -2px;
+  }
+}
+/* Reduced motion: the arc shows, still, at its starting angle. */
+@media (prefers-reduced-motion: reduce) {
+  :is(.surface-card, .bento-cell, .figure-grid):is(:hover, :focus-within)::after {
+    animation: none;
+  }
 }
