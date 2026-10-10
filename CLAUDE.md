@@ -29,6 +29,7 @@ file and a date.
 6. Never open or print `.env` files or any secret. Other repos are **read-only**: copy images or diagram sources from them into this project, nothing else.
 7. Motion graphics are claims: an animated diagram shows only components that exist in the source repo (`architecture[]` in `projects.ts`, each with a source).
 8. Do not publish the items listed in `CLAUDE.local.md` (personal details and private projects). Do not name them in tracked files either; the facts check reads them from the git-ignored `scripts/private-terms.local.txt`.
+9. **Exception: `public/resume.pdf`** is the owner's own document, published as given by owner decision (2026-10-10, `docs/ISSUES.md` ISS-46). It is exempt from rules 1–8; never edit it, and never copy its wording onto the site without checking it against the report.
 
 ### Banned claims (enforced by `scripts/check-facts.ts`)
 
@@ -262,7 +263,7 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 ## Review round 1 in place (2026-10-08)
 
 - **Hero:** label "Software engineer", H1 = the name (asserted equal to `personal.name` plus a period by the facts check), lead and second paragraph; all in `profile.hero`. The share image uses the label as kicker and the name as title.
-- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class; a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answered with the accent ramp until Stage 7.2; since then it stays on the neutral ramp (see `button.tsx`).
+- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class (variants `filled`, `outline`, `quiet`; `quiet` = the Source button, used since 2026-10-10 for View My Work, Download Resume and Case study, with no magnet or cursor label); a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answered with the accent ramp until Stage 7.2; since then it stays on the neutral ramp (see `button.tsx`).
 - **Contact band:** retired in Stage 7.4 (the form sits on a section card; the direct links are pills under the closing line).
 - **Stack in About:** `.stack-rows` is a subgrid table, chip column and "used in" column; one column below 30 rem.
 - **Work cards:** card figures show their qualifier under the label; "Also built" names sit on their own row; (the sticky stack and its short-viewport list are retired since Stage 7.4). About's flagship cell shows the test count, the Work card leads with performance figures.
