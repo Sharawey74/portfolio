@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { claim, source, asOf, todo } from "./schema.ts";
+import { claim, source, asOf } from "./schema.ts";
 
 /**
  * Roles, education and certifications.
@@ -43,8 +43,8 @@ const experienceSchema = z.object({
     }),
   ),
   certifications: z.array(certification),
-  /** Hidden until the owner fills it in. */
-  capstone: z.object({ todo }),
+  /** Hidden: the owner keeps the capstone off the site (2026-10-10, ISS-47). */
+  capstone: z.object({ withheld: z.iso.date() }),
 });
 
 const RESUME_SECTION = "evidence-report.md:408 (newest resume, roles and dates)";
@@ -119,7 +119,7 @@ export const experience = experienceSchema.parse({
     { name: "AI Associate", issuer: "Telecom Egypt", source: "evidence-report.md:408", asOf: VERIFIED },
     { name: "DevOps Foundations", issuer: "Sprints", source: "evidence-report.md:408", asOf: VERIFIED },
   ],
-  capstone: { todo: "TODO(owner): final-year FinTech capstone, hidden until described" },
+  capstone: { withheld: "2026-10-10" },
 });
 
 export type Experience = typeof experience;
