@@ -14,13 +14,14 @@ export const metadata: Metadata = {
 /**
  * Home: hero, then the five numbered sections, each flagged `live` in
  * profile.ts. Pull-request status is fetched once (daily ISR, snapshot
- * fallback) and shared by About and Open source so their numbers agree.
+ * fallback) and shared by the hero pill, About and Open source so their
+ * numbers agree.
  */
 export default async function Home() {
   const { prs, live } = await getPullRequests();
   return (
     <>
-      <Hero />
+      <Hero prs={prs} />
       <AboutSection prs={prs} />
       <WorkSection />
       <OssSection prs={prs} live={live} />
