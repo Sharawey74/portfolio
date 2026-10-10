@@ -6,13 +6,14 @@ import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { RevealText } from "@/components/motion/reveal-text.tsx";
 import { ScrambleText } from "@/components/motion/scramble.tsx";
 import { HeroHeadline } from "./hero-headline.tsx";
-import { HeroLight } from "./hero-light.tsx";
+import { HeroCore } from "./hero-core.tsx";
 import { HeroFigures } from "./hero-figures.tsx";
 
 /**
  * Hero (Stage 7, docs/ISSUES.md ISS-42): the announcement pill, role label,
  * the name as H1 (words blur into focus, gradient text), the approved lead
- * and second paragraph, CTAs; the CSS light on the right from 1024 px; the
+ * and second paragraph, CTAs; the core (reticle and wireframe sphere, ISS-51)
+ * on the right from 1280 px (below that the name needs the full width); the
  * figures strip below.
  * The pill's numbers come from ossSummary() over the same PR list the Open
  * source section renders. "View My Work" and the pill render only once their
@@ -35,7 +36,7 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
       className="hero relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col justify-center overflow-clip"
     >
       <div className="grid-12 relative w-full items-center gap-y-[min(2.5rem,4svh)] pt-20 pb-[min(4rem,6svh)]">
-        <div className="col-span-full flex flex-col gap-[min(1.75rem,3svh)] lg:col-span-7">
+        <div className="col-span-full flex flex-col gap-[min(1.75rem,3svh)] xl:col-span-7">
           {announce ? (
             <a href={hero.announce.href} className="hero-pill nudge self-start">
               <span className="hero-pill-inner text-small">
@@ -78,8 +79,8 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
             ) : null}
           </div>
         </div>
-        <div className="hidden lg:col-span-5 lg:block">
-          <HeroLight />
+        <div className="hidden xl:col-span-5 xl:block">
+          <HeroCore />
         </div>
         <HeroFigures />
       </div>
