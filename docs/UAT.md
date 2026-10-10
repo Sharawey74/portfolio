@@ -168,6 +168,7 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-73 | Scroll to the closing line in dark, then light; compare with the mock-up | The red behind "Systems that keep working as load grows." matches the mock-up: a strong red centre that softens outward and pulses slowly; the three link pills stay readable over it. With "Pause animations" on it stops pulsing | | |
 | UAT-74 | Hover, then Tab to, "View My Work", "Case study", "Source", the email / GitHub / LinkedIn pills and "Send message"; hover "Download Resume"; read Experience | Each button lifts slightly, a red edge circles it and its arrow nudges; "Source" is now a pill like "Case study". "Download Resume" stays still (it is disabled until the resume PDF is added). Orascom reads "Jul 2026" only | | |
 | UAT-75 | On `/`, look at "View My Work", then the Work card's "Case study" and "Source"; move the mouse near them; open the search menu (Ctrl K) and type "resume" | All three look the same: a thin outline, light grey text, white on hover with the red edge circling; none drifts toward the pointer or shows a cursor label. There is no "Download Resume" button and no resume entry in the search menu | | |
+| UAT-76 | Open the production site in a browser tab, in a light and a dark browser theme; bookmark it | The tab and bookmark show a light briefcase on a dark rounded square, clear in both browser themes | | |
 
 ## 5. Defect log
 
