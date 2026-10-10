@@ -14,8 +14,8 @@ import { monthYear } from "@/lib/format.ts";
  * down as the reader scrolls (CSS view() timeline; static where unsupported or
  * under reduced motion), entries clip in once in view. Certifications are
  * listed without dates, by owner decision. Education and certifications sit on
- * section cards (Stage 7). The capstone stays hidden until the
- * owner describes it (experience.capstone is a TODO).
+ * section cards (Stage 7). The capstone stays hidden (experience.capstone is
+ * withheld by the owner).
  */
 export function ExperienceSection() {
   const { ui, sections } = profile;

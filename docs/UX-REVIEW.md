@@ -563,3 +563,40 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `reduced-motion` | Pass | The edge shows still at its first angle; the glow sits at 0.18 with no pulse; the lift is off |
 | `color-contrast` | Pass | Text over the stronger closing glow: link pills 5.84:1 or more in light (dark text on the red), about 10:1 in dark; the filled button is opaque. `check:contrast` ok |
 | `performance` | Pass | The edge angle is a registered property, so only the hovered card repaints; `/` 157.4 KB gz; smoke 21/21 |
+
+
+## Hero motion (2026-10-11, ISS-50)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | Letters: opacity, translate and a per-letter blur (small layers); the period: opacity, translate, scale; the lens: `font-variation-settings` on one hovered word's letters (pinned word widths, no reflow); the underline: one 1 px background row (one-shot) |
+| `rendering` | Fixed | Letters animating inside a word with gradient text piled up mid-opening (Chrome breaks a parent's clipped-text background while children animate). The gradient now sits on each letter; frames at 450 and 1,000 ms render correctly |
+| `timing` | Fixed | The period started at 380 ms instead of after the last letter: `--n` is a registered non-inherited integer (M1 intro). Renamed `--letters`; the period lands at 975 ms and pulses at 1,375 ms |
+| `reduced-motion` | Pass | Letters, period and label static; the underline drawn; no lens or light |
+| `pause-control` | Pass | The opening is one-shot and exempt like the other reveals; the lens and light follow the pointer only, and are off under the pause |
+| `lcp` | Pass | Lighthouse names the lead paragraph as the LCP element, not the name; accessibility 100, CLS 0.002 (local; timings not comparable, CPU benchmark 584–1,436) |
+| `smoke` | Pass | 21/21 |
+
+## Hero core (2026-10-11, ISS-51)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | The sphere is canvas drawing on the shared scheduler; the CSS rings and emitter animate `opacity` and `scale` only |
+| `pause-control` | Pass | Headless probe: the canvas is unchanged across 600 ms while paused and moves again on resume; the CSS rings report `animation-play-state: paused` |
+| `offscreen` | Pass | Scrolled away, the canvas stays unchanged (the loop subscribes only while the core intersects the viewport); the CSS rings pause without `data-visible` |
+| `reduced-motion` | Pass | The sphere is drawn once and stays still; the CSS rings and emitter do not animate |
+| `decorative` | Pass | `aria-hidden`; no text. The mock-up's labels and metadata strip were left out: they name no real system (honesty rules 2 and 7) |
+| `responsive` | Fixed | At 1024 px the 7-column text area split the name after "Abdel" (inline-block letters since ISS-50). Words are kept whole and the core shows from 1280 px; `scrollWidth` equals the viewport at 320, 375, 768, 1024, 1279 and 1280, and the name is two lines at each |
+| `lcp` | Pass | The canvas module loads on idle (one extra chunk after load, none before); `/` first-load JS 158.6 KB gz; Lighthouse desktop (local, CPU benchmark 2,936–3,007): performance 98, accessibility 100, LCP 0.46–0.63 s, TBT 1–22 ms, CLS 0.001 |
+| `color` | Pass | `npm run check` ok; canvas colors read `--break` at runtime and follow the theme |
+| `smoke` | Pass | 21/21 |
+
+### Second pass (2026-10-11, owner: "its not the same")
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `fidelity` | Fixed | The first pass centred a smaller sphere on the reticle. Now the mock-up's geometry: a 620 px box (capped at 72svh), the sphere 4.5 units right of the reticle centre and cut by the column edge, the white emitter at the reticle centre, ring sizes as shares of the box height; captures in both themes at 1440 × 900 match the owner's screenshot |
+| `color` | Pass | The backdrop fill is `--g3`, not the mock-up's tinted #131315 (the one-color rule); dots and bloom are `--break` mixes; `npm run check` ok |
+| `contrast` | Pass | Text over the backdrop: `--text-3` on `--g3` 6.18:1 (dark), 5.71:1 (light) |
+| `performance` | Pass | `/` 158.6 KB gz; mobile Lighthouse A/B against the commit before ISS-51 (local, devtools throttling, CPU benchmark 1,079–2,950): TBT 2.0–4.2 s before, 2.4–4.3 s after; LCP 2.5–3.1 s before, 3.0–3.8 s after; within this machine's noise, judged on the preview. A `body:has()` rule to hide the M12 grid was dropped (the hero's stacking context already covers it) |
+| `motion` | Pass | Same probe as above: moves, stops with the pause and off screen, still under reduced motion, absent below 1280 px; smoke 21/21 |

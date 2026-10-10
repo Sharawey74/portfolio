@@ -22,6 +22,7 @@ export function RevealText({
   trigger = "view",
   mode = "words",
   offset,
+  mark,
   className = "",
   id,
 }: {
@@ -31,6 +32,8 @@ export function RevealText({
   trigger?: "view" | "load";
   mode?: "words" | "lines";
   offset?: number;
+  /** A phrase to draw a line under (see SplitWords). */
+  mark?: string;
   className?: string;
   id?: string;
 }) {
@@ -75,7 +78,7 @@ export function RevealText({
       data-mode={mode}
       className={`${trigger === "view" ? "rv" : "rv-load"} ${className}`}
     >
-      <SplitWords text={text} trailing={trailing} offset={offset} />
+      <SplitWords text={text} trailing={trailing} offset={offset} mark={mark} />
     </Tag>
   );
 }

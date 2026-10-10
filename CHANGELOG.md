@@ -6,11 +6,13 @@ All notable changes to this site. Format: [Keep a Changelog](https://keepachange
 - **MINOR**: a new section or case study
 - **PATCH**: copy, fixes, performance
 
-Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per finished stage, from `PLAN.md`, the merged pull request titles and `git log` dates. No git tags or GitHub Releases exist for them; `package.json` stayed at 0.1.0. The first tagged release will be v1.0.0.
+Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per finished stage, from `PLAN.md`, the merged pull request titles and `git log` dates. No git tags or GitHub Releases exist for them; `package.json` stayed at 0.1.0 until v1.0.0, the first tagged release.
 
 ## [Unreleased]
 
-Stage 7 (the redesign, through 7.6) merged in pull request #20 on 2026-10-10; owner review 2 follows in a second pull request. Both ship in v1.0.0.
+## [1.0.0] - 2026-10-11
+
+First tagged release and launch. It collects everything since 0.6.0: the release tooling (Stage 6), the Stage 7 redesign (pull requests #20 and #21) and the pre-release decisions (`docs/ISSUES.md` ISS-47). Measured on the Vercel preview: accessibility and best practices 100, TBT 30–82 ms, CLS 0.002–0.005; Speed Insights Real Experience Score 100 at p75 (desktop).
 
 ### Added
 - A deploy guide for the owner (hosting, Vercel import steps, environment variables, pre-release checklist, release and rollback steps), kept on the owner's machine rather than in the repository.
@@ -21,9 +23,14 @@ Stage 7 (the redesign, through 7.6) merged in pull request #20 on 2026-10-10; ow
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
+- Hero: the background takes the approved mock-up's surface (dark grey, a fine grid with faint red dots at the crossings, a soft red glow on the right). A slowly turning wireframe sphere (an inner sphere, flat rings, a particle cloud, a glowing core and a white node circling it), set right of thin rings and crosshairs and cut by the column edge, replaces the CSS light on screens 1280 px and wider, and leans toward the mouse; it is still under reduced motion and stops with "Pause animations". The name no longer breaks inside a word at 1024 px.
+- Hero: the label decodes, the name's letters rise one by one and the period lands last with a pulse, and a hairline draws under "keep working as load grows"; on a mouse, the name reacts like a lens (weight and optical size) and brightens toward the pointer.
+- Tech chips, status badges and the tab and filter pills react like the cards: an accent edge circles the one under the pointer, and chips and badges lift.
+- Eventora's case study drops its Limits section and the note beside the Frontend link; the footer's second column is titled "Social".
+- Site icon: a briefcase on the dark tile.
 - Lighthouse CI now fails a preview whose median Total Blocking Time is over 200 ms (it warned before); LCP still warns.
 - Owner review 2: the announcement pill answers on hover like the link pills; the glow behind the closing line matches the approved mock-up; every card and button shows a circling accent edge and lifts while hovered or focused; the Source link is a pill button, and View My Work and Case study share its quiet look without the magnetic pull.
-- Experience adds the Alstom systems engineering internship (Aug–Sep 2026); the Orascom internship is July 2026 only and one certification entry for the Anthropic Academy courses.
+- Experience adds the Alstom systems engineering internship (Aug–Sep 2026); the Orascom internship is July 2026 only, without the cabling line; the remaining personal fields (phone, portrait, location, bio, availability, GPA) and the capstone stay off the site by owner decision and one certification entry for the Anthropic Academy courses.
 - Motion (Stage 7.5): section blocks rise into place as they scroll in, section titles blur into focus, the chosen project card and returning open-source rows fade up, cards lift with a soft spotlight instead of tilting, and the closing glow breathes while on screen; all still under reduced motion, and the glow stops with "Pause animations".
 - Redesign sections (Stage 7.4): Work shows one project at a time behind tabs, with a screenshot slider (progress bars, arrows, dots, arrow keys) and Eventora's six screens in a new order without the landing page; "Also built" as two cards; Open source as status rows with an All / Merged / Open filter; a grid of nine sourced figures ("Every figure has a source."); a closing line with a soft glow and direct-link pills before Contact; the Contact band retired and the form on a card; About, Experience and the case studies on rounded cards in the new heading face.
 - Redesign hero (Stage 7.3): an announcement pill with the derived open-source count and a circling accent edge; the name's words blur into focus in gradient text; a CSS light with rays and rings on wide screens (the node-graph canvas is retired); four Eventora figures that count up under the hero; header links from 1280 px, their numbers and the pause label from 1536 px.
@@ -109,7 +116,8 @@ Facts, bootstrap and foundation (Stage 0 on `main`; pull request #1).
 - Motion foundation: one animation loop, smooth scrolling, custom cursor, a global "Pause animations" control.
 - CI: lint, typecheck, facts, contrast, build, colors and the first-load JavaScript budget.
 
-[Unreleased]: https://github.com/Sharawey74/portfolio/compare/067492d...HEAD
+[Unreleased]: https://github.com/Sharawey74/portfolio/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Sharawey74/portfolio/releases/tag/v1.0.0
 [0.6.0]: https://github.com/Sharawey74/portfolio/pull/8
 [0.5.0]: https://github.com/Sharawey74/portfolio/pull/6
 [0.4.0]: https://github.com/Sharawey74/portfolio/pull/4

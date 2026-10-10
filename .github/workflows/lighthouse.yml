@@ -31,10 +31,11 @@ jobs:
         with:
           node-version: 24
 
-      # Budgets from CLAUDE.md. CLS and accessibility fail the job; LCP and
-      # TBT warn, because their overruns are accepted until measured here
-      # (docs/ISSUES.md ISS-01, ISS-02, ISS-36). Tighten them to "error"
-      # once the preview numbers are within budget.
+      # Budgets from CLAUDE.md. Accessibility, CLS and TBT fail the job (TBT
+      # since 2026-10-10, ISS-02: previews 30-138 ms); LCP warns, accepted for
+      # v1.0.0 on the Speed Insights score (docs/ISSUES.md ISS-01, ISS-36).
+      # Tighten it to "error" once the preview numbers are within budget.
+      # docs/TESTING.md describes every check.
       - name: Run Lighthouse CI (3 runs per page, mobile)
         env:
           BASE: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
