@@ -460,3 +460,20 @@ Worse than Stage 5 on TBT everywhere and on Recruiter-Pro's LCP (now a screensho
 ## Stage 6 (2026-10-08)
 
 No interface changes: release docs, CI smoke tests, workflows and the withheld option for personal fields. The UI UX Pro Max audit has nothing new to rate. The Playwright smoke tests now repeat three earlier checks on every pull request: one visible `h1` per page, content without JavaScript and with reduced motion, and no horizontal scroll at 375 px (`horizontal-scroll`).
+
+
+## Stage 7.2, redesign foundation (2026-10-10)
+
+Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `frontend-design`, `modern-web-guidance` (guides: visually-stable-font-fallbacks, motion, scroll-entry-exit-effects, interactive-content-reveal). Scope: tokens, fonts, header, footer, buttons, section headings; sections themselves are restyled in 7.4.
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `color-contrast` | Pass | `npm run check:contrast`: 36 pairings per theme on the new ramp; tightest margin 1.03x (text-3 on `--c1`, 4.66:1 dark, 4.63:1 light); text-3 on the hover surface 5.08:1 dark, 4.90:1 light |
+| `color-not-only` | Pass | Active nav: red dot + full ink + neutral pill with an edge line; pause switch: knob position + track color + `aria-checked` |
+| `focus-states` | Pass | Global `:focus-visible` ring in `--break` unchanged |
+| `touch-target-size` | Pass | Header controls `min-h-11`; the Contact pill is 36 px tall but is a duplicate of the nav and footer links, and hidden below 640 px where the Menu covers it |
+| `aria` | Pass | Pause control is `role="switch"` with `aria-checked`; theme button keeps its changing `aria-label`; brand icons `aria-hidden` beside text |
+| `reduced-motion` | Pass | Switch knob, theme-icon turn, arrow nudge and icon lift drop their transitions under `prefers-reduced-motion`; the pause control is hidden there as before |
+| `font-loading` | Fixed | Inter's x-height, inherited through `font-size-adjust: from-font`, scaled the H1 about 20 % and clipped "Abdelrhman" at 375 px. Recomputed per face; the H1's words now end at 294 px (375) and 250 px (320) |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375 and 320 on `/`; smoke tests 20/20 |
+| `performance` | Pass | First-load JS on `/` 157.5 KB gz (budget 170); heading and mono faces not preloaded, so the preloads stay Newsreader and Inter |
