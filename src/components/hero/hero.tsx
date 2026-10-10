@@ -14,7 +14,8 @@ import { HeroFigures } from "./hero-figures.tsx";
  * the name as H1 (words blur into focus, gradient text), the approved lead
  * and second paragraph, CTAs; the core (reticle and wireframe sphere, ISS-51)
  * on the right from 1280 px (below that the name needs the full width); the
- * figures strip below.
+ * figures strip below; behind it all, the mock-up's backdrop (grid, accent
+ * dots, bloom).
  * The pill's numbers come from ossSummary() over the same PR list the Open
  * source section renders. "View My Work" and the pill render only once their
  * target section is live. The resume button renders only when
@@ -35,6 +36,9 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
       aria-labelledby="hero-title"
       className="hero relative isolate flex min-h-[calc(100svh-var(--header-h))] flex-col justify-center overflow-clip"
     >
+      <div aria-hidden="true" className="hero-backdrop">
+        <span className="hero-backdrop-bloom" />
+      </div>
       <div className="grid-12 relative w-full items-center gap-y-[min(2.5rem,4svh)] pt-20 pb-[min(4rem,6svh)]">
         <div className="col-span-full flex flex-col gap-[min(1.75rem,3svh)] xl:col-span-7">
           {announce ? (
