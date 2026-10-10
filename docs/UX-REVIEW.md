@@ -551,3 +551,15 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `lighthouse` | Pass | Accessibility, best practices and SEO 100 on `/`, Eventora, Recruiter-Pro and SysPlex. Performance not judged locally (CPU benchmark 1,537–1,718, about half the earlier runs); the Stage 7 PR preview and Speed Insights decide |
 | `dead-code` | Fixed | The retired M4 canvas (4 files) and M15 shader removed, with their CSS and the `NEXT_PUBLIC_ENABLE_SHADER` variable; `/dev/type` updated for the Stage 7 tokens and components |
 | `performance` | Pass | `/` first-load JS 157.4 KB gz, case studies 157.2 KB; smoke 21/21 |
+
+
+## Owner review 2 (2026-10-10, ISS-45)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `hover-feedback` | Pass | Pill: lifts 1 px, edge `--line-strong`, fill `--surface-hover`, arrow 4 px. Cards: 2 px lift, the circling edge at opacity 1 within 400 ms of hover; probes counted 135–685 edge pixels in the accent per frame on About, Open source and Experience cards |
+| `focus-states` | Pass | The edge also shows on `:focus-within`, so keyboard users get it on the card holding focus; the global focus ring is unchanged |
+| `animating-regions` | Pass | The edge runs only on the hovered or focused card (owner chose hover and focus over always-on); the pill arc and the closing glow are the only loops, each paused off-screen or by the switch |
+| `reduced-motion` | Pass | The edge shows still at its first angle; the glow sits at 0.18 with no pulse; the lift is off |
+| `color-contrast` | Pass | Text over the stronger closing glow: link pills 5.84:1 or more in light (dark text on the red), about 10:1 in dark; the filled button is opaque. `check:contrast` ok |
+| `performance` | Pass | The edge angle is a registered property, so only the hovered card repaints; `/` 157.4 KB gz; smoke 21/21 |
