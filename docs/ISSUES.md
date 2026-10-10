@@ -700,6 +700,10 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Mock-up v1, 2026-10-10** (7.1, a private design canvas the owner opens from the link in the session): the home page in dark and light (header, hero with gradient H1, red announcement pill, CSS stand-in for the hero light, four sourced figures, the Eventora card plus two compact cards, a tabbed code block with three real excerpts pinned to commits, a 3×3 grid of sourced figures, a closing line, footer) and a board of choices (two display serifs, three heading grotesks, color tokens, motion list). Tweaks switch theme, fonts and the red. Two pieces of new copy are left as bracketed placeholders for the owner: the code section's intro line and the grid's heading. Awaiting the owner's choices and approval.
 
+**Owner choices on v1, 2026-10-10.** Display serif: Newsreader (kept, with its `opsz` axis). Heading grotesk: Instrument Sans. Red: `#FF3B4E`. The "From the source" code section is dropped. Every component interactive and animated, including a screenshot slider for the work.
+
+**Mock-up v2, same day.** Project tabs (Eventora, Recruiter-Pro, SysPlex) swap the work card with a blur-and-rise; each card has a screenshot slider (progress bars that fill and advance, pause on hover or focus, arrows, dots, arrow keys; SysPlex shows its owed-screenshot placeholder); figures count up on load and when the grid enters the viewport; an Open source list with an All / Merged / Under review filter (11 / 8 / 3, snapshot 2026-10-08); a pause-animations switch and an animated theme toggle in the header; a pointer-following red spotlight on cards; arrow and outward-link icons nudge on hover; sections rise as they scroll in. Grid heading drafted as "Every figure has a source." (alternatives in the session). Reduced motion turns every animation off; the pause switch stops all loops.
+
 **Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
 
 ---
