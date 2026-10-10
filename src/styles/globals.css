@@ -707,11 +707,161 @@ html[data-reveal="on"]:not([data-intro]) .hero-ctas {
   animation: fade-up var(--dur-3) var(--ease-out) 820ms backwards;
 }
 
+/* Stage 7 hero (ISS-42). The H1's words blur into focus as they rise
+   (one-shot, 900 ms, 130 ms apart); the pill and the figures fade up around
+   them. Opacity, filter and translate only. */
+@keyframes hero-focus {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    translate: 0 0.2em;
+  }
+}
+html[data-reveal="on"]:not([data-intro]) .hero-h1 .w-i {
+  animation: hero-focus 900ms var(--ease-out) backwards;
+  animation-delay: calc(80ms + var(--i, 0) * 130ms);
+}
+.hero-h1 .w {
+  overflow: visible;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-pill {
+  animation: fade-up var(--dur-3) var(--ease-out) backwards;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-figures {
+  animation: fade-up var(--dur-3) var(--ease-out) 950ms backwards;
+}
+
 /* Reveals and the intro are one-shot entrances, and .title-track follows the
    reader's own scrolling: none of them autoplay, so the pause leaves them be
    (pausing them could strand text half-revealed). */
-html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .intro, .intro *, .title-track) {
+html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .hero-pill, .hero-figures, .intro, .intro *, .title-track) {
   animation-play-state: running !important;
+}
+
+/* Announcement pill: a 1 px edge with an accent arc circling it every 6 s (a
+   loop, so the pause stops it; the pill's own fade-in is exempt above). */
+.hero-pill {
+  position: relative;
+  display: inline-flex;
+  padding: 1px;
+  border-radius: var(--radius-pill);
+  background: var(--edge);
+  overflow: hidden;
+  isolation: isolate;
+  transition: translate var(--dur-1) var(--ease-out);
+}
+.hero-pill::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  z-index: -1;
+  background: conic-gradient(from 0deg, transparent 0 62%, var(--break) 80%, transparent 92%);
+  animation: hero-spin 6s linear infinite;
+}
+.hero-pill:hover {
+  translate: 0 -1px;
+}
+.hero-pill-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--text-1);
+}
+.hero-pill-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--break);
+  animation: hero-blink 2.4s ease-in-out infinite;
+}
+@keyframes hero-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes hero-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Hero light: glow, rays, two rings and a core. Loops stop with the pause;
+   static under reduced motion. */
+.hero-light {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  aspect-ratio: 1;
+  margin-inline-start: auto;
+}
+.hero-light > span {
+  position: absolute;
+  border-radius: 50%;
+}
+.hero-light-glow {
+  inset: 0;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 60%, transparent) 0, transparent 45%);
+  filter: blur(2.5rem);
+  opacity: 0.4;
+  animation: hero-pulse 6s ease-in-out infinite;
+}
+.hero-light-rays {
+  inset: 8%;
+  background: repeating-conic-gradient(from 0deg, transparent 0 9deg, color-mix(in srgb, var(--text-1) 9%, transparent) 9.5deg, transparent 10.5deg);
+  -webkit-mask: radial-gradient(circle, #000 0, transparent 68%);
+  mask: radial-gradient(circle, #000 0, transparent 68%);
+  animation: hero-spin 60s linear infinite;
+}
+.hero-light-ring {
+  inset: 18%;
+  border: 1px solid var(--edge);
+  animation: hero-drift 9s ease-in-out infinite;
+}
+.hero-light-ring-inner {
+  inset: 30%;
+  border-color: var(--edge-soft);
+  animation-duration: 12s;
+  animation-direction: reverse;
+}
+.hero-light-core {
+  inset: calc(50% - 0.4375rem);
+  background: radial-gradient(circle, var(--text-1) 0 40%, var(--break) 70%, transparent 72%);
+  animation: hero-pulse 3s ease-in-out infinite;
+}
+.hero-light-core::after {
+  content: "";
+  position: absolute;
+  inset: -2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--break) 45%, transparent) 0, transparent 70%);
+}
+:root[data-theme="light"] .hero-light-glow {
+  opacity: 0.25;
+}
+@keyframes hero-pulse {
+  50% {
+    opacity: 0.85;
+    scale: 1.08;
+  }
+}
+@keyframes hero-drift {
+  50% {
+    rotate: 8deg;
+    scale: 1.04;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-pill::before,
+  .hero-pill-dot,
+  .hero-light > span {
+    animation: none;
+  }
+  .hero-pill {
+    transition: none;
+  }
 }
 
 /* H1 words pinned to measured widths during the weight effect: center the
@@ -873,6 +1023,14 @@ html[data-intro="play"] .intro {
 }
 .spy-index {
   color: var(--text-3);
+}
+/* Stage 7 header: with the Contact pill and the pause switch, the five links
+   only fit on one line from 1024 px without their numbers; the numbers return
+   at 1536 px (the section titles always show them). */
+@media (width < 96rem) {
+  .site-header .spy-index {
+    display: none;
+  }
 }
 
 /* M3 section titles settle in scale as they enter. Decorative: no fallback. */
