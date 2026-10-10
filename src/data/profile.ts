@@ -26,8 +26,33 @@ const profileSchema = z.object({
     more: claim,
     ctaPrimary: z.object({ label: z.string(), href: z.string().startsWith("#") }),
     ctaResume: z.object({ label: z.string() }),
+    /**
+     * Announcement pill above the H1 (Stage 7). `{merged}` and `{projects}`
+     * are filled from ossSummary() over the same PR list the Open source
+     * section shows, so the numbers cannot drift.
+     */
+    announce: z.object({ template: z.string().includes("{merged}"), href: z.string().startsWith("#") }),
+    /** Figures strip under the hero: metric ids from projects.ts (label, qualifier, source come from there). */
+    figures: z.array(z.object({ project: z.string(), metric: z.string() })).min(1).max(4),
   }),
   sections: z.array(sectionSchema).min(1),
+  /**
+   * "Every figure has a source." (Stage 7): a grid of metric ids from
+   * projects.ts (label, qualifier and source come from there), or the derived
+   * open-source count. A missing id fails the build.
+   */
+  figures: z.object({
+    title: claim,
+    items: z
+      .array(z.union([z.object({ project: z.string(), metric: z.string() }), z.object({ oss: z.literal("merged") })]))
+      .min(3)
+      .max(9),
+  }),
+  /** Closing line before Contact (Stage 7), with the one soft glow outside the hero. */
+  closing: z.object({
+    line: claim,
+    cta: z.object({ label: z.string(), href: z.string().startsWith("#") }),
+  }),
   meta: z.object({
     title: z.string().min(1),
     description: z.string().min(1).max(160),
@@ -48,6 +73,9 @@ const profileSchema = z.object({
     externalLink: z.string(),
     caseStudy: z.string(),
     alsoBuilt: z.string(),
+    projectTabs: z.string(),
+    figure: z.string(),
+    screenshot: z.string(),
     carouselLabel: z.string(),
     previous: z.string(),
     next: z.string(),
@@ -104,6 +132,9 @@ const profileSchema = z.object({
       closed: z.string(),
       liveStatus: z.string(),
       snapshotStatus: z.string(),
+      filter: z.string(),
+      all: z.string(),
+      showing: z.string(),
     }),
     experience: z.object({
       education: z.string(),
@@ -130,6 +161,9 @@ const profileSchema = z.object({
     }),
     footer: z.object({
       nav: z.string(),
+      /** Visible column titles (Stage 7 footer). */
+      sectionsTitle: z.string(),
+      elsewhereTitle: z.string(),
       backToTop: z.string(),
       sources: z.string(),
       license: z.string(),
@@ -166,6 +200,13 @@ export const profile = profileSchema.parse({
     },
     ctaPrimary: { label: "View My Work", href: "#work" },
     ctaResume: { label: "Download Resume" },
+    announce: { template: "{merged} merged pull requests across {projects} open-source projects", href: "#open-source" },
+    figures: [
+      { project: "eventora", metric: "burst-oversell" },
+      { project: "eventora", metric: "local-requests" },
+      { project: "eventora", metric: "local-1-rps" },
+      { project: "eventora", metric: "tests" },
+    ],
   },
   sections: [
     { live: true, id: "about", index: "01", title: "About" },
@@ -174,6 +215,24 @@ export const profile = profileSchema.parse({
     { live: true, id: "experience", index: "04", title: "Experience" },
     { live: true, id: "contact", index: "05", title: "Contact" },
   ],
+  figures: {
+    title: { text: "Every figure has a source.", source: "owner:approved-copy", asOf: "2026-10-10" },
+    items: [
+      { project: "eventora", metric: "tests" },
+      { project: "eventora", metric: "coverage" },
+      { project: "eventora", metric: "states" },
+      { project: "eventora", metric: "migrations" },
+      { project: "recruiter-pro", metric: "branch-coverage" },
+      { project: "recruiter-pro", metric: "skills" },
+      { project: "recruiter-pro", metric: "adrs" },
+      { oss: "merged" },
+      { project: "sysplex", metric: "pytest" },
+    ],
+  },
+  closing: {
+    line: { text: "Systems that keep working as load grows.", source: "owner:approved-copy", asOf: "2026-10-10" },
+    cta: { label: "Send a message", href: "#contact" },
+  },
   meta: {
     title: "Abdelrhman Mohamed / Software engineer",
     description:
@@ -193,6 +252,9 @@ export const profile = profileSchema.parse({
     externalLink: "opens an external site",
     caseStudy: "Case study",
     alsoBuilt: "Also built",
+    projectTabs: "Projects",
+    figure: "Fig.",
+    screenshot: "Screenshot",
     carouselLabel: "Screenshots",
     previous: "Previous screenshot",
     next: "Next screenshot",
@@ -255,6 +317,9 @@ export const profile = profileSchema.parse({
       closed: "Closed",
       liveStatus: "Status from GitHub, refreshed daily",
       snapshotStatus: "Status as of the last snapshot",
+      filter: "Show pull requests",
+      all: "All",
+      showing: "Showing",
     },
     experience: {
       education: "Education",
@@ -281,6 +346,8 @@ export const profile = profileSchema.parse({
     },
     footer: {
       nav: "Site index",
+      sectionsTitle: "Sections",
+      elsewhereTitle: "Elsewhere",
       backToTop: "Back to top",
       sources: "Every number on this site names its source file and the date it was checked; the case studies link to the cited lines.",
       license: "Code MIT. Writing and photographs all rights reserved.",

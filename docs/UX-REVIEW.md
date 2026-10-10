@@ -460,3 +460,94 @@ Worse than Stage 5 on TBT everywhere and on Recruiter-Pro's LCP (now a screensho
 ## Stage 6 (2026-10-08)
 
 No interface changes: release docs, CI smoke tests, workflows and the withheld option for personal fields. The UI UX Pro Max audit has nothing new to rate. The Playwright smoke tests now repeat three earlier checks on every pull request: one visible `h1` per page, content without JavaScript and with reduced motion, and no horizontal scroll at 375 px (`horizontal-scroll`).
+
+
+## Stage 7.2, redesign foundation (2026-10-10)
+
+Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `frontend-design`, `modern-web-guidance` (guides: visually-stable-font-fallbacks, motion, scroll-entry-exit-effects, interactive-content-reveal). Scope: tokens, fonts, header, footer, buttons, section headings; sections themselves are restyled in 7.4.
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `color-contrast` | Pass | `npm run check:contrast`: 36 pairings per theme on the new ramp; tightest margin 1.03x (text-3 on `--c1`, 4.66:1 dark, 4.63:1 light); text-3 on the hover surface 5.08:1 dark, 4.90:1 light |
+| `color-not-only` | Pass | Active nav: red dot + full ink + neutral pill with an edge line; pause switch: knob position + track color + `aria-checked` |
+| `focus-states` | Pass | Global `:focus-visible` ring in `--break` unchanged |
+| `touch-target-size` | Pass | Header controls `min-h-11`; the Contact pill is 36 px tall but is a duplicate of the nav and footer links, and hidden below 640 px where the Menu covers it |
+| `aria` | Pass | Pause control is `role="switch"` with `aria-checked`; theme button keeps its changing `aria-label`; brand icons `aria-hidden` beside text |
+| `reduced-motion` | Pass | Switch knob, theme-icon turn, arrow nudge and icon lift drop their transitions under `prefers-reduced-motion`; the pause control is hidden there as before |
+| `font-loading` | Fixed | Inter's x-height, inherited through `font-size-adjust: from-font`, scaled the H1 about 20 % and clipped "Abdelrhman" at 375 px. Recomputed per face; the H1's words now end at 294 px (375) and 250 px (320) |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375 and 320 on `/`; smoke tests 20/20 |
+| `performance` | Pass | First-load JS on `/` 157.5 KB gz (budget 170); heading and mono faces not preloaded, so the preloads stay Newsreader and Inter |
+
+
+## Stage 7.3, hero (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `reduced-motion` | Pass | The H1 blur, pill and figures fades are under `data-reveal` (static without motion); the pill arc, its dot and the hero light have `animation: none` under `prefers-reduced-motion`; figures render their final value in the server HTML |
+| `pause-control` | Pass | The arc, dot and light are loops and stop with the global pause; the pill's and figures' one-shot fades are on the exemption list so paused visitors never get stranded hidden text |
+| `color-not-only` | Pass | The pill's red dot and arc are decoration; the text carries the meaning |
+| `touch-target-size` | Accepted | The pill is about 38 px tall (Resend-like proportion); it duplicates the Open source nav link and the palette entry |
+| `layout-shift` | Pass | Local Lighthouse CLS 0.002 on `/`, 0.004 on SysPlex |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 375; the pill wraps to two lines at 375 instead of overflowing; smoke 20/20 |
+| `nav-fits` | Fixed | With the Contact pill and the switch the five links wrapped at 1024 and 1440 px. Links start at 1280 px (`xl`), their numbers and the switch label at 1536 px; checked at 1024, 1280, 1440, 1600 |
+| `performance` | Pass | `/` first-load JS 156.8 KB gz (was 157.5 KB: the node-graph canvas host is no longer loaded); the light is CSS only. Preloaded fonts 177 KB (Inter, Newsreader; was 203 KB with three faces). Local LCP not comparable to earlier runs (CPU benchmark 1,887–2,069 against about 3,100); the Vercel preview run decides (ISS-36) |
+
+
+## Stage 7.4, sections and case studies (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `aria` | Pass | Work: `role="tablist"` / `tab` / `tabpanel` with `aria-selected`, `aria-controls`, roving `tabIndex`, arrow keys, Home and End. Open source filter: a labelled `role="group"` of `aria-pressed` buttons, with a polite live line ("Showing 3 of 11"). Slider: `aria-roledescription="carousel"` region, focusable, ← → keys; dots name their slide and carry `aria-current`; progress bars `aria-hidden` |
+| `progressive-enhancement` | Pass | Tablist and filter show, and inactive panels hide, only under `html[data-js]` (set before first paint): with JS off all three project cards and all rows render, no controls (Playwright, JS disabled: 3 visible panels, tablist and filter hidden). Server HTML matches the first client render, so no shift on hydration |
+| `pause-control` | Pass | Slider autoplay is a scheduler `loop` task: stops off-screen, on a hidden tab, under the pause and while hovered or focused; never runs under reduced motion (bars then show position only) |
+| `color-contrast` | Fixed | Inactive slider dots were `--line-strong` (about 1.9:1 on black, under the 3:1 for controls); now `--text-3`, 5.0:1 or more in both themes. `npm run check:contrast` ok |
+| `color-not-only` | Pass | PR status by shape and text (filled ✓ Merged, outlined ○ Open + dot); reported issues ● Closed / ○ Open with text; the current dot is longer as well as brighter |
+| `touch-target-size` | Pass | Tabs and filter pills 36 px tall in a 44 px group; slider arrows 44 px; dots 24 px targets around a 6 px dot (WCAG 2.5.8 minimum); contact pills `min-h-11` |
+| `typography` | Fixed | The case-study H1 with gradient text showed a seam where "E" and "v" overlap at −0.04em (Chrome paints overlapping clipped glyphs that way); that H1 stays solid. The home H1 and section H2s keep the gradient, no seams in the captures |
+| `content-hierarchy` | Pass | One featured card at a time (was three stacked); "Also built" as two equal cards; the figure grid is an unnumbered block, not in the nav |
+| `horizontal-scroll` | Pass | `scrollWidth` equals the viewport at 320 and 375 on all four pages, both themes; on phones the slider dots stack above the caption (they squeezed it at 375) |
+| `performance` | Pass | `/` first-load JS 157.5 KB gz (budget 170); the tabs and filter receive server-rendered nodes, so no data file (or Zod) is shipped to the client |
+| `smoke` | Pass | 21/21, with a new test for the tabs and the filter |
+
+
+## Stage 7.4.1, contrast and clarity (2026-10-10, ISS-43)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `color-contrast` | Fixed | Secondary text `--text-2` #A3A3A3 → #B8B8B8 dark, #4D4D4D → #404040 light; `--text-3` #858585 → #949494 dark, #666666 → #5C5C5C light. `npm run check:contrast`: tightest margin 1.09x dark, 1.08x light (was 1.03x); text-3 on the hover surface 6.18:1 dark, 5.71:1 light (was 5.08 and 4.90) |
+| `background-depth` | Fixed | Page black sampled from pixels at four scrolled positions: average (6, 6, 6), brightest 11 → (3, 3, 3), brightest 5; light white 249 → 252. Grain 0.045 → 0.02 (texture kept) |
+| `surface-separation` | Fixed | Cards on an opaque fill (text color mixed into the page color), so the grain no longer shows through them; edges 0.19 / 0.11 → 0.22 / 0.14 (dark), 0.16 / 0.09 → 0.18 / 0.11 (light) |
+| `typography-hierarchy` | Fixed | Section H2 gradient: full color to 45 %, ending at 75 % (was 30 % → 50 %, the end about #787878 on black) |
+| `reduced-motion` | Fixed | The M12 grid stayed at 0.5 over every screen under reduced motion (it faded only on a scroll timeline). It is now an absolute first-screen layer and scrolls away for every visitor; probe: its bottom is above the viewport once scrolled, in all four theme × motion modes |
+| `image-fidelity` | Pass | Active Eventora slide rendered at (223, 221, 230) average against (225, 222, 231) in the original file; no filter, opacity or blend above any screenshot |
+| `overlays` | Pass | After every reveal, only the hero glow, the hidden card spotlight, the first-screen grid and the grain are translucent; no text sits under opacity, filter or blend |
+| `horizontal-scroll` | Pass | `scrollWidth` = viewport at 1440 and 375, both themes, motion on and reduced; smoke 21/21; `/` 157.5 KB gz |
+
+
+## Stage 7.5, motion (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | Rises animate `translate` and `scale`; swaps and row entries `opacity` and `translate`; the glow `opacity` and `scale`; title words `translate` and a per-word `filter` (small layers). No layout properties |
+| `contrast-during-motion` | Pass | Scroll-linked rises keep opacity 1: probe mid-entry on the figure grid read translate 27 px, scale 0.98, opacity 1 |
+| `reduced-motion` | Pass | Under reduced motion: 0 of 14 rise blocks animate, no glow animation, the tab swap shows the panel at opacity 1 at once, title words unblurred |
+| `pause-control` | Pass | The closing glow is the one new loop: paused off-screen (`LoopGate`), running in view, paused by the switch. Rises are scroll-linked and swaps one-shot, so the pause leaves them be |
+| `loop-offscreen` | Pass | Glow off-screen: `animation-play-state: paused`, no `data-visible`; in view: running |
+| `feedback` | Pass | Tab switch fades in over 400 ms (opacity 0 → 0.93 at 150 ms → 1); returning filter rows stagger 30 ms; cards lift 2 px with the spotlight (fine pointer only); no tilt |
+| `animating-regions` | Pass | At most the scroll-linked block entering, one user-triggered swap and the glow per viewport; the hero light is off-screen once scrolled |
+| `performance` | Pass | `/` first-load JS 157.4 KB gz; the tilt's per-frame scheduler task is gone; `LoopGate` is one observer; no console errors |
+| `smoke` | Pass | 21/21 |
+
+
+## Stage 7.6, QA (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `target-size` | Fixed | Lighthouse flagged the slider dots on `/` at 23.3 px: the scroll-linked rise started at scale 0.97, and Lighthouse measures below-the-fold controls in that state. The rise is now translate only; accessibility 100 on all four pages |
+| `keyboard` | Pass | Tab walk of `/` at 1440: 139 stops (skip link, header, hero, tabs, slider arrows and dots, filter, every row link, figure sources, contact pills, form, footer), each with a visible ring; none hidden under the header |
+| `heading-order` | Pass | One H1; H2 per section (About, Work, Open source, Experience, the figure grid, the closing line, Contact); H3 for projects and roles |
+| `horizontal-scroll` | Pass | `scrollWidth` = viewport at 320 and 375 on `/`, the three case studies and `/dev/type`, both themes, motion on; no console errors |
+| `layout-shift` | Open | CLS 0.002 in 6 of 7 local runs; one home run read 0.182, the hero's second paragraph moved when Inter swapped in late and the lead re-wrapped (ISS-44) |
+| `lighthouse` | Pass | Accessibility, best practices and SEO 100 on `/`, Eventora, Recruiter-Pro and SysPlex. Performance not judged locally (CPU benchmark 1,537–1,718, about half the earlier runs); the Stage 7 PR preview and Speed Insights decide |
+| `dead-code` | Fixed | The retired M4 canvas (4 files) and M15 shader removed, with their CSS and the `NEXT_PUBLIC_ENABLE_SHADER` variable; `/dev/type` updated for the Stage 7 tokens and components |
+| `performance` | Pass | `/` first-load JS 157.4 KB gz, case studies 157.2 KB; smoke 21/21 |

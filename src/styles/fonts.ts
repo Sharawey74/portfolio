@@ -1,9 +1,12 @@
-import { Hanken_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google";
+import { Instrument_Sans, Inter, Newsreader } from "next/font/google";
+import localFont from "next/font/local";
 
 /**
- * The type pairing. Swap a family here and nowhere else; globals.css reads the
- * three CSS variables. Never use Inter, Roboto, Arial, system-ui, Space Grotesk
- * or Geist.
+ * The type system (Stage 7, docs/ISSUES.md ISS-42): Newsreader for the display
+ * lines, Instrument Sans for section headings and figures, Inter for body and
+ * interface text, Commit Mono for code, numbers in captions and metadata.
+ * All four are free (OFL). Swap a family here and nowhere else; globals.css
+ * reads the CSS variables.
  */
 
 /**
@@ -12,6 +15,7 @@ import { Hanken_Grotesk, JetBrains_Mono, Newsreader } from "next/font/google";
  * late swap re-wraps it and moved the hero by CLS 0.188 on a throttled mobile
  * run. The font is preloaded; a visit that misses the short block period keeps
  * the metric-adjusted fallback serif for that page view, with no shift.
+ * The opsz axis stays: owner decision 2026-10-09 (ISS-36).
  */
 export const display = Newsreader({
   subsets: ["latin"],
@@ -24,23 +28,38 @@ export const display = Newsreader({
   variable: "--font-newsreader",
 });
 
-/** Text and UI. */
-export const sans = Hanken_Grotesk({
+/** Body and interface text. Preloaded: the hero paragraph is the LCP element on `/`. */
+export const sans = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-hanken",
+  variable: "--font-inter",
 });
 
 /**
- * Labels, numbers, metadata, figure captions. Weight 400 only: nothing sets
- * another weight on mono text, and the static file is 20.7 KB against 39.5 KB
- * for the variable one (preloaded on every page; docs/ISSUES.md ISS-36).
+ * Section headings and figures. Not preloaded: nothing set in it is in the
+ * first paint's LCP element, and every preload competes with the CSS on slow
+ * connections (ISS-36). The metric-adjusted fallback keeps the swap shift small.
  */
-export const mono = JetBrains_Mono({
+export const heading = Instrument_Sans({
   subsets: ["latin"],
-  weight: "400",
   display: "swap",
-  variable: "--font-jetbrains",
+  preload: false,
+  variable: "--font-instrument",
 });
 
-export const fontVariables = `${display.variable} ${sans.variable} ${mono.variable}`;
+/**
+ * Code, figure captions, sources and metadata. Self-hosted from
+ * @fontsource/commit-mono (OFL; the package ships the licence). Weight 400
+ * only, latin subset, 47 KB; not preloaded, for the same reason as above.
+ */
+export const mono = localFont({
+  src: "../../node_modules/@fontsource/commit-mono/files/commit-mono-latin-400-normal.woff2",
+  weight: "400",
+  style: "normal",
+  display: "swap",
+  preload: false,
+  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+  variable: "--font-commit",
+});
+
+export const fontVariables = `${display.variable} ${sans.variable} ${heading.variable} ${mono.variable}`;

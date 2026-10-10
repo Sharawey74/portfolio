@@ -9,7 +9,7 @@ export type SpyItem = { id: string; index: string; title: string };
 /**
  * M13 scroll-spy. One IntersectionObserver over the target sections marks the
  * last section whose top has passed 45% of the viewport as current: the link gets
- * aria-current="true", the --break marker dot, full ink and a --c1 pill. The
+ * aria-current="true", the --break marker dot, full ink and a neutral pill with an edge line. The
  * state is never conveyed by color alone.
  *
  * Native `scroll-target-group` + `:target-current` is Chromium-only (2026), so

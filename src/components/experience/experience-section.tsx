@@ -10,10 +10,11 @@ import { InView } from "@/components/motion/in-view.tsx";
 import { monthYear } from "@/lib/format.ts";
 
 /**
- * 04 / Experience. Roles and education on a vertical timeline whose rule draws
+ * 04 / Experience. Roles on a vertical timeline whose rule draws
  * down as the reader scrolls (CSS view() timeline; static where unsupported or
  * under reduced motion), entries clip in once in view. Certifications are
- * listed without dates, by owner decision. The capstone stays hidden until the
+ * listed without dates, by owner decision. Education and certifications sit on
+ * section cards (Stage 7). The capstone stays hidden until the
  * owner describes it (experience.capstone is a TODO).
  */
 export function ExperienceSection() {
@@ -43,7 +44,7 @@ export function ExperienceSection() {
                 <time dateTime={r.start}>{monthYear(r.start)}</time> – <time dateTime={r.end}>{monthYear(r.end)}</time>
               </p>
               <div className="flex flex-col gap-3 md:col-span-7" title={evidence(r.source, r.asOf)}>
-                <h3 className="font-display text-h2">{r.title}</h3>
+                <h3 className="font-heading text-h3">{r.title}</h3>
                 <p className="text-ink-2">{r.org}</p>
                 <ul className="flex max-w-[64ch] flex-col gap-2">
                   {r.points.map((pt) => (
@@ -69,13 +70,13 @@ export function ExperienceSection() {
         </ol>
       </div>
 
-      <div className="col-span-full grid gap-12 md:col-span-10 md:col-start-2 md:grid-cols-10 md:gap-6">
-        <div className="flex flex-col gap-6 md:col-span-5">
+      <div className="rise-group col-span-full grid gap-5 md:col-span-10 md:col-start-2 md:grid-cols-10">
+        <div className="surface-card flex flex-col gap-4 p-6 md:col-span-5 md:p-7">
           <MonoLabel>{t.education}</MonoLabel>
           <ul className="flex flex-col">
             {experience.education.map((e) => (
-              <li key={e.school} className="flex flex-col gap-2 border-t border-hair py-6" title={evidence(e.source, e.asOf)}>
-                <p className="font-display text-h3">{e.degree}</p>
+              <li key={e.school} className="flex flex-col gap-2 border-t border-hair pt-5 pb-1" title={evidence(e.source, e.asOf)}>
+                <p className="font-heading text-h3">{e.degree}</p>
                 <p className="text-small text-ink-2">{e.school}</p>
                 <p className="num font-mono text-mono text-ink-3">
                   <time dateTime={e.start}>{monthYear(e.start)}</time> – <time dateTime={e.end}>{monthYear(e.end)}</time>
@@ -85,11 +86,11 @@ export function ExperienceSection() {
             ))}
           </ul>
         </div>
-        <div className="flex flex-col gap-6 md:col-span-5">
+        <div className="surface-card flex flex-col gap-4 p-6 md:col-span-5 md:p-7">
           <MonoLabel>{t.certifications}</MonoLabel>
           <ul className="flex flex-col">
             {experience.certifications.map((c) => (
-              <li key={c.name} className="flex flex-col gap-1 border-t border-hair py-4" title={evidence(c.source, c.asOf)}>
+              <li key={c.name} className="flex flex-col gap-1 border-t border-hair py-3.5 last:pb-0" title={evidence(c.source, c.asOf)}>
                 <p className="text-ink">{c.name}</p>
                 <p className="font-mono text-mono text-ink-3">{c.issuer}</p>
               </li>

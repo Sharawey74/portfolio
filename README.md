@@ -111,7 +111,6 @@ committed. `.env.example` lists them with notes.
 | `NEXT_PUBLIC_SITE_URL` | Canonical URLs, sitemap, OG, JSON-LD | Optional on Vercel (falls back to the production domain); set for a custom domain |
 | `GITHUB_TOKEN` | Daily PR status refresh | Optional; raises the API rate limit. No scopes needed |
 | `LAUNCH_STRICT` | Launch gate | `1` on Production makes the build fail while `TODO(owner)` items remain |
-| `NEXT_PUBLIC_ENABLE_SHADER` | Stage 5 shader | Default `0` |
 
 `/` is prerendered (and regenerated at most daily for the PR status), so a
 change to the contact variables takes effect on the next deployment.
