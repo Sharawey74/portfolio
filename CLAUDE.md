@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Context and standing rules for anyone (human or agent) working in this repo.
-Read this first, then `PLAN.md` for where the work stands. `PLAN.md`, `FACTS-CHECK.md`, `PERSONAL-INFO-CHECKLIST.md` and `DEPLOY.md` are local only since 2026-10-08 (git-ignored on every branch, owner's request): keep them up to date on this machine as before, but they are never committed, and a fresh clone does not have them. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script; `docs/ISSUES.md` is the register of open issues, decisions and proposed fixes; `docs/reports/` holds measurements. Private details that
+Read this first, then `PLAN.md` for where the work stands. `PLAN.md`, `FACTS-CHECK.md`, `PERSONAL-INFO-CHECKLIST.md` and `DEPLOY.md` are local only since 2026-10-08 (git-ignored on every branch, owner's request): keep them up to date on this machine as before, but they are never committed, and a fresh clone does not have them. `docs/UX-REVIEW.md` is the UI UX Pro Max audit (rule by rule); `docs/UAT.md` is the owner's manual acceptance script; `docs/ISSUES.md` is the register of open issues, decisions and proposed fixes; `docs/reports/` holds measurements; `docs/TESTING.md` lists every kind of test and check (add new ones there). Private details that
 must not be in a public repo live in `CLAUDE.local.md` (git-ignored); read it
 too if it exists on this machine.
 
@@ -165,6 +165,7 @@ Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.con
 | `npm run check` | facts + contrast + colors |
 | `npm run report:bundle` | First-load JS per prerendered page (gz, `nomodule` polyfills excluded); fails if `/` > 170 KB |
 | `npm run test:smoke` | Playwright smoke tests (`tests/smoke.spec.ts`) against `next start` on port 3110; build first |
+| `node scripts/probe-hero-core.mjs [outDir]` | Hero core motion and width probe against the site on port 3107 (not in CI; `docs/TESTING.md`) |
 
 Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`; documented in `.env.example` and the README. Commit only `.env.example`. To see the contact form locally, build and start with placeholder values for the three Resend variables, and test only paths that stop before sending (validation, honeypot); a valid message would call Resend.
 
