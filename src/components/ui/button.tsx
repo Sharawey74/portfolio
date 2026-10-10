@@ -17,7 +17,8 @@ const variants: Record<Variant, string> = {
   outline: "border border-line text-ink hover:border-line-strong hover:bg-hover",
 };
 
-const disabledStyle = "border border-hair text-ink-3 cursor-not-allowed";
+// Disabled buttons do not lift or show the accent edge: they cannot be used.
+const disabledStyle = "border border-hair text-ink-3 cursor-not-allowed hover:translate-y-0";
 
 type Common = {
   variant?: Variant;
