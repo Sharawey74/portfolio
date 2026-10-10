@@ -171,6 +171,7 @@ Tick what you covered. A full launch review covers every row at least once.
 | UAT-76 | Open the production site in a browser tab, in a light and a dark browser theme; bookmark it | The tab and bookmark show a light briefcase on a dark rounded square, clear in both browser themes | | |
 | UAT-77 | Open the Eventora case study; scroll to the footer | The header links read Source, Frontend and Project site with no note beside Frontend; there is no "Limits" section. The footer's second column is titled "Social" | | |
 | UAT-78 | Hover the "Java 21" chip on the Eventora card, a chip in About's stack, a "Merged" badge in Open source and a Work tab; Tab to a filter pill | Each lifts slightly (chips and badges) and a red edge circles the one under the pointer or focus; only that pill moves | | |
+| UAT-79 | Open `/` in a new tab (reload once if the counter intro plays); watch the first two seconds. Then move the mouse slowly across the name; then turn on reduced motion and reload | "SOFTWARE ENGINEER" decodes from random characters; the name's letters rise and come into focus one after another; the red period drops in last and pulses once; a thin line draws under "keep working as load grows". Moving the mouse over the name, nearby letters thicken and change shape smoothly like a lens, and the name brightens around the pointer; nothing shifts sideways. With reduced motion, everything shows at once, the line already drawn, nothing follows the mouse | | |
 
 ## 5. Defect log
 
