@@ -15,7 +15,7 @@ import { monthYear } from "@/lib/format.ts";
 const projectName = (slug: string) => projects.find((p) => p.slug === slug)?.name ?? slug;
 
 /**
- * 01 / About. A bento of facts drawn from the data files (education,
+ * 01 / About. A bento of section cards (Stage 7) with facts drawn from the data files (education,
  * internships, open source, the flagship project), plus the owner's bio,
  * portrait, location and availability once set in personal.ts (each omitted
  * until then). Below it, the stack by lane, every chip naming where it was used.
@@ -50,7 +50,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
 
         <li className="bento-cell md:col-span-3" title={evidence(school.source, school.asOf)}>
           <MonoLabel>{t.education}</MonoLabel>
-          <p className="font-display text-h3">{school.degree}</p>
+          <p className="font-heading text-h3">{school.degree}</p>
           <p className="text-small text-ink-2">{school.school}</p>
           <p className="num font-mono text-mono text-ink-3">
             {monthYear(school.start)} – {monthYear(school.end)}
@@ -59,21 +59,21 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
 
         <li className="bento-cell md:col-span-3" title={evidence(oss.source, oss.asOf)}>
           <MonoLabel>{t.openSource}</MonoLabel>
-          <p className="font-display text-h2 leading-none">
+          <p className="font-heading text-h2 leading-none tracking-tight">
             <CountUp display={String(oss.merged)} />
           </p>
           <p className="text-small text-ink-2">
             {t.mergedPrs} {t.acrossProjects} <span className="num">{oss.mergedProjects}</span> {ui.oss.acrossProjects},{" "}
             <span className="num">{oss.open}</span> {ui.oss.underReview}
           </p>
-          <a href="#open-source" className="mt-auto font-mono text-mono text-ink-2 underline decoration-line-strong underline-offset-4 hover:text-ink">
-            {sections.find((s) => s.id === "open-source")!.index} / {sections.find((s) => s.id === "open-source")!.title} <span aria-hidden="true">↓</span>
+          <a href="#open-source" className="nudge mt-auto inline-flex min-h-11 w-fit items-center gap-1.5 text-small text-ink-2 hover:text-ink">
+            {sections.find((s) => s.id === "open-source")!.index} / {sections.find((s) => s.id === "open-source")!.title} <span aria-hidden="true" data-arrow="down">↓</span>
           </a>
         </li>
 
         <li className="bento-cell md:col-span-2">
           <MonoLabel>{t.internships}</MonoLabel>
-          <p className="font-display text-h2 leading-none">
+          <p className="font-heading text-h2 leading-none tracking-tight">
             <CountUp display={String(experience.roles.length)} />
           </p>
           <ul className="flex flex-col gap-1 text-small text-ink-2">
@@ -87,17 +87,17 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
 
         <li className="bento-cell md:col-span-4" title={evidence(flagship.summary.source, flagship.summary.asOf)}>
           <MonoLabel>{t.flagship}</MonoLabel>
-          <p className="font-display text-h3">{flagship.name}</p>
+          <p className="font-heading text-h3">{flagship.name}</p>
           <p className="max-w-[56ch] text-small text-ink-2">{flagship.summary.text}</p>
           {flagshipMetric ? (
             <p className="text-small text-ink-2" title={evidence(flagshipMetric.source, flagshipMetric.asOf)}>
-              <span className="num font-display text-h3 text-ink">{flagshipMetric.display}</span>{" "}
+              <span className="num font-heading text-h3 text-ink">{flagshipMetric.display}</span>{" "}
               {flagshipMetric.label}
               {flagshipMetric.qualifier ? ` · ${flagshipMetric.qualifier}` : ""}
             </p>
           ) : null}
-          <Link href={`/projects/${flagship.slug}`} className="mt-auto font-mono text-mono text-ink-2 underline decoration-line-strong underline-offset-4 hover:text-ink">
-            {ui.caseStudy} <span aria-hidden="true">→</span>
+          <Link href={`/projects/${flagship.slug}`} className="nudge mt-auto inline-flex min-h-11 w-fit items-center gap-1.5 text-small text-ink-2 hover:text-ink">
+            {ui.caseStudy} <span aria-hidden="true" data-arrow="right">→</span>
           </Link>
         </li>
 
@@ -119,15 +119,15 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
         ) : null}
       </ul>
 
-      <div className="col-span-full flex flex-col gap-6 md:col-span-10 md:col-start-2">
+      <div className="surface-card col-span-full flex flex-col gap-2 p-6 md:col-span-10 md:col-start-2 md:p-8">
         <MonoLabel>{t.stack}</MonoLabel>
         <dl className="flex flex-col">
           {lanes.map((lane) => {
             const chips = skills.filter((s) => s.lane === lane);
             if (chips.length === 0) return null;
             return (
-              <div key={lane} className="grid gap-4 border-t border-hair py-6 md:grid-cols-10 md:gap-6">
-                <dt className="font-display text-h3 md:col-span-3">{t.lanes[lane]}</dt>
+              <div key={lane} className="grid gap-4 border-t border-hair py-6 first:border-t-0 md:grid-cols-10 md:gap-6">
+                <dt className="font-heading text-h3 md:col-span-3">{t.lanes[lane]}</dt>
                 <dd className="md:col-span-7">
                   {/* One row per technology: the chip column and the "used in"
                       column line up across rows (docs/ISSUES.md ISS-30). */}
