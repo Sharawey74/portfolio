@@ -56,7 +56,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-37 | Smoke tests timed out when about 8 browsers ran in parallel against one local `next start` | Medium | Closed | Fixed in Stage 6: 2 workers, 60 s per test, 1 retry in CI; 20/20 on three later runs | — |
 | ISS-38 | Commands that reach the npm registry or GitHub can fail for network reasons (`ECONNRESET`), not because of the project | Low | Decided | Retry; nothing in the repo to fix. How to tell a network failure from a real one is in the detail | When it recurs |
 | ISS-39 | Work card numerals (01–03) fail contrast in the light theme: 2.45:1, large text needs 3:1; first Lighthouse CI run on a preview scored accessibility 97 on `/` | High | Closed | Numerals use `--text-3` instead of `--deco` (#18); the preview Lighthouse run on #18 passed accessibility on all four pages | — |
-| ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Owner (later) | Owner decision 2026-10-09: set them in one batch with the resume PDF, the Alstom internship (ISS-19), the certificates (ISS-20) and the other `TODO(owner)` items (ISS-08); steps in `DEPLOY.md` → Contact form | Before v1.0.0 |
+| ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Closed | Connected 2026-10-10: the three variables set on Production, redeployed, the form renders on `/`, and the owner's test message arrived | — |
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
 | ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
 
@@ -655,7 +655,9 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 ### ISS-40 Contact form not connected on production
 
-**Severity** Medium (visitors still reach the owner through the email, GitHub and LinkedIn links). **Status** Owner (later).
+**Severity** Medium (visitors still reach the owner through the email, GitHub and LinkedIn links). **Status** Closed 2026-10-10.
+
+**Resolution.** The owner set `RESEND_API_KEY` (secret), `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` (`onboarding@resend.dev`) on Production only and redeployed. Evidence: the production `/` serves the `contact-form` element with its fields (checked 2026-10-10 12:05 UTC), and the owner's test message arrived in the inbox. Previews keep the "not connected" note by design. With the shared sender, delivery works only to the Resend account's own address; a verified own domain lifts that (`DEPLOY.md` → Contact form, step 5).
 
 **Context.** `contactConfigured()` (`src/lib/contact-config.ts`) renders the form only when `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` are set; production has none of them, so `/#contact` shows the "not connected" note.
 
