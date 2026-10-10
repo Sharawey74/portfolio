@@ -49,3 +49,6 @@ DEPLOY.md
 /test-results/
 /playwright-report/
 /blob-report/
+
+# owner's reference mock-ups (HTML, notes, screenshots), kept local
+/docs/New folder/
