@@ -59,6 +59,7 @@ Last updated: 2026-10-08 (end of review round 1 on `feat/owner-review-1`: ISS-12
 | ISS-40 | Contact form not connected on production: the three Resend variables are unset, so the form shows "not connected" | Medium | Closed | Connected 2026-10-10: the three variables set on Production, redeployed, the form renders on `/`, and the owner's test message arrived | — |
 | ISS-41 | Switching to a branch that still tracks the local-only files overwrote them, and pulling past the untracking commit deleted them | Medium | Closed | Restored 2026-10-09 from the last commit that held them; nothing was lost. Prevention in the detail and in `CLAUDE.md` | — |
 | ISS-42 | Redesign before launch: a Resend-style visual system (black, gray type, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts and a red accent | High | Decided | Owner decisions 2026-10-10 in the detail; planned as Stage 7 (`PLAN.md`), approved through an HTML mock-up before any code; replaces the visual system in `CLAUDE.md` in the same branch as the code | Before v1.0.0 |
+| ISS-43 | The site looks grey and washed out: hazy black, dim secondary text, faint cards and borders, headings that fade to grey (owner note) | High | Open | Measured cause: the grain layer lifts black to (6, 6, 6) on average; card fills are translucent, so the grain shows through them; secondary text is #A3A3A3 and metadata #858585; heading gradients end at 50 % alpha. Screenshots are not altered (rendered within 2/255 of the files). Fix at the tokens and shared layers in Stage 7.4.1 | Before the Stage 7 PR |
 
 One further owner-only item is tracked in the git-ignored `CLAUDE.local.md`.
 
@@ -715,6 +716,28 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 **7.4 sections and case studies, 2026-10-10** (`feat/stage7-redesign`). Work: project tabs with one card at a time (the M6 sticky stack, its Lenis fallback and the card numeral are retired, as in the approved mock-up); the slider with progress bars, round arrows, dots, arrow keys and a direction-aware wipe; Eventora's six slides in the approved order, the landing screenshot removed from the site, and the search results screenshot now the case-study hero (M8 pair); "Also built" as two cards. Open source: status rows in one card with an All / Merged / Open filter ("Open" matches the pill text; the mock-up said "Under review"). New unnumbered blocks before Contact: the figure grid ("Every figure has a source.", nine metric ids in `profile.figures`, sources linked to the pinned lines) and the closing line with the one glow outside the hero. Contact: the `--c1` band is retired (`--c1` now only backs the palette's active option); the form sits on a card and the direct links moved up to the closing pills. About, Experience and the case studies restyled (cards, heading face, rounded media). Tabs and filter hide content only under a new pre-paint `data-js` flag, so JS-off visitors see everything. Found and fixed: inactive dots under 3:1; the case-study H1 seam with gradient text (that H1 stays solid). Checks: lint, typecheck, facts, contrast, colors, build, `/` 157.5 KB, smoke 21/21.
 
 **Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
+
+
+### ISS-43 Grey, washed-out appearance
+
+**Severity** High (the owner's first impression of the whole site; readability of most copy). **Status** Open, being fixed in Stage 7.4.1 on `feat/stage7-redesign`. **Reported** by the owner, 2026-10-10, with requirements: deep black, bright primary text, readable secondary text, subtle but visible borders, grain kept but not foggy, screenshots in their original colors, fix the root cause, keep the design.
+
+**Evidence** (local production build, 1440 × 900, motion allowed, every reveal run, pixels sampled from screenshots of four scrolled positions; script and captures in the session scratchpad, before set `haze-before/`):
+- Page black, left gutter, dark theme: average (6, 6, 6), brightest pixel 11. With the grain layer hidden: (0, 0, 0). Hiding the grid or the vignette changes nothing once past the first screen (the grid's scroll timeline has faded it to 0). Light theme: white measures 249 with the grain, 255 without; the vignette takes 1 more.
+- Overlays after all reveals: only the hero glow (opacity 0.83, blur 40 px, inside the hero), the card spotlight (opacity 0 until hovered), the grid (0) and the grain (0.045). No text or image sits under an `opacity`, `filter`, `backdrop-filter` or `mix-blend-mode`.
+- Screenshots: the active Eventora slide renders at (223, 221, 230) average against (225, 222, 231) for the same area of the original file, through `/_next/image` at 828 px, quality 90. They are not muted by the page.
+- Text: most paragraph and card copy is `--text-2` (#A3A3A3), metadata and sources `--text-3` (#858585), both at 12–18 px; section H2s are gradient text from the full text color at 30 % to 50 % alpha at the end (about #787878 on black).
+- Cards: `.surface-card` and `.bento-cell` fill with the text color at 2.5 % over a transparent background, so the grain shows through every card; edges at 0.19 and 0.11 alpha.
+
+**Cause.** Not one overlay but four shared settings adding up: the grain lifts the whole black page; translucent cards carry that haze into every card; the secondary text roles are one step too dim for body-size copy; the heading gradient fades too far.
+
+**Fix** (at the tokens and shared layers, no per-section brightness):
+1. Grain at a lower opacity, so the texture stays but the average lift is about a third.
+2. Cards on an opaque fill (the same tone, mixed with the page color), so grain stays outside them.
+3. `--text-2` and `--text-3` one step brighter in dark (and one step darker in light); the contrast check re-run.
+4. Heading gradient holds the full color longer and ends at 75 % instead of 50 %.
+5. Edge lines slightly stronger, still translucent.
+Before and after sets at 1440 and 375, both themes, top and scrolled; `CLAUDE.md` token table and gradient rule updated in the same branch.
 
 ---
 
