@@ -140,7 +140,7 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 - One easing for reveals: `cubic-bezier(0.22, 1, 0.36, 1)` (`--ease-out`). Durations 200 / 400 / 800 ms. Linear only for constant-rate progress. No default `ease`, no spring on everything.
 - Animate only `transform`, `opacity`, `clip-path` and small-layer `filter`. At most 3 concurrently animating regions per viewport.
 - One shared rAF scheduler (`src/lib/motion/scheduler.ts`). Every loop pauses off-screen and on hidden tab. **No scroll event listeners**: use IntersectionObserver, CSS scroll timelines, or Lenis' own callback.
-- `prefers-reduced-motion: reduce`: every item has a static equivalent. `pointer: coarse`: no custom cursor, tilt or magnet. Save-Data: no M1, no M15, lighter hero.
+- `prefers-reduced-motion: reduce`: every item has a static equivalent. `pointer: coarse`: no custom cursor, tilt or magnet. Save-Data: no M1 intro.
 - A global "Pause animations" control (header and palette) stops every autoplaying loop (WCAG 2.2.2). Nothing required is conveyed by motion alone.
 - Content is visible with JS disabled; animation is progressive enhancement.
 - Budgets: first-load JS on `/` ≤ 170 KB gz excluding lazy hero/diagrams; mobile LCP < 2.5 s; INP < 200 ms; CLS < 0.05. Measure, report numbers.
@@ -165,7 +165,7 @@ Next 16 notes: `next lint` no longer exists (ESLint 9 flat config in `eslint.con
 | `npm run report:bundle` | First-load JS per prerendered page (gz, `nomodule` polyfills excluded); fails if `/` > 170 KB |
 | `npm run test:smoke` | Playwright smoke tests (`tests/smoke.spec.ts`) against `next start` on port 3110; build first |
 
-Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`, `NEXT_PUBLIC_ENABLE_SHADER` (default 0); documented in `.env.example` and the README. Commit only `.env.example`. To see the contact form locally, build and start with placeholder values for the three Resend variables, and test only paths that stop before sending (validation, honeypot); a valid message would call Resend.
+Env vars: `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, `NEXT_PUBLIC_SITE_URL`, optional `GITHUB_TOKEN`, `LAUNCH_STRICT`; documented in `.env.example` and the README. Commit only `.env.example`. To see the contact form locally, build and start with placeholder values for the three Resend variables, and test only paths that stop before sending (validation, honeypot); a valid message would call Resend.
 
 ## Skills (load before UI work; never invent a skill name)
 
@@ -202,7 +202,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - The pre-paint script (`theme-script.tsx`) also sets `data-reveal="on"` (motion allowed) and `data-intro="play"` (first visit this session). Hidden-then-revealed CSS keys off `data-reveal`, so JS-off and reduced motion get static text.
 - One-shot entrances (`.rv`, `.rv-load`, `.hero-ctas`, `.intro`) and the scroll-linked `.title-track` are exempt from the global pause: they do not autoplay, and pausing could strand text half-revealed. Loops must not be added to that list.
 - `src/components/intro/intro.tsx`: M1, CSS-only.
-- `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths; since Stage 7.3 gradient text and a blur-in per word), `HeroLight` (CSS-only light, Stage 7.3), `HeroFigures` (metric ids from `profile.hero.figures`, CountUp). Not rendered since Stage 7.3 (kept until the 7.6 cleanup): `HeroGraph` (lazy host), `hero-canvas.tsx`, `HeroGraphStatic`, `hero-shader.tsx` (M15), `node-field.ts`.
+- `src/components/hero/*`: `Hero`, `HeroHeadline` (weight proximity with pinned word widths; since Stage 7.3 gradient text and a blur-in per word), `HeroLight` (CSS-only light, Stage 7.3), `HeroFigures` (metric ids from `profile.hero.figures`, CountUp). The M4 node-graph canvas and the M15 WebGL shader were retired in 7.3 and their files removed in 7.6 (git history has them).
 - The hero's announcement pill fills `profile.hero.announce.template` from `ossSummary()` over the page's PR list (passed from `page.tsx`), like About and Open source.
 - `src/components/layout/header-shell.tsx` (hide on scroll down via Lenis) and `scroll-spy-nav.tsx` (`ScrollSpyNav`, reusable; `/dev/type` uses it as a specimen index).
 - Measured at the end of Stage 2: `/` first-load JS 145.0 KB gz; canvas chunk 1.6 KB gz, loaded on idle.
@@ -252,9 +252,9 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Case-study headings:** every section heading is `font-display text-h2`; display sizes are for the H1 only.
 - **Durations:** every JS-driven duration reads `DUR_MS` from `src/lib/motion/tokens.ts`; CSS uses `--dur-1/2/3`. The intro is 800 ms count + 300 ms hold + 400 ms lift.
 - **Pressed state:** one rule in `globals.css` (`@layer base`): buttons, `role=button`, palette options, `.contact-link` and links with `data-press` drop 1 px on `:active`. Give any new button-styled link `data-press`.
-- **M15:** `src/components/hero/hero-shader.tsx`, loaded by `HeroGraph` only with `NEXT_PUBLIC_ENABLE_SHADER=1` (inlined at build) and the capability gates; it reports failures and the M4 canvas takes over. Colors come from `--g0` / `--g5`, so it stays on the ramp.
+- **M15:** the optional WebGL2 shader (default off) was retired with the M4 canvas in Stage 7.3 and removed in 7.6, with its `NEXT_PUBLIC_ENABLE_SHADER` variable.
 - **Screenshots:** full-page captures are tiled at the real viewport height and stitched (a single `captureBeyondViewport` shot breaks the sticky stack and lazy images). The sticky cards repeat across tiles; that is the stitching.
-- **Performance pass:** grain is `public/textures/grain.png` (pre-rendered, grayscale), never an SVG filter; the live hero canvas and the M15 shader load only with a fine pointer (`finePointer` in `HeroGraph`); Newsreader loads the normal style only (add `"italic"` in `fonts.ts` only when content uses it, it costs ~140 KB). `content-visibility: auto` was tried below the fold and made layout slower here; do not reapply it without re-measuring.
+- **Performance pass:** grain is `public/textures/grain.png` (pre-rendered, grayscale), never an SVG filter; Newsreader loads the normal style only (add `"italic"` in `fonts.ts` only when content uses it, it costs ~140 KB). `content-visibility: auto` was tried below the fold and made layout slower here; do not reapply it without re-measuring.
 - **Measuring main-thread cost:** record a Chrome trace over the DevTools protocol at 4x CPU and break down each task over 50 ms by child event (Layout, UpdateLayoutTree, EvaluateScript); three-run A/B comparisons of `Performance.getMetrics` were too noisy to trust.
 - Measured at the end of Stage 5: `/` 156.1 KB gz, case studies 155.6 KB gz. Lighthouse mobile medians (applied throttling, localhost, mains power): LCP `/` 2.11 s, Recruiter-Pro 2.27 s, SysPlex 2.45 s, Eventora 2.79 s; TBT 695–989 ms; CLS 0.001; accessibility, best practices and SEO 100. Eventora LCP and TBT are accepted until re-measured on Vercel (`docs/ISSUES.md` ISS-01, ISS-02).
 - **Lighthouse needs a steady CPU.** Runs on battery read a CPU benchmark of 510–670 against 1,500–2,400 for the Stage 4 runs, and TBT came out about four times higher; check `environment.benchmarkIndex` in each JSON before trusting or comparing runs.
@@ -308,11 +308,16 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 
 ## Motion in place (Stage 7.5)
 
-- **Section rises** (`.rise`, `.rise-group > *` with `--i` from `:nth-child`): a scroll-linked `view()` animation of `translate` and `scale` only. Never add opacity to a scroll-linked entrance: mid-entry text failed contrast once (Stage 4). Static without scroll-timeline support and under reduced motion; exempt from the pause (not autoplay). Do not put `.rise` on the cells of a gap-seamed grid (`.figure-grid`): moving cells open the seams; rise the whole grid.
+- **Section rises** (`.rise`, `.rise-group > *` with `--i` from `:nth-child`): a scroll-linked `view()` animation of `translate` only. Never add opacity or scale to a scroll-linked entrance: mid-entry text failed contrast once (Stage 4), and a 0.97 scale shrank the slider dots below the fold to 23.3 px, failing Lighthouse `target-size` (Stage 7.6). Static without scroll-timeline support and under reduced motion; exempt from the pause (not autoplay). Do not put `.rise` on the cells of a gap-seamed grid (`.figure-grid`): moving cells open the seams; rise the whole grid.
 - **User-triggered entries use `@starting-style`:** the newly shown Work panel and the open-source rows that return after a filter fade and rise (400 ms; rows 30 ms apart). Gated on `data-reveal`, so reduced motion and JS-off get no transition.
 - **Section titles** blur into focus as their words rise (`.rv`; the 4 s safety animation also clears the blur).
 - **Cards:** `.lift` lifts 2 px and brightens the top edge on hover (fine pointer); `InteractiveCard` is a spotlight only (soft light plus the hairline grid under the pointer). The 4° tilt was removed: the approved mock-up has a lift.
 - **CSS loops pause off-screen through `LoopGate`** (`src/components/motion/loop-gate.tsx`, one IntersectionObserver setting `data-visible`): the closing glow breathes only while visible, stops with the pause and is still under reduced motion. The hero light still relies on the browser's off-screen throttling; give it a gate if it ever grows.
+
+## QA in place (Stage 7.6)
+
+- `/dev/type` shows the Stage 7 tokens (including the two edge lines) and components (pill group, section card with lift, nudge and brand-icon links).
+- Measured at the end of Stage 7 (local, CPU benchmark 1,537–1,718, not comparable to earlier runs): accessibility, best practices and SEO 100 on all four pages; CLS 0.002 in 6 of 7 runs, one home run 0.182 from a late Inter swap re-wrapping the hero lead (ISS-44); `/` 157.4 KB gz; smoke 21/21; keyboard walk of `/` 139 stops, every one with a visible ring; `scrollWidth` = viewport at 320 and 375 on every page, both themes. LCP and TBT are judged on the Vercel preview and Speed Insights.
 
 ## Review and acceptance
 
