@@ -563,3 +563,16 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `reduced-motion` | Pass | The edge shows still at its first angle; the glow sits at 0.18 with no pulse; the lift is off |
 | `color-contrast` | Pass | Text over the stronger closing glow: link pills 5.84:1 or more in light (dark text on the red), about 10:1 in dark; the filled button is opaque. `check:contrast` ok |
 | `performance` | Pass | The edge angle is a registered property, so only the hovered card repaints; `/` 157.4 KB gz; smoke 21/21 |
+
+
+## Hero motion (2026-10-11, ISS-50)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | Letters: opacity, translate and a per-letter blur (small layers); the period: opacity, translate, scale; the lens: `font-variation-settings` on one hovered word's letters (pinned word widths, no reflow); the underline: one 1 px background row (one-shot) |
+| `rendering` | Fixed | Letters animating inside a word with gradient text piled up mid-opening (Chrome breaks a parent's clipped-text background while children animate). The gradient now sits on each letter; frames at 450 and 1,000 ms render correctly |
+| `timing` | Fixed | The period started at 380 ms instead of after the last letter: `--n` is a registered non-inherited integer (M1 intro). Renamed `--letters`; the period lands at 975 ms and pulses at 1,375 ms |
+| `reduced-motion` | Pass | Letters, period and label static; the underline drawn; no lens or light |
+| `pause-control` | Pass | The opening is one-shot and exempt like the other reveals; the lens and light follow the pointer only, and are off under the pause |
+| `lcp` | Pass | Lighthouse names the lead paragraph as the LCP element, not the name; accessibility 100, CLS 0.002 (local; timings not comparable, CPU benchmark 584–1,436) |
+| `smoke` | Pass | 21/21 |
