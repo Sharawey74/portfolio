@@ -130,6 +130,9 @@ const profileSchema = z.object({
     }),
     footer: z.object({
       nav: z.string(),
+      /** Visible column titles (Stage 7 footer). */
+      sectionsTitle: z.string(),
+      elsewhereTitle: z.string(),
       backToTop: z.string(),
       sources: z.string(),
       license: z.string(),
@@ -281,6 +284,8 @@ export const profile = profileSchema.parse({
     },
     footer: {
       nav: "Site index",
+      sectionsTitle: "Sections",
+      elsewhereTitle: "Elsewhere",
       backToTop: "Back to top",
       sources: "Every number on this site names its source file and the date it was checked; the case studies link to the cited lines.",
       license: "Code MIT. Writing and photographs all rights reserved.",
