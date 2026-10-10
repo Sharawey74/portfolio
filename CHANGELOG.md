@@ -10,7 +10,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
-Stage 7 (the redesign, through 7.6) merged in pull request #20 on 2026-10-10; owner review 2 follows in a second pull request. Both ship in v1.0.0.
+Stage 7 (the redesign, through 7.6) merged in pull request #20 on 2026-10-10; owner review 2 in pull request #21. Both ship in v1.0.0.
 
 ### Added
 - A deploy guide for the owner (hosting, Vercel import steps, environment variables, pre-release checklist, release and rollback steps), kept on the owner's machine rather than in the repository.
