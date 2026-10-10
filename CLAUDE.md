@@ -68,7 +68,7 @@ All copy lives in typed data files. Components contain no copy. Updating the sit
 | `src/data/profile.ts` | Approved hero copy, section indices, site meta |
 | `src/data/projects.ts` | Five projects: eventora (flagship), recruiter-pro, sysplex (case studies), lexintelligence, phishsniffer (secondary grid) |
 | `src/data/oss.json` + `oss.ts` | PR snapshot (fallback for the ISR refresh) and `ossSummary()` |
-| `src/data/experience.ts` | Three internships (Alstom, Orascom, Telecom Egypt), AASTMT, five undated certification entries, hidden capstone TODO |
+| `src/data/experience.ts` | Three internships (Alstom, Orascom, Telecom Egypt), AASTMT, five undated certification entries, the capstone withheld (hidden) |
 | `src/data/skills.ts` | Tech chips by lane with `usedIn` validated against project slugs |
 
 Data files import each other with explicit `.ts` extensions (`import { claim } from "./schema.ts"`) so Node can run the check scripts with native type stripping. `tsconfig.json` sets `allowImportingTsExtensions`; keep it.
@@ -354,6 +354,8 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 
 ## Open items owed by the owner
 
-Tracked as `TODO(owner)` and listed by `npm run check:launch`; summary in `PERSONAL-INFO-CHECKLIST.md`: all personal fields, resume PDF, Railway API status, a SysPlex screenshot, the capstone description, confirming the LinkedIn URL.
+None since 2026-10-10: every `TODO(owner)` item is decided (ISS-47) and `npm run check:launch -- --strict` passes. Withheld by the owner: phone, portrait, location, bio, availability, GPA, the resume, the capstone. Later releases: the SysPlex screenshot. After v1.0.0: the owner's UAT run (ISS-09). A new `TODO(owner)` added later makes the strict check fail again, by design.
 
-Vercel is live since 2026-10-09 (ISS-07): production is `https://abdelrhaman-mohamed.vercel.app` (the owner's chosen domain; the first one, `portfolio-virid-delta-2g04ymqux2.vercel.app`, is gone), also the repo homepage. The team-scoped `*-sharawey74s-projects.vercel.app` URLs need a Vercel login; never give them out as the public link. If the production domain changes, update the homepage too. The `main` ruleset is active since 2026-10-09: pull request required (0 approvals), merge commits only, required check `Lint, typecheck, facts, build, smoke`, no deletion, no force push, empty bypass list, so docs-only changes also go through a PR. The contact form is connected on Production since 2026-10-10 (ISS-40: Resend's shared sender `onboarding@resend.dev`, which delivers only to the Resend account's own address; previews show "not connected" by design). Still open for the owner: the resume PDF, the Alstom internship, the certificates and the other `TODO(owner)` items.
+**Branch before v1.0.0:** every edit to docs or code goes on one branch, `chore/release-v1` (owner, 2026-10-10), which also carries the release commit (version bump and dated CHANGELOG).
+
+Vercel is live since 2026-10-09 (ISS-07): production is `https://abdelrhaman-mohamed.vercel.app` (the owner's chosen domain; the first one, `portfolio-virid-delta-2g04ymqux2.vercel.app`, is gone), also the repo homepage. The team-scoped `*-sharawey74s-projects.vercel.app` URLs need a Vercel login; never give them out as the public link. If the production domain changes, update the homepage too. The `main` ruleset is active since 2026-10-09: pull request required (0 approvals), merge commits only, required check `Lint, typecheck, facts, build, smoke`, no deletion, no force push, empty bypass list, so docs-only changes also go through a PR. The contact form is connected on Production since 2026-10-10 (ISS-40: Resend's shared sender `onboarding@resend.dev`, which delivers only to the Resend account's own address; previews show "not connected" by design). Speed Insights (Mobile, p75 LCP) is read from the owner's Vercel dashboard to decide ISS-01 and ISS-36.
