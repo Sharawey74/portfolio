@@ -945,34 +945,6 @@ html[data-intro="play"] .intro {
   }
 }
 
-/* M4: static SVG until the canvas is live, then crossfade. A soft alpha mask
-   keeps the graph away from the reading line. */
-.hero-graph {
-  z-index: -1;
-  mask-image: radial-gradient(120% 90% at 70% 35%, #000 35%, transparent 85%);
-}
-/* On narrow screens the text fills the width: keep the graph in the top-right
-   corner so no line crosses the headline or sub. */
-@media (width < 48rem) {
-  .hero-graph {
-    mask-image: radial-gradient(85% 38% at 100% 0%, #000 25%, transparent 100%);
-  }
-}
-.hero-graph-static {
-  transition: opacity var(--dur-3) var(--ease-out);
-}
-.hero-graph[data-live] .hero-graph-static {
-  opacity: 0;
-}
-.hero-graph canvas {
-  animation: fade-in var(--dur-3) var(--ease-out);
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 /* M13 smart header */
 .site-header {
   transition: translate var(--dur-2) var(--ease-out);
@@ -1359,6 +1331,11 @@ html[data-reveal="on"] .chart-reveal:not(.is-in) .chart-line {
 /* M8 fallback: no View Transitions API -> a plain fade on route content. */
 html[data-vt="none"] .case {
   animation: fade-in var(--dur-2) var(--ease-out);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
 }
 ::view-transition {
   pointer-events: none;
@@ -1802,9 +1779,10 @@ html[data-js] .work-panel:not([data-active]) {
 /* ── Stage 7.5 motion (docs/ISSUES.md ISS-42) ────────────────────────── */
 
 /* Section blocks rise as they scroll in: scroll-linked (view timeline), so
-   they follow the reader and do not autoplay. Translate and scale only, no
-   opacity: a fade on a scroll-linked entrance once left text at 1.66:1 mid
-   entry (Stage 4). Children of .rise-group stagger by their position. Static
+   they follow the reader and do not autoplay. Translate only: a fade on a
+   scroll-linked entrance once left text at 1.66:1 mid entry (Stage 4), and a
+   0.97 scale shrank the slider dots below the fold to 23.3 px, under the
+   24 px target size Lighthouse measures at load (Stage 7.6). Children of .rise-group stagger by their position. Static
    without scroll-timeline support and under reduced motion. */
 .rise-group > :nth-child(2) { --i: 1; }
 .rise-group > :nth-child(3) { --i: 2; }
@@ -1819,7 +1797,6 @@ html[data-js] .work-panel:not([data-active]) {
     @keyframes rise-in {
       from {
         translate: 0 2.5rem;
-        scale: 0.97;
       }
     }
     .rise,
