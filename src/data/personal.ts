@@ -52,7 +52,10 @@ export const personal = personalSchema.parse({
   bio: { value: null, todo: "TODO(owner): bio paragraph" },
   availability: { value: null, todo: "TODO(owner): availability line" },
   gpa: { value: null, todo: "TODO(owner): GPA, only if it should be public" },
-  resumePdf: { value: null, todo: "TODO(owner): resume PDF at /public/resume.pdf" },
+  // The owner's own resume, published as given by owner decision (2026-10-10,
+  // docs/ISSUES.md ISS-46): exempt from the facts rules and the private-terms
+  // list, so it may carry details and wording the site itself does not use.
+  resumePdf: { value: "/resume.pdf" },
   github: { handle: "Sharawey74", href: "https://github.com/Sharawey74" },
   // Probe on 2026-10-06 returned 999 (LinkedIn's bot wall for non-browser clients).
   // Kept because the owner supplied it; see FACTS-CHECK.md.
