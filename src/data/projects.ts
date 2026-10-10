@@ -335,7 +335,8 @@ export const projects = z.array(projectSchema).parse([
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/03-event-detail-dark.webp", src: "/projects/eventora/03-event-detail-dark.webp", width: 1440, height: 1458, alt: "Event detail page" },
       { from: "Event-Ticketing-Platform/site/assets/img/screenshots/08-booking-detail-qr-ticket-dark.webp", src: "/projects/eventora/08-booking-detail-qr-ticket-dark.webp", width: 1440, height: 1367, alt: "Booking detail with QR ticket" },
     ],
-    todos: ["TODO(owner): confirm whether the Railway API is intentionally down (report §7 q3)"],
+    // Railway API: not shown (only the frontend is linked as live); owner, 2026-10-10, ISS-47.
+    todos: [],
   },
 
   // ── Recruiter-Pro ─────────────────────────────────────────────────────
@@ -532,7 +533,8 @@ export const projects = z.array(projectSchema).parse([
       ],
     },
     screenshots: [],
-    todos: ["TODO(owner): screenshot of the SysPlex dashboard"],
+    // Dashboard screenshot: a later release (owner, 2026-10-10, ISS-47).
+    todos: [],
   },
 
   // facts:allow RAG,LangChain,ChromaDB
