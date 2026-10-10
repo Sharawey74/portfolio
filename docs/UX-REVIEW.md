@@ -576,3 +576,17 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `pause-control` | Pass | The opening is one-shot and exempt like the other reveals; the lens and light follow the pointer only, and are off under the pause |
 | `lcp` | Pass | Lighthouse names the lead paragraph as the LCP element, not the name; accessibility 100, CLS 0.002 (local; timings not comparable, CPU benchmark 584–1,436) |
 | `smoke` | Pass | 21/21 |
+
+## Hero core (2026-10-11, ISS-51)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `motion-properties` | Pass | The sphere is canvas drawing on the shared scheduler; the CSS rings and emitter animate `opacity` and `scale` only |
+| `pause-control` | Pass | Headless probe: the canvas is unchanged across 600 ms while paused and moves again on resume; the CSS rings report `animation-play-state: paused` |
+| `offscreen` | Pass | Scrolled away, the canvas stays unchanged (the loop subscribes only while the core intersects the viewport); the CSS rings pause without `data-visible` |
+| `reduced-motion` | Pass | The sphere is drawn once and stays still; the CSS rings and emitter do not animate |
+| `decorative` | Pass | `aria-hidden`; no text. The mock-up's labels and metadata strip were left out: they name no real system (honesty rules 2 and 7) |
+| `responsive` | Fixed | At 1024 px the 7-column text area split the name after "Abdel" (inline-block letters since ISS-50). Words are kept whole and the core shows from 1280 px; `scrollWidth` equals the viewport at 320, 375, 768, 1024, 1279 and 1280, and the name is two lines at each |
+| `lcp` | Pass | The canvas module loads on idle (one extra chunk after load, none before); `/` first-load JS 158.6 KB gz; Lighthouse desktop (local, CPU benchmark 2,936–3,007): performance 98, accessibility 100, LCP 0.46–0.63 s, TBT 1–22 ms, CLS 0.001 |
+| `color` | Pass | `npm run check` ok; canvas colors read `--break` at runtime and follow the theme |
+| `smoke` | Pass | 21/21 |
