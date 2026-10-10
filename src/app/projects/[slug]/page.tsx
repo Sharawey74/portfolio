@@ -162,7 +162,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section aria-labelledby="evidence" className="col-span-full flex flex-col gap-10 md:col-span-10 md:col-start-2">
         <RevealText as="h2" id="evidence" text={s.evidence} className="font-heading text-section text-gradient" />
-        <dl className="grid grid-cols-1 gap-px overflow-clip rounded-card border border-hair border-t-line bg-hair sm:grid-cols-2 lg:grid-cols-3">
+        <dl className="rise grid grid-cols-1 gap-px overflow-clip rounded-card border border-hair border-t-line bg-hair sm:grid-cols-2 lg:grid-cols-3">
           {project.metrics.map((m) => (
             <div key={m.id} className="flex flex-col gap-2 bg-page p-5">
               <dt className="mono-label order-2 text-ink-3">
