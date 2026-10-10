@@ -1998,3 +1998,41 @@ html[data-motion="paused"] :is(.rise, .rise-group > *) {
     animation: none;
   }
 }
+
+/* Buttons share the cards' circling accent edge while hovered or focused
+   (owner, 2026-10-10, ISS-45): every pill with .btn (hero CTAs, Case study,
+   Source, the closing link pills, the contact submit). Disabled buttons do
+   not react. The outward arrow nudges up and right like the others. */
+.btn {
+  position: relative;
+}
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--arc), transparent 0 62%, var(--break) 80%, transparent 92%);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-2) var(--ease-out);
+}
+.btn:not(:disabled, [aria-disabled="true"]):is(:hover, :focus-visible)::after {
+  opacity: 1;
+  animation: arc-turn 3s linear infinite;
+}
+.btn:hover > [data-arrow="out"] {
+  translate: 0.125rem -0.125rem;
+}
+.btn > [data-arrow="out"] {
+  display: inline-block;
+  transition: translate var(--dur-1) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:is(:hover, :focus-visible)::after {
+    animation: none;
+  }
+}
