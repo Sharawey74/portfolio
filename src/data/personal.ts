@@ -46,12 +46,14 @@ const personalSchema = z.object({
 export const personal = personalSchema.parse({
   name: { value: "Abdelrhman Mohamed" },
   email: { value: "abdelrhmanhamied004@gmail.com" },
-  phone: { value: null, todo: "TODO(owner): phone number, only if it should be public" },
-  portrait: { value: null, todo: "TODO(owner): portrait photo under /public" },
-  location: { value: null, todo: "TODO(owner): location line" },
-  bio: { value: null, todo: "TODO(owner): bio paragraph" },
-  availability: { value: null, todo: "TODO(owner): availability line" },
-  gpa: { value: null, todo: "TODO(owner): GPA, only if it should be public" },
+  // Withheld by the owner before v1.0.0 (2026-10-10, docs/ISSUES.md ISS-47):
+  // not shown on the site.
+  phone: { value: null, withheld: "2026-10-10" },
+  portrait: { value: null, withheld: "2026-10-10" },
+  location: { value: null, withheld: "2026-10-10" },
+  bio: { value: null, withheld: "2026-10-10" },
+  availability: { value: null, withheld: "2026-10-10" },
+  gpa: { value: null, withheld: "2026-10-10" },
   // No resume on the site: the owner removed the button (2026-10-10,
   // docs/ISSUES.md ISS-46).
   resumePdf: { value: null, withheld: "2026-10-10" },
