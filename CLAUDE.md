@@ -306,6 +306,14 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **The M12 grid** is an absolute layer on the first screen (`100svh`) and scrolls away with it. As a fixed layer it relied on a scroll-timeline fade, and under reduced motion it stayed over every screen.
 - Screenshots were checked against their files (within 2/255 through the image optimizer): never add a filter or overlay above them.
 
+## Motion in place (Stage 7.5)
+
+- **Section rises** (`.rise`, `.rise-group > *` with `--i` from `:nth-child`): a scroll-linked `view()` animation of `translate` and `scale` only. Never add opacity to a scroll-linked entrance: mid-entry text failed contrast once (Stage 4). Static without scroll-timeline support and under reduced motion; exempt from the pause (not autoplay). Do not put `.rise` on the cells of a gap-seamed grid (`.figure-grid`): moving cells open the seams; rise the whole grid.
+- **User-triggered entries use `@starting-style`:** the newly shown Work panel and the open-source rows that return after a filter fade and rise (400 ms; rows 30 ms apart). Gated on `data-reveal`, so reduced motion and JS-off get no transition.
+- **Section titles** blur into focus as their words rise (`.rv`; the 4 s safety animation also clears the blur).
+- **Cards:** `.lift` lifts 2 px and brightens the top edge on hover (fine pointer); `InteractiveCard` is a spotlight only (soft light plus the hairline grid under the pointer). The 4° tilt was removed: the approved mock-up has a lift.
+- **CSS loops pause off-screen through `LoopGate`** (`src/components/motion/loop-gate.tsx`, one IntersectionObserver setting `data-visible`): the closing glow breathes only while visible, stops with the pause and is still under reduced motion. The hero light still relies on the browser's off-screen throttling; give it a gate if it ever grows.
+
 ## Review and acceptance
 
 - Before each stage summary, re-run the UI UX Pro Max audit for the new UI against `references/quick-reference.md` and add rows to `docs/UX-REVIEW.md` (verdicts: Pass, Fixed, Open, N/A, Brief, UAT).
