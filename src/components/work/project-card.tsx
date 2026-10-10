@@ -29,7 +29,7 @@ export function ProjectCard({ project }: { project: Project }) {
   const repo = project.links.find((l) => l.kind === "repo");
 
   return (
-    <InteractiveCard className="project-card surface-card grid gap-8 p-4 sm:p-5 lg:grid-cols-12 lg:gap-4">
+    <InteractiveCard className="project-card surface-card lift grid gap-8 p-4 sm:p-5 lg:grid-cols-12 lg:gap-4">
       <div className="lg:col-span-7">
         {project.screenshots.length > 0 ? (
           <InView className="clip-reveal">
