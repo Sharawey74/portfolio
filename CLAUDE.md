@@ -17,7 +17,7 @@ file and a date.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
 - **Brief changes from review round 1** (owner, 2026-10-08, `docs/ISSUES.md` ISS-12 to ISS-25) are applied below: the hero copy, a three-step accent ramp instead of one accent, pill buttons, Hanken Grotesk for interface labels, brand icons, color screenshots. A later change to these rules follows the same path: decision recorded in `docs/ISSUES.md` first, then this file in the same branch as the code.
-- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. Nothing is copied from either site. The mock-up was approved on 2026-10-10 and the visual system below was rewritten in the Stage 7 foundation branch (7.2); sections are restyled in 7.4.
+- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. Nothing is copied from either site. The mock-up was approved on 2026-10-10 and the visual system below was rewritten in the Stage 7 foundation step (7.2); the hero (7.3) and the sections and case studies (7.4) are restyled. All of Stage 7 is on one branch, `feat/stage7-redesign`, and lands as one pull request after 7.6.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -84,7 +84,7 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 ## Visual system (overrides any skill's defaults)
 
-**Stage 7 system** (owner decisions 2026-10-10, `docs/ISSUES.md` ISS-42; approved mock-up v3). Resend-style structure with GetLayers-style motion, built here: no fonts, videos, images or code copied from either site. While Stage 7 is in progress, sections not yet restyled (7.4) keep their earlier look, such as the `--c1` Contact band and square cards.
+**Stage 7 system** (owner decisions 2026-10-10, `docs/ISSUES.md` ISS-42; approved mock-up v3). Resend-style structure with GetLayers-style motion, built here: no fonts, videos, images or code copied from either site.
 
 **Color.** A black page, a neutral gray ramp for surfaces and text, two translucent blue-white edge colors for lines, and one red accent family for marks. Text is the gray ramp, with two `--break` text uses: the H1's final period (and the wordmark's) and the section index numbers ("01"). Dark is default; light mirrors it.
 
@@ -107,13 +107,13 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 `globals.css` is the source of truth for the exact values; any value changed to pass contrast is logged in its header comment.
 
-**Accent** (red; `#FF3B4E` approved 2026-10-10, ISS-42). `--break` is the one bright red; `--c1` and `--c2` remain for the surfaces not yet restyled and for `::selection`.
+**Accent** (red; `#FF3B4E` approved 2026-10-10, ISS-42). `--break` is the one bright red; `--c2` remains for `::selection` and `--c1` for the palette's selected option.
 
 | Token | Dark | Light | Job |
 |---|---|---|---|
 | `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow and the announcement pill's moving edge |
 | `--c2` | #8E1428 | #A3142A | `::selection` (text `--on-c2`) |
-| `--c1` | #3A0810 | #F6E2E5 | Legacy fills until 7.4 (the Contact band) |
+| `--c1` | #3A0810 | #F6E2E5 | The palette's selected option (the Contact band is retired since 7.4) |
 
 - Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the text color at 30 % fading to 50 %), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
 - `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1, graphics ≥ 3:1.
@@ -213,7 +213,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 - **Charts are data.** `projects.ts → charts` (`kind: "points" | "steps"`), at most one `highlight` per chart (schema). Components: `src/components/charts/point-chart.tsx`, `step-chart.tsx` (server SVG, sr-only tables, `<title>` tooltips).
 - **Card metrics** come from `highlights` (metric ids, validated). **Screenshots** need `src`, `width`, `height`; the facts check fails if a file is missing from `public/`.
 - **Source links:** `sourceHref()` in `src/lib/sources.ts` maps `Repo/path:lines` to GitHub permalinks pinned per repo. When evidence is re-read from a newer commit, update the pinned SHA there and re-verify the cited lines.
-- Components: `src/components/work/*` (WorkSection, ProjectCard, InteractiveCard, ScreenshotCarousel, Marquee, StackFallback), `src/components/diagrams/*` (FlowDiagram, FlowPreview), `src/components/motion/count-up.tsx`, `in-view.tsx`, `src/app/projects/[slug]/*` (page, ZoomGallery, FocusHeading).
+- Components: `src/components/work/*` (WorkSection, WorkTabs, ProjectCard, InteractiveCard, ScreenshotCarousel; the M6 sticky stack and StackFallback were retired in Stage 7.4), `src/components/diagrams/*` (FlowDiagram, FlowPreview), `src/components/motion/count-up.tsx`, `in-view.tsx`, `src/app/projects/[slug]/*` (page, ZoomGallery, FocusHeading).
 - M8 uses React `<ViewTransition name=… share="morph" default="none">` pairs: `project-<slug>-title` and `project-<slug>-media`. Names must stay unique per page.
 - The pre-paint script also sets `data-vt="none"` when the View Transitions API is missing (CSS fade fallback).
 - `.grid-12 > *` has `min-width: 0`: a wide child (diagram scroller) must not widen the grid. Keep it.
@@ -222,7 +222,7 @@ At the start of each of Stages 1–5: `ListSkills`, then `SearchSkills` (ui, ux,
 
 ## Sections, palette and SEO in place (Stage 4)
 
-- `/` renders Hero → About → Work → Open source → Experience → Contact; all five sections are `live`. `page.tsx` fetches PR status once (`getPullRequests()` in `src/lib/oss-live.ts`) and passes it to About and Open source so their numbers agree. That fetch (`revalidate: 86400`) makes `/` ISR with a 1-day interval; failures fall back to `oss.json` per PR.
+- `/` renders Hero → About → Work → Open source → Experience → figure grid → closing line → Contact; all five numbered sections are `live` (the figure grid and the closing line are unnumbered, Stage 7.4). `page.tsx` fetches PR status once (`getPullRequests()` in `src/lib/oss-live.ts`) and passes it to the hero pill, About, Open source and the figure grid so their numbers agree. That fetch (`revalidate: 86400`) makes `/` ISR with a 1-day interval; failures fall back to `oss.json` per PR.
 - Components: `src/components/{about,oss,experience,contact,palette}/*`, `layout/site-footer.tsx`, `layout/surfaces.tsx` (M12), `motion/scramble.tsx` (M11). Interface strings for all of them live in `profile.ui.{about,oss,experience,contact,footer,palette}`.
 - **Contact:** Server Action `src/app/actions/contact.ts` (honeypot → config → Zod → rate limit → Resend over `fetch`). `src/lib/contact-config.ts` decides whether the form renders; keep non-action helpers out of the `"use server"` file (every export there becomes a callable endpoint). The action returns the submitted values with a fresh `at`, and the form is keyed on it, because React resets a form after its action.
 - **Palette (M13):** `PaletteDialog` (client) gets a prebuilt item list from `CommandPalette` (server). Open it from anywhere with `window.dispatchEvent(new Event(OPEN_EVENT))`. It is the mobile navigation (header "Menu" below 1024 px since Stage 5).
@@ -248,7 +248,7 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 ## Polish in place (Stage 5)
 
 - **Breakpoints:** the two-column project card starts at 1024 px (`lg`); the header's section links start at 1280 px (`xl`, since Stage 7.3: with the Contact pill and the pause switch they wrapped to two lines at 1024 and, with their numbers, at 1440). Below that the header button reads "Menu" (the palette). The links' index numbers and the pause switch's text label show from 1536 px (`2xl`). At 768 px both the five links and a 5/12 card column overflowed.
-- **No stack marquee:** the tech chips appear once on `/`, in About (owner decision D2). M6 is the sticky stack plus numeral parallax.
+- **No stack marquee:** the tech chips appear once on `/`, in About (owner decision D2). M6 was the sticky stack plus numeral parallax, retired in Stage 7.4 for the project tabs.
 - **Case-study headings:** every section heading is `font-display text-h2`; display sizes are for the H1 only.
 - **Durations:** every JS-driven duration reads `DUR_MS` from `src/lib/motion/tokens.ts`; CSS uses `--dur-1/2/3`. The intro is 800 ms count + 300 ms hold + 400 ms lift.
 - **Pressed state:** one rule in `globals.css` (`@layer base`): buttons, `role=button`, palette options, `.contact-link` and links with `data-press` drop 1 px on `:active`. Give any new button-styled link `data-press`.
@@ -262,10 +262,10 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 ## Review round 1 in place (2026-10-08)
 
 - **Hero:** label "Software engineer", H1 = the name (asserted equal to `personal.name` plus a period by the facts check), lead and second paragraph; all in `profile.hero`. The share image uses the label as kicker and the name as title.
-- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class; a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answers with the accent ramp (filled → `--c2`, outline → `--c2` edge on `--c1`).
-- **Contact band:** `.contact-band` wraps the Contact section and redefines `--line-hair` / `--line` as `--c2` inside it.
+- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class; a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answered with the accent ramp until Stage 7.2; since then it stays on the neutral ramp (see `button.tsx`).
+- **Contact band:** retired in Stage 7.4 (the form sits on a section card; the direct links are pills under the closing line).
 - **Stack in About:** `.stack-rows` is a subgrid table, chip column and "used in" column; one column below 30 rem.
-- **Work cards:** card figures show their qualifier under the label; "Also built" names sit on their own row; below 40 rem viewport height the sticky stack becomes a plain list. About's flagship cell shows the test count, the Work card leads with performance figures.
+- **Work cards:** card figures show their qualifier under the label; "Also built" names sit on their own row; (the sticky stack and its short-viewport list are retired since Stage 7.4). About's flagship cell shows the test count, the Work card leads with performance figures.
 - **Screenshots:** files are copied from the repos' GitHub Pages folders, viewed one by one first. Recruiter-Pro uses 4 of 13 (the others show unsourced figures, the owner's own resume or a banned term); reasons are in a comment in `projects.ts`.
 - **Diagrams:** `flow.zones` (sourced groupings) draw as dashed frames behind their nodes (`flow-parts.tsx`); a layout with `detail: true` shows each node's detail line. SysPlex is laid out as the README's two tiers.
 - **Cursor:** the page flag is `data-cursor-active`; `data-cursor` is only ever a per-element label (ISS-33).
@@ -287,6 +287,17 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Withheld personal fields:** `{ value: null, withheld: "<date>" }` keeps a field off the site without counting as a `TODO(owner)`, so `check:launch --strict` can pass.
 - **ESLint 10** is on branch `chore/eslint-10` (ISS-11), not on `main` until the owner merges it.
 - **Lock file line endings:** npm rewrites `package-lock.json` with CRLF on this machine; the repo has it as LF. Convert it back before committing (`git diff --ignore-cr-at-eol --stat` shows the real change).
+
+## Sections in place (Stage 7.4)
+
+- **`data-js`:** the pre-paint script sets it whenever scripts run. Controls that only work with JS (`.js-only`, the Work tablist) show, and inactive panels (`.work-panel`) hide, only under it, so JS-off visitors get every project and row and the server HTML equals the first client render. Use the same pattern for any new tab or filter.
+- **Client components get nodes, not data:** `WorkTabs` and `OssFilter` receive server-rendered panels and rows. Importing `profile.ts` or `projects.ts` in a client component would ship Zod and the data files to the browser.
+- **Work:** `WorkTabs` (tablist, arrow keys, Home and End) over one `ProjectCard` per case study; the card shows the first six screenshots (`SLIDES` in `project-card.tsx`), so the order in `projects.ts` is the slider's order and the first is the case-study hero (M8 pair). "Also built" lists every non-commit metric, the stack, facts and caveats of the secondary projects.
+- **Slider:** autoplay is a scheduler `loop` task that also writes `--p` on the active progress bar; the wipe direction follows `data-dir`. Dots are 24 px targets; inactive dots use `--text-3` for 3:1.
+- **Open source:** rows in one `.surface-card`, filter All / Merged / Open with counts and a polite "Showing n of m". Reported issues are a second card.
+- **Figure grid:** `profile.figures.items` (metric ids, or `{ oss: "merged" }`); a missing id fails the build. **Closing line:** `profile.closing`; the glow is the one `--break` glow outside the hero.
+- **Gradient text and overlapping glyphs:** Chrome draws a seam where clipped gradient glyphs overlap (the case-study H1's "Ev" at −0.04em). That H1 stays solid; check new gradient headings at their real size.
+- Measured at the end of 7.4: `/` 157.5 KB gz; smoke 21/21; `scrollWidth` = viewport at 320 and 375 on every page.
 
 ## Review and acceptance
 
