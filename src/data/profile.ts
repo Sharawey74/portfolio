@@ -23,6 +23,8 @@ const profileSchema = z.object({
     /** The public name. The final period is the one place body/heading text may use --break. */
     headline: claim,
     lead: claim,
+    /** Words of the lead underlined by the opening sequence (ISS-50); must be a phrase of `lead`. */
+    leadMark: z.string().min(1),
     more: claim,
     ctaPrimary: z.object({ label: z.string(), href: z.string().startsWith("#") }),
     ctaResume: z.object({ label: z.string() }),
@@ -193,6 +195,7 @@ export const profile = profileSchema.parse({
       source: "owner:approved-copy",
       asOf: "2026-10-08",
     },
+    leadMark: "keep working as load grows",
     more: {
       text: "Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software.",
       source: "owner:approved-copy",
