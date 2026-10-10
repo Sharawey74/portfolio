@@ -537,3 +537,17 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `animating-regions` | Pass | At most the scroll-linked block entering, one user-triggered swap and the glow per viewport; the hero light is off-screen once scrolled |
 | `performance` | Pass | `/` first-load JS 157.4 KB gz; the tilt's per-frame scheduler task is gone; `LoopGate` is one observer; no console errors |
 | `smoke` | Pass | 21/21 |
+
+
+## Stage 7.6, QA (2026-10-10)
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `target-size` | Fixed | Lighthouse flagged the slider dots on `/` at 23.3 px: the scroll-linked rise started at scale 0.97, and Lighthouse measures below-the-fold controls in that state. The rise is now translate only; accessibility 100 on all four pages |
+| `keyboard` | Pass | Tab walk of `/` at 1440: 139 stops (skip link, header, hero, tabs, slider arrows and dots, filter, every row link, figure sources, contact pills, form, footer), each with a visible ring; none hidden under the header |
+| `heading-order` | Pass | One H1; H2 per section (About, Work, Open source, Experience, the figure grid, the closing line, Contact); H3 for projects and roles |
+| `horizontal-scroll` | Pass | `scrollWidth` = viewport at 320 and 375 on `/`, the three case studies and `/dev/type`, both themes, motion on; no console errors |
+| `layout-shift` | Open | CLS 0.002 in 6 of 7 local runs; one home run read 0.182, the hero's second paragraph moved when Inter swapped in late and the lead re-wrapped (ISS-44) |
+| `lighthouse` | Pass | Accessibility, best practices and SEO 100 on `/`, Eventora, Recruiter-Pro and SysPlex. Performance not judged locally (CPU benchmark 1,537–1,718, about half the earlier runs); the Stage 7 PR preview and Speed Insights decide |
+| `dead-code` | Fixed | The retired M4 canvas (4 files) and M15 shader removed, with their CSS and the `NEXT_PUBLIC_ENABLE_SHADER` variable; `/dev/type` updated for the Stage 7 tokens and components |
+| `performance` | Pass | `/` first-load JS 157.4 KB gz, case studies 157.2 KB; smoke 21/21 |
