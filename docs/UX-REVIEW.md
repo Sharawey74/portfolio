@@ -590,3 +590,13 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `lcp` | Pass | The canvas module loads on idle (one extra chunk after load, none before); `/` first-load JS 158.6 KB gz; Lighthouse desktop (local, CPU benchmark 2,936–3,007): performance 98, accessibility 100, LCP 0.46–0.63 s, TBT 1–22 ms, CLS 0.001 |
 | `color` | Pass | `npm run check` ok; canvas colors read `--break` at runtime and follow the theme |
 | `smoke` | Pass | 21/21 |
+
+### Second pass (2026-10-11, owner: "its not the same")
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `fidelity` | Fixed | The first pass centred a smaller sphere on the reticle. Now the mock-up's geometry: a 620 px box (capped at 72svh), the sphere 4.5 units right of the reticle centre and cut by the column edge, the white emitter at the reticle centre, ring sizes as shares of the box height; captures in both themes at 1440 × 900 match the owner's screenshot |
+| `color` | Pass | The backdrop fill is `--g3`, not the mock-up's tinted #131315 (the one-color rule); dots and bloom are `--break` mixes; `npm run check` ok |
+| `contrast` | Pass | Text over the backdrop: `--text-3` on `--g3` 6.18:1 (dark), 5.71:1 (light) |
+| `performance` | Pass | `/` 158.6 KB gz; mobile Lighthouse A/B against the commit before ISS-51 (local, devtools throttling, CPU benchmark 1,079–2,950): TBT 2.0–4.2 s before, 2.4–4.3 s after; LCP 2.5–3.1 s before, 3.0–3.8 s after; within this machine's noise, judged on the preview. A `body:has()` rule to hide the M12 grid was dropped (the hero's stacking context already covers it) |
+| `motion` | Pass | Same probe as above: moves, stops with the pause and off screen, still under reduced motion, absent below 1280 px; smoke 21/21 |
