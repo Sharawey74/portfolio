@@ -98,12 +98,12 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 | `--g5` | #262626 | #D4D4D4 | border fallback |
 | `--g6` | #3D3D3D | #B8B8B8 | strong border, switch track |
 | `--g7` | #5E5E5E | #999999 | decoration only, never text |
-| `--g8` | #858585 | #666666 | text-3 |
-| `--g9` | #A3A3A3 | #4D4D4D | text-2 |
+| `--g8` | #949494 | #5C5C5C | text-3 |
+| `--g9` | #B8B8B8 | #404040 | text-2 |
 | `--g10` | #D4D4D4 | #262626 | text-soft, filled-button hover |
 | `--g11` | #F0F0F0 | #111111 | text |
-| `--edge` | rgba(214,235,253,.19) | rgba(18,30,45,.16) | `--line`: borders, a card's top edge |
-| `--edge-soft` | rgba(217,237,254,.11) | rgba(18,30,45,.09) | `--line-hair`: dividers, a card's other edges |
+| `--edge` | rgba(214,235,253,.22) | rgba(18,30,45,.18) | `--line`: borders, a card's top edge |
+| `--edge-soft` | rgba(217,237,254,.14) | rgba(18,30,45,.11) | `--line-hair`: dividers, a card's other edges |
 
 `globals.css` is the source of truth for the exact values; any value changed to pass contrast is logged in its header comment.
 
@@ -115,7 +115,7 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 | `--c2` | #8E1428 | #A3142A | `::selection` (text `--on-c2`) |
 | `--c1` | #3A0810 | #F6E2E5 | The palette's selected option (the Contact band is retired since 7.4) |
 
-- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the text color at 30 % fading to 50 %), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
+- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the full text color to 45 %, fading to 75 %; 50 % read as grey, ISS-43), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
 - `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1, graphics ≥ 3:1.
 - `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2`, `--break` and `--edge` / `--edge-soft` definitions (the compiler writes the edges as 8-digit hex in the built CSS; both forms are accepted only in those declarations). Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
 
@@ -298,6 +298,13 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Figure grid:** `profile.figures.items` (metric ids, or `{ oss: "merged" }`); a missing id fails the build. **Closing line:** `profile.closing`; the glow is the one `--break` glow outside the hero.
 - **Gradient text and overlapping glyphs:** Chrome draws a seam where clipped gradient glyphs overlap (the case-study H1's "Ev" at −0.04em). That H1 stays solid; check new gradient headings at their real size.
 - Measured at the end of 7.4: `/` 157.5 KB gz; smoke 21/21; `scrollWidth` = viewport at 320 and 375 on every page.
+
+## Contrast and clarity (Stage 7.4.1, ISS-43)
+
+- **Measure haze from pixels, not CSS.** The owner saw a grey veil; no overlay sat on the text or screenshots. Four shared settings added up: the grain lifted black to (6, 6, 6), translucent cards carried it inside, secondary text was one step too dim, and heading gradients ended at 50 %. Sample a black area with each M12 layer on and off before blaming a component.
+- **Grain** is 0.02 (was 0.045; black now averages (3, 3, 3)). **Cards** (`.surface-card`, `.bento-cell`) fill with the text color mixed into the page color, opaque, so the grain stays outside them. Do not make a card fill translucent again.
+- **The M12 grid** is an absolute layer on the first screen (`100svh`) and scrolls away with it. As a fixed layer it relied on a scroll-timeline fade, and under reduced motion it stayed over every screen.
+- Screenshots were checked against their files (within 2/255 through the image optimizer): never add a filter or overlay above them.
 
 ## Review and acceptance
 
