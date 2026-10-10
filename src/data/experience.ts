@@ -49,16 +49,35 @@ const experienceSchema = z.object({
 
 const RESUME_SECTION = "evidence-report.md:408 (newest resume, roles and dates)";
 const APPROVED = "owner:approved-claims";
+/** The owner's resume, shared on the asOf date for the Alstom internship and the Anthropic Academy certificates only (ISS-19, ISS-20). */
+const RESUME_2026_10 = "owner:resume";
 const VERIFIED = "2026-10-06";
 
 export const experience = experienceSchema.parse({
   roles: [
     {
+      id: "alstom",
+      title: "Systems Engineering Intern",
+      org: "Alstom",
+      start: "2026-08",
+      end: "2026-09",
+      points: [
+        { text: "Cairo Monorail (CITYFLO 650 CBTC): diagnosed in-service faults on the driverless line by tracing 10+ subsystem interfaces (ATS, interlocking, ATP/ATO, platform screen doors, SCADA) and rebuilding event timelines from onboard and wayside logs to separate root causes from symptoms.", source: RESUME_2026_10, asOf: "2026-10-10" },
+        { text: "Audited 660 pages of wayside and onboard maintenance manuals against the as-built architecture: a register of 78 findings (11 critical), each checked against its source document through 150+ scripted text checks.", source: RESUME_2026_10, asOf: "2026-10-10" },
+        { text: "AI/ML sprint on railway incident data: framed the problem of 5 incompatible alarm formats feeding one operator screen, set 5 data-quality metrics, and proposed a unified incident taxonomy and classification approach.", source: RESUME_2026_10, asOf: "2026-10-10" },
+      ],
+      projects: [],
+      source: RESUME_2026_10,
+      asOf: "2026-10-10",
+    },
+    {
       id: "orascom",
       title: "IT Infrastructure Intern",
       org: "Orascom Construction PLC",
+      // July only: the owner's decision (2026-10-10), from the resume; the
+      // evidence report had July to August (FACTS-CHECK.md).
       start: "2026-07",
-      end: "2026-08",
+      end: "2026-07",
       points: [
         { text: "CCNA-aligned networking: routing, VLAN segmentation, NAT, IP addressing, switching.", source: APPROVED, asOf: VERIFIED },
         { text: "Copper and fiber cabling.", source: APPROVED, asOf: VERIFIED },
@@ -94,6 +113,7 @@ export const experience = experienceSchema.parse({
     },
   ],
   certifications: [
+    { name: "Claude 101, Claude Code 101, Claude Code in Action, Agent Skills, Subagents", issuer: "Anthropic Academy", source: RESUME_2026_10, asOf: "2026-10-10" },
     { name: "GenAI Practice", issuer: "NVIDIA", source: "evidence-report.md:408", asOf: VERIFIED },
     { name: "Building LLM Applications with Prompt Engineering", issuer: "NVIDIA", source: "evidence-report.md:408", asOf: VERIFIED },
     { name: "AI Associate", issuer: "Telecom Egypt", source: "evidence-report.md:408", asOf: VERIFIED },

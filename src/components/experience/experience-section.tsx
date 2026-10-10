@@ -41,7 +41,12 @@ export function ExperienceSection() {
             <InView as="li" key={r.id} className="xp-item clip-reveal">
               <span aria-hidden="true" className="xp-node" />
               <p className="num font-mono text-mono-lg text-ink-3 md:col-span-3">
-                <time dateTime={r.start}>{monthYear(r.start)}</time> – <time dateTime={r.end}>{monthYear(r.end)}</time>
+                <time dateTime={r.start}>{monthYear(r.start)}</time>
+                {r.end !== r.start ? (
+                  <>
+                    {" "}– <time dateTime={r.end}>{monthYear(r.end)}</time>
+                  </>
+                ) : null}
               </p>
               <div className="flex flex-col gap-3 md:col-span-7" title={evidence(r.source, r.asOf)}>
                 <h3 className="font-heading text-h3">{r.title}</h3>

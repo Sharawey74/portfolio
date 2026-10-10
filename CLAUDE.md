@@ -17,7 +17,7 @@ file and a date.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
 - **Brief changes from review round 1** (owner, 2026-10-08, `docs/ISSUES.md` ISS-12 to ISS-25) are applied below: the hero copy, a three-step accent ramp instead of one accent, pill buttons, Hanken Grotesk for interface labels, brand icons, color screenshots. A later change to these rules follows the same path: decision recorded in `docs/ISSUES.md` first, then this file in the same branch as the code.
-- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. Nothing is copied from either site. The mock-up was approved on 2026-10-10 and the visual system below was rewritten in the Stage 7 foundation step (7.2); the hero (7.3) and the sections and case studies (7.4) are restyled. All of Stage 7 is on one branch, `feat/stage7-redesign`, and lands as one pull request after 7.6.
+- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. Nothing is copied from either site. The mock-up was approved on 2026-10-10 and the visual system below was rewritten in the Stage 7 foundation step (7.2); the hero (7.3) and the sections and case studies (7.4) are restyled. All of Stage 7 is on one branch, `feat/stage7-redesign`, and was merged in pull request #20 (2026-10-10, up to 7.6); the owner review 2 commits that reached the branch after that merge go in a second pull request from the same branch.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -29,6 +29,7 @@ file and a date.
 6. Never open or print `.env` files or any secret. Other repos are **read-only**: copy images or diagram sources from them into this project, nothing else.
 7. Motion graphics are claims: an animated diagram shows only components that exist in the source repo (`architecture[]` in `projects.ts`, each with a source).
 8. Do not publish the items listed in `CLAUDE.local.md` (personal details and private projects). Do not name them in tracked files either; the facts check reads them from the git-ignored `scripts/private-terms.local.txt`.
+9. **No resume on the site** (owner, 2026-10-10, `docs/ISSUES.md` ISS-46): the Download Resume button is removed and `personal.resumePdf` is withheld. A resume PDF published later must pass rules 1–8 (it would make the phone number and banned wording public) unless the owner decides otherwise.
 
 ### Banned claims (enforced by `scripts/check-facts.ts`)
 
@@ -67,7 +68,7 @@ All copy lives in typed data files. Components contain no copy. Updating the sit
 | `src/data/profile.ts` | Approved hero copy, section indices, site meta |
 | `src/data/projects.ts` | Five projects: eventora (flagship), recruiter-pro, sysplex (case studies), lexintelligence, phishsniffer (secondary grid) |
 | `src/data/oss.json` + `oss.ts` | PR snapshot (fallback for the ISR refresh) and `ossSummary()` |
-| `src/data/experience.ts` | Two internships, AASTMT, four undated certifications, hidden capstone TODO |
+| `src/data/experience.ts` | Three internships (Alstom, Orascom, Telecom Egypt), AASTMT, five undated certification entries, hidden capstone TODO |
 | `src/data/skills.ts` | Tech chips by lane with `usedIn` validated against project slugs |
 
 Data files import each other with explicit `.ts` extensions (`import { claim } from "./schema.ts"`) so Node can run the check scripts with native type stripping. `tsconfig.json` sets `allowImportingTsExtensions`; keep it.
@@ -80,7 +81,7 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 - H1: "Abdelrhman Mohamed." (the final period is the one text use of `--break`)
 - Lead: "Software Engineer focused on designing and building systems that keep working as load grows, with a strong emphasis on correctness, maintainability and real-world engineering constraints."
 - Second paragraph: "Interested in software architecture, distributed systems, performance, security, and the engineering practices that turn complex requirements into tested, deployable software."
-- CTAs: "View My Work", "Download Resume".
+- CTAs: "View My Work" ("Download Resume" removed by the owner on 2026-10-10, ISS-46).
 
 ## Visual system (overrides any skill's defaults)
 
@@ -111,11 +112,11 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 | Token | Dark | Light | Job |
 |---|---|---|---|
-| `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow and the announcement pill's moving edge |
+| `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow, the closing glow, the announcement pill's moving edge, and the same circling edge on a hovered or focused card (ISS-45) |
 | `--c2` | #8E1428 | #A3142A | `::selection` (text `--on-c2`) |
 | `--c1` | #3A0810 | #F6E2E5 | The palette's selected option (the Contact band is retired since 7.4) |
 
-- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the full text color to 45 %, fading to 75 %; 50 % read as grey, ISS-43), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
+- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the full text color to 45 %, fading to 75 %; 50 % read as grey, ISS-43), red glows in the hero and behind the closing line only (the closing one is the mock-up's orb: accent to 42 %, 40 px blur, pulsing 0.75 to 1; ISS-45), translucent edge lines, and a circling accent edge on a card only while it is hovered or focused. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
 - `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1, graphics ≥ 3:1.
 - `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2`, `--break` and `--edge` / `--edge-soft` definitions (the compiler writes the edges as 8-digit hex in the built CSS; both forms are accepted only in those declarations). Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
 
@@ -262,7 +263,7 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 ## Review round 1 in place (2026-10-08)
 
 - **Hero:** label "Software engineer", H1 = the name (asserted equal to `personal.name` plus a period by the facts check), lead and second paragraph; all in `profile.hero`. The share image uses the label as kicker and the name as title.
-- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class; a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answered with the accent ramp until Stage 7.2; since then it stays on the neutral ramp (see `button.tsx`).
+- **Buttons:** `Button` / `ButtonLink` carry the `.btn` class (variants `filled`, `outline`, `quiet`; `quiet` = the Source button, used since 2026-10-10 for View My Work and Case study, with no magnet or cursor label); a trailing arrow marked `data-arrow="right" | "down"` moves 4 px on hover. Hover answered with the accent ramp until Stage 7.2; since then it stays on the neutral ramp (see `button.tsx`).
 - **Contact band:** retired in Stage 7.4 (the form sits on a section card; the direct links are pills under the closing line).
 - **Stack in About:** `.stack-rows` is a subgrid table, chip column and "used in" column; one column below 30 rem.
 - **Work cards:** card figures show their qualifier under the label; "Also built" names sit on their own row; (the sticky stack and its short-viewport list are retired since Stage 7.4). About's flagship cell shows the test count, the Work card leads with performance figures.
@@ -280,7 +281,7 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - `DEPLOY.md` (local only, git-ignored) is the owner's guide: Vercel setup, environment variables, pre-release checklist, release steps, smoke checks, rollback. `CHANGELOG.md` (Keep a Changelog): 0.1.0 to 0.6.0 are backfilled and untagged; v1.0.0 is the first tag.
 - **CI** (`ci.yml`, job name `Lint, typecheck, facts, build, smoke`): the old checks, then Playwright Chromium and `npm run test:smoke`; traces are uploaded on failure. Renaming the job renames the required status check in the owner's ruleset.
 - **Smoke tests** run with `workers: 2`: one `next start` serves them, and more parallel browsers time out on image optimization rather than finding bugs. Add a route to `PAGES` in `tests/smoke.spec.ts` when the site gains one.
-- **Lighthouse CI** (`lighthouse.yml`) runs on Vercel `deployment_status` events for previews, so it starts only once the project is imported and the file is on `main`. LCP and TBT assertions are `warn` while ISS-01, ISS-02 and ISS-36 are open; switch them to `error` when the preview numbers are within budget.
+- **Lighthouse CI** (`lighthouse.yml`) runs on Vercel `deployment_status` events for previews, so it starts only once the project is imported and the file is on `main`. The TBT assertion is `error` since 2026-10-10 (ISS-02 closed: previews 30–138 ms); LCP stays `warn` while ISS-01 and ISS-36 are open (judged on Speed Insights field p75), and switches to `error` when the preview numbers are within budget. Preview SEO reads about 60 by design (Vercel marks previews `noindex`).
 - **LCP on Vercel** (2026-10-09, ISS-36): preview TBT is within budget; simulated LCP is 2.9–3.6 s, driven by the bytes before first paint (three preloaded fonts, about 160 KB of JS) and the first layout. The owner kept the display font's `opsz` axis (look over about 0.5 s of simulated LCP). Mono loads weight 400 only. **Vercel Speed Insights** (`layout.tsx`, rendered only when `VERCEL=1` so local and CI servers never request its script) gives real-visitor LCP; judge the budget on its 75th percentile.
 - **Release** (`release.yml`): a `vX.Y.Z` tag creates the GitHub Release from that CHANGELOG section; it fails if the section is missing or `package.json` has another version.
 - **Dependabot** weekly, npm and actions, minor and patch grouped. Never `npm audit fix --force` (ISS-10).
@@ -314,10 +315,23 @@ section. A tall `--window-size` does not work (the hero is `100svh`), and
 - **Cards:** `.lift` lifts 2 px and brightens the top edge on hover (fine pointer); `InteractiveCard` is a spotlight only (soft light plus the hairline grid under the pointer). The 4° tilt was removed: the approved mock-up has a lift.
 - **CSS loops pause off-screen through `LoopGate`** (`src/components/motion/loop-gate.tsx`, one IntersectionObserver setting `data-visible`): the closing glow breathes only while visible, stops with the pause and is still under reduced motion. The hero light still relies on the browser's off-screen throttling; give it a gate if it ever grows.
 
+## Owner review 2 (2026-10-10, ISS-45)
+
+- **Card edge:** `.surface-card`, `.bento-cell` and `.figure-grid` get an `::after` ring masked to the border (`mask` with `content-box exclude`) carrying the pill's conic arc, turned by the registered `--arc` angle while hovered or focused; clipped cards keep `overflow-clip-margin: 1px`. Hover and focus only, by owner decision: never make it always-on (many cards share a screen; the three-regions rule). Cards also lift 2 px on hover. Every `.btn` pill gets the same edge on hover and `:focus-visible` (3 s a turn), except disabled buttons, which do not lift or react.
+- **The rise uses `transform`, the lift uses `translate`:** an animated property overrides a hover rule on the same property, so keep them on different properties.
+- **Closing glow:** the mock-up's numbers exactly (see the visual system). Check text contrast over it after any change: closing pills measured 5.84:1 (light) and about 10:1 (dark).
+- **Experience:** the Alstom internship and the Anthropic Academy entry come from the owner's resume (`owner:resume`), used only for internships and certificates. Source strings on certificates must not contain a date: the facts check reads them.
+- **Commit messages:** the git hook reads "anthropic" and "claude" as AI attribution; describe such changes without those words.
+
 ## QA in place (Stage 7.6)
 
 - `/dev/type` shows the Stage 7 tokens (including the two edge lines) and components (pill group, section card with lift, nudge and brand-icon links).
 - Measured at the end of Stage 7 (local, CPU benchmark 1,537–1,718, not comparable to earlier runs): accessibility, best practices and SEO 100 on all four pages; CLS 0.002 in 6 of 7 runs, one home run 0.182 from a late Inter swap re-wrapping the hero lead (ISS-44); `/` 157.4 KB gz; smoke 21/21; keyboard walk of `/` 139 stops, every one with a visible ring; `scrollWidth` = viewport at 320 and 375 on every page, both themes. LCP and TBT are judged on the Vercel preview and Speed Insights.
+
+## After the Stage 7 merge (2026-10-10)
+
+- **Preview measurement of record** (`docs/reports/lighthouse-stage7-preview.md`, PR #20): LCP medians 2.93–3.79 s (simulated), TBT 30–78 ms, CLS 0.002–0.005, accessibility and best practices 100. Lighthouse CI uploads the HTML and JSON reports as a workflow artifact (`gh run download <run id>`); on this machine read them with a `\\?\` long-path prefix (the file names pass 260 characters).
+- **Check what a merge contained.** PR #20 was merged at `88ff24e` while 33 later commits were pushed afterwards; compare `git rev-list --count origin/main..<branch>` after the owner says "merged", and render a follow-up PR when it is not 0.
 
 ## Review and acceptance
 

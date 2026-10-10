@@ -3,6 +3,7 @@ import { ViewTransition } from "react";
 import type { Project } from "@/data/projects.ts";
 import { profile } from "@/data/profile.ts";
 import { Chip } from "@/components/ui/chip.tsx";
+import { quietButton } from "@/components/ui/button.tsx";
 import { CountUp } from "@/components/motion/count-up.tsx";
 import { InView } from "@/components/motion/in-view.tsx";
 import { FlowPreview } from "@/components/diagrams/flow-preview.tsx";
@@ -80,20 +81,23 @@ export function ProjectCard({ project }: { project: Project }) {
             </div>
           ))}
         </dl>
-        <p className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-small">
+        <p className="mt-auto flex flex-wrap items-center gap-3 pt-2 text-small">
           <Link
             href={`/projects/${project.slug}`}
-            data-cursor={ui.cursorView}
-            data-magnetic=""
             data-press=""
-            className="btn inline-flex min-h-11 items-center gap-3 rounded-pill border border-line px-5 font-medium text-ink transition-[background-color,border-color,translate] duration-200 ease-out hover:-translate-y-px hover:border-line-strong hover:bg-hover"
+            className={quietButton}
           >
             {ui.caseStudy}
             <span className="sr-only">: {project.name}</span>
             <span aria-hidden="true" data-arrow="right">→</span>
           </Link>
           {repo ? (
-            <a href={repo.href} rel="noreferrer" className="nudge inline-flex min-h-11 items-center gap-1.5 text-ink-2 hover:text-ink">
+            <a
+              href={repo.href}
+              rel="noreferrer"
+              data-press=""
+              className={quietButton}
+            >
               {repo.label}
               <span className="sr-only">
                 : {project.name} ({ui.externalLink})

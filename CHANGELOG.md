@@ -10,6 +10,8 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
+Stage 7 (the redesign, through 7.6) merged in pull request #20 on 2026-10-10; owner review 2 follows in a second pull request. Both ship in v1.0.0.
+
 ### Added
 - A deploy guide for the owner (hosting, Vercel import steps, environment variables, pre-release checklist, release and rollback steps), kept on the owner's machine rather than in the repository.
 - Playwright smoke tests in CI: every route returns 200, no console errors, header navigation, the Work tabs and the open-source filter, reduced-motion and JavaScript-off rendering, no horizontal scroll at 375 px.
@@ -19,6 +21,9 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 - Vercel Speed Insights on production builds: real visitors' Core Web Vitals, to judge the LCP budget on field data.
 
 ### Changed
+- Lighthouse CI now fails a preview whose median Total Blocking Time is over 200 ms (it warned before); LCP still warns.
+- Owner review 2: the announcement pill answers on hover like the link pills; the glow behind the closing line matches the approved mock-up; every card and button shows a circling accent edge and lifts while hovered or focused; the Source link is a pill button, and View My Work and Case study share its quiet look without the magnetic pull.
+- Experience adds the Alstom systems engineering internship (Aug–Sep 2026); the Orascom internship is July 2026 only and one certification entry for the Anthropic Academy courses.
 - Motion (Stage 7.5): section blocks rise into place as they scroll in, section titles blur into focus, the chosen project card and returning open-source rows fade up, cards lift with a soft spotlight instead of tilting, and the closing glow breathes while on screen; all still under reduced motion, and the glow stops with "Pause animations".
 - Redesign sections (Stage 7.4): Work shows one project at a time behind tabs, with a screenshot slider (progress bars, arrows, dots, arrow keys) and Eventora's six screens in a new order without the landing page; "Also built" as two cards; Open source as status rows with an All / Merged / Open filter; a grid of nine sourced figures ("Every figure has a source."); a closing line with a soft glow and direct-link pills before Contact; the Contact band retired and the form on a card; About, Experience and the case studies on rounded cards in the new heading face.
 - Redesign hero (Stage 7.3): an announcement pill with the derived open-source count and a circling accent edge; the name's words blur into focus in gradient text; a CSS light with rays and rings on wide screens (the node-graph canvas is retired); four Eventora figures that count up under the hero; header links from 1280 px, their numbers and the pause label from 1536 px.
@@ -27,6 +32,7 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 - The mono face loads at weight 400 only (39.5 KB to 20.7 KB, preloaded on every page).
 
 ### Removed
+- The Download Resume button (owner decision; the resume is not published on the site).
 - The node-graph hero canvas and the optional WebGL hero shader (replaced by the CSS light in Stage 7.3), with the `NEXT_PUBLIC_ENABLE_SHADER` setting.
 - The sticky stack of project cards and its scroll fallback (replaced by project tabs in Stage 7.4).
 
