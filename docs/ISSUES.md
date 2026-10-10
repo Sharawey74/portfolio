@@ -698,6 +698,8 @@ Exact values come from a contrast pass in both themes (text ≥ 4.5:1, graphics 
 
 **Rules this replaces** (in `CLAUDE.md`, rewritten in the Stage 7 branch together with the code, as the brief requires): no gradients or gradient text; content radius 0–2 px; Inter banned; the crimson ramp; the editorial 12-column offsets as the main layout; Newsreader, Hanken Grotesk and JetBrains Mono as the only faces.
 
+**Mock-up v1, 2026-10-10** (7.1, a private design canvas the owner opens from the link in the session): the home page in dark and light (header, hero with gradient H1, red announcement pill, CSS stand-in for the hero light, four sourced figures, the Eventora card plus two compact cards, a tabbed code block with three real excerpts pinned to commits, a 3×3 grid of sourced figures, a closing line, footer) and a board of choices (two display serifs, three heading grotesks, color tokens, motion list). Tweaks switch theme, fonts and the red. Two pieces of new copy are left as bracketed placeholders for the owner: the code section's intro line and the grid's heading. Awaiting the owner's choices and approval.
+
 **Plan.** Stage 7 in `PLAN.md`: 7.0 brief and tokens, 7.1 HTML mock-up for approval, 7.2 foundation, 7.3 hero, 7.4 sections and case studies, 7.5 motion, 7.6 QA and measurements. Ships as one minor bump inside 0.x; v1.0.0 launches with it.
 
 ---
