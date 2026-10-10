@@ -720,9 +720,14 @@ html[data-reveal="on"]:not([data-intro]) .hero-ctas {
     translate: 0 0.2em;
   }
 }
-html[data-reveal="on"]:not([data-intro]) .hero-h1 .w-i {
-  animation: hero-focus 900ms var(--ease-out) backwards;
-  animation-delay: calc(80ms + var(--i, 0) * 130ms);
+/* ISS-50: the name rises letter by letter (35 ms apart), each blurring into
+   focus; the period lands after the last letter with one pulse. */
+.hero-h1 .ch {
+  display: inline-block;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-h1 .ch {
+  animation: hero-focus var(--dur-3) var(--ease-out) backwards;
+  animation-delay: calc(80ms + var(--c, 0) * 35ms);
 }
 .hero-h1 .w {
   overflow: visible;
@@ -737,7 +742,7 @@ html[data-reveal="on"]:not([data-intro]) .hero-figures {
 /* Reveals and the intro are one-shot entrances, and .title-track follows the
    reader's own scrolling: none of them autoplay, so the pause leaves them be
    (pausing them could strand text half-revealed). */
-html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-label, .hero-more, .hero-ctas, .hero-pill, .hero-figures, .intro, .intro *, .title-track) {
+html[data-motion="paused"] :is(.rv .w-i, .rv-load .w-i, .hero-h1 .ch, .hero-h1 .accent-mark, .text-mark, .hero-label, .hero-more, .hero-ctas, .hero-pill, .hero-figures, .intro, .intro *, .title-track) {
   animation-play-state: running !important;
 }
 
@@ -2054,4 +2059,72 @@ html[data-motion="paused"] :is(.rise, .rise-group > *) {
     border-color: var(--line-strong);
     color: var(--text-1);
   }
+}
+
+/* ── Hero motion (ISS-50) ─────────────────────────────────────────────── */
+
+/* The period lands after the last letter (--letters, set on the H1; not --n,
+   which the M1 intro registers as a non-inherited integer), then
+   pulses once: a mark coming on. */
+@keyframes period-land {
+  from {
+    opacity: 0;
+    translate: 0 -0.45em;
+  }
+}
+@keyframes period-pulse {
+  40% {
+    scale: 1.6;
+  }
+}
+.hero-h1 .accent-mark {
+  display: inline-block;
+  transform-origin: 50% 80%;
+}
+html[data-reveal="on"]:not([data-intro]) .hero-h1 .accent-mark {
+  animation:
+    period-land var(--dur-2) var(--ease-out) backwards,
+    period-pulse var(--dur-3) var(--ease-out);
+  animation-delay:
+    calc(80ms + var(--letters, 17) * 35ms + 300ms),
+    calc(80ms + var(--letters, 17) * 35ms + 700ms);
+}
+
+/* A hairline draws under the lead's key phrase once the name has landed. A
+   1 px background line (it spans line breaks; a pseudo-element would not), so
+   this one-shot animates background-size on a single 1 px row. Static and
+   fully drawn with JS off and under reduced motion. */
+.text-mark {
+  background-image: linear-gradient(color-mix(in srgb, currentColor 55%, transparent), color-mix(in srgb, currentColor 55%, transparent));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+}
+@keyframes mark-draw {
+  from {
+    background-size: 0% 1px;
+  }
+}
+html[data-reveal="on"]:not([data-intro]) .text-mark {
+  animation: mark-draw var(--dur-3) var(--ease-out) 1.5s backwards;
+}
+
+/* The name's gradient sits on each letter, not on the word or the H1: in
+   Chrome a clipped-text background on a parent breaks while its children
+   animate (the letters piled up mid-opening). Same look, one gradient per
+   glyph. */
+.hero-h1.text-gradient,
+.hero-h1.text-gradient .w-i {
+  background-image: none;
+}
+.hero-h1 .ch {
+  background-image: linear-gradient(to right bottom, var(--text-1) 45%, color-mix(in srgb, var(--text-1) 75%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+/* Cursor light: while the pointer is over the hero, each letter's gradient is
+   centred on the pointer (--lx / --ly per letter, eased on the scheduler). */
+.hero-h1[data-lit] .ch {
+  background-image: radial-gradient(circle 16rem at var(--lx, 50%) var(--ly, 50%), var(--text-1) 0, color-mix(in srgb, var(--text-1) 62%, transparent) 100%);
 }
