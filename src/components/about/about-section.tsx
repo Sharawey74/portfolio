@@ -36,7 +36,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
     <section aria-labelledby="about" className="grid-12 gap-y-16 py-24 md:py-32">
       <SectionHeading id="about" index={section.index} title={section.title} />
 
-      <ul className="bento col-span-full md:col-span-10 md:col-start-2">
+      <ul className="bento rise-group col-span-full md:col-span-10 md:col-start-2">
         {personal.bio.value ? (
           <li className="bento-cell md:col-span-4">
             <p className="max-w-[60ch] font-display text-h3">{personal.bio.value}</p>
@@ -91,7 +91,9 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
           <p className="max-w-[56ch] text-small text-ink-2">{flagship.summary.text}</p>
           {flagshipMetric ? (
             <p className="text-small text-ink-2" title={evidence(flagshipMetric.source, flagshipMetric.asOf)}>
-              <span className="num font-heading text-h3 text-ink">{flagshipMetric.display}</span>{" "}
+              <span className="num font-heading text-h3 text-ink">
+                <CountUp display={flagshipMetric.display} />
+              </span>{" "}
               {flagshipMetric.label}
               {flagshipMetric.qualifier ? ` · ${flagshipMetric.qualifier}` : ""}
             </p>
@@ -119,7 +121,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
         ) : null}
       </ul>
 
-      <div className="surface-card col-span-full flex flex-col gap-2 p-6 md:col-span-10 md:col-start-2 md:p-8">
+      <div className="surface-card rise col-span-full flex flex-col gap-2 p-6 md:col-span-10 md:col-start-2 md:p-8">
         <MonoLabel>{t.stack}</MonoLabel>
         <dl className="flex flex-col">
           {lanes.map((lane) => {
