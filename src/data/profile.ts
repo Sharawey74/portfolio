@@ -26,6 +26,14 @@ const profileSchema = z.object({
     more: claim,
     ctaPrimary: z.object({ label: z.string(), href: z.string().startsWith("#") }),
     ctaResume: z.object({ label: z.string() }),
+    /**
+     * Announcement pill above the H1 (Stage 7). `{merged}` and `{projects}`
+     * are filled from ossSummary() over the same PR list the Open source
+     * section shows, so the numbers cannot drift.
+     */
+    announce: z.object({ template: z.string().includes("{merged}"), href: z.string().startsWith("#") }),
+    /** Figures strip under the hero: metric ids from projects.ts (label, qualifier, source come from there). */
+    figures: z.array(z.object({ project: z.string(), metric: z.string() })).min(1).max(4),
   }),
   sections: z.array(sectionSchema).min(1),
   meta: z.object({
@@ -169,6 +177,13 @@ export const profile = profileSchema.parse({
     },
     ctaPrimary: { label: "View My Work", href: "#work" },
     ctaResume: { label: "Download Resume" },
+    announce: { template: "{merged} merged pull requests across {projects} open-source projects", href: "#open-source" },
+    figures: [
+      { project: "eventora", metric: "burst-oversell" },
+      { project: "eventora", metric: "local-requests" },
+      { project: "eventora", metric: "local-1-rps" },
+      { project: "eventora", metric: "tests" },
+    ],
   },
   sections: [
     { live: true, id: "about", index: "01", title: "About" },
