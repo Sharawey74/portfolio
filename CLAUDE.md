@@ -17,7 +17,7 @@ file and a date.
 - Hosting: Vercel Git integration (production = `main`, every PR gets a preview). No `vercel.json` unless required. Never run `vercel` commands and never deploy.
 - Work is staged (0 to 6, plus "Review round 1" between 5 and 6). Finish a stage, stop, wait for the owner to type "continue". See `PLAN.md`.
 - **Brief changes from review round 1** (owner, 2026-10-08, `docs/ISSUES.md` ISS-12 to ISS-25) are applied below: the hero copy, a three-step accent ramp instead of one accent, pill buttons, Hanken Grotesk for interface labels, brand icons, color screenshots. A later change to these rules follows the same path: decision recorded in `docs/ISSUES.md` first, then this file in the same branch as the code.
-- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. The visual system below still applies until the Stage 7 foundation branch rewrites it; nothing is copied from either site. The first step is an HTML mock-up for the owner's approval.
+- **Stage 7 redesign decided** (owner, 2026-10-10, `docs/ISSUES.md` ISS-42): a Resend-style system (black, gradient headings, translucent borders, rounded cards, a code-block section) with GetLayers-style motion, own assets, free fonts (Inter allowed for body, Commit Mono for code) and a red accent, before v1.0.0. Nothing is copied from either site. The mock-up was approved on 2026-10-10 and the visual system below was rewritten in the Stage 7 foundation branch (7.2); sections are restyled in 7.4.
 
 ## Source of truth and honesty rules (highest priority)
 
@@ -84,49 +84,56 @@ Owner's own description, reframed to pass the copy rules and approved on 2026-10
 
 ## Visual system (overrides any skill's defaults)
 
-**Color.** Text is black or white (gray steps), with two exceptions in `--break`: the H1's final period and the section index numbers ("01"). Dark is default; light is the exact mirror. Surfaces come from a neutral 12-step ramp (R=G=B), applied by role:
+**Stage 7 system** (owner decisions 2026-10-10, `docs/ISSUES.md` ISS-42; approved mock-up v3). Resend-style structure with GetLayers-style motion, built here: no fonts, videos, images or code copied from either site. While Stage 7 is in progress, sections not yet restyled (7.4) keep their earlier look, such as the `--c1` Contact band and square cards.
+
+**Color.** A black page, a neutral gray ramp for surfaces and text, two translucent blue-white edge colors for lines, and one red accent family for marks. Text is the gray ramp, with two `--break` text uses: the H1's final period (and the wordmark's) and the section index numbers ("01"). Dark is default; light mirrors it.
 
 | Token | Dark | Light | Role |
 |---|---|---|---|
-| `--g0` | #050505 | #FAFAFA | page |
-| `--g1` | #0A0A0A | #F5F5F5 | raised |
-| `--g2` | #111111 | #EEEEEE | card |
-| `--g3` | #181818 | #E7E7E7 | hover |
-| `--g4` | #212121 | #DEDEDE | hairline |
-| `--g5` | #2E2E2E | #D1D1D1 | border |
-| `--g6` | #444444 | #BBBBBB | strong border |
-| `--g7` | #666666 | #999999 | decoration only |
-| `--g8` | #8F8F8F | see `globals.css` | text-3 |
-| `--g9` | #B3B3B3 | #4C4C4C | text-2 |
-| `--g10` | #E0E0E0 | #1F1F1F | text-soft |
-| `--g11` | #FAFAFA | #050505 | text |
+| `--g0` | #000000 | #FFFFFF | page |
+| `--g1` | #050505 | #FAFAFA | raised |
+| `--g2` | #0A0A0A | #F5F5F5 | card |
+| `--g3` | #121212 | #EDEDED | hover |
+| `--g4` | #1C1C1C | #E3E3E3 | (hairline fallback) |
+| `--g5` | #262626 | #D4D4D4 | border fallback |
+| `--g6` | #3D3D3D | #B8B8B8 | strong border, switch track |
+| `--g7` | #5E5E5E | #999999 | decoration only, never text |
+| `--g8` | #858585 | #666666 | text-3 |
+| `--g9` | #A3A3A3 | #4D4D4D | text-2 |
+| `--g10` | #D4D4D4 | #262626 | text-soft, filled-button hover |
+| `--g11` | #F0F0F0 | #111111 | text |
+| `--edge` | rgba(214,235,253,.19) | rgba(18,30,45,.16) | `--line`: borders, a card's top edge |
+| `--edge-soft` | rgba(217,237,254,.11) | rgba(18,30,45,.09) | `--line-hair`: dividers, a card's other edges |
 
 `globals.css` is the source of truth for the exact values; any value changed to pass contrast is logged in its header comment.
 
-**Accent ramp** (owner decision 2026-10-08, ISS-21 direction A): three crimson steps, each with one job. Nothing else is colored.
+**Accent** (red; `#FF3B4E` approved 2026-10-10, ISS-42). `--break` is the one bright red; `--c1` and `--c2` remain for the surfaces not yet restyled and for `::selection`.
 
 | Token | Dark | Light | Job |
 |---|---|---|---|
-| `--c1` deep | #3A0810 | #F6E2E5 | Fills: the Contact band (the one large accent surface), outline-button and header-control hover, the active nav pill, the selected palette option |
-| `--c2` mid | #8E1428 | #A3142A | Filled-button hover (text `--on-c2` #FAFAFA), `::selection`, project-card hover edge, hairlines inside the Contact band |
-| `--break` bright | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the single active packet/node in motion graphics, one highlighted value per chart, the H1 final period, section index numbers, the cursor-ring hover state |
+| `--break` | #FF3B4E | #C4152A | Marks: live/open status dot, active nav dot, focus ring, the switch track when on, the single active node in motion graphics, one highlighted value per chart, the H1 and wordmark periods, section index numbers, brand icons on hover, the hero glow and the announcement pill's moving edge |
+| `--c2` | #8E1428 | #A3142A | `::selection` (text `--on-c2`) |
+| `--c1` | #3A0810 | #F6E2E5 | Legacy fills until 7.4 (the Contact band) |
 
-- Forbidden: colored body or heading text (beyond the two `--break` text uses above), gradients, glows, shadows, accent fills on cards or content blocks other than the Contact band, `--break` as a fill larger than a chip.
-- `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1 (including all text roles on `--c1` and `--on-c2` on `--c2`), graphics ≥ 3:1. Light `--c1` was lightened from #F3DADD to #F6E2E5 to keep text-3 at 4.63:1.
-- `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2` and `--break` definitions. Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
+- Allowed since Stage 7: gradient text on the H1 and section H2s only (`.text-gradient`: the text color at 30 % fading to 50 %), soft red glows in the hero and behind the closing line only, translucent edge lines. Still forbidden: colored body or heading text beyond the `--break` uses above, purple or blue gradients, glass-blur cards, drop shadows, accent fills on cards, `--break` as a fill larger than a chip (the switch track is a chip).
+- `scripts/check-contrast.ts` checks every pairing in both themes: text ≥ 4.5:1, graphics ≥ 3:1.
+- `scripts/check-colors.ts` fails on any non-gray color literal other than the `--c1`, `--c2`, `--break` and `--edge` / `--edge-soft` definitions (the compiler writes the edges as 8-digit hex in the built CSS; both forms are accepted only in those declarations). Do not write "crimson" or another color name in a CSS comment: the check reads named colors.
 
-**Depth** comes from stacking ramp steps, opacity, 1 px hairlines (`--g4`/`--g5`), grain, scale and `mix-blend-mode`. No shadows, no blur glows.
+**Depth** comes from stacking ramp steps, translucent edges (the top edge of a card stronger than the rest), a faint raised fill on cards, grain, scale and `mix-blend-mode`. No drop shadows.
 
 **No color-only meaning.** Merged = filled pill + ✓; Open = outline pill + ○ + break dot; reported issues ● Closed / ○ Open; always with text. Screenshots render in full color (ISS-25): carousels resized at quality 90 with `sizes` matching the card column, the case-study hero (an LCP image) at the default quality, gallery and zoom as the original files (ISS-26). Diagrams use line weight, dashes, gray fills, patterns and dashed zone frames.
 
-**Type.** Never Inter, Roboto, Arial, system-ui, Space Grotesk or Geist. Fonts in `src/styles/fonts.ts` (swap there only):
-- Display: Newsreader (variable opsz + wght), large, tracking −0.02 to −0.04em, weight 300–400, italic for single emphasis words.
-- Text/UI: Hanken Grotesk, 16–18 px / 1.55.
-- Mono: JetBrains Mono for numbers, metadata, sources, figure captions and content labels (11–13 px; labels uppercase, +0.06em).
-- Interface labels (header controls, nav links, footer links, stack captions) use Hanken Grotesk in sentence case (`.ui-label`; ISS-23); their index numbers stay mono. The header wordmark is the name in Newsreader.
-- Type scale tokens only (display XL, display L, H2, H3, body, small, mono label); no ad-hoc sizes. Tabular numerals for every figure. Fluid sizes keep max ≤ 2.5 × min so browser zoom still works. Display sizes are capped by viewport height too (`svh`), for laptops at 125–150% scaling (ISS-28). Display XL is the H1 only, 48–120 px (`min(15vw, 15svh)`): the longest word of the name must fit 288 px at 320.
+**Type.** Four free faces in `src/styles/fonts.ts` (swap there only). Still banned: Roboto, Arial, system-ui, Space Grotesk, Geist.
+- Display: Newsreader (variable opsz + wght, normal style only), for the H1, the wordmark and display lines; weight 300–400, tracking −0.02 to −0.04em. `display: optional`, preloaded.
+- Headings: Instrument Sans for section H2s (`text-section`, 40–56 px, tracking −0.05em, gradient text), H3s and large figures. Not preloaded.
+- Text/UI: Inter, 16–18 px / 1.55, and `.ui-label` (header controls, nav links, footer links) in sentence case. Preloaded (the LCP paragraph).
+- Mono: Commit Mono (self-hosted from `@fontsource/commit-mono`, 400, latin) for numbers, metadata, sources, figure captions and content labels (11–13 px; labels uppercase, +0.06em). Not preloaded.
+- `font-size-adjust: from-font` is set on the body and recomputed on every element in another face (H1–H3, code, kbd, `.font-display`, `.font-heading`, `.font-mono`, `.mono-label`): its computed value inherits as a number, and Inter's x-height once scaled the H1 by about 20 % until it clipped at 375 px.
+- Type scale tokens only (display XL, display L, section, H2, H3, body, small, mono label); no ad-hoc sizes. Tabular numerals for every figure. Fluid sizes keep max ≤ 2.5 × min so browser zoom still works. Display sizes are capped by viewport height too (`svh`), for laptops at 125–150% scaling (ISS-28). Display XL is the H1 only, 48–120 px (`min(15vw, 15svh)`): the longest word of the name must fit 288 px at 320.
 
-**Anti-slop.** Banned: purple/blue gradients, neon glow, glass-blur cards, gradient blobs, gradient text, sparkle icons, emoji icons, grids of identical rounded shadowed cards, 3-column icon-feature rows, everything centered, colored left-border stat cards, untouched shadcn/Tailwind default look, drop shadows. Required: asymmetric 12-column editorial grid with deliberate offsets and a consistent baseline; numbered section indices ("01 / Work"); mono figure captions ("FIG. 03 / Booking flow"); hairline rules; oversized numerals; radius 0–2 px on content, pills (`rounded-pill`) on buttons, CTAs and header controls only (ISS-22); real content (numbers, diagrams, screenshots) as the visual material. Icons are text glyphs (→ ↗ ✓ ○ ·) in mono; the GitHub and LinkedIn marks and a 1.5 px-stroke envelope (`src/components/ui/brand-icon.tsx`, always beside a text label; ISS-24) are the only SVG icons.
+**Shape.** Pills (`rounded-pill`) for buttons, badges, tabs, filters, chips and header controls; `rounded-card` (24 px) for section cards (`.surface-card`); `rounded-inner` (14 px) for media and panels inside a card. The header is a fade, not a bar (`.header-fade`), with a white pill "Contact" link.
+
+**Anti-slop.** Banned: purple/blue gradients, neon glow, glass-blur cards, gradient blobs, sparkle icons, emoji icons, drop shadows, colored left-border stat cards, untouched shadcn/Tailwind default look. Required: numbered section indices ("01 / Work"); mono figure captions ("FIG. 03 / Booking flow"); real content (numbers, diagrams, screenshots) as the visual material; every figure with its qualifier and source. Icons are text glyphs (→ ↗ ✓ ○ ·) plus the GitHub and LinkedIn marks and a 1.5 px-stroke envelope (`src/components/ui/brand-icon.tsx`, always beside a text label; ISS-24), which lift and take `--break` on hover (`.icon-link`). Arrows nudge toward where they point (`.nudge` with `data-arrow="right" | "out"`).
 
 ## Motion rules
 
