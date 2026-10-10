@@ -3,11 +3,12 @@ import { profile } from "@/data/profile.ts";
 import { ButtonLink } from "@/components/ui/button.tsx";
 import { BrandIcon, type IconKind } from "@/components/ui/brand-icon.tsx";
 import { RevealText } from "@/components/motion/reveal-text.tsx";
+import { LoopGate } from "@/components/motion/loop-gate.tsx";
 
 /**
  * Closing line before Contact (Stage 7, docs/ISSUES.md ISS-42): the hero's
  * claim in one display line with gradient text over a soft accent glow (the
- * one glow outside the hero), a button to the form, and the direct links as
+ * one glow outside the hero, breathing slowly while visible), a button to the form, and the direct links as
  * pills whose icons lift and take the accent on hover. Phone and email appear
  * only once set in personal.ts.
  */
@@ -22,13 +23,13 @@ export function Closing() {
 
   return (
     <section aria-labelledby="closing" className="closing grid-12 py-24 md:py-36">
-      <div aria-hidden="true" className="closing-glow" />
+      <LoopGate className="closing-glow" />
       <div className="col-span-full flex flex-col items-center gap-8 text-center md:col-span-10 md:col-start-2">
         <RevealText as="h2" id="closing" text={closing.line.text} className="max-w-[16ch] font-display text-display-l font-light text-gradient" />
         <ButtonLink href={closing.cta.href}>
           {closing.cta.label} <span aria-hidden="true" data-arrow="right">→</span>
         </ButtonLink>
-        <ul className="flex flex-wrap justify-center gap-2.5" aria-label={ui.contact.direct}>
+        <ul className="rise flex flex-wrap justify-center gap-2.5" aria-label={ui.contact.direct}>
           {links.map((l) => {
             const external = l.href.startsWith("https://");
             return (
