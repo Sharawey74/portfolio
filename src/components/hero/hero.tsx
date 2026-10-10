@@ -1,7 +1,7 @@
 import { personal } from "@/data/personal.ts";
 import { profile } from "@/data/profile.ts";
 import { ossSummary, type PullRequest } from "@/data/oss.ts";
-import { Button, ButtonLink } from "@/components/ui/button.tsx";
+import { ButtonLink } from "@/components/ui/button.tsx";
 import { MonoLabel } from "@/components/ui/mono-label.tsx";
 import { RevealText } from "@/components/motion/reveal-text.tsx";
 import { HeroHeadline } from "./hero-headline.tsx";
@@ -15,11 +15,11 @@ import { HeroFigures } from "./hero-figures.tsx";
  * figures strip below.
  * The pill's numbers come from ossSummary() over the same PR list the Open
  * source section renders. "View My Work" and the pill render only once their
- * target section is live. The resume button renders disabled until the owner
- * adds the PDF.
+ * target section is live. The resume button renders only when
+ * `personal.resumePdf` has a value (withheld since 2026-10-10, ISS-46).
  */
 export function Hero({ prs }: { prs: readonly PullRequest[] }) {
-  const { hero, ui, sections } = profile;
+  const { hero, sections } = profile;
   const isLive = (href: string) => sections.some((s) => s.id === href.slice(1) && s.live);
   const showPrimary = isLive(hero.ctaPrimary.href);
   const summary = ossSummary(prs);
@@ -71,11 +71,7 @@ export function Hero({ prs }: { prs: readonly PullRequest[] }) {
               <ButtonLink href={resume} variant="quiet" download>
                 {hero.ctaResume.label} <span aria-hidden="true" data-arrow="down">↓</span>
               </ButtonLink>
-            ) : (
-              <Button variant="quiet" disabled title={ui.resumeUnavailable}>
-                {hero.ctaResume.label}
-              </Button>
-            )}
+            ) : null}
           </div>
         </div>
         <div className="hidden lg:col-span-5 lg:block">
