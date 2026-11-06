@@ -33,7 +33,7 @@ const profileSchema = z.object({
      * are filled from ossSummary() over the same PR list the Open source
      * section shows, so the numbers cannot drift.
      */
-    announce: z.object({ template: z.string().includes("{merged}"), href: z.string().startsWith("#") }),
+    announce: z.object({ template: z.string().startsWith("{projects}"), href: z.string().startsWith("#") }),
     /** Figures strip under the hero: metric ids from projects.ts (label, qualifier, source come from there). */
     figures: z.array(z.object({ project: z.string(), metric: z.string() })).min(1).max(4),
   }),
@@ -203,7 +203,7 @@ export const profile = profileSchema.parse({
     },
     ctaPrimary: { label: "View My Work", href: "#work" },
     ctaResume: { label: "Download Resume" },
-    announce: { template: "{merged} merged pull requests across {projects} open-source projects", href: "#open-source" },
+    announce: { template: "{projects} open-source projects, {merged} merged pull requests", href: "#open-source" },
     figures: [
       { project: "eventora", metric: "burst-oversell" },
       { project: "eventora", metric: "local-requests" },

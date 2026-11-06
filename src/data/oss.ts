@@ -68,7 +68,7 @@ export function ossSummary(prs: readonly PullRequest[] = oss.pullRequests) {
     open: open.length,
     from: dates[0]?.slice(0, 7),
     to: dates.at(-1)?.slice(0, 7),
-    source: "evidence-report.md:309-364",
+    source: "GitHub API, gh pr view per pull request",
     asOf: oss.fetchedAt,
   };
 }
