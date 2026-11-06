@@ -38,7 +38,7 @@ Rows 1 to 9 are the required check `Lint, typecheck, facts, build, smoke` on `ma
 3. **Facts check** (`scripts/check-facts.ts`):
    - imports every data file, so each Zod schema parses (a public number without `source` or `asOf` fails);
    - scans the text that ships (`src/`, `public/`) for the banned claims and banned words listed in `CLAUDE.md`, except inside `// facts:allow` regions that name the term;
-   - runs semantic asserts a regex cannot, such as: the H1 equals the public name plus a period; the open-source summary is derived (8 merged across 6 projects); certificates carry no dates.
+   - runs semantic asserts a regex cannot, such as: the H1 equals the public name plus a period; the open-source summary is derived (15 merged across 11 projects); certificates carry no dates.
    - **Locally only:** it also reads the do-not-publish terms from the git-ignored `scripts/private-terms.local.txt`. CI does not have that file, so run `npm run check:facts` on this machine before every push.
 4. **Contrast check** (`scripts/check-contrast.ts`): reads the token blocks in `globals.css` and checks every pairing the design uses, in both themes:
    - text on surfaces at least 4.5:1;
