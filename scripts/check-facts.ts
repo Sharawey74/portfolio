@@ -147,9 +147,9 @@ for (const [repo, n] of [
 if (pr("firstcontributions/first-contributions", 123531)) errors.push("oss.json: first-contributions PR must be excluded");
 
 const s = ossSummary();
-// magefree/mage #16440 merged on 2026-10-07 (docs/ISSUES.md ISS-16).
-if (s.merged !== 8 || s.mergedProjects !== 6 || s.open !== 3) {
-  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; recorded headline is 8 / 6 / 3`);
+// Snapshot 2026-11-06: seven PRs merged 2026-10-24 to 27 joined the list (ISS-16 rules unchanged).
+if (s.merged !== 15 || s.mergedProjects !== 11 || s.open !== 3) {
+  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; recorded headline is 15 / 11 / 3`);
 }
 
 const eventora = projects.find((p) => p.slug === "eventora");
