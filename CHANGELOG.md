@@ -10,8 +10,13 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-06
+
+Open-source refresh and dependency updates (pull requests #28 and #29).
+
 ### Changed
 - Open source snapshot of 2026-11-06: 15 merged pull requests across 11 projects (seven merged 2026-10-24 to 27), 3 under review. The hero pill now leads with the number of projects.
+- Dependencies: Next.js and eslint-config-next 16.4.4 (from 16.4.0, which carried a security advisory), React and React DOM 19.3.1, Tailwind CSS 4.3.4, Zod 4.6.7, Lenis 1.3.27, ESLint 10.14.0, Playwright 1.64.1.
 
 ## [1.0.0] - 2026-10-11
 
@@ -119,7 +124,8 @@ Facts, bootstrap and foundation (Stage 0 on `main`; pull request #1).
 - Motion foundation: one animation loop, smooth scrolling, custom cursor, a global "Pause animations" control.
 - CI: lint, typecheck, facts, contrast, build, colors and the first-load JavaScript budget.
 
-[Unreleased]: https://github.com/Sharawey74/portfolio/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/Sharawey74/portfolio/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/Sharawey74/portfolio/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Sharawey74/portfolio/releases/tag/v1.0.0
 [0.6.0]: https://github.com/Sharawey74/portfolio/pull/8
 [0.5.0]: https://github.com/Sharawey74/portfolio/pull/6
