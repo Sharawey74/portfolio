@@ -7,6 +7,7 @@ import { CountUp } from "@/components/motion/count-up.tsx";
 import { InteractiveCard } from "./interactive-card.tsx";
 import { ProjectCard } from "./project-card.tsx";
 import { WorkTabs } from "./work-tabs.tsx";
+import { WorkTimeline } from "./work-timeline.tsx";
 
 /**
  * 02 / Work. The featured projects behind tabs, one card at a time (Stage 7,
@@ -14,10 +15,21 @@ import { WorkTabs } from "./work-tabs.tsx";
  * the secondary projects as two cards (no case study), each with its sourced
  * figures, stack, facts and limits. The stack by lane lives in About
  * (owner decision, Stage 5 D2), so it is not repeated here.
+ * With profile.layout "trace" (ISS-55) the section is the numbered timeline
+ * instead; this tab layout is kept for "classic" until the owner retires it.
  */
 export function WorkSection() {
   const { ui, sections } = profile;
   const section = sections.find((s) => s.id === "work")!;
+
+  if (profile.layout === "trace") {
+    return (
+      <section aria-labelledby="work" className="work grid-12 gap-y-16 py-24 md:py-32">
+        <SectionHeading id="work" index={section.index} title={section.title} />
+        <WorkTimeline />
+      </section>
+    );
+  }
 
   return (
     <section aria-labelledby="work" className="work grid-12 gap-y-16 py-24 md:py-32">
