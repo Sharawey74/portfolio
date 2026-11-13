@@ -121,6 +121,8 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
         ) : null}
       </ul>
 
+      {/* With layout "trace" the stack is its own section (ISS-55). */}
+      {profile.layout === "classic" ? (
       <div className="surface-card rise col-span-full flex flex-col gap-2 p-6 md:col-span-10 md:col-start-2 md:p-8">
         <MonoLabel>{t.stack}</MonoLabel>
         <dl className="flex flex-col">
@@ -150,6 +152,7 @@ export function AboutSection({ prs }: { prs: PullRequest[] }) {
           })}
         </dl>
       </div>
+      ) : null}
     </section>
   );
 }
