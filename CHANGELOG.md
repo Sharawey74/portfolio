@@ -10,7 +10,11 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
+### Added
+- Stack section: the technologies branch off one line into two columns, each with the projects it was used in; a lane's node lights the projects that use it. The stack table leaves About (`docs/ISSUES.md` ISS-55).
+
 ### Changed
+- Work is one numbered timeline of all five projects, replacing the tabs and "Also built"; the line draws and the nodes light as you scroll. One switch in `profile.ts` brings the previous layout back (ISS-55).
 - Open source snapshot of 2026-11-13: 21 merged pull requests across 14 projects (six merged 2026-11-01 to 12), 3 under review. One pull request was removed from the list at the owner's request.
 
 ## [1.0.1] - 2026-11-06

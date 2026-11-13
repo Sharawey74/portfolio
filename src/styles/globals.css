@@ -2232,3 +2232,357 @@ html[data-reveal="on"]:not([data-intro]) .text-mark {
 .hero-h1[data-lit] .ch {
   background-image: radial-gradient(circle 16rem at var(--lx, 50%) var(--ly, 50%), var(--text-1) 0, color-mix(in srgb, var(--text-1) 62%, transparent) 100%);
 }
+
+/* ── Stack tree and project timeline (layout "trace", docs/ISSUES.md ISS-55) ──
+   Both hang off one rail: a dashed hairline with a solid trace that draws as
+   the reader scrolls (scroll-linked, so not autoplay). Nodes start hollow and
+   light once reached (TraceLight sets data-lit; the hollow look applies only
+   under data-reveal, so JS-off and reduced motion show them lit). A lit node
+   carries the --break mark with a soft radial glow behind it (no shadow); a
+   pressed lane node lights its technologies and the projects that use them. */
+.tree,
+.tl-wrap {
+  position: relative;
+}
+.tree-rail,
+.tl-rail {
+  position: absolute;
+  inset-block: 0;
+  width: 1px;
+  background: repeating-linear-gradient(to bottom, var(--line) 0 2px, transparent 2px 8px);
+  pointer-events: none;
+}
+.tree-rail::after,
+.tl-rail::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--text-3);
+  transform-origin: top;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes trace-draw {
+      from {
+        transform: scaleY(0);
+      }
+    }
+    /* The drawn end follows the middle of the viewport down the rail. */
+    .tree-rail::after,
+    .tl-rail::after {
+      animation: trace-draw linear both;
+      animation-timeline: view();
+      animation-range: cover 50svh cover calc(100% - 50svh);
+    }
+  }
+}
+html[data-motion="paused"] :is(.tree-rail, .tl-rail)::after {
+  animation-play-state: running !important;
+}
+
+/* Nodes: lit by default; hollow until reached when reveals are on. */
+.tree-node,
+.tl-node,
+.tree-dot {
+  position: relative;
+  border-radius: 50%;
+  /* Only scale moves (motion rules: transform and opacity); the colors
+     change with it, and the glow behind fades in on opacity. */
+  transition: scale var(--dur-2) var(--ease-out);
+}
+.tree-node::before,
+.tl-node::before {
+  content: "";
+  position: absolute;
+  inset: -0.875rem;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--break) 42%, transparent), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+  transition:
+    opacity var(--dur-3) var(--ease-out),
+    scale var(--dur-3) var(--ease-out);
+}
+html[data-reveal="on"] [data-trace] [data-node]:not([data-lit]) {
+  scale: 0.6;
+  border-color: var(--line);
+  background-color: var(--surface-page);
+  color: var(--text-3);
+}
+html[data-reveal="on"] [data-trace] [data-node]:not([data-lit])::before {
+  opacity: 0;
+}
+
+/* Stack tree. Phones: the rail at the left, every lane to its right. */
+.tree {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  row-gap: 3.5rem;
+  padding-block: 1rem;
+  isolation: isolate;
+}
+.tree-rail {
+  left: 0.75rem;
+}
+.tree-col {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+.tree-unit {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: start;
+}
+.tree-node {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: center;
+  margin-top: 0.5rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border: 1.5px solid var(--break);
+  background-color: var(--break);
+}
+.tree-node-button {
+  position: absolute;
+  inset: -0.875rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.tree-unit:has(.tree-node-button:hover) .tree-node::before,
+.tree-unit[data-selected] .tree-node::before {
+  opacity: 1;
+  scale: 1.35;
+}
+.tree-txt {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+.tree-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-top: 1.25rem;
+}
+.tree-skills > li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+.tree-dot {
+  flex: none;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  translate: 0 -0.125rem;
+  border: 1.3px solid var(--text-3);
+  background-color: var(--text-3);
+}
+.tree-unit[data-selected] .tree-dot {
+  border-color: var(--break);
+  background-color: var(--break);
+}
+.tree-skill {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.125rem;
+  overflow-wrap: anywhere;
+}
+.tree-used {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 1rem;
+  margin-top: 1rem;
+}
+.tree-used > .mono-label {
+  flex-basis: 100%;
+}
+
+/* From 768 px: two lanes per row, branching left and right off a centre rail. */
+@media (width >= 48rem) {
+  .tree {
+    grid-template-columns: minmax(0, 1fr) 6rem minmax(0, 1fr);
+    padding-block: 2rem;
+  }
+  .tree-rail {
+    left: 50%;
+  }
+  .tree-col[data-side="l"] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .tree-col[data-side="r"] {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .tree-unit[data-side="l"] {
+    grid-template-columns: minmax(0, 1fr) 1.5rem;
+    text-align: right;
+  }
+  .tree-unit[data-side="l"] .tree-node {
+    grid-column: 2;
+  }
+  .tree-unit[data-side="l"] .tree-txt {
+    grid-column: 1;
+  }
+  .tree-unit[data-side="l"] .tree-skills > li {
+    flex-direction: row-reverse;
+  }
+  .tree-unit[data-side="l"] .tree-used {
+    justify-content: flex-end;
+  }
+  /* The branch from the rail to the node (half the 6 rem rail column plus
+     the rest of the node's column), drawn out from the rail as it lights. */
+  .tree-node::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 0.5px);
+    width: calc(3rem + 0.75rem - 0.4375rem);
+    height: 1px;
+    background: var(--text-3);
+    transition: transform var(--dur-3) var(--ease-out);
+  }
+  .tree-unit[data-side="l"] .tree-node::after {
+    left: 100%;
+    transform-origin: right;
+  }
+  .tree-unit[data-side="r"] .tree-node::after {
+    right: 100%;
+    transform-origin: left;
+  }
+  html[data-reveal="on"] [data-trace] .tree-node:not([data-lit])::after {
+    transform: scaleX(0);
+  }
+}
+
+/* Project timeline. Phones: the rail and numbered nodes at the left. */
+.tl {
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  isolation: isolate;
+}
+.tl-rail {
+  left: 1.375rem;
+}
+.tl-row {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr);
+  column-gap: 1.25rem;
+  row-gap: 2rem;
+  align-items: start;
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+.tl-mark {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+.tl-media,
+.tl-body {
+  grid-column: 2;
+  min-width: 0;
+}
+.tl-node {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1.5px solid var(--break);
+  background-color: var(--surface-page);
+  color: var(--text-1);
+}
+.tl-use {
+  display: none;
+}
+@media (width >= 64rem) {
+  .tl {
+    gap: 7rem;
+  }
+  .tl-rail {
+    left: 50%;
+  }
+  .tl-row {
+    grid-template-columns: minmax(0, 1fr) 6rem minmax(0, 1fr);
+    column-gap: 0;
+  }
+  .tl-mark {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+  .tl-row[data-side="l"] .tl-media,
+  .tl-row[data-side="r"] .tl-body {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .tl-row[data-side="l"] .tl-body,
+  .tl-row[data-side="r"] .tl-media {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .tl-body {
+    padding-top: 0.5rem;
+  }
+}
+
+/* A pressed lane in the Stack lights the projects that use it: a filled
+   node, a brighter glow, the "Uses …" note and two rings out from the node
+   (user-triggered, finite: two runs, then still). */
+.tl-node::after {
+  content: "";
+  position: absolute;
+  inset: -1.5px;
+  border: 1px solid var(--break);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes tl-ping {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+html[data-stack-lane="backend"] .tl-row[data-lanes~="backend"] .tl-node,
+html[data-stack-lane="data"] .tl-row[data-lanes~="data"] .tl-node,
+html[data-stack-lane="delivery"] .tl-row[data-lanes~="delivery"] .tl-node,
+html[data-stack-lane="ai"] .tl-row[data-lanes~="ai"] .tl-node,
+html[data-stack-lane="frontend"] .tl-row[data-lanes~="frontend"] .tl-node {
+  background-color: var(--break);
+  /* Page color on the accent: 5.99:1 dark, about 6:1 light (the number stays text). */
+  color: var(--surface-page);
+}
+html[data-stack-lane="backend"] .tl-row[data-lanes~="backend"] .tl-node::before,
+html[data-stack-lane="data"] .tl-row[data-lanes~="data"] .tl-node::before,
+html[data-stack-lane="delivery"] .tl-row[data-lanes~="delivery"] .tl-node::before,
+html[data-stack-lane="ai"] .tl-row[data-lanes~="ai"] .tl-node::before,
+html[data-stack-lane="frontend"] .tl-row[data-lanes~="frontend"] .tl-node::before {
+  opacity: 1;
+  scale: 1.35;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-stack-lane="backend"] .tl-row[data-lanes~="backend"] .tl-node::after,
+  html[data-stack-lane="data"] .tl-row[data-lanes~="data"] .tl-node::after,
+  html[data-stack-lane="delivery"] .tl-row[data-lanes~="delivery"] .tl-node::after,
+  html[data-stack-lane="ai"] .tl-row[data-lanes~="ai"] .tl-node::after,
+  html[data-stack-lane="frontend"] .tl-row[data-lanes~="frontend"] .tl-node::after {
+    animation: tl-ping 1.2s var(--ease-out) 2;
+  }
+}
+html[data-stack-lane="backend"] .tl-use[data-lane="backend"],
+html[data-stack-lane="data"] .tl-use[data-lane="data"],
+html[data-stack-lane="delivery"] .tl-use[data-lane="delivery"],
+html[data-stack-lane="ai"] .tl-use[data-lane="ai"],
+html[data-stack-lane="frontend"] .tl-use[data-lane="frontend"] {
+  display: inline;
+}

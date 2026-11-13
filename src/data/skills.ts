@@ -76,4 +76,16 @@ export const skills = z
   });
 
 export type Skill = (typeof skills)[number];
+export type Lane = Skill["lane"];
 export const lanes = lane.options;
+
+/** Project slugs that use any chip of a lane, in projects.ts order (non-repo labels left out). */
+export function laneProjects(l: Lane): string[] {
+  const used = new Set(skills.filter((s) => s.lane === l && !s.qualifier).flatMap((s) => s.usedIn));
+  return projects.map((p) => p.slug).filter((slug) => used.has(slug));
+}
+
+/** The lanes a project's chips belong to, for the timeline's highlight. */
+export function projectLanes(slug: string): Lane[] {
+  return lanes.filter((l) => laneProjects(l).includes(slug));
+}

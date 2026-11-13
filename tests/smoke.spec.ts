@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { profile } from "../src/data/profile.ts";
 
 /**
  * Release smoke tests (PLAN.md Stage 6.2). They answer "does the built site
@@ -55,13 +56,25 @@ test("header navigation jumps to a section and marks it current", async ({ page 
   await expect(nav.locator('[aria-current="true"]')).toContainText("Work");
 });
 
-test("work tabs switch projects and the open-source filter narrows the list", async ({ page }) => {
+test("work shows its projects and the open-source filter narrows the list", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/");
   const work = page.locator('section[aria-labelledby="work"]');
-  await work.getByRole("tab", { name: "Recruiter-Pro" }).click();
-  await expect(work.getByRole("heading", { level: 3, name: "Recruiter-Pro", exact: true })).toBeVisible();
-  await expect(work.getByRole("heading", { level: 3, name: "Eventora", exact: true })).toBeHidden();
+  if (profile.layout === "trace") {
+    // Stack lane nodes light the timeline rows that use the lane (ISS-55).
+    const lane = page.getByRole("button", { name: /Data and messaging/ });
+    await lane.click();
+    await expect(lane).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator('section[aria-labelledby="stack"] [aria-live]')).toContainText("Eventora");
+    await expect(page.locator('#project-eventora .tl-use[data-lane="data"]')).toBeVisible();
+    await expect(page.locator("#project-recruiter-pro .tl-use")).toHaveCount(4);
+    await expect(page.locator("#project-recruiter-pro .tl-use").first()).toBeHidden();
+    await expect(work.getByRole("heading", { level: 3 })).toHaveCount(5);
+  } else {
+    await work.getByRole("tab", { name: "Recruiter-Pro" }).click();
+    await expect(work.getByRole("heading", { level: 3, name: "Recruiter-Pro", exact: true })).toBeVisible();
+    await expect(work.getByRole("heading", { level: 3, name: "Eventora", exact: true })).toBeHidden();
+  }
   const oss = page.locator('section[aria-labelledby="open-source"]');
   const rows = oss.locator("ul").first().locator(":scope > li");
   const all = await rows.count();

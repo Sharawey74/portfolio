@@ -600,3 +600,25 @@ Design source: the approved mock-up (`docs/ISSUES.md` ISS-42). Skills loaded: `f
 | `contrast` | Pass | Text over the backdrop: `--text-3` on `--g3` 6.18:1 (dark), 5.71:1 (light) |
 | `performance` | Pass | `/` 158.6 KB gz; mobile Lighthouse A/B against the commit before ISS-51 (local, devtools throttling, CPU benchmark 1,079–2,950): TBT 2.0–4.2 s before, 2.4–4.3 s after; LCP 2.5–3.1 s before, 3.0–3.8 s after; within this machine's noise, judged on the preview. A `body:has()` rule to hide the M12 grid was dropped (the hero's stacking context already covers it) |
 | `motion` | Pass | Same probe as above: moves, stops with the pause and off screen, still under reduced motion, absent below 1280 px; smoke 21/21 |
+
+## Stack tree and project timeline (2026-11-13, ISS-55)
+
+Audited against the UI UX Pro Max quick reference; captures at 1440 and 375 px, dark, light and reduced motion (headless Chromium).
+
+| Rule | Verdict | Evidence |
+|---|---|---|
+| `keyboard-nav` | Pass | Lane buttons are in DOM order, left column then right, as drawn; Enter and Space toggle `aria-pressed` |
+| `focus-states` | Pass | The global ring: 2 px solid `--break` on the lane button |
+| `web-target-size` | Pass | Lane buttons 25 px (unlit, scaled 0.6) to 42 px (lit) |
+| `aria-labels` | Pass | Each lane button is named "Highlight the projects that use {lane}" and carries its pressed state |
+| `contextual-live-badge-updates` | Pass | One polite region: "Data and messaging: used in Eventora." and "Highlight cleared." |
+| `color-not-only` | Pass | A lit project also shows "Uses {lane}" in its label |
+| `color-accessible-pairs` | Pass | The number on a filled node is the page color on `--break` (5.99:1 dark, about 6:1 light); `npm run check` ok |
+| `heading-hierarchy` | Pass | H2 Stack and Work, H3 per lane and per project |
+| `reduced-motion` | Pass | Reduced motion: 0 nodes marked, all shown lit, no rail drawing, no rings |
+| `transform-performance` | Fixed | The first build transitioned node colors; now `scale` and the glow's opacity only (motion rules) |
+| `excessive-motion` | Pass | One rail draws per section; nodes light once; the rings run twice, only after a press |
+| `horizontal-scroll` | Pass | `scrollWidth` = viewport at 375 and 1440, both themes |
+| `whitespace-balance` | Fixed | The first build paired lanes by row (Backend's 10 items against Data's 3); lanes now go to the shorter column |
+| `performance` | Pass | `/` 158.9 KB gz first-load JS (budget 170); screenshots stay lazy |
+| `smoke` | Pass | 21/21 |

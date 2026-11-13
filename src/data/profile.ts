@@ -16,7 +16,25 @@ const sectionSchema = z.object({
   live: z.boolean(),
 });
 
+/**
+ * Which presentation `/` uses for the stack and the projects (docs/ISSUES.md
+ * ISS-55). "trace": a numbered Stack section drawn as a branching tree whose
+ * lane nodes highlight projects, and the projects on a numbered timeline.
+ * "classic": the stack table inside About and the Work tabs (before ISS-55).
+ * Switching back is this one line; the section numbers follow on their own.
+ * Keep the `as`: with a plain annotation TypeScript narrows the constant and
+ * the build fails on the comparisons that test for the other value.
+ */
+const LAYOUT = "trace" as "trace" | "classic";
+
+/** Numbers the live sections in order ("01", "02", …); a hidden one gets "00". */
+function numbered(list: { live: boolean; id: string; title: string }[]) {
+  let n = 0;
+  return list.map((s) => ({ ...s, index: s.live ? String(++n).padStart(2, "0") : "00" }));
+}
+
 const profileSchema = z.object({
+  layout: z.enum(["trace", "classic"]),
   hero: z.object({
     /** Mono label above the H1. */
     label: claim,
@@ -122,6 +140,18 @@ const profileSchema = z.object({
       usedIn: z.string(),
       lanes: z.object({ backend: z.string(), data: z.string(), delivery: z.string(), ai: z.string(), frontend: z.string() }),
     }),
+    /** Stack section and project timeline (layout "trace", ISS-55). */
+    stack: z.object({
+      lead: z.string(),
+      /** Accessible name of a lane node; `{lane}` is the lane's name. */
+      highlight: z.string(),
+      /** Announced after a lane is chosen; `{lane}` and `{projects}`. */
+      announce: z.string(),
+      cleared: z.string(),
+      usedIn: z.string(),
+      jump: z.string(),
+      uses: z.string(),
+    }),
     oss: z.object({
       merged: z.string(),
       acrossProjects: z.string(),
@@ -187,6 +217,7 @@ const profileSchema = z.object({
 });
 
 export const profile = profileSchema.parse({
+  layout: LAYOUT,
   hero: {
     label: { text: "Software engineer", source: "owner:approved-copy", asOf: "2026-10-08" },
     headline: { text: "Abdelrhman Mohamed.", source: "owner:approved-copy", asOf: "2026-10-08" },
@@ -211,13 +242,14 @@ export const profile = profileSchema.parse({
       { project: "eventora", metric: "tests" },
     ],
   },
-  sections: [
-    { live: true, id: "about", index: "01", title: "About" },
-    { live: true, id: "work", index: "02", title: "Work" },
-    { live: true, id: "open-source", index: "03", title: "Open source" },
-    { live: true, id: "experience", index: "04", title: "Experience" },
-    { live: true, id: "contact", index: "05", title: "Contact" },
-  ],
+  sections: numbered([
+    { live: true, id: "about", title: "About" },
+    { live: LAYOUT === "trace", id: "stack", title: "Stack" },
+    { live: true, id: "work", title: "Work" },
+    { live: true, id: "open-source", title: "Open source" },
+    { live: true, id: "experience", title: "Experience" },
+    { live: true, id: "contact", title: "Contact" },
+  ]),
   figures: {
     title: { text: "Every figure has a source.", source: "owner:approved-copy", asOf: "2026-10-10" },
     items: [
@@ -307,6 +339,15 @@ export const profile = profileSchema.parse({
         ai: "AI services",
         frontend: "Frontend",
       },
+    },
+    stack: {
+      lead: "Every technology here is in at least one of the projects below. Choose a lane to light up the projects that use it.",
+      highlight: "Highlight the projects that use {lane}",
+      announce: "{lane}: used in {projects}.",
+      cleared: "Highlight cleared.",
+      usedIn: "Used in",
+      jump: "Go to",
+      uses: "Uses",
     },
     oss: {
       merged: "merged pull requests",
