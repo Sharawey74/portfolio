@@ -67,7 +67,7 @@ They answer "does the built site work for a visitor", not "is every detail right
 | Routes | 9 | `/`, the three case studies, `/sitemap.xml`, `/robots.txt`, `/opengraph-image` and `/icon.svg` return 200; an unknown path returns 404 |
 | Pages render | 4 | Each page has exactly one visible H1 and no console errors or uncaught exceptions once the network is idle |
 | Header navigation | 1 | At 1280 × 800, clicking "Work" changes the URL to `#work`, scrolls the section into view and marks the link current |
-| Work tabs and filter | 1 | The Recruiter-Pro tab shows its card and hides Eventora's; the Open filter shows fewer rows than All, at least one, and no "Merged" row |
+| Work and filter | 1 | With layout "trace" (ISS-55): pressing the "Data and messaging" lane node sets `aria-pressed`, announces Eventora and shows its "Uses" note, not Recruiter-Pro's, and Work has five project headings; with "classic", the Recruiter-Pro tab shows its card and hides Eventora's. Then the Open filter shows fewer rows than All, at least one, and no "Merged" row |
 | Reduced motion | 1 | With reduced motion, the H1 and the five section titles are present |
 | JavaScript off | 1 | Without JavaScript, the H1 and the three project cards render, and a case study renders |
 | Phone width | 4 | At 375 px, no page scrolls sideways |
