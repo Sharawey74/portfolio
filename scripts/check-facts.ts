@@ -145,11 +145,12 @@ for (const [repo, n] of [
     errors.push(`oss.json: ${repo}#${n} is "${p.state}" in the snapshot; verify on GitHub and update FACTS-CHECK.md first`);
 }
 if (pr("firstcontributions/first-contributions", 123531)) errors.push("oss.json: first-contributions PR must be excluded");
+if (pr("simplesamlphp/simplesamlphp", 2688)) errors.push("oss.json: simplesamlphp #2688 must be excluded (owner, ISS-54)");
 
 const s = ossSummary();
-// Snapshot 2026-11-06: seven PRs merged 2026-10-24 to 27 joined the list (ISS-16 rules unchanged).
-if (s.merged !== 15 || s.mergedProjects !== 11 || s.open !== 3) {
-  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; recorded headline is 15 / 11 / 3`);
+// Snapshot 2026-11-13: six PRs merged 2026-11-01 to 12 and one opened joined the list; simplesamlphp #2688 dropped (ISS-54).
+if (s.merged !== 21 || s.mergedProjects !== 14 || s.open !== 3) {
+  errors.push(`oss summary is ${s.merged} merged / ${s.mergedProjects} projects / ${s.open} open; recorded headline is 21 / 14 / 3`);
 }
 
 const eventora = projects.find((p) => p.slug === "eventora");

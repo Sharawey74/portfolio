@@ -7,8 +7,10 @@ import snapshot from "./oss.json" with { type: "json" };
  * refreshes `state` from the public GitHub API with ISR (revalidate 86400);
  * if that fails, this snapshot renders.
  *
- * Excluded on purpose: firstcontributions#123531 (onboarding PR) and the
- * comment-only Micrometer threads (#7625, #7886). See FACTS-CHECK.md.
+ * Excluded on purpose: firstcontributions#123531 (onboarding PR), the
+ * comment-only Micrometer threads (#7625, #7886), and simplesamlphp#2688
+ * (dropped by the owner on 2026-11-13, docs/ISSUES.md ISS-54; it must not
+ * render anywhere). See FACTS-CHECK.md.
  * Status is shown by shape, not color: merged = filled pill + check glyph,
  * open = outline pill + ring glyph + break dot, always with text.
  */

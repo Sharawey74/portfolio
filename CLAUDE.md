@@ -54,7 +54,7 @@ All in `FACTS-CHECK.md` → "Conflicts resolved". The ones that shape copy:
 - Recruiter-Pro `frontend/Images/*.png` are design mockups with placeholder data. Never use them.
 - Recruiter-Pro: "500+ tests" (README says 544 and 530).
 - Public name: **"Abdelrhman Mohamed"** (owner, 2026-10-08, `docs/ISSUES.md` ISS-14): `personal.name`, the hero H1, the LICENSE holder and JSON-LD `Person.name`; "Sharawey74" stays as the handle (`alternateName`). The facts check bans the other spelling and asserts the H1 equals the name plus a period.
-- Headline OSS stat is derived, not typed (`ossSummary()`): 15 merged across 11 projects, 3 under review, 2026-08 to 2026-10 (snapshot 2026-11-06, ISS-53). The hero pill leads with the project count ("11 open-source projects, 15 merged pull requests"; the template must start with `{projects}`). The first-contributions practice PR stays excluded (ISS-16). "Issues reported" lists litestar #5020 and #5018 and avoid-ai-writing #333 (ISS-17).
+- Headline OSS stat is derived, not typed (`ossSummary()`): 21 merged across 14 projects, 3 under review, 2026-08 to 2026-11 (snapshot 2026-11-13, ISS-54). The hero pill leads with the project count ("14 open-source projects, 21 merged pull requests"; the template must start with `{projects}`). The first-contributions practice PR stays excluded (ISS-16), and so does simplesamlphp #2688, dropped by the owner (ISS-54); the facts check fails if either is in `oss.json`. "Issues reported" lists litestar #5020 and #5018 and avoid-ai-writing #333 (ISS-17).
 - Eventora card highlights: 0 oversold seats, 569,066 requests with 0 failed across five capacity runs (A, B, C, G, H; summed and checked), 660 req/s per 1-CPU replica, all "local, Docker Compose" (ISS-18).
 
 ## Content model

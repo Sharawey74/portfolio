@@ -10,6 +10,9 @@ Versions 0.1.0 to 0.6.0 were assigned on 2026-10-08, after the fact, one per fin
 
 ## [Unreleased]
 
+### Changed
+- Open source snapshot of 2026-11-13: 21 merged pull requests across 14 projects (six merged 2026-11-01 to 12), 3 under review. One pull request was removed from the list at the owner's request.
+
 ## [1.0.1] - 2026-11-06
 
 Open-source refresh and dependency updates (pull requests #28 and #29).

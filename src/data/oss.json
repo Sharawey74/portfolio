@@ -1,7 +1,13 @@
 {
-  "fetchedAt": "2026-11-06",
-  "source": "gh pr view <n> -R <repo> --json title,state,createdAt,mergedAt,additions,deletions",
+  "fetchedAt": "2026-11-13",
+  "source": "gh pr view <n> -R <repo> --json title,state,createdAt,mergedAt,additions,deletions,closingIssuesReferences",
   "pullRequests": [
+    { "repo": "solongate/agent-security", "number": 379, "title": "ci: add dependabot gomod entries for sandbox and crypto", "state": "merged", "createdAt": "2026-11-09", "mergedAt": "2026-11-12", "additions": 16, "deletions": 0, "fixes": 365 },
+    { "repo": "gkjohnson/three-mesh-bvh", "number": 960, "title": "BVHComputeData: Make the subclass override functions public", "state": "merged", "createdAt": "2026-11-09", "mergedAt": "2026-11-10", "additions": 73, "deletions": 5, "fixes": 952 },
+    { "repo": "vshulcz/deja-vu", "number": 6009, "title": "docs(guide): add memory guide for Muse Code", "state": "merged", "createdAt": "2026-11-09", "mergedAt": "2026-11-09", "additions": 453, "deletions": 118, "fixes": 5867 },
+    { "repo": "vshulcz/deja-vu", "number": 5994, "title": "docs(guide): add memory guide for MiniMax Code", "state": "merged", "createdAt": "2026-11-09", "mergedAt": "2026-11-09", "additions": 445, "deletions": 116, "fixes": 5866 },
+    { "repo": "vshulcz/deja-vu", "number": 5993, "title": "fix(blame): refuse a blank path before and after --", "state": "merged", "createdAt": "2026-11-09", "mergedAt": "2026-11-09", "additions": 62, "deletions": 1, "fixes": 5938 },
+    { "repo": "mogenius/renovate-operator", "number": 773, "title": "feat(actions): publish combined crds to the github release", "state": "merged", "createdAt": "2026-10-31", "mergedAt": "2026-11-01", "additions": 19, "deletions": 0, "fixes": 730 },
     { "repo": "testssl/testssl.sh", "number": 3195, "title": "[3.2] Fix Shellcheck issue SC2154 in client-initiated renegotiation check", "state": "merged", "createdAt": "2026-10-26", "mergedAt": "2026-10-27", "additions": 4, "deletions": 4, "fixes": null, "note": "Backport of #3190 to the 3.2 branch, requested by the maintainer" },
     { "repo": "disposable-email-domains/disposable-email-domains", "number": 1243, "title": "Add DuckMailFetcher for the duckmail.sbs domain pool", "state": "merged", "createdAt": "2026-10-24", "mergedAt": "2026-10-27", "additions": 30, "deletions": 7, "fixes": 1218 },
     { "repo": "ydkhatri/mac_apt", "number": 177, "title": "Add LESSHST plugin to read less history (.lesshst)", "state": "merged", "createdAt": "2026-10-27", "mergedAt": "2026-10-27", "additions": 161, "deletions": 0, "fixes": 169 },
@@ -17,7 +23,7 @@
     { "repo": "python/typeshed", "number": 16443, "title": "Widen tarfile.open() preset to int", "state": "merged", "createdAt": "2026-09-25", "mergedAt": "2026-09-25", "additions": 5, "deletions": 5, "fixes": 16442 },
     { "repo": "conorbronsdon/avoid-ai-writing", "number": 342, "title": "fix(scripts): use the resolved interpreter in read_manifest_version", "state": "merged", "createdAt": "2026-09-23", "mergedAt": "2026-09-23", "additions": 1, "deletions": 1, "fixes": 333 },
     { "repo": "conorbronsdon/avoid-ai-writing", "number": 332, "title": "docs: replace comments naming a missing script, roadmap and research file", "state": "merged", "createdAt": "2026-09-21", "mergedAt": "2026-09-22", "additions": 54, "deletions": 38, "fixes": 224 },
-    { "repo": "simplesamlphp/simplesamlphp", "number": 2688, "title": "Document the Twig conflict when an application loads its own Twig", "state": "open", "createdAt": "2026-10-02", "mergedAt": null, "additions": 23, "deletions": 0, "fixes": 2687, "note": "Retitled during review; first titled \"Remove deprecated Twig includes from the release autoloader\"" },
+    { "repo": "disposable-email-domains/disposable-email-domains", "number": 1267, "title": "Add ThrowawayFetcher for the throwaway.io domain pool", "state": "open", "createdAt": "2026-11-09", "mergedAt": null, "additions": 42, "deletions": 0, "fixes": 1213 },
     { "repo": "litestar-org/litestar", "number": 5019, "title": "fix: do not suggest FromQuery for path parameter defaults", "state": "open", "createdAt": "2026-08-26", "mergedAt": null, "additions": 76, "deletions": 8, "fixes": 5018 },
     { "repo": "eclipse-collections/eclipse-collections", "number": 1965, "title": "Add iteration pattern examples for primitive bags to reference guide", "state": "open", "createdAt": "2026-08-22", "mergedAt": null, "additions": 50, "deletions": 0, "fixes": 1387, "note": "Has a merge conflict" }
   ],
